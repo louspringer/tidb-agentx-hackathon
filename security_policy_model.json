@@ -1,0 +1,35 @@
+{
+  "description": "Security policy model for credentials, UUIDs, and configuration context. Used for enforcement, triage, and disaster recovery.",
+  "credentials": {
+    "allowed_patterns": ["YOUR_API_KEY", "${API_KEY}", "your-data-plane-uuid-here", "${UUID}", "00000000-0000-0000-0000-000000000000"],
+    "forbidden_patterns": [
+      "sk-[0-9a-zA-Z]{48}",
+      "AKIA[0-9A-Z]{16}",
+      "ghp_[0-9a-zA-Z]{36}"
+    ],
+    "contexts": {
+      "example_config": "placeholders only",
+      "production_config": "no real values",
+      "code": "no real credentials, only env references or placeholders"
+    }
+  },
+  "uuids": {
+    "allowed_in": ["example", "test", "placeholder", "template"],
+    "forbidden_in": ["production", "docs", "real configs"],
+    "placeholder_patterns": ["your-data-plane-uuid-here", "00000000-0000-0000-0000-000000000000", "${UUID}"]
+  },
+  "enforcement": {
+    "tests": ["test_security_model.py"],
+    "rules": [
+      ".cursor/rules/prevention-architecture.mdc",
+      ".cursor/rules/intelligent-policy.mdc",
+      ".cursor/rules/security-credentials.mdc"
+    ],
+    "scripts": ["scripts/security-check.sh"]
+  },
+  "meta": {
+    "version": "1.0",
+    "last_updated": "2024-06-09",
+    "author": "LLM + Lou (OpenFlow-Playground)"
+  }
+} 
