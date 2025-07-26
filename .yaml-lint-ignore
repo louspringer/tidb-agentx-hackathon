@@ -1,0 +1,9 @@
+# Ignore CloudFormation templates from generic YAML linting
+# These files use CloudFormation intrinsic functions (!Sub, !Ref, !GetAtt)
+# and should be validated with cfn-lint instead
+
+models/Openflow-Playground.yaml
+*.template.yaml
+*.template.yml
+*cloudformation*.yaml
+*cloudformation*.yml 
