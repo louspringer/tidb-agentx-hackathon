@@ -1,0 +1,48 @@
+# Deterministic File Editing
+
+## BANNED: Stochastic/Fuzzy Editors
+- NEVER use `edit_file` for structured files
+- NEVER use fuzzy editing tools
+- NEVER use tools that can introduce random formatting
+
+## REQUIRED: Deterministic Tools
+
+### YAML Files
+- Use `ruamel.yaml` for parsing and serializing
+- Use `PyYAML` with schema validation
+- Use `search_replace` with exact string matching
+
+### JSON Files  
+- Use `json` library with proper formatting
+- Use `orjson` for performance
+- Use `pydantic` for validation
+
+### Python Files
+- Use `ast` for structural edits
+- Use `libcst` for code transformations
+- Use `black` for formatting
+
+### MDC Files
+- Parse YAML frontmatter with `ruamel.yaml`
+- Handle markdown content separately
+- Use exact string replacement
+
+### Other Formats
+- TOML: Use `tomlkit` or `tomli`
+- INI: Use `configparser`
+- Markdown: Use `markdown-it-py` or `mistune`
+
+## Validation Steps:
+- [ ] Used appropriate library for file type
+- [ ] Preserved original structure and formatting
+- [ ] Validated syntax after editing
+- [ ] Used exact string matching for replacements
+- [ ] No random formatting changes introduced
+
+## Remember:
+If you don't have a deterministic tool for a format, acknowledge the limitation and use the best available approach.
+Always validate file structure after editing.
+description:
+globs:
+alwaysApply: false
+---
