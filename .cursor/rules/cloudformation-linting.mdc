@@ -1,0 +1,40 @@
+# CloudFormation Linting
+
+## BANNED: Generic YAML Linters for CloudFormation
+- NEVER use generic YAML linters on CloudFormation templates
+- NEVER use tools that don't understand `!Sub`, `!Ref`, `!GetAtt`
+- NEVER use tools that flag CloudFormation intrinsic functions as errors
+
+## REQUIRED: CloudFormation-Specific Tools
+
+### Primary Tool: cfn-lint
+```bash
+# Install
+pip install cfn-lint
+
+# Validate CloudFormation templates
+cfn-lint models/Openflow-Playground.yaml
+
+# Validate with specific rules
+cfn-lint --append-rules E3002,E3003 models/Openflow-Playground.yaml
+```
+
+### Alternative Tools
+- **AWS CloudFormation Designer** - Visual validation
+- **AWS Toolkit for VS Code** - IntelliSense and validation
+- **AWS SAM CLI** - For serverless templates
+- **CloudFormation Guard** - Policy validation
+
+## File Patterns to Ignore in Generic Linters
+- `*.template.yaml`
+- `*.template.yml` 
+- `*cloudformation*.yaml`
+- `*cloudformation*.yml`
+- `models/Openflow-Playground.yaml`
+
+## The Rule
+**"CloudFormation is not generic YAML - use the right tool for the job."**
+description:
+globs:
+alwaysApply: false
+---
