@@ -1,0 +1,127 @@
+{
+  "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
+  "version": "1.0",
+  "last_updated": "2024-07-25",
+  "author": "LLM + Lou (OpenFlow-Playground)",
+  "domains": {
+    "cloudformation": {
+      "patterns": ["*.template.yaml", "models/*.yaml", "*cloudformation*.yaml"],
+      "content_indicators": ["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"],
+      "linter": "cfn-lint",
+      "validator": "aws-cloudformation",
+      "exclusions": [],
+      "requirements": [
+        "Don't lint CloudFormation with generic YAML tools",
+        "Use cfn-lint for CloudFormation validation"
+      ]
+    },
+    "python": {
+      "patterns": ["*.py"],
+      "content_indicators": ["import ", "def ", "class ", "#!/usr/bin/env python"],
+      "linter": "flake8",
+      "formatter": "black",
+      "exclusions": ["__pycache__/*", "*.pyc"],
+      "requirements": [
+        "Use flake8 for Python linting",
+        "Format Python code with black"
+      ]
+    },
+    "yaml": {
+      "patterns": ["*.yaml", "*.yml"],
+      "content_indicators": ["---", "key: value"],
+      "linter": "yamllint",
+      "exclusions": ["models/*.yaml", "*.template.yaml"],
+      "requirements": [
+        "Lint generic YAML files with yamllint",
+        "Exclude CloudFormation files from generic YAML linting"
+      ]
+    },
+    "security": {
+      "patterns": ["**/*"],
+      "content_indicators": ["password", "secret", "key", "token", "credential"],
+      "linter": "bandit",
+      "validator": "detect-secrets",
+      "exclusions": [],
+      "requirements": [
+        "Scan for hardcoded credentials and secrets",
+        "Enforce security policy via detect-secrets and bandit"
+      ]
+    },
+    "bash": {
+      "patterns": ["*.sh", "*.bash"],
+      "content_indicators": ["#!/bin/bash", "#!/bin/sh", "export ", "source "],
+      "linter": "shellcheck",
+      "exclusions": [],
+      "requirements": [
+        "Lint shell scripts with shellcheck"
+      ]
+    }
+  },
+  "tool_selection_logic": {
+    "pattern_weight": 0.4,
+    "content_indicator_weight": 0.3,
+    "exclusion_weight": 0.3,
+    "confidence_threshold": 0.5
+  },
+  "requirements_traceability": [
+    {
+      "requirement": "Don't lint CloudFormation with generic YAML tools",
+      "domain": "cloudformation",
+      "implementation": "content_indicators, patterns, yamllint exclusions",
+      "test": "test_requirement_1_cloudformation_detection"
+    },
+    {
+      "requirement": "Use domain-specific tools",
+      "domain": "*",
+      "implementation": "linter, validator, formatter fields in each domain",
+      "test": "test_requirement_2_tool_selection"
+    },
+    {
+      "requirement": "Generate proper exclusions",
+      "domain": "yaml",
+      "implementation": "exclusions field in yaml domain",
+      "test": "test_requirement_3_exclusion_generation"
+    },
+    {
+      "requirement": "Intelligent content analysis",
+      "domain": "*",
+      "implementation": "content_indicators in each domain",
+      "test": "test_requirement_4_content_analysis"
+    },
+    {
+      "requirement": "Intelligent confidence scoring",
+      "domain": "*",
+      "implementation": "tool_selection_logic weights",
+      "test": "test_requirement_5_confidence_scoring"
+    },
+    {
+      "requirement": "Actual tool execution works",
+      "domain": "*",
+      "implementation": "validate_file() method",
+      "test": "test_requirement_6_tool_execution"
+    },
+    {
+      "requirement": "Extensible domain registry",
+      "domain": "*",
+      "implementation": "domains object in this file",
+      "test": "test_requirement_7_domain_registry"
+    }
+  ],
+  "meta": {
+    "project": "OpenFlow Playground",
+    "model_type": "model-driven tool orchestration",
+    "file": "project_model_registry.json",
+    "tests": [
+      "test_model_traceability.py"
+    ],
+    "rules": [
+      ".cursor/rules/security-credentials.mdc",
+      ".cursor/rules/deterministic-editing.mdc",
+      ".cursor/rules/investigation-analysis.mdc",
+      ".cursor/rules/llm-architect.mdc",
+      ".cursor/rules/intelligent-policy.mdc",
+      ".cursor/rules/prevention-architecture.mdc",
+      ".cursor/rules/cloudformation-linting.mdc"
+    ]
+  }
+} 
