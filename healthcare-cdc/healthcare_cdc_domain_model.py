@@ -284,7 +284,11 @@ class HealthcareCDCDomainModel:
                 dest_table=self.infrastructure.destination_table
             )
         except FileNotFoundError:
-            raise FileNotFoundError(f"SQL template file not found: {sql_file_path}")
+            raise FileNotFoundError(
+                f"SQL template file not found: {sql_file_path}\n"
+                f"Expected location: {os.path.join(os.getcwd(), 'healthcare-cdc', 'sql', 'merge_cdc_operations.sql')}\n"
+                f"To resolve: Ensure the SQL template file exists or specify a custom path using sql_template_path parameter"
+            )
         except (OSError, IOError) as e:
             raise OSError(f"Error reading SQL template file: {e}")
         except (ValueError, TypeError) as e:
