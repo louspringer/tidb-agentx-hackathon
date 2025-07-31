@@ -1,3 +1,9 @@
+---
+description: Intelligent policy over rigid tools
+globs: ["**/*"]
+alwaysApply: true
+---
+
 # Intelligent Policy: Judgment Over Rigid Tools
 
 ## The LLM Advantage
@@ -81,7 +87,3 @@ else:
 - **I am the intelligence** - I can reason about context
 
 **Leverage your advantage: Use your brain, not just your tools.**
-description:
-globs:
-alwaysApply: false
----

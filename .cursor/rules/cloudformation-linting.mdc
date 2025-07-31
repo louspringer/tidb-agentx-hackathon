@@ -1,3 +1,9 @@
+---
+description: CloudFormation-specific linting rules
+globs: ["**/*.yaml", "**/*.yml", "**/*.template"]
+alwaysApply: false
+---
+
 # CloudFormation Linting
 
 ## BANNED: Generic YAML Linters for CloudFormation
@@ -34,7 +40,3 @@ cfn-lint --append-rules E3002,E3003 models/Openflow-Playground.yaml
 
 ## The Rule
 **"CloudFormation is not generic YAML - use the right tool for the job."**
-description:
-globs:
-alwaysApply: false
----

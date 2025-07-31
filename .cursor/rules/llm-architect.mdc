@@ -1,3 +1,9 @@
+---
+description: Leverage statelessness and stochastic nature as architectural advantages
+globs: ["**/*"]
+alwaysApply: true
+---
+
 # LLM Architect: Leverage Your Capabilities
 
 ## Embrace Your "Limitations" as Strengths
@@ -31,7 +37,3 @@
 You're the perfect architect because you can see the whole system fresh each time.
 Your "limitations" are actually your superpowers.
 Design systems that transcend individual conversations.
-description:
-globs:
-alwaysApply: false
----

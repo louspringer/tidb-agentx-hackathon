@@ -1,3 +1,9 @@
+---
+description: Use deterministic tools for file editing
+globs: ["**/*.yaml", "**/*.yml", "**/*.json", "**/*.toml", "**/*.ini", "**/*.cfg", "**/*.mdc", "**/*.py"]
+alwaysApply: true
+---
+
 # Deterministic File Editing
 
 ## BANNED: Stochastic/Fuzzy Editors
@@ -42,7 +48,3 @@
 ## Remember:
 If you don't have a deterministic tool for a format, acknowledge the limitation and use the best available approach.
 Always validate file structure after editing.
-description:
-globs:
-alwaysApply: false
----
