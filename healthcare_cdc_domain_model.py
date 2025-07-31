@@ -402,6 +402,29 @@ class HealthcareCDCDomainModel:
                         }
                     }
                 }
+            },
+            "Outputs": {
+                "DynamoDBTableName": {
+                    "Description": "Name of the DynamoDB table",
+                    "Value": self.infrastructure.dynamodb_table,
+                    "Export": {
+                        "Name": "HealthcareCDC-DynamoDBTableName"
+                    }
+                },
+                "KinesisStreamName": {
+                    "Description": "Name of the Kinesis Data Stream",
+                    "Value": self.infrastructure.kinesis_stream,
+                    "Export": {
+                        "Name": "HealthcareCDC-KinesisStreamName"
+                    }
+                },
+                "EC2InstanceId": {
+                    "Description": "ID of the EC2 instance",
+                    "Value": {"Ref": "EC2Instance"},
+                    "Export": {
+                        "Name": "HealthcareCDC-EC2InstanceId"
+                    }
+                }
             }
         }
     

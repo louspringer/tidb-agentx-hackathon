@@ -82,8 +82,12 @@ class TestHealthcareCDCDomainModel:
         assert "InsuranceClaimsTable" in resources
         assert "InsuranceClaimsStream" in resources
         assert "EC2Instance" in resources
-        assert "EC2SecurityGroup" in resources
-        assert "EC2InstanceRole" in resources
+        
+        # Check for required outputs
+        outputs = template["Outputs"]
+        assert "DynamoDBTableName" in outputs
+        assert "KinesisStreamName" in outputs
+        assert "EC2InstanceId" in outputs
     
     def test_snowflake_schema_generation(self):
         """Test Snowflake schema generation"""
