@@ -28,18 +28,21 @@ class LiveLLMOrchestrator:
         # Initialize LangChain models (only if API key is available)
         self.llm = None
         if self.api_key:
-            if provider == "openai":
-                self.llm = ChatOpenAI(
-                    api_key=self.api_key,
-                    model="gpt-4-turbo",
-                    temperature=0.7
-                )
-            elif provider == "anthropic":
-                self.llm = ChatAnthropic(
-                    api_key=self.api_key,
-                    model="claude-3-5-sonnet-20241022",
-                    temperature=0.7
-                )
+            try:
+                if provider == "openai":
+                    self.llm = ChatOpenAI(
+                        api_key=self.api_key,
+                        model="gpt-4-turbo",
+                        temperature=0.7
+                    )
+                elif provider == "anthropic":
+                    self.llm = ChatAnthropic(
+                        api_key=self.api_key,
+                        model="claude-3-5-sonnet-20241022",
+                        temperature=0.7
+                    )
+            except Exception as e:
+                raise ValueError(f"Failed to initialize {provider} model: {str(e)}. Check API key validity and model availability.")
         
         # Set up JSON output parser
         self.output_parser = JsonOutputParser()
