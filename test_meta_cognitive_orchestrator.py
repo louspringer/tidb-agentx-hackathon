@@ -52,7 +52,7 @@ def test_assumption_detection():
             print(f"❌ {test_case['description']}: Expected {expected}, got {detected}")
     
     print(f"📊 Assumption Detection: {passed}/{total} tests passed")
-    return passed == total
+    assert passed == total, f"Only {passed}/{total} assumption detection tests passed"
 
 def test_blind_spot_identification():
     """Test that the orchestrator can identify blind spots"""
@@ -88,13 +88,12 @@ def test_blind_spot_identification():
     
     if not missing_blind_spots and not extra_blind_spots:
         print("✅ All expected blind spots detected correctly")
-        return True
     else:
         if missing_blind_spots:
             print(f"❌ Missing blind spots: {missing_blind_spots}")
         if extra_blind_spots:
             print(f"⚠️ Extra blind spots: {extra_blind_spots}")
-        return False
+        assert False, f"Blind spot detection failed: missing={missing_blind_spots}, extra={extra_blind_spots}"
 
 def test_jeopardy_question_generation():
     """Test that the orchestrator generates appropriate Jeopardy questions"""
@@ -137,7 +136,7 @@ def test_jeopardy_question_generation():
             print(f"❌ {test_case['description']}: '{question}'")
     
     print(f"📊 Jeopardy Question Generation: {passed}/{total} tests passed")
-    return passed == total
+    assert passed == total, f"Only {passed}/{total} jeopardy question tests passed"
 
 def test_confidence_calculation():
     """Test that confidence is calculated correctly based on issues"""
@@ -160,10 +159,9 @@ def test_confidence_calculation():
     # Should be very low due to many blind spots
     if confidence < 0.3:
         print("✅ Confidence correctly low due to many issues")
-        return True
     else:
         print(f"❌ Confidence too high ({confidence:.2f}) for case with many issues")
-        return False
+        assert False, f"Confidence too high ({confidence:.2f}) for case with many issues"
 
 def test_decision_making():
     """Test that the orchestrator makes appropriate decisions"""
@@ -186,10 +184,9 @@ def test_decision_making():
     # Should recommend asking human due to low confidence and blind spots
     if decision == "ASK_HUMAN":
         print("✅ Correctly recommended asking human")
-        return True
     else:
         print(f"❌ Wrong decision: {decision} (should be ASK_HUMAN)")
-        return False
+        assert False, f"Wrong decision: {decision} (should be ASK_HUMAN)"
 
 def test_partner_question_quality():
     """Test that partner questions are high quality and revealing"""
@@ -225,10 +222,9 @@ def test_partner_question_quality():
     
     if quality_ratio > 0.7:
         print("✅ High-quality questions generated")
-        return True
     else:
         print("❌ Too many low-quality questions")
-        return False
+        assert False, f"Quality ratio too low: {quality_ratio:.2f}"
 
 def test_end_to_end_workflow():
     """Test the complete meta-cognitive workflow"""
@@ -270,7 +266,7 @@ def test_end_to_end_workflow():
             print(f"❌ {check_name}")
     
     print(f"📊 End-to-End Workflow: {passed}/{total} checks passed")
-    return passed == total
+    assert passed == total, f"Only {passed}/{total} end-to-end checks passed"
 
 def main():
     """Run all tests to prove the meta-cognitive orchestrator works"""

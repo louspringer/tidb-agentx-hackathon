@@ -8,7 +8,7 @@ Original Contributors: Snowflake Inc.
 Enhanced by: OpenFlow Playground Team
 """
 
-from .healthcare_cdc_domain_model import (
+from healthcare_cdc_domain_model import (
     HealthcareCDCDomainModel,
     HealthcareClaim,
     PatientInfo,
