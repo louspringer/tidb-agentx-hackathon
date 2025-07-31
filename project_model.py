@@ -193,7 +193,7 @@ class ProjectModel:
         
         for command in analysis.validation_commands:
             try:
-                result: subprocess.CompletedProcess[str] = subprocess.run(
+                result = subprocess.run(
                     command.split(), 
                     capture_output=True, 
                     text=True, 
