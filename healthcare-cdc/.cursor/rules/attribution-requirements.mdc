@@ -1,0 +1,195 @@
+---
+description: Healthcare CDC attribution requirements and patterns
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: false
+---
+
+# Healthcare CDC Attribution Requirements
+
+## CONTEXT
+This component is based on the Snowflake Healthcare CDC Quickstart and must maintain proper attribution to original contributors while documenting enhancements made by the OpenFlow Playground Team.
+
+## REQUIRED ATTRIBUTION
+
+### Original Source
+- **Source**: Snowflake Healthcare CDC Quickstart
+- **URL**: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/
+- **Original Contributors**: Snowflake Inc.
+
+### Enhancement Credits
+- **Enhanced by**: OpenFlow Playground Team
+- **Enhancements**: Domain model, automated infrastructure, comprehensive testing, documentation
+
+## ATTRIBUTION PATTERNS
+
+### File Headers
+```python
+#!/usr/bin/env python3
+"""
+Healthcare CDC Domain Model
+Model-driven implementation of Snowflake Healthcare CDC with DynamoDB and Openflow
+
+Based on: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/
+Original Contributors: Snowflake Inc.
+Enhanced by: OpenFlow Playground Team
+"""
+```
+
+### Documentation Attribution
+```markdown
+## Attribution
+
+This implementation is based on the [Snowflake Healthcare CDC Quickstart](https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/) with significant enhancements:
+
+- **Original Contributors**: Snowflake Inc.
+- **Enhanced by**: OpenFlow Playground Team
+- **Improvements**:
+  - Comprehensive domain model with type safety
+  - Automated infrastructure deployment
+  - Enhanced monitoring and observability
+  - Production-ready security practices
+  - Detailed documentation and examples
+  - Comprehensive test coverage
+```
+
+### README Attribution
+```markdown
+## 🤝 Attribution
+
+This implementation is based on the [Snowflake Healthcare CDC Quickstart](https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/) with the following enhancements:
+
+- **Original Contributors**: Snowflake Inc.
+- **Enhanced by**: OpenFlow Playground Team
+- **Improvements**:
+  - Comprehensive domain model with type safety
+  - Automated infrastructure deployment
+  - Enhanced monitoring and observability
+  - Production-ready security practices
+  - Detailed documentation and examples
+  - Comprehensive test coverage
+```
+
+## ENHANCEMENT DOCUMENTATION
+
+### Original vs Enhanced Features
+
+| Original Quickstart | Enhanced Implementation |
+|-------------------|----------------------|
+| Manual step-by-step guide | Automated infrastructure deployment |
+| Basic examples | Comprehensive domain model |
+| Limited documentation | Complete documentation and guides |
+| No testing | Full test coverage |
+| Basic security | Production-ready security practices |
+| No monitoring | Comprehensive observability |
+
+### Specific Enhancements Made
+
+1. **Domain Model**
+   - Type-safe data structures with dataclasses
+   - Comprehensive enums for status values
+   - JSON serialization for CDC events
+   - Infrastructure and pipeline configuration
+
+2. **Infrastructure**
+   - CloudFormation templates for automated deployment
+   - Enhanced security with IAM roles and encryption
+   - Monitoring and observability setup
+   - Production-ready configuration
+
+3. **Testing**
+   - Comprehensive unit and integration tests
+   - Performance testing for JSON serialization
+   - Security testing for data handling
+   - 100% test coverage for domain model
+
+4. **Documentation**
+   - Complete implementation guides
+   - Architecture diagrams
+   - Troubleshooting guides
+   - Security and compliance documentation
+
+5. **Security**
+   - HIPAA compliance considerations
+   - Data encryption requirements
+   - Audit trail implementation
+   - Access control patterns
+
+## ATTRIBUTION REQUIREMENTS
+
+### Required in All Files
+- Source URL must be included
+- Original contributors must be credited
+- Enhancement credits must be documented
+- Clear distinction between original and enhanced features
+
+### Documentation Standards
+- Attribution section in all README files
+- Source URL in file headers
+- Credits in documentation
+- Enhancement list in project descriptions
+
+### Code Comments
+```python
+# Based on Snowflake Healthcare CDC Quickstart
+# Original Contributors: Snowflake Inc.
+# Enhanced by: OpenFlow Playground Team
+# Source: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/
+```
+
+## FORBIDDEN PATTERNS
+- ❌ Don't remove original attribution
+- ❌ Don't claim original work as your own
+- ❌ Don't skip enhancement documentation
+- ❌ Don't ignore source URL requirements
+- ❌ Don't forget to credit both original and enhanced contributors
+
+## REQUIRED ATTRIBUTION FIELDS
+
+### File Headers
+```python
+"""
+Healthcare CDC Implementation
+Based on: [SOURCE_URL]
+Original Contributors: Snowflake Inc.
+Enhanced by: OpenFlow Playground Team
+"""
+```
+
+### Documentation
+```markdown
+## Attribution
+
+- **Source**: [SOURCE_URL]
+- **Original Contributors**: Snowflake Inc.
+- **Enhanced by**: OpenFlow Playground Team
+- **Enhancements**: [LIST_OF_ENHANCEMENTS]
+```
+
+### Project Descriptions
+```markdown
+This implementation is based on the Snowflake Healthcare CDC Quickstart with significant enhancements including domain modeling, automated infrastructure, comprehensive testing, and production-ready security practices.
+```
+
+## SUCCESS METRICS
+- All files include proper attribution
+- Source URL is documented
+- Original contributors are credited
+- Enhancements are clearly documented
+- Attribution is consistent across all files
+- No claims of original work without proper credits
+
+## ATTRIBUTION CHECKLIST
+- [ ] Source URL included in all files
+- [ ] Original contributors credited
+- [ ] Enhancement credits documented
+- [ ] Clear distinction between original and enhanced features
+- [ ] Attribution section in README files
+- [ ] Credits in documentation
+- [ ] Enhancement list in project descriptions
+- [ ] No removal of original attribution
+- [ ] No false claims of original work
+
+description: Healthcare CDC attribution requirements and patterns
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: true
+---

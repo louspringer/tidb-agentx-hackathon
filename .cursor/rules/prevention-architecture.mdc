@@ -1,3 +1,9 @@
+---
+description: Model-driven, test-driven prevention architecture
+globs: ["**/*"]
+alwaysApply: true
+---
+
 # Prevention Architecture: Model-Driven, Test-Driven
 
 ## The Real Work: Prevention, Not Detection
@@ -181,7 +187,3 @@ def test_credentials_not_in_code():
 - **Template everything** - Use templates to prevent hardcoded values
 
 **Focus on the architecture that prevents chaos, not the tools that detect it.**
-description:
-globs:
-alwaysApply: false
----

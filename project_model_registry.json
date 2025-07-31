@@ -36,6 +36,50 @@
         "Exclude CloudFormation files from generic YAML linting"
       ]
     },
+    "yaml_infrastructure": {
+      "patterns": ["*cloudformation*.yaml", "*infrastructure*.yaml", "*aws*.yaml", "models/*.yaml"],
+      "content_indicators": ["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"],
+      "linter": "cfn-lint",
+      "validator": "aws-cloudformation",
+      "exclusions": [],
+      "requirements": [
+        "Use cfn-lint for CloudFormation YAML files",
+        "Apply AWS-specific validation for infrastructure YAML"
+      ]
+    },
+    "yaml_config": {
+      "patterns": ["config*.yaml", "settings*.yaml", "*.config.yaml"],
+      "content_indicators": ["config:", "settings:", "environment:", "features:"],
+      "linter": "yamllint",
+      "validator": "jsonschema",
+      "exclusions": [],
+      "requirements": [
+        "Use yamllint for configuration YAML files",
+        "Apply schema validation for config files"
+      ]
+    },
+    "yaml_cicd": {
+      "patterns": [".github/*.yaml", ".gitlab-ci.yml", "*.workflow.yaml", "azure-pipelines*.yml"],
+      "content_indicators": ["on:", "jobs:", "steps:", "pipeline:", "stages:"],
+      "linter": "actionlint",
+      "validator": "gitlab-ci-lint",
+      "exclusions": [],
+      "requirements": [
+        "Use domain-specific CI/CD validators",
+        "Apply workflow syntax validation"
+      ]
+    },
+    "yaml_kubernetes": {
+      "patterns": ["k8s/*.yaml", "kubernetes/*.yaml", "*.k8s.yaml"],
+      "content_indicators": ["apiVersion:", "kind:", "metadata:", "spec:"],
+      "linter": "kubectl",
+      "validator": "kubeval",
+      "exclusions": [],
+      "requirements": [
+        "Use kubectl validate for Kubernetes YAML",
+        "Apply Kubernetes API validation"
+      ]
+    },
     "security": {
       "patterns": ["**/*"],
       "content_indicators": ["password", "secret", "key", "token", "credential"],
@@ -105,6 +149,30 @@
       "domain": "*",
       "implementation": "domains object in this file",
       "test": "test_requirement_7_domain_registry"
+    },
+    {
+      "requirement": "YAML type-specific validation",
+      "domain": "yaml_infrastructure",
+      "implementation": "cfn-lint for CloudFormation, aws-cloudformation validator",
+      "test": "test_requirement_8_yaml_infrastructure"
+    },
+    {
+      "requirement": "Configuration YAML validation",
+      "domain": "yaml_config", 
+      "implementation": "yamllint + jsonschema for config files",
+      "test": "test_requirement_9_yaml_config"
+    },
+    {
+      "requirement": "CI/CD YAML validation",
+      "domain": "yaml_cicd",
+      "implementation": "actionlint for GitHub Actions, gitlab-ci-lint for GitLab CI",
+      "test": "test_requirement_10_yaml_cicd"
+    },
+    {
+      "requirement": "Kubernetes YAML validation",
+      "domain": "yaml_kubernetes",
+      "implementation": "kubectl validate, kubeval for K8s files",
+      "test": "test_requirement_11_yaml_kubernetes"
     }
   ],
   "meta": {
@@ -121,7 +189,8 @@
       ".cursor/rules/llm-architect.mdc",
       ".cursor/rules/intelligent-policy.mdc",
       ".cursor/rules/prevention-architecture.mdc",
-      ".cursor/rules/cloudformation-linting.mdc"
+      ".cursor/rules/cloudformation-linting.mdc",
+      ".cursor/rules/yaml-type-specific.mdc"
     ]
   }
 } 

@@ -10,7 +10,7 @@ import json
 import subprocess
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 
 @dataclass
 class DomainConfig:
@@ -19,17 +19,9 @@ class DomainConfig:
     linter: str
     validator: Optional[str] = None
     formatter: Optional[str] = None
-    patterns: List[str] = None
-    exclude_patterns: List[str] = None
-    content_indicators: List[str] = None
-    
-    def __post_init__(self):
-        if self.patterns is None:
-            self.patterns = []
-        if self.exclude_patterns is None:
-            self.exclude_patterns = []
-        if self.content_indicators is None:
-            self.content_indicators = []
+    patterns: List[str] = field(default_factory=list)
+    exclude_patterns: List[str] = field(default_factory=list)
+    content_indicators: List[str] = field(default_factory=list)
 
 @dataclass
 class FileAnalysis:
@@ -72,6 +64,34 @@ class ProjectModel:
                 patterns=["*.yaml", "*.yml"],
                 exclude_patterns=["models/*.yaml", "*.template.yaml"],
                 content_indicators=["---", "key: value"]
+            ),
+            "yaml_infrastructure": DomainConfig(
+                name="yaml_infrastructure",
+                linter="cfn-lint",
+                validator="aws-cloudformation",
+                patterns=["*cloudformation*.yaml", "*infrastructure*.yaml", "*aws*.yaml", "models/*.yaml"],
+                content_indicators=["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"]
+            ),
+            "yaml_config": DomainConfig(
+                name="yaml_config",
+                linter="yamllint",
+                validator="jsonschema",
+                patterns=["config*.yaml", "settings*.yaml", "*.config.yaml"],
+                content_indicators=["config:", "settings:", "environment:", "features:"]
+            ),
+            "yaml_cicd": DomainConfig(
+                name="yaml_cicd",
+                linter="actionlint",
+                validator="gitlab-ci-lint",
+                patterns=[".github/*.yaml", ".gitlab-ci.yml", "*.workflow.yaml", "azure-pipelines*.yml"],
+                content_indicators=["on:", "jobs:", "steps:", "pipeline:", "stages:"]
+            ),
+            "yaml_kubernetes": DomainConfig(
+                name="yaml_kubernetes",
+                linter="kubectl",
+                validator="kubeval",
+                patterns=["k8s/*.yaml", "kubernetes/*.yaml", "*.k8s.yaml"],
+                content_indicators=["apiVersion:", "kind:", "metadata:", "spec:"]
             ),
             "security": DomainConfig(
                 name="security",

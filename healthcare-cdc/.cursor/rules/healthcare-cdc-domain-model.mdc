@@ -1,0 +1,203 @@
+---
+description: Healthcare CDC domain model patterns and coding standards
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: false
+---
+
+# Healthcare CDC Domain Model Rules
+
+## CONTEXT
+This is a healthcare Change Data Capture (CDC) implementation based on the Snowflake Healthcare CDC Quickstart. The domain model provides type-safe data structures for healthcare claims processing with real-time synchronization between DynamoDB and Snowflake.
+
+## CORE PRINCIPLES
+
+### 1. Domain-Driven Design
+- All data structures are defined as dataclasses with type hints
+- Enums are used for status values (ClaimStatus, PaymentStatus, EventType)
+- Clear separation between domain entities (PatientInfo, ProviderInfo, PayerInfo, HealthcareClaim)
+
+### 2. Healthcare-Specific Data Model
+```python
+@dataclass
+class HealthcareClaim:
+    claim_id: str
+    member_id: str
+    insurance_plan: str
+    diagnosis_codes: List[str]
+    total_charge: float
+    claim_status: ClaimStatus
+    payment_status: PaymentStatus
+    patient: PatientInfo
+    provider: ProviderInfo
+    payer: PayerInfo
+```
+
+### 3. CDC Event Structure
+- Events must include: event_name (EventType), event_creation_unix_time, claim data
+- JSON serialization for DynamoDB streams
+- Support for INSERT, MODIFY, REMOVE operations
+
+### 4. Infrastructure Components
+- DynamoDB table with stream enabled
+- Kinesis Data Stream for event capture
+- Snowflake tables: destination, CDC staging, event history
+- Openflow pipeline configuration
+
+## CODING STANDARDS
+
+### Data Structures
+- Use `@dataclass` for all domain entities
+- Include comprehensive type hints
+- Add docstrings for all classes and methods
+- Use enums for status values, not strings
+
+### Error Handling
+- Validate data at domain model level
+- Use proper exception handling for JSON serialization
+- Ensure timestamp handling is consistent
+
+### Testing
+- Unit tests for all domain model classes
+- Test JSON serialization/deserialization
+- Validate enum values and data constraints
+- Integration tests for complete workflows
+
+## IMPLEMENTATION PATTERNS
+
+### Adding New Fields
+```python
+@dataclass
+class HealthcareClaim:
+    # Existing fields...
+    new_field: str  # Add with type hint and docstring
+```
+
+### Creating New Events
+```python
+class EventType(Enum):
+    INSERT = "INSERT"
+    MODIFY = "MODIFY"
+    REMOVE = "REMOVE"
+    NEW_EVENT = "NEW_EVENT"  # Add new event types here
+```
+
+### Infrastructure Updates
+- Update InfrastructureComponents dataclass
+- Modify CloudFormation template generation
+- Update Snowflake schema generation
+- Ensure pipeline configuration includes new components
+
+## ATTRIBUTION REQUIREMENTS
+- Always maintain attribution to original Snowflake contributors
+- Include source URL: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/
+- Credit: "Original Contributors: Snowflake Inc. Enhanced by: OpenFlow Playground Team"
+
+## SECURITY CONSIDERATIONS
+- Healthcare data requires HIPAA compliance considerations
+- PII (Patient Identifiable Information) must be handled securely
+- Audit trails for all data changes
+- Encryption for data in transit and at rest
+
+## PERFORMANCE REQUIREMENTS
+- Real-time CDC processing
+- Efficient JSON serialization for DynamoDB streams
+- Optimized Snowflake schema design
+- Scalable infrastructure components
+
+## DOCUMENTATION STANDARDS
+- Comprehensive docstrings for all classes and methods
+- Architecture diagrams in documentation
+- Data flow examples
+- Troubleshooting guides
+- Security and compliance notes
+
+## TESTING REQUIREMENTS
+- 100% test coverage for domain model
+- Unit tests for all data structures
+- Integration tests for CDC workflows
+- Performance tests for JSON serialization
+- Security tests for data handling
+
+## DEPLOYMENT CONSIDERATIONS
+- CloudFormation templates for infrastructure
+- Snowflake schema scripts
+- Openflow pipeline configuration
+- Monitoring and observability setup
+- Security group and IAM role configuration
+
+## MAINTENANCE GUIDELINES
+- Keep domain model stateless
+- Version all changes appropriately
+- Maintain backward compatibility where possible
+- Update documentation with all changes
+- Ensure tests pass before merging
+
+## COMMON PATTERNS
+
+### Creating Sample Data
+```python
+def create_sample_claim() -> HealthcareClaim:
+    patient = PatientInfo(...)
+    provider = ProviderInfo(...)
+    payer = PayerInfo(...)
+    return HealthcareClaim(
+        claim_id=f"CLM-{uuid.uuid4().hex[:8].upper()}",
+        # ... other fields
+    )
+```
+
+### CDC Event Generation
+```python
+def create_cdc_event(claim: HealthcareClaim, event_type: EventType) -> CDCEvent:
+    return CDCEvent(
+        event_name=event_type,
+        event_creation_unix_time=int(datetime.now().timestamp() * 1000000),
+        claim=claim
+    )
+```
+
+### Infrastructure Generation
+```python
+def generate_cloudformation_template() -> Dict[str, Any]:
+    # Always include required AWS resources
+    # Ensure proper IAM roles and security groups
+    # Include monitoring and logging configuration
+```
+
+## FORBIDDEN PATTERNS
+- ❌ Don't use strings for status values (use enums)
+- ❌ Don't hardcode healthcare data in production
+- ❌ Don't skip validation in domain model
+- ❌ Don't forget attribution to original contributors
+- ❌ Don't ignore security and compliance requirements
+- ❌ Don't skip tests for new functionality
+
+## REQUIRED IMPORTS
+```python
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any
+from enum import Enum
+from datetime import datetime
+import json
+import uuid
+```
+
+## FILE ORGANIZATION
+- `healthcare_cdc_domain_model.py` - Core domain model
+- `test_healthcare_cdc_domain_model.py` - Unit tests
+- `models/` - Infrastructure templates
+- `sql/` - Database schemas
+- `docs/` - Documentation
+
+## SUCCESS METRICS
+- All tests passing
+- Type safety maintained
+- Documentation updated
+- Attribution preserved
+- Security requirements met
+- Performance benchmarks achieved
+
+description: Healthcare CDC domain model patterns and coding standards
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: true
+---

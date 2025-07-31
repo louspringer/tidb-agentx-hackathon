@@ -1,3 +1,9 @@
+---
+description: Model-driven tool orchestration
+globs: ["**/*"]
+alwaysApply: true
+---
+
 # Model-Driven Tool Orchestration
 
 ## ALWAYS Check for project_model_registry.json First
@@ -80,7 +86,3 @@ for req in model['requirements_traceability']:
 - **Test failures** - Update the model to match reality
 
 **Remember: This model exists because generic tools fail on domain-specific problems. Use the model to be intelligent, not just compliant.**
-description:
-globs:
-alwaysApply: false
----

@@ -1,3 +1,9 @@
+---
+description: Ask better questions and investigate before answering
+globs: ["**/*"]
+alwaysApply: true
+---
+
 # Investigation & Analysis
 
 ## ALWAYS Ask Better Questions
@@ -33,7 +39,3 @@ Consider these dimensions when solving problems:
 Better questions lead to better answers.
 Investigation prevents wrong solutions.
 Multi-dimensional thinking reveals better options.
-description:
-globs:
-alwaysApply: false
----
