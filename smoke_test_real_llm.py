@@ -50,7 +50,7 @@ Format as JSON:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "gpt-4-turbo",
+                    "model": self.DEFAULT_MODEL,
                     "messages": [{"role": "user", "content": prompt}],
                     "temperature": 0.7,
                     "max_tokens": 500
