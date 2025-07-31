@@ -1,0 +1,25 @@
+# LangGraph Diversity Orchestrator Dependencies
+
+# Core LangChain packages
+langchain-core>=0.1.0
+langchain-openai>=0.1.0
+langchain-anthropic>=0.1.0
+
+# Visualization packages
+matplotlib>=3.7.0
+seaborn>=0.12.0
+pandas>=2.0.0
+numpy>=1.24.0
+networkx>=3.0
+
+# Report generation
+reportlab>=4.0.0
+markdown>=3.5.0
+jinja2>=3.1.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Type checking support
+types-requests>=2.31.0
+types-markdown>=3.5.0 

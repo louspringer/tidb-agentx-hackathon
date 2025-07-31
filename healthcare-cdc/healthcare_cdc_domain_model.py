@@ -284,9 +284,16 @@ class HealthcareCDCDomainModel:
                 dest_table=self.infrastructure.destination_table
             )
         except FileNotFoundError:
-            raise FileNotFoundError(f"SQL template file not found: {sql_file_path}")
-        except Exception as e:
-            raise Exception(f"Error reading SQL template: {e}")
+            raise FileNotFoundError(
+                f"SQL template file not found: {sql_file_path}\n"
+                f"Expected location: {os.path.join(os.getcwd(), 'healthcare-cdc', 'sql', 'merge_cdc_operations.sql')}\n"
+                f"To resolve: Ensure the SQL template file exists or specify a custom path using sql_template_path parameter\n"
+                f"Note: This is a demo environment - in production, use proper file management"
+            )
+        except (OSError, IOError) as e:
+            raise OSError(f"Error reading SQL template file: {e}")
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Error processing SQL template content: {e}")
     
     def generate_cloudformation_template(self) -> Dict[str, Any]:
         """Generate CloudFormation template for the healthcare CDC infrastructure"""
@@ -389,7 +396,7 @@ class HealthcareCDCDomainModel:
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
                         "InstanceType": {"Ref": "EC2InstanceType"},
-                        "ImageId": {"Ref": "AWS::SSM::Parameter::Value<String>/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"},
+                        "ImageId": {"Fn::Sub": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"},
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
                         "IamInstanceProfile": {"Ref": "EC2InstanceProfile"},

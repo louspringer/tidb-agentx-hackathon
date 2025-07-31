@@ -23,6 +23,10 @@ CREATE OR REPLACE WAREHOUSE IDENTIFIER($WH) WITH WAREHOUSE_SIZE = 'SMALL';
 
 -- GRANTS
 -- Removed overly permissive GRANT CREATE WAREHOUSE ON ACCOUNT statement
+
+-- DEMO ONLY: This grant is for demonstration purposes
+-- In production, use more restrictive role-based permissions
+-- For healthcare compliance, implement least privilege access controls
 GRANT ROLE IDENTIFIER($ROLE) TO USER IDENTIFIER($USER);
 GRANT ROLE IDENTIFIER($ROLE) TO ROLE ACCOUNTADMIN;
 GRANT OWNERSHIP ON DATABASE IDENTIFIER($DB) TO ROLE IDENTIFIER($ROLE);
