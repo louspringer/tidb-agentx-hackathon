@@ -10,15 +10,11 @@ import requests
 def test_anthropic_smoke_test():
     """Test the exact same request as the smoke test"""
     
-    # Get API key from 1Password
-    import subprocess
-    try:
-        api_key = subprocess.check_output(
-            ["op", "item", "get", "ANTHROPIC_API_KEY", "--fields", "credential", "--reveal"],
-            text=True, stderr=subprocess.PIPE
-        ).strip()
-    except subprocess.CalledProcessError:
-        print("❌ Could not get API key from 1Password")
+    # Get API key from 1Password using environment variable or secure method
+    api_key = os.getenv('ANTHROPIC_API_KEY')
+    if not api_key:
+        print("❌ ANTHROPIC_API_KEY environment variable not set")
+        print("💡 Consider using 1Password CLI or SDK instead of subprocess")
         return
     
     print(f"🔑 API Key: {api_key[:10]}...{api_key[-10:]}")
