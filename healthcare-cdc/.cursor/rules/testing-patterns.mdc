@@ -1,3 +1,8 @@
+---
+description: Healthcare CDC testing patterns and requirements
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: true
+---
 # Healthcare CDC Testing Patterns
 
 ## CONTEXT
@@ -419,7 +424,4 @@ from healthcare_cdc_domain_model import (
 - Security requirements validated
 - Documentation updated
 - Attribution preserved
-description:
-globs:
-alwaysApply: false
----
+

@@ -300,11 +300,7 @@ ORDER BY eventCreationUnixTime DESC;
 - Compliance requirements satisfied
 - Performance benchmarks achieved
 - Audit trail functional
-description:
-globs:
-alwaysApply: false
----
-description:
-globs:
-alwaysApply: false
+description: Healthcare CDC infrastructure patterns for CloudFormation and Snowflake
+globs: ["healthcare-cdc/**/*.yaml", "healthcare-cdc/**/*.sql", "healthcare-cdc/**/*.py"]
+alwaysApply: true
 ---
