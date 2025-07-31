@@ -348,6 +348,11 @@ class HealthcareCDCDomainModel:
                 "SubnetId": {
                     "Type": "AWS::EC2::Subnet::Id", 
                     "Description": "Subnet ID for the EC2 instance"
+                },
+                "EC2InstanceType": {
+                    "Type": "String",
+                    "Default": self.infrastructure.ec2_instance_type,
+                    "Description": "EC2 instance type for data processing"
                 }
             },
             "Resources": {
@@ -381,10 +386,56 @@ class HealthcareCDCDomainModel:
                         "ShardCount": 1
                     }
                 },
+                "EC2SecurityGroup": {
+                    "Type": "AWS::EC2::SecurityGroup",
+                    "Properties": {
+                        "GroupDescription": "Security group for Healthcare CDC EC2 instance",
+                        "VpcId": {"Ref": "VpcId"},
+                        "SecurityGroupIngress": [
+                            {
+                                "IpProtocol": "tcp",
+                                "FromPort": "22",
+                                "ToPort": "22",
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ],
+                        "SecurityGroupEgress": [
+                            {
+                                "IpProtocol": "-1",
+                                "CidrIp": "0.0.0.0/0"
+                            }
+                        ]
+                    }
+                },
+                "EC2InstanceProfile": {
+                    "Type": "AWS::IAM::InstanceProfile",
+                    "Properties": {
+                        "Roles": [{"Ref": "EC2InstanceRole"}]
+                    }
+                },
+                "EC2InstanceRole": {
+                    "Type": "AWS::IAM::Role",
+                    "Properties": {
+                        "AssumeRolePolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Principal": {"Service": "ec2.amazonaws.com"},
+                                    "Action": "sts:AssumeRole"
+                                }
+                            ]
+                        },
+                        "ManagedPolicyArns": [
+                            "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+                            "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
+                        ]
+                    }
+                },
                 "EC2Instance": {
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
-                        "InstanceType": self.infrastructure.ec2_instance_type,
+                        "InstanceType": {"Ref": "EC2InstanceType"},
                         "ImageId": {"Fn::FindInMap": ["AWSRegionArch2AMI", {"Ref": "AWS::Region"}, "HVM64"]},
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
@@ -394,8 +445,14 @@ class HealthcareCDCDomainModel:
                                 "Fn::Sub": [
                                     "#!/bin/bash\n",
                                     "yum update -y\n",
-                                    "yum install -y aws-cli\n",
-                                    "aws kinesis put-record --stream-name ${StreamName} --partition-key test --data test\n"
+                                    "yum install -y aws-cli python3\n",
+                                    "pip3 install virtualenv\n",
+                                    "virtualenv /opt/app_env\n",
+                                    "source /opt/app_env/bin/activate\n",
+                                    "pip install boto3\n",
+                                    "echo 'Setting up Kinesis stream...' >> /var/log/user-data.log\n",
+                                    "aws kinesis put-record --stream-name ${StreamName} --partition-key test --data test >> /var/log/user-data.log 2>&1\n",
+                                    "echo 'Setup complete.' >> /var/log/user-data.log\n"
                                 ],
                                 "StreamName": {"Ref": "InsuranceClaimsStream"}
                             }
