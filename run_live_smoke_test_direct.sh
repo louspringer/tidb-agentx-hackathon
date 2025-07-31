@@ -27,18 +27,17 @@ echo ""
 echo "🔑 Looking for Anthropic API key..."
 ANTHROPIC_API_KEY=""
 
-# Try standard environment variable names first
-for item_name in "ANTHROPIC_API_KEY" "Anthropic Cursor AI" "Anthropic API Key" "Anthropic" "Claude API Key"; do
-    # Sanitize item_name to prevent command injection
-    sanitized_item_name=$(printf '%q' "$item_name")
-    echo "  Trying: $sanitized_item_name"
+# Define a whitelist of allowed item names for security
+allowed_anthropic_items=("ANTHROPIC_API_KEY" "Anthropic Cursor AI" "Anthropic API Key" "Anthropic" "Claude API Key")
+for item_name in "${allowed_anthropic_items[@]}"; do
+    echo "  Trying: $item_name"
     # Try different field names
     for field_name in "credential" "api key" "password" "key" "secret"; do
         # Sanitize field_name to prevent command injection
         sanitized_field_name=$(printf '%q' "$field_name")
-        credential=$(op item get "$sanitized_item_name" --fields "$sanitized_field_name" --reveal 2>/dev/null)
+        credential=$(op item get "$item_name" --fields "$sanitized_field_name" --reveal 2>/dev/null)
         if [ $? -eq 0 ] && [ -n "$credential" ]; then
-            echo "  ✅ Found Anthropic API key in '$sanitized_item_name' field '$sanitized_field_name'"
+            echo "  ✅ Found Anthropic API key in '$item_name' field '$sanitized_field_name'"
             ANTHROPIC_API_KEY="$credential"
             export ANTHROPIC_API_KEY
             break 2
@@ -55,18 +54,17 @@ echo ""
 echo "🔑 Looking for OpenAI API key..."
 OPENAI_API_KEY=""
 
-# Try standard environment variable names first
-for item_name in "OPENAI_API_KEY" "OpenAI API Key" "OpenAI" "GPT API Key"; do
-    # Sanitize item_name to prevent command injection
-    sanitized_item_name=$(printf '%q' "$item_name")
-    echo "  Trying: $sanitized_item_name"
+# Define a whitelist of allowed item names for security
+allowed_openai_items=("OPENAI_API_KEY" "OpenAI API Key" "OpenAI" "GPT API Key")
+for item_name in "${allowed_openai_items[@]}"; do
+    echo "  Trying: $item_name"
     # Try different field names
     for field_name in "credential" "api key" "password" "key" "secret"; do
         # Sanitize field_name to prevent command injection
         sanitized_field_name=$(printf '%q' "$field_name")
-        credential=$(op item get "$sanitized_item_name" --fields "$sanitized_field_name" --reveal 2>/dev/null)
+        credential=$(op item get "$item_name" --fields "$sanitized_field_name" --reveal 2>/dev/null)
         if [ $? -eq 0 ] && [ -n "$credential" ]; then
-            echo "  ✅ Found OpenAI API key in '$sanitized_item_name' field '$sanitized_field_name'"
+            echo "  ✅ Found OpenAI API key in '$item_name' field '$sanitized_field_name'"
             OPENAI_API_KEY="$credential"
             export OPENAI_API_KEY
             break 2
