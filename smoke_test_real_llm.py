@@ -16,6 +16,7 @@ class RealLLMOrchestrator:
     def __init__(self, api_key: str = None):
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.base_url = "https://api.openai.com/v1/chat/completions"
+        self.DEFAULT_MODEL = "gpt-4-turbo"
     
     def call_partner_llm(self, context: str, jeopardy_question: str) -> Dict[str, Any]:
         """Actually call another LLM for real second opinion"""
@@ -99,7 +100,17 @@ def test_unknown_scenario_1():
     print("\n🤖 Real LLM Analysis:")
     print(json.dumps(real_result, indent=2))
     
-    return result, real_result
+    # Validate our orchestrator worked
+    assert "assumptions_detected" in result, "Missing assumptions_detected"
+    assert "blind_spots_identified" in result, "Missing blind_spots_identified"
+    assert "confidence" in result, "Missing confidence"
+    assert "final_decision" in result, "Missing final_decision"
+    
+    # Note: Real LLM may fail due to missing API key, but that's expected in CI
+    if "error" in real_result:
+        print("⚠️ Real LLM failed (expected without API key)")
+    else:
+        assert "questions" in real_result, "Real LLM missing questions"
 
 def test_unknown_scenario_2():
     """Test with security scenario - completely different domain"""
@@ -129,7 +140,17 @@ def test_unknown_scenario_2():
     print("\n🤖 Real LLM Analysis:")
     print(json.dumps(real_result, indent=2))
     
-    return result, real_result
+    # Validate our orchestrator worked
+    assert "assumptions_detected" in result, "Missing assumptions_detected"
+    assert "blind_spots_identified" in result, "Missing blind_spots_identified"
+    assert "confidence" in result, "Missing confidence"
+    assert "final_decision" in result, "Missing final_decision"
+    
+    # Note: Real LLM may fail due to missing API key, but that's expected in CI
+    if "error" in real_result:
+        print("⚠️ Real LLM failed (expected without API key)")
+    else:
+        assert "questions" in real_result, "Real LLM missing questions"
 
 def test_edge_case():
     """Test edge case - legitimate use of assumption words"""
@@ -159,7 +180,17 @@ def test_edge_case():
     print("\n🤖 Real LLM Analysis:")
     print(json.dumps(real_result, indent=2))
     
-    return result, real_result
+    # Validate our orchestrator worked
+    assert "assumptions_detected" in result, "Missing assumptions_detected"
+    assert "blind_spots_identified" in result, "Missing blind_spots_identified"
+    assert "confidence" in result, "Missing confidence"
+    assert "final_decision" in result, "Missing final_decision"
+    
+    # Note: Real LLM may fail due to missing API key, but that's expected in CI
+    if "error" in real_result:
+        print("⚠️ Real LLM failed (expected without API key)")
+    else:
+        assert "questions" in real_result, "Real LLM missing questions"
 
 def compare_results(our_result: Dict, real_llm_result: Dict) -> Dict[str, Any]:
     """Compare our orchestrator vs real LLM results"""

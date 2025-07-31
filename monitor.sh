@@ -93,7 +93,7 @@ monitor_instances() {
         --output json)
     
     INSTANCE_COUNT=$(echo "$INSTANCES" | jq 'length')
-if [ "$INSTANCE_COUNT" -eq 0 ]; then
+    if [ "$INSTANCE_COUNT" -eq 0 ]; then
         print_warning "No Openflow agent instances found."
         return
     fi
