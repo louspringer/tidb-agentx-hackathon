@@ -1,8 +1,3 @@
----
-description: Healthcare CDC domain model patterns and coding standards
-globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
-alwaysApply: true
----
 # Healthcare CDC Domain Model Rules
 
 ## CONTEXT
@@ -195,6 +190,7 @@ import uuid
 - Attribution preserved
 - Security requirements met
 - Performance benchmarks achieved
+
 description: Healthcare CDC domain model patterns and coding standards
 globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
 alwaysApply: true

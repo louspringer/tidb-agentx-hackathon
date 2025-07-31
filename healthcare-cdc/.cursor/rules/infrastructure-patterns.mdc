@@ -1,8 +1,3 @@
----
-description: Healthcare CDC infrastructure patterns for CloudFormation and Snowflake
-globs: ["healthcare-cdc/**/*.yaml", "healthcare-cdc/**/*.sql", "healthcare-cdc/**/*.py"]
-alwaysApply: true
----
 # Healthcare CDC Infrastructure Patterns
 
 ## CONTEXT
@@ -305,6 +300,7 @@ ORDER BY eventCreationUnixTime DESC;
 - Compliance requirements satisfied
 - Performance benchmarks achieved
 - Audit trail functional
+
 description: Healthcare CDC infrastructure patterns for CloudFormation and Snowflake
 globs: ["healthcare-cdc/**/*.yaml", "healthcare-cdc/**/*.sql", "healthcare-cdc/**/*.py"]
 alwaysApply: true
