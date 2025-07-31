@@ -28,7 +28,6 @@ def test_requirement_1_cloudformation_detection():
     print(f"✅ Domain: {result.detected_domain}")
     print(f"✅ Confidence: {result.confidence}")
     print(f"✅ Tools: {result.recommended_tools}")
-    return True
 
 def test_requirement_2_tool_selection():
     """REQUIREMENT: Use domain-specific tools"""
@@ -51,7 +50,6 @@ def test_requirement_2_tool_selection():
     
     print(f"✅ CloudFormation tools: {cf_result['tools_used']}")
     print(f"✅ Python tools: {py_result['tools_used']}")
-    return True
 
 def test_requirement_3_exclusion_generation():
     """REQUIREMENT: Generate proper exclusions"""
@@ -68,7 +66,6 @@ def test_requirement_3_exclusion_generation():
     assert len(yaml_ignore) > 0, "No exclusions generated"
     
     print(f"✅ YAML exclusions: {yaml_ignore}")
-    return True
 
 def test_requirement_4_content_analysis():
     """REQUIREMENT: Intelligent content analysis"""
@@ -90,8 +87,6 @@ def test_requirement_4_content_analysis():
     # Verify model detected them
     result = model.analyze_file("models/Openflow-Playground.yaml")
     assert result.detected_domain == "cloudformation", "Content analysis failed"
-    
-    return True
 
 def test_requirement_5_confidence_scoring():
     """REQUIREMENT: Intelligent confidence scoring"""
@@ -109,7 +104,6 @@ def test_requirement_5_confidence_scoring():
     
     print(f"✅ CloudFormation confidence: {cf_result.confidence}")
     print(f"✅ Python confidence: {py_result.confidence}")
-    return True
 
 def test_requirement_6_tool_execution():
     """REQUIREMENT: Actual tool execution works"""
@@ -125,8 +119,6 @@ def test_requirement_6_tool_execution():
         print("✅ cfn-lint executed successfully")
     except (subprocess.CalledProcessError, FileNotFoundError):
         print("⚠️ cfn-lint not available, but model selected it correctly")
-    
-    return True
 
 def test_requirement_7_domain_registry():
     """REQUIREMENT: Extensible domain registry"""
@@ -145,7 +137,6 @@ def test_requirement_7_domain_registry():
         assert hasattr(config, 'patterns'), f"Domain {domain_name} missing patterns"
     
     print(f"✅ All domains registered: {list(model.domains.keys())}")
-    return True
 
 def main():
     """Run all traceability tests"""
