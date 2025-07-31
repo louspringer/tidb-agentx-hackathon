@@ -1,47 +1,51 @@
 #!/usr/bin/env python3
 """
-Live Smoke Test with Real API Credentials
-Tests the meta-cognitive orchestrator against real LLM APIs
+Live Smoke Test with LangChain Integration
+Clean, maintainable LLM integration without manual API glue code
 """
 
 import os
 import json
-import requests
 from typing import Dict, List, Any, Optional
+from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
+from langchain_core.messages import HumanMessage
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 from meta_cognitive_orchestrator import MetaCognitiveOrchestrator
 
 class LiveLLMOrchestrator:
-    """Live LLM integration for real smoke testing"""
+    """Clean LangChain-based LLM integration"""
     
     def __init__(self, api_key: Optional[str] = None, provider: str = "openai"):
         self.provider = provider
         self.api_key = api_key or os.getenv(f"{provider.upper()}_API_KEY")
-        self.base_url = self._get_base_url()
-        self.model = self._get_model()
-    
-    def _get_base_url(self) -> str:
-        if self.provider == "openai":
-            return "https://api.openai.com/v1/chat/completions"
-        elif self.provider == "anthropic":
-            return "https://api.anthropic.com/v1/messages"
-        else:
-            raise ValueError(f"Unsupported provider: {self.provider}")
-    
-    def _get_model(self) -> str:
-        if self.provider == "openai":
-            return "gpt-4-turbo"
-        elif self.provider == "anthropic":
-            return "claude-3-5-sonnet-20241022"
-        else:
-            return "gpt-4-turbo"
-    
-    def call_live_llm(self, context: str, jeopardy_question: str) -> Dict[str, Any]:
-        """Call live LLM API for real second opinion"""
         
-        if not self.api_key:
-            return {"error": f"No {self.provider.upper()}_API_KEY available", "questions": []}
+        # Validate provider first
+        if provider not in ["openai", "anthropic"]:
+            raise ValueError(f"Unsupported provider: {provider}")
         
-        prompt = f"""
+        # Initialize LangChain models (only if API key is available)
+        self.llm = None
+        if self.api_key:
+            if provider == "openai":
+                self.llm = ChatOpenAI(
+                    api_key=self.api_key,
+                    model="gpt-4-turbo",
+                    temperature=0.7
+                )
+            elif provider == "anthropic":
+                self.llm = ChatAnthropic(
+                    api_key=self.api_key,
+                    model="claude-3-5-sonnet-20241022",
+                    temperature=0.7
+                )
+        
+        # Set up JSON output parser
+        self.output_parser = JsonOutputParser()
+        
+        # Create the prompt template
+        self.prompt = ChatPromptTemplate.from_template("""
 You are a partner LLM helping to detect blind spots and unknown unknowns.
 
 Context: {context}
@@ -51,61 +55,30 @@ Jeopardy Question: {jeopardy_question}
 Generate 5 probing questions that would reveal blind spots, assumptions, or unknown unknowns. 
 Focus on questions that challenge the approach and reveal what might be missing.
 
-Format as JSON:
-{{
-    "questions": ["question1", "question2", ...],
-    "confidence": 0.0-1.0,
-    "blind_spots": ["blind_spot1", "blind_spot2", ...],
-    "recommendation": "ASK_HUMAN|INVESTIGATE|PROCEED"
-}}
-"""
+{format_instructions}
+""")
+        
+        # Create the chain (only if LLM is available)
+        self.chain = None
+        if self.llm:
+            self.chain = self.prompt | self.llm | self.output_parser
+    
+    def call_live_llm(self, context: str, jeopardy_question: str) -> Dict[str, Any]:
+        """Call live LLM API using LangChain"""
+        
+        if not self.api_key or not self.chain:
+            return {"error": f"No {self.provider.upper()}_API_KEY available", "questions": []}
         
         try:
-            if self.provider == "openai":
-                response = requests.post(
-                    self.base_url,
-                    headers={
-                        "Authorization": f"Bearer {self.api_key}",
-                        "Content-Type": "application/json"
-                    },
-                    json={
-                        "model": self.model,
-                        "messages": [{"role": "user", "content": prompt}],
-                        "temperature": 0.7,
-                        "max_tokens": 500
-                    },
-                    timeout=30
-                )
-            elif self.provider == "anthropic":
-                response = requests.post(
-                    self.base_url,
-                    headers={
-                        "x-api-key": self.api_key,
-                        "Content-Type": "application/json",
-                        "anthropic-version": "2023-06-01"
-                    },
-                    json={
-                        "model": self.model,
-                        "max_tokens": 500,
-                        "messages": [{"role": "user", "content": prompt}]
-                    },
-                    timeout=30
-                )
+            # Execute the chain
+            result = self.chain.invoke({
+                "context": context,
+                "jeopardy_question": jeopardy_question,
+                "format_instructions": self.output_parser.get_format_instructions()
+            })
             
-            if response.status_code == 200:
-                result = response.json()
-                if self.provider == "openai":
-                    content = result["choices"][0]["message"]["content"]
-                elif self.provider == "anthropic":
-                    content = result["content"][0]["text"]
-                
-                try:
-                    return json.loads(content)
-                except json.JSONDecodeError:
-                    return {"error": "Invalid JSON response", "raw": content}
-            else:
-                return {"error": f"API error: {response.status_code}", "questions": []}
-                
+            return result
+            
         except Exception as e:
             return {"error": f"Request failed: {str(e)}", "questions": []}
 
@@ -237,38 +210,9 @@ def test_live_edge_case():
         assert "questions" in live_result, "Live LLM missing questions"
         print(f"✅ Live LLM generated {len(live_result['questions'])} questions")
 
-def compare_live_results(our_result: Dict, live_result: Dict) -> Dict[str, Any]:
-    """Compare our orchestrator vs live LLM results"""
-    
-    comparison = {
-        "our_assumptions": len(our_result["assumptions_detected"]),
-        "our_blind_spots": len(our_result["blind_spots_identified"]),
-        "our_confidence": our_result["confidence"],
-        "our_decision": our_result["final_decision"],
-        "live_llm_questions": len(live_result.get("questions", [])),
-        "live_llm_confidence": live_result.get("confidence", 0.0),
-        "live_llm_recommendation": live_result.get("recommendation", "UNKNOWN"),
-        "agreement": False,
-        "issues": []
-    }
-    
-    # Check for agreement on confidence
-    confidence_diff = abs(comparison["our_confidence"] - comparison["live_llm_confidence"])
-    if confidence_diff < 0.3:
-        comparison["agreement"] = True
-    
-    # Check for issues
-    if "error" in live_result:
-        comparison["issues"].append(f"Live LLM error: {live_result['error']}")
-    
-    if comparison["our_confidence"] > 0.8 and comparison["live_llm_confidence"] < 0.3:
-        comparison["issues"].append("Major confidence disagreement")
-    
-    return comparison
-
 def main():
-    """Run live smoke tests with real API credentials"""
-    print("🔥 LIVE SMOKE TEST - REAL API CREDENTIALS")
+    """Run live smoke tests with LangChain integration"""
+    print("🔥 LIVE SMOKE TEST - LANGCHAIN INTEGRATION")
     print("=" * 60)
     
     # Check for API credentials
@@ -291,8 +235,6 @@ def main():
         ("Edge Case", test_live_edge_case)
     ]
     
-    results = []
-    
     for test_name, test_func in tests:
         print(f"\n🧪 Running: {test_name}")
         try:
@@ -302,11 +244,11 @@ def main():
             print(f"❌ {test_name} failed: {e}")
     
     print("\n" + "=" * 60)
-    print("🎯 LIVE TEST COMPLETED!")
-    print("- Tests actual LLM integration")
-    print("- Tests real unknown scenarios")
-    print("- Tests edge cases with live APIs")
-    print("- Validates meta-cognitive capabilities")
+    print("🎯 LANGCHAIN LIVE TEST COMPLETED!")
+    print("- Clean, maintainable LLM integration")
+    print("- No manual API glue code")
+    print("- Built-in JSON parsing and error handling")
+    print("- Production-ready LangChain patterns")
 
 if __name__ == "__main__":
     main() 
