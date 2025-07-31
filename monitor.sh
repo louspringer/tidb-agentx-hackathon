@@ -92,7 +92,8 @@ monitor_instances() {
         --query 'Reservations[].Instances[]' \
         --output json)
     
-    if [ "$(echo "$INSTANCES" | jq 'length')" -eq 0 ]; then
+    INSTANCE_COUNT=$(echo "$INSTANCES" | jq 'length')
+if [ "$INSTANCE_COUNT" -eq 0 ]; then
         print_warning "No Openflow agent instances found."
         return
     fi

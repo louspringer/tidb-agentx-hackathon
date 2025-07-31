@@ -137,12 +137,12 @@ class MultiDimensionalSmokeTest:
             "gpt4": {
                 "api_key_env": "OPENAI_API_KEY",
                 "endpoint": "https://api.openai.com/v1/chat/completions",
-                "model_name": "gpt-4o-mini"
+                "model_name": "gpt-4-turbo"
             },
             "gpt4o": {
                 "api_key_env": "OPENAI_API_KEY",
                 "endpoint": "https://api.openai.com/v1/chat/completions", 
-                "model_name": "gpt-4o-mini"
+                "model_name": "gpt-4-turbo"
             },
             "gpt4_turbo": {
                 "api_key_env": "OPENAI_API_KEY",
@@ -152,12 +152,12 @@ class MultiDimensionalSmokeTest:
             "claude": {
                 "api_key_env": "ANTHROPIC_API_KEY", 
                 "endpoint": "https://api.anthropic.com/v1/messages",
-                "model_name": "claude-3-5-sonnet-20241022"
+                "model_name": "claude-3-sonnet-20240229"
             },
             "claude_web": {
                 "api_key_env": "ANTHROPIC_API_KEY",
                 "endpoint": "https://api.anthropic.com/v1/messages",
-                "model_name": "claude-3-5-sonnet-20241022"
+                "model_name": "claude-3-sonnet-20240229"
             },
             "claude_haiku": {
                 "api_key_env": "ANTHROPIC_API_KEY",

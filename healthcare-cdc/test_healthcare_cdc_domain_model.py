@@ -345,5 +345,4 @@ def test_integration():
     schema_sql = model.generate_snowflake_schema()
     assert "CREATE DATABASE" in schema_sql
 
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"]) 
+# Tests should be run externally with: pytest healthcare-cdc/test_healthcare_cdc_domain_model.py -v 
