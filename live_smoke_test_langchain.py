@@ -41,6 +41,10 @@ class LiveLLMOrchestrator:
                         model="claude-3-5-sonnet-20241022",
                         temperature=0.7
                     )
+            except ImportError as e:
+                raise ValueError(f"Failed to import {provider} dependencies: {str(e)}. Install required packages.")
+            except ValueError as e:
+                raise ValueError(f"Invalid {provider} configuration: {str(e)}. Check API key format.")
             except Exception as e:
                 raise ValueError(f"Failed to initialize {provider} model: {str(e)}. Check API key validity and model availability.")
         

@@ -288,10 +288,13 @@ def main():
     
     for test in tests:
         try:
-            if test():
-                passed += 1
+            test()  # Tests should use assertions, not return values
+            passed += 1
+            print(f"✅ {test.__name__}: PASSED")
+        except AssertionError as e:
+            print(f"❌ {test.__name__}: ASSERTION FAILED - {e}")
         except Exception as e:
-            print(f"❌ {test.__name__}: {e}")
+            print(f"❌ {test.__name__}: EXCEPTION - {e}")
     
     print("\n" + "=" * 50)
     print(f"📊 FINAL RESULTS: {passed}/{total} tests passed")

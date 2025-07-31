@@ -171,9 +171,10 @@ class PipelineConfiguration:
 class HealthcareCDCDomainModel:
     """Domain Model for Healthcare CDC System"""
     
-    def __init__(self):
+    def __init__(self, sql_template_path: Optional[str] = None):
         self.infrastructure = InfrastructureComponents()
         self.pipeline_config = PipelineConfiguration()
+        self.sql_template_path = sql_template_path
         self._setup_pipeline()
     
     def _setup_pipeline(self):
@@ -269,7 +270,10 @@ class HealthcareCDCDomainModel:
     
     def _get_merge_sql(self) -> str:
         """Get the SQL merge statement for CDC operations"""
-        sql_file_path = Path(__file__).parent / "sql" / "merge_cdc_operations.sql"
+        if self.sql_template_path:
+            sql_file_path = Path(self.sql_template_path)
+        else:
+            sql_file_path = Path(__file__).parent / "sql" / "merge_cdc_operations.sql"
         
         try:
             with open(sql_file_path, 'r') as f:
@@ -385,7 +389,7 @@ class HealthcareCDCDomainModel:
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
                         "InstanceType": {"Ref": "EC2InstanceType"},
-                        "ImageId": {"Ref": "AWS::SSM::Parameter::Value<String>/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"},
+                        "ImageId": {"Ref": "AWS::SSM::Parameter::Value<String>/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"},
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
                         "IamInstanceProfile": {"Ref": "EC2InstanceProfile"},
