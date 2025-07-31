@@ -19,9 +19,9 @@ class DomainConfig:
     linter: str
     validator: Optional[str] = None
     formatter: Optional[str] = None
-    patterns: List[str] = None
-    exclude_patterns: List[str] = None
-    content_indicators: List[str] = None
+    patterns: Optional[List[str]] = None
+    exclude_patterns: Optional[List[str]] = None
+    content_indicators: Optional[List[str]] = None
     
     def __post_init__(self):
         if self.patterns is None:
@@ -72,6 +72,34 @@ class ProjectModel:
                 patterns=["*.yaml", "*.yml"],
                 exclude_patterns=["models/*.yaml", "*.template.yaml"],
                 content_indicators=["---", "key: value"]
+            ),
+            "yaml_infrastructure": DomainConfig(
+                name="yaml_infrastructure",
+                linter="cfn-lint",
+                validator="aws-cloudformation",
+                patterns=["*cloudformation*.yaml", "*infrastructure*.yaml", "*aws*.yaml", "models/*.yaml"],
+                content_indicators=["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"]
+            ),
+            "yaml_config": DomainConfig(
+                name="yaml_config",
+                linter="yamllint",
+                validator="jsonschema",
+                patterns=["config*.yaml", "settings*.yaml", "*.config.yaml"],
+                content_indicators=["config:", "settings:", "environment:", "features:"]
+            ),
+            "yaml_cicd": DomainConfig(
+                name="yaml_cicd",
+                linter="actionlint",
+                validator="gitlab-ci-lint",
+                patterns=[".github/*.yaml", ".gitlab-ci.yml", "*.workflow.yaml", "azure-pipelines*.yml"],
+                content_indicators=["on:", "jobs:", "steps:", "pipeline:", "stages:"]
+            ),
+            "yaml_kubernetes": DomainConfig(
+                name="yaml_kubernetes",
+                linter="kubectl",
+                validator="kubeval",
+                patterns=["k8s/*.yaml", "kubernetes/*.yaml", "*.k8s.yaml"],
+                content_indicators=["apiVersion:", "kind:", "metadata:", "spec:"]
             ),
             "security": DomainConfig(
                 name="security",
@@ -165,7 +193,7 @@ class ProjectModel:
         
         for command in analysis.validation_commands:
             try:
-                result = subprocess.run(
+                result: subprocess.CompletedProcess[str] = subprocess.run(
                     command.split(), 
                     capture_output=True, 
                     text=True, 
