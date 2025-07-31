@@ -1,3 +1,8 @@
+---
+description: Healthcare CDC infrastructure patterns for CloudFormation and Snowflake
+globs: ["healthcare-cdc/**/*.yaml", "healthcare-cdc/**/*.sql", "healthcare-cdc/**/*.py"]
+alwaysApply: true
+---
 # Healthcare CDC Infrastructure Patterns
 
 ## CONTEXT
