@@ -1,3 +1,9 @@
+---
+description: Healthcare CDC domain model patterns and coding standards
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: false
+---
+
 # Healthcare CDC Domain Model Rules
 
 ## CONTEXT

@@ -1,3 +1,9 @@
+---
+description: Healthcare CDC attribution requirements and patterns
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: false
+---
+
 # Healthcare CDC Attribution Requirements
 
 ## CONTEXT
