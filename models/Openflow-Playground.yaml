@@ -12,7 +12,6 @@ Parameters:
   SnowflakeOAuthIntegrationName:
     Description: Name of the Snowflake integration that provides OAuth2 for Snowflake Openflow services
     Type: String
-    Default: OPENFLOW_DATAPLANE_9A8F7433_020F_48EE_AEDC_4F8CC2135B50
     MinLength: 1
 
   SnowflakeOAuthClientID:
@@ -29,20 +28,17 @@ Parameters:
     MinLength: 1
 
   SnowflakeAccountURL:
-    Description: Snowflake Account base URL
+    Description: Snowflake Account base URL (e.g., https://your-account.snowflakecomputing.com)
     Type: String
-    Default: https://cfclgqp-hqb93436.snowflakecomputing.com
     MinLength: 1
 
   SnowflakeOrganization:
     Description: Identifier for the organization of the Snowflake account
-    Default: CFCLGQP
     Type: String
     MinLength: 1
 
   SnowflakeAccount:
     Description: Identifier for the Snowflake account, excluding the organization
-    Default: HQB93436
     Type: String
     MinLength: 1
 
@@ -65,21 +61,18 @@ Parameters:
     MinLength: 1
 
   DataPlaneURL:
-    Description: The URL for accessing this Data Plane through a web browser.
+    Description: The URL for accessing this Data Plane through a web browser (provided by Snowflake)
     Type: String
-    Default: buiylzk8.openflow.cfclgqp-hqb93436.us-east-1.aws.snowflake-customer.app
     MinLength: 1
 
   DataPlaneKey:
     Description: The unique key for this Data Plane, used as part of the name of created cloud resources.
     Type: String
-    Default: buiylzk8
     MinLength: 1
 
   DataPlaneUUID:
-    Description: The unique identifier for this Data Plane, used to validate the Data Plane with the Control Plane.
+    Description: The unique identifier for this Data Plane, used to validate the Data Plane with the Control Plane (provided by Snowflake)
     Type: String
-    Default: 9a8f7433-020f-48ee-aedc-4f8cc2135b50
     MinLength: 1
 
   AgentImageVersion:
@@ -133,15 +126,13 @@ Parameters:
     AllowedPattern: ^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/\d{1,3}$
 
   TelemetryURL:
-    Description: The Snowflake URL that receives telemetry emitted from this Data Plane
+    Description: The Snowflake URL that receives telemetry emitted from this Data Plane (provided by Snowflake)
     Type: String
-    Default: https://cfclgqp-hqb93436.telemetry.iadaax.snowflakecomputing.com
     MinLength: 1
 
   ControlPlaneURL:
-    Description: The Snowflake URL of the Control Plane that manages this Data Plane
+    Description: The Snowflake URL of the Control Plane that manages this Data Plane (provided by Snowflake)
     Type: String
-    Default: https://cfclgqp-hqb93436.openflow.iadaax.snowflakecomputing.com
     MinLength: 1
 
   UseImageRegistryOverPrivateLink:
