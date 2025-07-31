@@ -17,14 +17,12 @@ Parameters:
   SnowflakeOAuthClientID:
     Description: Snowflake OAuth2 Client ID to secure communications to Snowflake Openflow services
     Type: String
-    Default: 8ThBttNtEB44hNz7yxGXZ7Jouuw=
     MinLength: 1
 
   SnowflakeOAuthClientSecret:
     NoEcho: true
     Description: Snowflake OAuth2 Client Secret to secure communications to Snowflake Openflow services
     Type: String
-    Default: 75/dT4ojSHwa1ped1iFhwQO3X0o0JWzTIZn2V3tijxU=
     MinLength: 1
 
   SnowflakeAccountURL:

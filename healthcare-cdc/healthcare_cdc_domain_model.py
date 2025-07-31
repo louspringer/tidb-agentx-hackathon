@@ -436,7 +436,7 @@ class HealthcareCDCDomainModel:
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
                         "InstanceType": {"Ref": "EC2InstanceType"},
-                        "ImageId": {"Fn::FindInMap": ["AWSRegionArch2AMI", {"Ref": "AWS::Region"}, "HVM64"]},
+                        "ImageId": {"Ref": "AWS::SSM::Parameter::Value<String>/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"},
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
                         "IamInstanceProfile": {"Ref": "EC2InstanceProfile"},
