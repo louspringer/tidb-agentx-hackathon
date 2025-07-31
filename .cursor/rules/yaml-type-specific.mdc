@@ -1,0 +1,68 @@
+# YAML File Type-Specific Rules
+
+## File Type Detection and Routing
+
+### 1. Infrastructure/CloudFormation YAML
+**Patterns:** `*cloudformation*.yaml`, `*infrastructure*.yaml`, `*aws*.yaml`, `models/*.yaml`
+**Apply:** CloudFormation-specific linting rules
+**Tools:** cfn-lint, AWS CloudFormation Designer
+**Validation:** CloudFormation syntax, AWS resource validation
+
+### 2. Configuration YAML
+**Patterns:** `config*.yaml`, `settings*.yaml`, `*.config.yaml`
+**Apply:** Configuration validation rules
+**Tools:** jsonschema, yamllint
+**Validation:** Schema validation, required fields, data types
+
+### 3. CI/CD Pipeline YAML
+**Patterns:** `.github/*.yaml`, `.gitlab-ci.yml`, `*.workflow.yaml`, `azure-pipelines*.yml`
+**Apply:** CI/CD pipeline rules
+**Tools:** GitHub Actions validator, GitLab CI validator
+**Validation:** Workflow syntax, security practices
+
+### 4. Kubernetes YAML
+**Patterns:** `k8s/*.yaml`, `kubernetes/*.yaml`, `*.k8s.yaml`
+**Apply:** Kubernetes-specific rules
+**Tools:** kubectl validate, kubeval
+**Validation:** Kubernetes API validation, RBAC rules
+
+### 5. Docker Compose YAML
+**Patterns:** `docker-compose*.yml`, `compose*.yml`
+**Apply:** Docker Compose rules
+**Tools:** docker-compose config
+**Validation:** Service definitions, network configuration
+
+### 6. Application Configuration YAML
+**Patterns:** `app*.yaml`, `application*.yaml`, `*.app.yaml`
+**Apply:** Application config rules
+**Tools:** yamllint, custom schema validation
+**Validation:** Environment-specific configs, feature flags
+
+## Universal YAML Rules
+
+### Formatting Standards
+- Use 2-space indentation (never tabs)
+- Use consistent quoting (prefer unquoted unless needed)
+- Use explicit `null` values when required
+- Use YAML anchors and aliases for DRY principles
+
+### Security Practices
+- Never hardcode secrets or credentials
+- Use environment variables or secret management
+- Validate all external inputs
+- Follow principle of least privilege
+
+### Validation Strategy
+1. **Detect file type** based on path and content
+2. **Apply type-specific rules** and tools
+3. **Validate against appropriate schema**
+4. **Check security and best practices**
+5. **Ensure proper formatting and structure**
+
+## Common YAML Issues to Prevent
+- Mixed indentation (spaces vs tabs)
+- Incorrect YAML syntax (missing colons, wrong quotes)
+- Invalid references or anchors
+- Security vulnerabilities (hardcoded secrets)
+- Schema violations
+- Inconsistent formatting
