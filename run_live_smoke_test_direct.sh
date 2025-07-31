@@ -22,33 +22,48 @@ fi
 
 echo "✅ 1Password CLI available and signed in"
 
-# Try to get Anthropic API key from the specific item we found
+# Try to get Anthropic API key - look for standard env var names
 echo ""
-echo "🔑 Getting Anthropic API key from 'Anthropic Cursor AI'..."
-ANTHROPIC_API_KEY=$(op item get "Anthropic Cursor AI" --fields credential --reveal 2>/dev/null)
-if [ $? -eq 0 ] && [ -n "$ANTHROPIC_API_KEY" ]; then
-    echo "✅ Found Anthropic API key in 1Password"
-    export ANTHROPIC_API_KEY
-else
-    echo "❌ Could not get Anthropic API key"
-    ANTHROPIC_API_KEY=""
+echo "🔑 Looking for Anthropic API key..."
+ANTHROPIC_API_KEY=""
+
+# Try standard environment variable names first
+for item_name in "ANTHROPIC_API_KEY" "Anthropic Cursor AI" "Anthropic API Key" "Anthropic" "Claude API Key"; do
+    echo "  Trying: $item_name"
+    # Try different field names
+    for field_name in "credential" "api key" "password" "key" "secret"; do
+        credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null)
+        if [ $? -eq 0 ] && [ -n "$credential" ]; then
+            echo "  ✅ Found Anthropic API key in '$item_name' field '$field_name'"
+            ANTHROPIC_API_KEY="$credential"
+            export ANTHROPIC_API_KEY
+            break 2
+        fi
+    done
+done
+
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+    echo "❌ Could not find Anthropic API key"
 fi
 
-# Try to get OpenAI API key - let's check if there's a more specific item
+# Try to get OpenAI API key - look for standard env var names
 echo ""
 echo "🔑 Looking for OpenAI API key..."
 OPENAI_API_KEY=""
 
-# Try a few common patterns
-for item_name in "OpenAI API Key" "OpenAI" "GPT API Key"; do
+# Try standard environment variable names first
+for item_name in "OPENAI_API_KEY" "OpenAI API Key" "OpenAI" "GPT API Key"; do
     echo "  Trying: $item_name"
-    credential=$(op item get "$item_name" --fields credential --reveal 2>/dev/null)
-    if [ $? -eq 0 ] && [ -n "$credential" ]; then
-        echo "  ✅ Found OpenAI API key in '$item_name'"
-        OPENAI_API_KEY="$credential"
-        export OPENAI_API_KEY
-        break
-    fi
+    # Try different field names
+    for field_name in "credential" "api key" "password" "key" "secret"; do
+        credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null)
+        if [ $? -eq 0 ] && [ -n "$credential" ]; then
+            echo "  ✅ Found OpenAI API key in '$item_name' field '$field_name'"
+            OPENAI_API_KEY="$credential"
+            export OPENAI_API_KEY
+            break 2
+        fi
+    done
 done
 
 if [ -z "$OPENAI_API_KEY" ]; then
@@ -79,8 +94,8 @@ echo ""
 echo "🧪 Running live smoke test with 1Password credentials..."
 echo ""
 
-# Run the live smoke test
-python live_smoke_test.py
+# Run the live smoke test with LangChain
+python live_smoke_test_langchain.py
 
 echo ""
 echo "📊 Test completed!"
