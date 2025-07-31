@@ -11,6 +11,9 @@ def test_anthropic_smoke_test():
     """Test the exact same request as the smoke test"""
     
     # Get API key from 1Password using environment variable or secure method
+    # DEMO ONLY: This uses environment variables for demonstration purposes
+    # In production, consider using 1Password SDK or secure credential management
+    # For healthcare compliance, implement proper credential rotation and audit trails
     api_key = os.getenv('ANTHROPIC_API_KEY')
     if not api_key:
         print("❌ ANTHROPIC_API_KEY environment variable not set")

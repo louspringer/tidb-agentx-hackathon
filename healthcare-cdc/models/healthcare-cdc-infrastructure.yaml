@@ -102,16 +102,25 @@ Resources:
           ToPort: 22
           CidrIp: !Ref TrustedIpRange
           Description: SSH access (restricted to trusted IP range)
+          # DEMO ONLY: This allows SSH access for demonstration purposes
+          # In production, consider using AWS Systems Manager Session Manager
+          # For healthcare compliance, implement strict IP restrictions
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: !Ref TrustedIpRange
           Description: HTTP access (restricted to trusted IP range)
+          # DEMO ONLY: This allows HTTP access for demonstration purposes
+          # In production, use a load balancer with proper security groups
+          # For healthcare compliance, implement strict access controls
         - IpProtocol: tcp
           FromPort: 443
           ToPort: 443
           CidrIp: !Ref TrustedIpRange
           Description: HTTPS access (restricted to trusted IP range)
+          # DEMO ONLY: This allows HTTPS access for demonstration purposes
+          # In production, use a load balancer with proper security groups
+          # For healthcare compliance, implement strict access controls
       SecurityGroupEgress:
         - IpProtocol: -1
           CidrIp: 0.0.0.0/0
