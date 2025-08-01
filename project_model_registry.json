@@ -41,7 +41,7 @@
     },
     "security_first": {
       "patterns": ["src/security_first/*.py", "src/security_first/*.sh", "src/security_first/*.json", "**/*"],
-      "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash"],
+      "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash", "https", "ssl", "csrf", "rate_limit"],
       "linter": "bandit",
       "validator": "detect-secrets",
       "formatter": "safety",
@@ -49,7 +49,10 @@
       "requirements": [
         "Scan for hardcoded credentials and secrets",
         "Enforce security policy via detect-secrets and bandit",
-        "Check for known vulnerabilities with safety"
+        "Check for known vulnerabilities with safety",
+        "Enforce HTTPS for all connections",
+        "Implement rate limiting to prevent abuse",
+        "Validate CSRF tokens for session security"
       ]
     },
     "multi_agent_testing": {
@@ -496,6 +499,24 @@
       "domain": "healthcare_cdc",
       "implementation": "CI/CD pipeline with healthcare-specific security scans and monitoring",
       "test": "test_requirement_32_healthcare_cdc_cicd_integration"
+    },
+    {
+      "requirement": "HTTPS enforcement for all connections",
+      "domain": "security_first",
+      "implementation": "HTTPS enforcement module with TLS 1.2+ configuration and certificate validation",
+      "test": "test_requirement_33_https_enforcement"
+    },
+    {
+      "requirement": "Rate limiting to prevent abuse",
+      "domain": "security_first",
+      "implementation": "Redis-based rate limiting with configurable limits per endpoint and user",
+      "test": "test_requirement_34_rate_limiting"
+    },
+    {
+      "requirement": "CSRF protection for session security",
+      "domain": "security_first",
+      "implementation": "Session-based CSRF tokens with SHA-256 generation and validation",
+      "test": "test_requirement_35_csrf_protection"
     }
   ],
   "meta": {
