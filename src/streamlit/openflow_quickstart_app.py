@@ -18,7 +18,7 @@ import time
 import asyncio
 import hashlib
 import hmac
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 import streamlit as st
@@ -89,7 +89,7 @@ class DeploymentStatus:
     resources_created: int
     resources_total: int
     error_message: Optional[str] = None
-    last_updated: datetime = None
+    last_updated: Optional[datetime] = None
 
 class SecurityManager:
     """Security-first credential and session management"""
@@ -121,19 +121,21 @@ class SecurityManager:
     def validate_session(self, session_token: str) -> bool:
         """Validate JWT session token"""
         try:
-            payload = jwt.decode(session_token, SECURITY_CONFIG["jwt_secret"], algorithms=["HS256"])
+            payload = jwt.decode(session_token, str(SECURITY_CONFIG["jwt_secret"]), algorithms=["HS256"])
             return payload.get("exp", 0) > time.time()
         except jwt.InvalidTokenError:
             return False
     
     def create_session_token(self, user_id: str, role: str) -> str:
         """Create JWT session token"""
+        timeout_minutes = SECURITY_CONFIG["session_timeout_minutes"]
+        assert timeout_minutes is not None, "session_timeout_minutes should be set"
         payload = {
             "user_id": user_id,
             "role": role,
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=SECURITY_CONFIG["session_timeout_minutes"])
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes))
         }
-        return jwt.encode(payload, SECURITY_CONFIG["jwt_secret"], algorithm="HS256")
+        return jwt.encode(payload, str(SECURITY_CONFIG["jwt_secret"]), algorithm="HS256")
 
 class InputValidator:
     """Comprehensive input validation and sanitization"""
@@ -258,7 +260,7 @@ class MonitoringDashboard:
         events = self.deployment_manager.get_stack_events(stack_name)
         
         # Group by resource type and status
-        resource_status = {}
+        resource_status: Dict[str, Dict[str, int]] = {}
         for event in events:
             resource_type = event['ResourceType']
             status = event['ResourceStatus']
