@@ -1,6 +1,23 @@
 repos:
   - repo: local
     hooks:
+      - id: rule-compliance-check
+        name: Rule Compliance Check
+        entry: scripts/rule-compliance-check.sh
+        language: script
+        types: [yaml, json, python, markdown, text]
+        pass_filenames: false
+        always_run: true
+        description: "Check for deterministic editing compliance and coding standards"
+
+      - id: mdc-linter
+        name: MDC File Linter
+        entry: python scripts/mdc-linter.py
+        language: system
+        types: [text]
+        files: \.mdc$
+        description: "Validate .mdc files for proper YAML frontmatter structure"
+
       - id: security-check
         name: Security Check
         entry: scripts/security-check.sh

@@ -1,5 +1,7 @@
 ---
-title: Bash Scripting Rules
+description: Bash scripting rules and development guidelines
+globs: ["scripts/*.sh", "*.sh", "*.bash"]
+alwaysApply: true
 ---
 
 # Bash Scripting Rules
