@@ -14,22 +14,25 @@ import sys
 from typing import Dict, List, Any
 from dataclasses import dataclass
 
-# Mock external dependencies
-sys.modules['redis'] = Mock()
-sys.modules['boto3'] = Mock()
-sys.modules['jwt'] = Mock()
-sys.modules['cryptography'] = Mock()
-sys.modules['streamlit'] = Mock()
-sys.modules['plotly'] = Mock()
-sys.modules['plotly.graph_objects'] = Mock()
-sys.modules['plotly.express'] = Mock()
-sys.modules['pandas'] = Mock()
-sys.modules['numpy'] = Mock()
-sys.modules['pydantic'] = Mock()
-sys.modules['requests'] = Mock()
-sys.modules['botocore.exceptions'] = Mock()
+# Import the app components with proper test setup
+def setup_mocks():
+    """Setup mocks for external dependencies"""
+    sys.modules['redis'] = Mock()
+    sys.modules['boto3'] = Mock()
+    sys.modules['jwt'] = Mock()
+    sys.modules['cryptography'] = Mock()
+    sys.modules['streamlit'] = Mock()
+    sys.modules['plotly'] = Mock()
+    sys.modules['plotly.graph_objects'] = Mock()
+    sys.modules['plotly.express'] = Mock()
+    sys.modules['pandas'] = Mock()
+    sys.modules['numpy'] = Mock()
+    sys.modules['pydantic'] = Mock()
+    sys.modules['requests'] = Mock()
+    sys.modules['botocore.exceptions'] = Mock()
 
-# Import the app components with mocked dependencies
+# Setup mocks and import
+setup_mocks()
 from openflow_quickstart_app import (
     SecurityManager,
     InputValidator,
