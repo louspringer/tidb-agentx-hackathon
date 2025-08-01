@@ -1,6 +1,8 @@
 ---
 description: YAML file type-specific rules and validation strategies
-globs: ["**/*.yaml", "**/*.yml"]
+globs:
+- '**/*.yaml'
+- '**/*.yml'
 alwaysApply: true
 ---
 

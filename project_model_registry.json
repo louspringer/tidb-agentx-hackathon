@@ -200,6 +200,22 @@
         "Validate .mdc file structure",
         "Provide immediate IDE feedback"
       ]
+    },
+    "mdc_generator": {
+      "patterns": ["src/mdc_generator/*.py", "scripts/regenerate_mdc_files.py"],
+      "content_indicators": ["MDCFile", "MDCFrontmatter", "MDCGenerator", "mdc_generator"],
+      "linter": "flake8",
+      "validator": "pytest",
+      "formatter": "black",
+      "exclusions": [],
+      "requirements": [
+        "Use flake8 for Python linting",
+        "Validate MDC generator with pytest",
+        "Format Python code with black",
+        "Model .mdc files with Python dataclasses",
+        "Generate .mdc files using standard libraries",
+        "Provide simple projection from model to file"
+      ]
     }
   },
   "tool_selection_logic": {
@@ -427,6 +443,18 @@
       "domain": "rule_compliance",
       "implementation": "Cursor IDE plugin for immediate rule compliance feedback",
       "test": "test_requirement_24_immediate_ide_feedback"
+    },
+    {
+      "requirement": "MDC file modeling and generation",
+      "domain": "mdc_generator",
+      "implementation": "Python dataclasses and standard libraries for .mdc file generation",
+      "test": "test_requirement_25_mdc_generator"
+    },
+    {
+      "requirement": "Simple projection from model to file",
+      "domain": "mdc_generator",
+      "implementation": "MDCGenerator class for automated .mdc file generation",
+      "test": "test_requirement_26_mdc_projection"
     }
   ],
   "meta": {
