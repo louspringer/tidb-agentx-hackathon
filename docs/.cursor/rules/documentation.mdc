@@ -1,5 +1,7 @@
 ---
-title: Documentation Rules
+description: Documentation development rules and guidelines
+globs: ["docs/*.md", "*.md"]
+alwaysApply: true
 ---
 
 # Documentation Rules
@@ -35,7 +37,3 @@ title: Documentation Rules
 - **Version Control**: Track documentation changes
 - **Review Process**: Implement documentation review
 - **Feedback**: Collect and incorporate user feedback
-
-
-- **Feedback**: Collect and incorporate user feedback
-

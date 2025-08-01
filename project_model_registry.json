@@ -184,6 +184,22 @@
         "Scan for hardcoded credentials and secrets",
         "Enforce security policy via detect-secrets and bandit"
       ]
+    },
+    "rule_compliance": {
+      "patterns": ["scripts/rule-compliance-check.sh", "scripts/mdc-linter.py", ".cursor/plugins/*.py", "config/.pre-commit-config.yaml"],
+      "content_indicators": ["rule-compliance", "deterministic-editing", "pre-commit", "mdc-linter"],
+      "linter": "shellcheck",
+      "validator": "pytest",
+      "formatter": "black",
+      "exclusions": [],
+      "requirements": [
+        "Use shellcheck for shell script linting",
+        "Validate rule compliance with pytest",
+        "Format Python code with black",
+        "Enforce deterministic editing rules",
+        "Validate .mdc file structure",
+        "Provide immediate IDE feedback"
+      ]
     }
   },
   "tool_selection_logic": {
@@ -393,6 +409,24 @@
       "domain": "*",
       "implementation": "Domain-specific .cursor/rules files for each domain",
       "test": "test_requirement_21_domain_rules_validation"
+    },
+    {
+      "requirement": "Rule compliance enforcement system",
+      "domain": "rule_compliance",
+      "implementation": "Pre-commit hooks + IDE plugins + automated linting for rule compliance",
+      "test": "test_requirement_22_rule_compliance_enforcement"
+    },
+    {
+      "requirement": "Deterministic editing enforcement",
+      "domain": "rule_compliance",
+      "implementation": "Rule compliance checker + MDC linter for deterministic editing",
+      "test": "test_requirement_23_deterministic_editing_enforcement"
+    },
+    {
+      "requirement": "Immediate IDE feedback",
+      "domain": "rule_compliance",
+      "implementation": "Cursor IDE plugin for immediate rule compliance feedback",
+      "test": "test_requirement_24_immediate_ide_feedback"
     }
   ],
   "meta": {

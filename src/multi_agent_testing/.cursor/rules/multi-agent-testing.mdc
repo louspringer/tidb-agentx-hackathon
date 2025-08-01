@@ -1,41 +1,40 @@
 ---
+description: Multi-agent testing rules and guidelines
+globs: ["src/multi_agent_testing/**/*.py", "*diversity*.py", "*agent*.py", "*orchestrator*.py"]
+alwaysApply: true
+---
+
 # Multi-Agent Testing Rules
 
-## Multi-Agent Testing Framework Guidelines
+## Multi-Agent Testing Guidelines
 
-### Diversity Hypothesis Testing
-- **Multiple Perspectives**: Use 5+ different AI agents
-- **Diverse Roles**: Security, DevOps, UX, Performance, Code Quality
-- **Blind Spot Detection**: Focus on finding missed issues
-- **Confidence Scoring**: Rate confidence in findings
+### Testing Strategy
+- **Diversity Testing**: Test with diverse agent perspectives
+- **Blind Spot Detection**: Identify overlooked issues
+- **Comprehensive Coverage**: Test all critical paths
+- **Edge Cases**: Test edge cases and error conditions
 
-### Agent Configuration
-- **Specialized Roles**: Each agent has specific expertise
-- **Different Models**: Use different AI models when possible
-- **Temperature Variation**: Vary temperature for diverse outputs
-- **Prompt Engineering**: Craft role-specific prompts
+### Agent Types
+- **Security Expert**: Focus on security vulnerabilities
+- **DevOps Engineer**: Focus on deployment and operations
+- **Code Quality Expert**: Focus on code quality and maintainability
+- **User Experience Advocate**: Focus on usability and accessibility
+- **Performance Engineer**: Focus on performance and scalability
 
-### Testing Framework
-- **Comprehensive Coverage**: Test all aspects of the system
-- **Real LLM Calls**: Use actual API calls for validation
-- **Cost Tracking**: Monitor API usage and costs
-- **Result Analysis**: Analyze and synthesize findings
+### Testing Process
+- **Automated Testing**: Implement automated multi-agent testing
+- **Manual Review**: Include manual review of findings
+- **Prioritization**: Prioritize findings by impact
+- **Documentation**: Document all findings and recommendations
 
-### Validation Requirements
-- **Multi-Perspective Analysis**: Get input from all agent types
-- **Blind Spot Detection**: Identify issues single agents miss
-- **Confidence Scoring**: Rate confidence in each finding
-- **Recommendation Synthesis**: Combine findings into actionable items
+### Quality Assurance
+- **Validation**: Validate all test results
+- **Reproducibility**: Ensure tests are reproducible
+- **Coverage**: Ensure comprehensive test coverage
+- **Reporting**: Generate clear and actionable reports
 
-### Performance & Cost
-- **Efficient API Usage**: Minimize token usage
-- **Parallel Processing**: Use multi-threading when possible
-- **Caching**: Cache results to avoid duplicate calls
-- **Cost Monitoring**: Track and optimize API costs
-
-### Documentation
-- **Findings Documentation**: Document all blind spots found
-- **Recommendation Tracking**: Track implementation of recommendations
-- **Coverage Analysis**: Document coverage metrics
-- **Cost Analysis**: Document cost-benefit analysis
----
+### Integration
+- **CI/CD Integration**: Integrate with CI/CD pipelines
+- **Continuous Testing**: Implement continuous testing
+- **Feedback Loop**: Create feedback loops for improvement
+- **Metrics**: Track testing metrics and effectiveness

@@ -1,4 +1,9 @@
 ---
+description: Configuration management rules and guidelines
+globs: ["config/*.yaml", "config/*.yml", "config/*.json", "config/*.env"]
+alwaysApply: true
+---
+
 # Configuration Rules
 
 ## Configuration Management Guidelines
@@ -32,4 +37,3 @@
 - **Clear Naming**: Use clear, descriptive names
 - **Consistent Format**: Use consistent formatting
 - **Validation**: Validate configuration on startup
----

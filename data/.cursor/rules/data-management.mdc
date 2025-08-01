@@ -1,35 +1,33 @@
 ---
+description: Data management rules and guidelines
+globs: ["data/*.json", "data/*.py", "data/*.csv", "data/*.yaml", "data/*.html"]
+alwaysApply: true
+---
+
 # Data Management Rules
 
 ## Data Management Guidelines
 
 ### Data Security
-- **Access Control**: Restrict access to sensitive data
-- **Encryption**: Encrypt data at rest and in transit
+- **Encryption**: Encrypt sensitive data at rest and in transit
+- **Access Control**: Implement proper access controls for data
 - **Audit Logging**: Log all data access and modifications
 - **Data Classification**: Classify data by sensitivity level
 
-### Data Organization
-- **Structured Storage**: Use consistent data structures
-- **Naming Conventions**: Use clear, descriptive names
-- **Version Control**: Track data changes and versions
-- **Backup Strategy**: Implement regular data backups
+### Data Quality
+- **Validation**: Validate all data inputs
+- **Cleaning**: Implement data cleaning processes
+- **Consistency**: Ensure data consistency across systems
+- **Documentation**: Document data schemas and formats
 
 ### Data Processing
-- **Validation**: Validate all data inputs
-- **Transformation**: Document data transformations
-- **Quality Checks**: Implement data quality checks
-- **Error Handling**: Handle data processing errors gracefully
+- **Efficient Processing**: Use efficient data processing methods
+- **Error Handling**: Implement robust error handling
+- **Monitoring**: Monitor data processing performance
+- **Backup**: Maintain data backups
 
-### Data Types
-- **Configuration Data**: Application configuration
-- **Results Data**: Analysis and test results
-- **Log Data**: Application and system logs
-- **User Data**: User-generated content
-
-### Best Practices
-- **Minimal Data**: Store only necessary data
-- **Data Retention**: Implement data retention policies
-- **Privacy**: Respect user privacy and data protection
-- **Performance**: Optimize data access and storage
----
+### Data Storage
+- **Appropriate Storage**: Choose appropriate storage solutions
+- **Scalability**: Design for data growth
+- **Retention**: Implement data retention policies
+- **Archival**: Archive old data appropriately

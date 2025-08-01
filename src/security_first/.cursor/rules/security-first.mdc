@@ -1,4 +1,9 @@
 ---
+description: Security-first development rules and architecture guidelines
+globs: ["src/security_first/**/*.py", "src/security_first/**/*.sh", "src/security_first/**/*.json"]
+alwaysApply: true
+---
+
 # Security-First Development Rules
 
 ## Security-First Architecture Guidelines
@@ -38,4 +43,3 @@
 - **Vulnerability Scanning**: Scan for known vulnerabilities
 - **Secure Coding**: Follow OWASP guidelines
 - **Code Review**: Security-focused code reviews
----
