@@ -1,3 +1,4 @@
+---
 # Multi-Agent Testing Rules
 
 ## Multi-Agent Testing Framework Guidelines
@@ -37,7 +38,4 @@
 - **Recommendation Tracking**: Track implementation of recommendations
 - **Coverage Analysis**: Document coverage metrics
 - **Cost Analysis**: Document cost-benefit analysis
-description:
-globs:
-alwaysApply: false
 ---

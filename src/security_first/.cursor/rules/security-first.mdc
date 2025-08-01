@@ -1,3 +1,4 @@
+---
 # Security-First Development Rules
 
 ## Security-First Architecture Guidelines
@@ -37,7 +38,4 @@
 - **Vulnerability Scanning**: Scan for known vulnerabilities
 - **Secure Coding**: Follow OWASP guidelines
 - **Code Review**: Security-focused code reviews
-description:
-globs:
-alwaysApply: false
 ---

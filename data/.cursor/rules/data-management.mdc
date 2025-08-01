@@ -1,3 +1,4 @@
+---
 # Data Management Rules
 
 ## Data Management Guidelines
@@ -31,7 +32,4 @@
 - **Data Retention**: Implement data retention policies
 - **Privacy**: Respect user privacy and data protection
 - **Performance**: Optimize data access and storage
-description:
-globs:
-alwaysApply: false
 ---
