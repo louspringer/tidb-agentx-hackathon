@@ -39,18 +39,14 @@ import importlib.util
 import sys
 from pathlib import Path
 
-# Add src to Python path
+# Add src to Python path (only once)
 src_path = Path(__file__).parent.parent / "src"
-sys.path.insert(0, str(src_path))
+if str(src_path) not in sys.path:
+    sys.path.insert(0, str(src_path))
 
 try:
     # Import the module directly from the file path
     module_path = Path(__file__).parent.parent / "src" / "streamlit" / "openflow_quickstart_app.py"
-    
-    # Add the src directory to sys.path for proper imports
-    src_path = Path(__file__).parent.parent / "src"
-    if str(src_path) not in sys.path:
-        sys.path.insert(0, str(src_path))
     
     # Import using exec to avoid module loading issues
     with open(module_path, 'r') as f:
