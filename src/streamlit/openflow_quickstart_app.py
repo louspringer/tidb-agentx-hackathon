@@ -39,11 +39,17 @@ SECURITY_CONFIG = {
     "session_timeout_minutes": 15,
     "max_login_attempts": 3,
     "password_min_length": 12,
-    "jwt_secret": os.getenv("JWT_SECRET", "dev-secret-key"),
-    "fernet_key": os.getenv("FERNET_KEY", "dev-fernet-key-32-bytes-long"),
+    "jwt_secret": os.getenv("JWT_SECRET"),
+    "fernet_key": os.getenv("FERNET_KEY"),
     "redis_url": os.getenv("REDIS_URL", "redis://localhost:6379"),
     "aws_region": os.getenv("AWS_REGION", "us-east-1")
 }
+
+# Fail fast if critical security keys are not set
+if not SECURITY_CONFIG["jwt_secret"]:
+    raise RuntimeError("JWT_SECRET environment variable must be set for secure operation.")
+if not SECURITY_CONFIG["fernet_key"]:
+    raise RuntimeError("FERNET_KEY environment variable must be set for secure operation.")
 
 # Pydantic models for validation
 class SnowflakeConfig(BaseModel):
