@@ -1,0 +1,37 @@
+# Data Management Rules
+
+## Data Management Guidelines
+
+### Data Security
+- **Access Control**: Restrict access to sensitive data
+- **Encryption**: Encrypt data at rest and in transit
+- **Audit Logging**: Log all data access and modifications
+- **Data Classification**: Classify data by sensitivity level
+
+### Data Organization
+- **Structured Storage**: Use consistent data structures
+- **Naming Conventions**: Use clear, descriptive names
+- **Version Control**: Track data changes and versions
+- **Backup Strategy**: Implement regular data backups
+
+### Data Processing
+- **Validation**: Validate all data inputs
+- **Transformation**: Document data transformations
+- **Quality Checks**: Implement data quality checks
+- **Error Handling**: Handle data processing errors gracefully
+
+### Data Types
+- **Configuration Data**: Application configuration
+- **Results Data**: Analysis and test results
+- **Log Data**: Application and system logs
+- **User Data**: User-generated content
+
+### Best Practices
+- **Minimal Data**: Store only necessary data
+- **Data Retention**: Implement data retention policies
+- **Privacy**: Respect user privacy and data protection
+- **Performance**: Optimize data access and storage
+description:
+globs:
+alwaysApply: false
+---
