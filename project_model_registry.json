@@ -215,7 +215,9 @@
       "description": "Documentation and specifications",
       "PR_*.md": "Pull request documentation",
       "*.md": "General documentation",
-      "ORGANIZATION_SUMMARY.md": "File organization documentation"
+      "ORGANIZATION_SUMMARY.md": "File organization documentation",
+      "DOCUMENTATION_INDEX.md": "Comprehensive documentation index",
+      "prioritized_implementation_plan.md": "Prioritized implementation plan"
     },
     "config": {
       "description": "Configuration files",
@@ -228,7 +230,11 @@
       "description": "Data files and results",
       "*.json": "JSON data files",
       "cost_analysis.py": "Data analysis scripts",
-      "PR_Dashboard.html": "Dashboard data"
+      "PR_Dashboard.html": "Dashboard data",
+      "diversity_analysis_report.*": "Diversity analysis reports",
+      "*.png": "Analysis visualization images",
+      "*.svg": "Analysis visualization vectors",
+      "synthesis_*.json": "Synthesis analysis data"
     },
     "healthcare_cdc": {
       "description": "Healthcare CDC domain",
