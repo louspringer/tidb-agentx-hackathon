@@ -173,7 +173,7 @@ This is an invalid .mdc file without frontmatter.
         assert frontmatter.get("alwaysApply") is True, "Should always apply"
         # Check that .mdc files are included in globs (using the correct pattern)
         globs = frontmatter.get("globs", [])
-        mdc_patterns = [g for g in globs if "mdc" in g]
+        mdc_patterns = [g for g in globs if re.search(r'\.mdc(\W|$)', g)]
         assert len(mdc_patterns) > 0, "Should apply to .mdc files"
         
     def test_project_model_includes_rule_compliance(self):

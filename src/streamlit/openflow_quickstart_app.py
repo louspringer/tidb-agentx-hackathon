@@ -40,6 +40,7 @@ SECURITY_CONFIG = {
     "max_login_attempts": 3,
     "password_min_length": 12,
     "jwt_secret": os.getenv("JWT_SECRET", "dev-secret-key"),
+    "fernet_key": os.getenv("FERNET_KEY", "dev-fernet-key-32-bytes-long"),
     "redis_url": os.getenv("REDIS_URL", "redis://localhost:6379"),
     "aws_region": os.getenv("AWS_REGION", "us-east-1")
 }
@@ -88,7 +89,7 @@ class SecurityManager:
     """Security-first credential and session management"""
     
     def __init__(self):
-        self.fernet = Fernet(SECURITY_CONFIG["jwt_secret"])
+        self.fernet = Fernet(SECURITY_CONFIG["fernet_key"])
         self.redis_client = redis.from_url(SECURITY_CONFIG["redis_url"])
     
     def encrypt_credential(self, credential: str) -> str:
@@ -124,7 +125,7 @@ class SecurityManager:
         payload = {
             "user_id": user_id,
             "role": role,
-            "exp": datetime.utcnow() + timedelta(minutes=SECURITY_CONFIG["session_timeout_minutes"])
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=SECURITY_CONFIG["session_timeout_minutes"])
         }
         return jwt.encode(payload, SECURITY_CONFIG["jwt_secret"], algorithm="HS256")
 
@@ -390,9 +391,9 @@ class OpenFlowQuickstartApp:
             import bcrypt
             return bcrypt.checkpw(password.encode('utf-8'), user_db[username].encode('utf-8'))
         except ImportError:
-            # Fallback to SHA256 if bcrypt not available (not recommended for production)
-            password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            return hmac.compare_digest(password_hash, user_db[username])
+            # bcrypt is required for secure password validation
+            # Optionally, log a warning or display a message here
+            return False
     
     def main_dashboard(self):
         """Main dashboard with progressive disclosure"""
