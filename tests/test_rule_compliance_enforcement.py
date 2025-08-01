@@ -12,6 +12,7 @@ import sys
 import yaml
 import json
 import re
+import fnmatch
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
@@ -172,9 +173,9 @@ This is an invalid .mdc file without frontmatter.
         frontmatter = yaml.safe_load(frontmatter_text)
         
         assert frontmatter.get("alwaysApply") is True, "Should always apply"
-        # Check that .mdc files are included in globs (using the correct pattern)
+        # Check that .mdc files are included in globs (using fnmatch for proper glob pattern matching)
         globs = frontmatter.get("globs", [])
-        mdc_patterns = [g for g in globs if re.search(r'\.mdc(\W|$)', g)]
+        mdc_patterns = [g for g in globs if fnmatch.fnmatch("test.mdc", g) or fnmatch.fnmatch("**/*.mdc", g)]
         assert len(mdc_patterns) > 0, "Should apply to .mdc files"
         
     def test_project_model_includes_rule_compliance(self):
