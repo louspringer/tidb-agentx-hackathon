@@ -1,3 +1,7 @@
+---
+title: Bash Scripting Rules
+---
+
 # Bash Scripting Rules
 
 ## Bash Script Development Guidelines
@@ -37,7 +41,3 @@
 - **Parameter Documentation**: Document all parameters
 - **Dependencies**: List all dependencies
 - **Prerequisites**: Document prerequisites
-description:
-globs:
-alwaysApply: false
----

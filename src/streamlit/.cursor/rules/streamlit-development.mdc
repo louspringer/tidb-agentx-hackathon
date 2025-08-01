@@ -1,3 +1,4 @@
+---
 # Streamlit Development Rules
 
 ## Streamlit-Specific Guidelines
@@ -31,7 +32,4 @@
 - **Dependencies**: Keep requirements minimal and secure
 - **Monitoring**: Implement health checks and monitoring
 - **Scaling**: Design for multiple concurrent users
-description:
-globs:
-alwaysApply: false
 ---
