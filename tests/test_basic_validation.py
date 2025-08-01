@@ -45,7 +45,6 @@ sys.path.insert(0, str(src_path))
 
 try:
     # Import the module directly from the file path
-    import sys
     module_path = Path(__file__).parent.parent / "src" / "streamlit" / "openflow_quickstart_app.py"
     
     # Add the src directory to sys.path for proper imports
