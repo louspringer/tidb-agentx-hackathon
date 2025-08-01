@@ -33,16 +33,21 @@ def setup_mocks():
 
 # Setup mocks and import
 setup_mocks()
-from src.streamlit.openflow_quickstart_app import (
-    SecurityManager,
-    InputValidator,
-    DeploymentManager,
-    MonitoringDashboard,
-    OpenFlowQuickstartApp,
-    SnowflakeConfig,
-    OpenFlowConfig,
-    SECURITY_CONFIG
-)
+
+# Use importlib for robust import handling
+import importlib
+try:
+    openflow_module = importlib.import_module("src.streamlit.openflow_quickstart_app")
+    SecurityManager = openflow_module.SecurityManager
+    InputValidator = openflow_module.InputValidator
+    DeploymentManager = openflow_module.DeploymentManager
+    MonitoringDashboard = openflow_module.MonitoringDashboard
+    OpenFlowQuickstartApp = openflow_module.OpenFlowQuickstartApp
+    SnowflakeConfig = openflow_module.SnowflakeConfig
+    OpenFlowConfig = openflow_module.OpenFlowConfig
+    SECURITY_CONFIG = openflow_module.SECURITY_CONFIG
+except ImportError as e:
+    raise RuntimeError(f"Failed to import openflow_quickstart_app: {e}")
 
 class TestSecurityManager:
     """Test security-first credential and session management"""
