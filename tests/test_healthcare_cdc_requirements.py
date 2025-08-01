@@ -148,9 +148,9 @@ class TestHealthcareCDCRequirements:
         patterns = healthcare_domain["patterns"]
         
         # Check for YAML and JSON patterns for CI/CD
-        cicd_patterns = ["*.yaml", "*.json"]
+        cicd_patterns = ["healthcare-cdc/*.yaml", "healthcare-cdc/*.json"]
         for pattern in cicd_patterns:
-            # Accept any pattern in patterns that matches the file type (e.g., '*.yaml', 'healthcare-cdc/*.yaml', etc.)
+            # Accept any pattern in patterns that matches the file type (e.g., 'healthcare-cdc/*.yaml', etc.)
             import re
             regex = re.compile(fnmatch.translate(pattern))
             matched = any(regex.match(p) for p in patterns)

@@ -33,7 +33,7 @@ def setup_mocks():
 
 # Setup mocks and import
 setup_mocks()
-from openflow_quickstart_app import (
+from src.streamlit.openflow_quickstart_app import (
     SecurityManager,
     InputValidator,
     DeploymentManager,
