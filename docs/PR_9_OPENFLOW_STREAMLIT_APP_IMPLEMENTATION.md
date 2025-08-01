@@ -1,4 +1,4 @@
-# 🎯 PR #9: OpenFlow Streamlit App - Multi-Agent Blind Spot Detection Implementation
+# 🎯 PR #9: OpenFlow Streamlit App - Security-First Architecture Implementation
 
 ## 📋 Pull Request Summary
 
@@ -215,11 +215,23 @@ class AsyncManager:
 ## 📁 File Structure
 
 ```
-streamlit_app/
-├── openflow_quickstart_app.py          # Main Streamlit application
-├── requirements_streamlit.txt           # Dependencies
-├── test_streamlit_security_first.py    # Security-first test suite
-└── test_multi_agent_blind_spot_detection.py  # Multi-agent validation
+src/
+├── streamlit/
+│   ├── openflow_quickstart_app.py          # Main Streamlit application
+│   └── __init__.py
+├── security_first/
+│   ├── test_streamlit_security_first.py    # Security-first test suite
+│   └── __init__.py
+└── multi_agent_testing/
+    ├── test_multi_agent_blind_spot_detection.py  # Multi-agent validation
+    └── __init__.py
+
+tests/
+├── test_basic_validation.py               # Basic validation tests
+├── test_core_concepts.py                  # Core concept validation
+└── test_file_organization.py              # File organization validation
+
+requirements_streamlit.txt                  # Streamlit app dependencies
 ```
 
 ---
@@ -272,7 +284,7 @@ streamlit_app/
 ```json
 {
   "streamlit": {
-    "patterns": ["*streamlit*.py", "app.py", "pages/*.py"],
+    "patterns": ["src/streamlit/*.py", "app.py", "pages/*.py"],
     "content_indicators": ["import streamlit", "st.", "streamlit run"],
     "linter": "flake8",
     "formatter": "black",
@@ -290,7 +302,7 @@ streamlit_app/
 ```json
 {
   "security_first": {
-    "patterns": ["**/*"],
+    "patterns": ["src/security_first/*.py", "src/security_first/*.sh", "src/security_first/*.json"],
     "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash"],
     "linter": "bandit",
     "validator": "detect-secrets",
@@ -308,7 +320,7 @@ streamlit_app/
 ```json
 {
   "multi_agent_testing": {
-    "patterns": ["*diversity*.py", "*agent*.py", "*orchestrator*.py"],
+    "patterns": ["src/multi_agent_testing/*.py", "*diversity*.py", "*agent*.py", "*orchestrator*.py"],
     "content_indicators": ["DiversityAgent", "BlindSpotFinding", "multi_threaded", "orchestrator"],
     "linter": "flake8",
     "formatter": "black",
@@ -361,7 +373,7 @@ streamlit_app/
 ### **Phase 1: Security Foundation (Week 1-2)**
 ```bash
 # 1. Install dependencies
-pip install -r streamlit_app/requirements_streamlit.txt
+pip install -r requirements_streamlit.txt
 
 # 2. Configure environment variables
 export JWT_SECRET="your-secure-jwt-secret"
@@ -369,16 +381,16 @@ export REDIS_URL="redis://localhost:6379"
 export AWS_REGION="us-east-1"
 
 # 3. Run security tests
-pytest streamlit_app/test_streamlit_security_first.py -v
+pytest src/security_first/test_streamlit_security_first.py -v
 
 # 4. Run multi-agent validation
-pytest streamlit_app/test_multi_agent_blind_spot_detection.py -v
+pytest src/multi_agent_testing/test_multi_agent_blind_spot_detection.py -v
 ```
 
 ### **Phase 2: Production Deployment (Week 3-4)**
 ```bash
 # 1. Deploy to production environment
-streamlit run streamlit_app/openflow_quickstart_app.py
+streamlit run src/streamlit/openflow_quickstart_app.py
 
 # 2. Configure monitoring
 # - Set up CloudWatch dashboards
