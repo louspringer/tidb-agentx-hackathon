@@ -31,7 +31,6 @@ setup_mocks()
 import importlib.util
 try:
     # Import the module directly from the file path
-    import sys
     module_path = Path(__file__).parent.parent / "src" / "streamlit" / "openflow_quickstart_app.py"
     spec = importlib.util.spec_from_file_location("openflow_quickstart_app", module_path)
     if spec is None:

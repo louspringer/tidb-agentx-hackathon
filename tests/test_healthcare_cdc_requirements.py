@@ -8,6 +8,7 @@ import pytest
 import json
 import os
 import fnmatch
+import re
 from pathlib import Path
 from typing import Dict, Any, List
 
