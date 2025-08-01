@@ -1,7 +1,7 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.5",
-  "last_updated": "2024-07-25",
+  "version": "1.6",
+  "last_updated": "2024-12-19",
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
     "cloudformation": {
