@@ -371,13 +371,16 @@ class OpenFlowQuickstartApp:
     
     def validate_credentials(self, username: str, password: str) -> bool:
         """Validate user credentials using hashed password comparison (for demo only)"""
-        # In production, use a proper authentication service and secure user store
-        # Example user database: username -> SHA-256 hashed password (hex)
-        user_db = {
-            "admin": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",  # password: "password"
-            "operator": "12b7b8b1e1b6a9b6e5b1e1b6a9b6e5b1e1b6a9b6e5b1e1b6a9b6e5b1e1b6a9b6",  # password: "operator123"
-            "viewer": "6cb75f652a9b52798eb6cf2201057c73e0679d534a3e5b8b0d6d7a7a7a7a7a7a",  # password: "viewerpass"
-        }
+        # User database is loaded from the OPENFLOW_USER_DB environment variable as JSON.
+        # Example: {"admin": "<sha256-hash>", "operator": "<sha256-hash>"}
+        user_db_json = os.environ.get("OPENFLOW_USER_DB")
+        if not user_db_json:
+            # No user database configured
+            return False
+        try:
+            user_db = json.loads(user_db_json)
+        except Exception:
+            return False
         
         if username not in user_db:
             return False
@@ -616,7 +619,7 @@ class OpenFlowQuickstartApp:
                 for i, step in enumerate(steps):
                     progress_bar.progress((i + 1) / len(steps))
                     status_text.text(step)
-                    time.sleep(1)  # Simulate deployment time
+                    st.sleep(1)  # Simulate deployment time (non-blocking)
                 
                 st.success("✅ Deployment completed successfully!")
                 

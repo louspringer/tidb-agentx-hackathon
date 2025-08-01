@@ -151,7 +151,9 @@ class TestHealthcareCDCRequirements:
         cicd_patterns = ["*.yaml", "*.json"]
         for pattern in cicd_patterns:
             # Accept any pattern in patterns that matches the file type (e.g., '*.yaml', 'healthcare-cdc/*.yaml', etc.)
-            matched = any(fnmatch.fnmatchcase(p, pattern) for p in patterns)
+            import re
+            regex = re.compile(fnmatch.translate(pattern))
+            matched = any(regex.match(p) for p in patterns)
             assert matched, f"Missing CI/CD pattern matching: {pattern}"
         
         # Check for CI/CD files in healthcare-cdc directory

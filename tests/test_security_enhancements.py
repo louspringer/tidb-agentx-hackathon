@@ -79,9 +79,9 @@ def test_requirement_34_rate_limiting():
     assert rate_limit_indicator in content_indicators, f"Missing rate limiting indicator: {rate_limit_indicator}"
     print(f"✅ Rate limiting indicator found: {rate_limit_indicator}")
     
-    # Check implementation file exists - rate limiting is in https_enforcement.py
-    rate_limit_file = Path("src/security_first/https_enforcement.py")
-    assert rate_limit_file.exists(), "Rate limiting module not found (in https_enforcement.py)"
+    # Check implementation file exists - rate limiting should be in its own module
+    rate_limit_file = Path("src/security_first/rate_limiting.py")
+    assert rate_limit_file.exists(), "Rate limiting module not found (expected src/security_first/rate_limiting.py)"
     print("✅ Rate limiting module exists")
     
     print("✅ Requirement 34: Rate limiting - PASSED")
