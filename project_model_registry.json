@@ -1,11 +1,11 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.3",
+  "version": "1.4",
   "last_updated": "2024-07-25",
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
     "cloudformation": {
-      "patterns": ["*.template.yaml", "models/*.yaml", "*cloudformation*.yaml"],
+      "patterns": ["*.template.yaml", "config/*.yaml", "*cloudformation*.yaml"],
       "content_indicators": ["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"],
       "linter": "cfn-lint",
       "validator": "aws-cloudformation",
@@ -97,7 +97,7 @@
       ]
     },
     "data": {
-      "patterns": ["data/*.json", "data/*.py", "data/*.csv", "data/*.yaml"],
+      "patterns": ["data/*.json", "data/*.py", "data/*.csv", "data/*.yaml", "data/*.html"],
       "content_indicators": ["results", "analysis", "output", "data"],
       "linter": "jsonlint",
       "validator": "jsonschema",
@@ -107,18 +107,31 @@
         "Apply schema validation for data files"
       ]
     },
+    "healthcare_cdc": {
+      "patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql"],
+      "content_indicators": ["healthcare", "cdc", "medical", "patient", "clinical"],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "pytest",
+      "exclusions": ["__pycache__/*", "*.pyc"],
+      "requirements": [
+        "Use flake8 for healthcare CDC Python linting",
+        "Format healthcare CDC code with black",
+        "Validate healthcare CDC with pytest"
+      ]
+    },
     "yaml": {
       "patterns": ["*.yaml", "*.yml"],
       "content_indicators": ["---", "key: value"],
       "linter": "yamllint",
-      "exclusions": ["models/*.yaml", "*.template.yaml"],
+      "exclusions": ["config/*.yaml", "*.template.yaml"],
       "requirements": [
         "Lint generic YAML files with yamllint",
         "Exclude CloudFormation files from generic YAML linting"
       ]
     },
     "yaml_infrastructure": {
-      "patterns": ["*cloudformation*.yaml", "*infrastructure*.yaml", "*aws*.yaml", "models/*.yaml"],
+      "patterns": ["*cloudformation*.yaml", "*infrastructure*.yaml", "*aws*.yaml", "config/*.yaml"],
       "content_indicators": ["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"],
       "linter": "cfn-lint",
       "validator": "aws-cloudformation",
@@ -201,23 +214,41 @@
     "docs": {
       "description": "Documentation and specifications",
       "PR_*.md": "Pull request documentation",
-      "*.md": "General documentation"
+      "*.md": "General documentation",
+      "ORGANIZATION_SUMMARY.md": "File organization documentation"
     },
     "config": {
       "description": "Configuration files",
       "config.env.example": "Environment configuration example",
       ".pre-commit-config.yaml": "Pre-commit hooks configuration",
-      ".yaml-lint-ignore": "YAML linting exclusions"
+      ".yaml-lint-ignore": "YAML linting exclusions",
+      "Openflow-Playground.yaml": "Infrastructure configuration"
     },
     "data": {
       "description": "Data files and results",
       "*.json": "JSON data files",
-      "cost_analysis.py": "Data analysis scripts"
+      "cost_analysis.py": "Data analysis scripts",
+      "PR_Dashboard.html": "Dashboard data"
+    },
+    "healthcare_cdc": {
+      "description": "Healthcare CDC domain",
+      "healthcare_cdc_domain_model.py": "Healthcare CDC domain model",
+      "test_healthcare_cdc_domain_model.py": "Healthcare CDC tests",
+      "README.md": "Healthcare CDC documentation"
     },
     "requirements": {
       "description": "Dependency management",
       "requirements_streamlit.txt": "Streamlit app dependencies",
       "requirements_diversity.txt": "Diversity hypothesis dependencies"
+    },
+    "project_level": {
+      "description": "Project-level files",
+      "README.md": "Main project documentation",
+      "QUICKSTART.md": "Quick start guide",
+      "project_model_registry.json": "Model-driven tool orchestration",
+      "project_model.py": "Project model implementation",
+      "setup.py": "Project setup script",
+      ".gitignore": "Git ignore rules"
     }
   },
   "requirements_traceability": [
@@ -334,6 +365,12 @@
       "domain": "data",
       "implementation": "jsonlint + jsonschema for data files",
       "test": "test_requirement_19_data_validation"
+    },
+    {
+      "requirement": "Healthcare CDC domain validation",
+      "domain": "healthcare_cdc",
+      "implementation": "flake8 + black + pytest for healthcare CDC",
+      "test": "test_requirement_20_healthcare_cdc_validation"
     }
   ],
   "meta": {
