@@ -1,0 +1,43 @@
+# Multi-Agent Testing Rules
+
+## Multi-Agent Testing Framework Guidelines
+
+### Diversity Hypothesis Testing
+- **Multiple Perspectives**: Use 5+ different AI agents
+- **Diverse Roles**: Security, DevOps, UX, Performance, Code Quality
+- **Blind Spot Detection**: Focus on finding missed issues
+- **Confidence Scoring**: Rate confidence in findings
+
+### Agent Configuration
+- **Specialized Roles**: Each agent has specific expertise
+- **Different Models**: Use different AI models when possible
+- **Temperature Variation**: Vary temperature for diverse outputs
+- **Prompt Engineering**: Craft role-specific prompts
+
+### Testing Framework
+- **Comprehensive Coverage**: Test all aspects of the system
+- **Real LLM Calls**: Use actual API calls for validation
+- **Cost Tracking**: Monitor API usage and costs
+- **Result Analysis**: Analyze and synthesize findings
+
+### Validation Requirements
+- **Multi-Perspective Analysis**: Get input from all agent types
+- **Blind Spot Detection**: Identify issues single agents miss
+- **Confidence Scoring**: Rate confidence in each finding
+- **Recommendation Synthesis**: Combine findings into actionable items
+
+### Performance & Cost
+- **Efficient API Usage**: Minimize token usage
+- **Parallel Processing**: Use multi-threading when possible
+- **Caching**: Cache results to avoid duplicate calls
+- **Cost Monitoring**: Track and optimize API costs
+
+### Documentation
+- **Findings Documentation**: Document all blind spots found
+- **Recommendation Tracking**: Track implementation of recommendations
+- **Coverage Analysis**: Document coverage metrics
+- **Cost Analysis**: Document cost-benefit analysis
+description:
+globs:
+alwaysApply: false
+---
