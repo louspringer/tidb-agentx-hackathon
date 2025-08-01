@@ -159,11 +159,11 @@ class TestFileOrganization:
         """Test that package imports work correctly"""
         # Test that we can import from src
         import sys
-        sys.path.insert(0, str(self.project_root))
+        sys.path.insert(0, str(self.src_dir))
         
         try:
             # Test importing from streamlit package
-            from src.streamlit import OpenFlowQuickstartApp
+            from streamlit import OpenFlowQuickstartApp
             assert OpenFlowQuickstartApp is not None, "Should be able to import OpenFlowQuickstartApp"
         except ImportError as e:
             pytest.skip(f"Import test skipped due to missing dependencies: {e}")
