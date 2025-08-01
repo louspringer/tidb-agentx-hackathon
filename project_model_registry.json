@@ -1,6 +1,6 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.1",
+  "version": "1.2",
   "last_updated": "2024-07-25",
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
@@ -27,7 +27,7 @@
       ]
     },
     "streamlit": {
-      "patterns": ["*streamlit*.py", "app.py", "pages/*.py"],
+      "patterns": ["src/streamlit/*.py", "app.py", "pages/*.py"],
       "content_indicators": ["import streamlit", "st.", "streamlit run"],
       "linter": "flake8",
       "formatter": "black",
@@ -40,7 +40,7 @@
       ]
     },
     "security_first": {
-      "patterns": ["**/*"],
+      "patterns": ["src/security_first/*.py", "**/*"],
       "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash"],
       "linter": "bandit",
       "validator": "detect-secrets",
@@ -53,7 +53,7 @@
       ]
     },
     "multi_agent_testing": {
-      "patterns": ["*diversity*.py", "*agent*.py", "*orchestrator*.py"],
+      "patterns": ["src/multi_agent_testing/*.py", "*diversity*.py", "*agent*.py", "*orchestrator*.py"],
       "content_indicators": ["DiversityAgent", "BlindSpotFinding", "multi_threaded", "orchestrator"],
       "linter": "flake8",
       "formatter": "black",
@@ -146,6 +146,28 @@
     "exclusion_weight": 0.3,
     "confidence_threshold": 0.5
   },
+  "file_organization": {
+    "src": {
+      "description": "Source code organized by domain",
+      "streamlit": "Streamlit application components",
+      "security_first": "Security-first architecture components",
+      "multi_agent_testing": "Multi-agent testing framework components"
+    },
+    "tests": {
+      "description": "Test files organized by domain",
+      "test_basic_validation.py": "Basic validation tests",
+      "test_core_concepts.py": "Core concept validation tests"
+    },
+    "requirements": {
+      "description": "Dependency management",
+      "requirements_streamlit.txt": "Streamlit app dependencies",
+      "requirements_diversity.txt": "Diversity hypothesis dependencies"
+    },
+    "docs": {
+      "description": "Documentation and specifications",
+      "PR_9_OPENFLOW_STREAMLIT_APP_IMPLEMENTATION.md": "Implementation documentation"
+    }
+  },
   "requirements_traceability": [
     {
       "requirement": "Don't lint CloudFormation with generic YAML tools",
@@ -230,6 +252,12 @@
       "domain": "multi_agent_testing",
       "implementation": "flake8 + black + pytest for multi-agent systems",
       "test": "test_requirement_14_multi_agent_testing"
+    },
+    {
+      "requirement": "Domain-based file organization",
+      "domain": "*",
+      "implementation": "file_organization object in this file",
+      "test": "test_requirement_15_file_organization"
     }
   ],
   "meta": {
