@@ -6,13 +6,8 @@ Simple test suite that validates core functionality without external dependencie
 """
 
 import pytest
-import unittest
-from unittest.mock import Mock, patch, MagicMock
-import json
-import os
+from unittest.mock import Mock, patch
 import sys
-from typing import Dict, List, Any
-from dataclasses import dataclass
 
 # Import the app components with proper test setup
 def setup_mocks():
@@ -34,9 +29,7 @@ def setup_mocks():
 # Setup mocks and import
 setup_mocks()
 
-# Use importlib for robust import handling
-import importlib.util
-import sys
+
 from pathlib import Path
 
 # Add src to Python path (only once)
@@ -53,7 +46,7 @@ try:
         module_code = f.read()
     
     # Create a new module namespace
-    module_namespace = {}
+    module_namespace: dict = {}
     exec(module_code, module_namespace)
     
     SecurityManager = module_namespace['SecurityManager']

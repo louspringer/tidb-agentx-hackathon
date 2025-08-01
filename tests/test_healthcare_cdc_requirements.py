@@ -6,11 +6,9 @@ Based on GA Gemini 2.5 Pro implementation plan.
 
 import pytest
 import json
-import os
 import fnmatch
-import re
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 
 class TestHealthcareCDCRequirements:

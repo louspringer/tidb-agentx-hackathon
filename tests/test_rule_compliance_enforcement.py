@@ -11,10 +11,9 @@ import os
 import sys
 import yaml
 import json
-import re
 import fnmatch
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 class TestRuleComplianceEnforcement:
     """Test the rule compliance enforcement system"""
