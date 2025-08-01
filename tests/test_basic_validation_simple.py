@@ -5,7 +5,7 @@ Tests core functionality without pytest dependency
 """
 
 import sys
-import os
+
 from pathlib import Path
 from unittest.mock import Mock, patch
 
