@@ -1,6 +1,6 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.4",
+  "version": "1.5",
   "last_updated": "2024-07-25",
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
@@ -249,6 +249,16 @@
       "project_model.py": "Project model implementation",
       "setup.py": "Project setup script",
       ".gitignore": "Git ignore rules"
+    },
+    "domain_rules": {
+      "description": "Domain-specific development rules",
+      "src/streamlit/.cursor/rules/streamlit-development.mdc": "Streamlit development guidelines",
+      "src/security_first/.cursor/rules/security-first.mdc": "Security-first architecture guidelines",
+      "src/multi_agent_testing/.cursor/rules/multi-agent-testing.mdc": "Multi-agent testing guidelines",
+      "scripts/.cursor/rules/bash-scripting.mdc": "Bash scripting guidelines",
+      "docs/.cursor/rules/documentation.mdc": "Documentation guidelines",
+      "config/.cursor/rules/configuration.mdc": "Configuration management guidelines",
+      "data/.cursor/rules/data-management.mdc": "Data management guidelines"
     }
   },
   "requirements_traceability": [
@@ -371,6 +381,12 @@
       "domain": "healthcare_cdc",
       "implementation": "flake8 + black + pytest for healthcare CDC",
       "test": "test_requirement_20_healthcare_cdc_validation"
+    },
+    {
+      "requirement": "Domain-specific rules validation",
+      "domain": "*",
+      "implementation": "Domain-specific .cursor/rules files for each domain",
+      "test": "test_requirement_21_domain_rules_validation"
     }
   ],
   "meta": {
@@ -388,7 +404,14 @@
       ".cursor/rules/intelligent-policy.mdc",
       ".cursor/rules/prevention-architecture.mdc",
       ".cursor/rules/cloudformation-linting.mdc",
-      ".cursor/rules/yaml-type-specific.mdc"
+      ".cursor/rules/yaml-type-specific.mdc",
+      "src/streamlit/.cursor/rules/streamlit-development.mdc",
+      "src/security_first/.cursor/rules/security-first.mdc",
+      "src/multi_agent_testing/.cursor/rules/multi-agent-testing.mdc",
+      "scripts/.cursor/rules/bash-scripting.mdc",
+      "docs/.cursor/rules/documentation.mdc",
+      "config/.cursor/rules/configuration.mdc",
+      "data/.cursor/rules/data-management.mdc"
     ]
   }
 } 
