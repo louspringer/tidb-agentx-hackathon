@@ -39,7 +39,7 @@ SECURITY_CONFIG = {
     "session_timeout_minutes": 15,
     "max_login_attempts": 3,
     "password_min_length": 12,
-    "jwt_secret": os.getenv("JWT_SECRET", Fernet.generate_key()),
+    "jwt_secret": os.getenv("JWT_SECRET", "dev-secret-key"),
     "redis_url": os.getenv("REDIS_URL", "redis://localhost:6379"),
     "aws_region": os.getenv("AWS_REGION", "us-east-1")
 }
@@ -370,9 +370,9 @@ class OpenFlowQuickstartApp:
         return False
     
     def validate_credentials(self, username: str, password: str) -> bool:
-        """Validate user credentials using hashed password comparison (for demo only)"""
+        """Validate user credentials using bcrypt password hashing (for demo only)"""
         # User database is loaded from the OPENFLOW_USER_DB environment variable as JSON.
-        # Example: {"admin": "<sha256-hash>", "operator": "<sha256-hash>"}
+        # Example: {"admin": "<bcrypt-hash>", "operator": "<bcrypt-hash>"}
         user_db_json = os.environ.get("OPENFLOW_USER_DB")
         if not user_db_json:
             # No user database configured
@@ -385,10 +385,14 @@ class OpenFlowQuickstartApp:
         if username not in user_db:
             return False
         
-        # Hash the provided password
-        password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
-        # Use hmac.compare_digest for secure comparison
-        return hmac.compare_digest(password_hash, user_db[username])
+        # Use bcrypt for secure password comparison
+        try:
+            import bcrypt
+            return bcrypt.checkpw(password.encode('utf-8'), user_db[username].encode('utf-8'))
+        except ImportError:
+            # Fallback to SHA256 if bcrypt not available (not recommended for production)
+            password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            return hmac.compare_digest(password_hash, user_db[username])
     
     def main_dashboard(self):
         """Main dashboard with progressive disclosure"""
@@ -619,7 +623,7 @@ class OpenFlowQuickstartApp:
                 for i, step in enumerate(steps):
                     progress_bar.progress((i + 1) / len(steps))
                     status_text.text(step)
-                    st.sleep(1)  # Simulate deployment time (non-blocking)
+                    time.sleep(1)  # Simulate deployment time
                 
                 st.success("✅ Deployment completed successfully!")
                 
