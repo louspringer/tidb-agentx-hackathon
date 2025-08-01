@@ -224,6 +224,21 @@
         "Generate .mdc files using standard libraries",
         "Provide simple projection from model to file"
       ]
+    },
+    "package_management": {
+      "patterns": ["pyproject.toml", "requirements*.txt", "Pipfile", "poetry.lock", "uv.lock"],
+      "content_indicators": ["uv", "pip", "poetry", "pipenv", "dependencies", "dev-dependencies"],
+      "linter": "uv check",
+      "validator": "uv sync",
+      "formatter": "uv format",
+      "exclusions": ["__pycache__/*", "*.pyc", ".venv/*", "venv/*"],
+      "requirements": [
+        "Use UV for all package management",
+        "Enforce UV lock file usage",
+        "Validate dependencies with UV check",
+        "Sync dependencies with UV sync",
+        "Format with UV format"
+      ]
     }
   },
   "tool_selection_logic": {
@@ -517,6 +532,30 @@
       "domain": "security_first",
       "implementation": "Session-based CSRF tokens with SHA-256 generation and validation",
       "test": "test_requirement_35_csrf_protection"
+    },
+    {
+      "requirement": "UV package management enforcement",
+      "domain": "package_management",
+      "implementation": "UV lock file and dependency management for all Python packages",
+      "test": "test_requirement_36_uv_package_management"
+    },
+    {
+      "requirement": "Streamlit app dependencies with UV",
+      "domain": "package_management",
+      "implementation": "streamlit, boto3, redis, plotly, pandas, pydantic, bcrypt managed via UV",
+      "test": "test_requirement_37_streamlit_dependencies_uv"
+    },
+    {
+      "requirement": "Security-first dependencies with UV",
+      "domain": "package_management",
+      "implementation": "cryptography, PyJWT, bandit, safety managed via UV",
+      "test": "test_requirement_38_security_dependencies_uv"
+    },
+    {
+      "requirement": "Development dependencies with UV",
+      "domain": "package_management",
+      "implementation": "pytest, flake8, black, mypy managed via UV",
+      "test": "test_requirement_39_dev_dependencies_uv"
     }
   ],
   "meta": {
