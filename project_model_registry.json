@@ -1,6 +1,6 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.0",
+  "version": "1.1",
   "last_updated": "2024-07-25",
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
@@ -24,6 +24,45 @@
       "requirements": [
         "Use flake8 for Python linting",
         "Format Python code with black"
+      ]
+    },
+    "streamlit": {
+      "patterns": ["*streamlit*.py", "app.py", "pages/*.py"],
+      "content_indicators": ["import streamlit", "st.", "streamlit run"],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "streamlit-validate",
+      "exclusions": ["__pycache__/*", "*.pyc"],
+      "requirements": [
+        "Use flake8 for Streamlit Python linting",
+        "Format Streamlit code with black",
+        "Validate Streamlit app structure and security"
+      ]
+    },
+    "security_first": {
+      "patterns": ["**/*"],
+      "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash"],
+      "linter": "bandit",
+      "validator": "detect-secrets",
+      "formatter": "safety",
+      "exclusions": [],
+      "requirements": [
+        "Scan for hardcoded credentials and secrets",
+        "Enforce security policy via detect-secrets and bandit",
+        "Check for known vulnerabilities with safety"
+      ]
+    },
+    "multi_agent_testing": {
+      "patterns": ["*diversity*.py", "*agent*.py", "*orchestrator*.py"],
+      "content_indicators": ["DiversityAgent", "BlindSpotFinding", "multi_threaded", "orchestrator"],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "pytest",
+      "exclusions": ["__pycache__/*", "*.pyc"],
+      "requirements": [
+        "Use flake8 for multi-agent Python linting",
+        "Format multi-agent code with black",
+        "Validate multi-agent testing with pytest"
       ]
     },
     "yaml": {
@@ -173,6 +212,24 @@
       "domain": "yaml_kubernetes",
       "implementation": "kubectl validate, kubeval for K8s files",
       "test": "test_requirement_11_yaml_kubernetes"
+    },
+    {
+      "requirement": "Streamlit app security validation",
+      "domain": "streamlit",
+      "implementation": "flake8 + streamlit-validate for Streamlit apps",
+      "test": "test_requirement_12_streamlit_security"
+    },
+    {
+      "requirement": "Security-first architecture enforcement",
+      "domain": "security_first",
+      "implementation": "bandit + detect-secrets + safety for comprehensive security",
+      "test": "test_requirement_13_security_first"
+    },
+    {
+      "requirement": "Multi-agent testing validation",
+      "domain": "multi_agent_testing",
+      "implementation": "flake8 + black + pytest for multi-agent systems",
+      "test": "test_requirement_14_multi_agent_testing"
     }
   ],
   "meta": {
