@@ -73,6 +73,22 @@ class TestSecurityFirstArchitecture:
             else:
                 assert not url.startswith("http")
     
+    def _is_valid_uuid(self, uuid_str: str) -> bool:
+        """Helper function to validate UUID format."""
+        if uuid_str == "not-a-uuid":
+            return "-" not in uuid_str
+        
+        try:
+            parts = uuid_str.split("-")
+            return (len(parts) == 5 and 
+                    len(parts[0]) == 8 and 
+                    len(parts[1]) == 4 and 
+                    len(parts[2]) == 4 and 
+                    len(parts[3]) == 4 and 
+                    len(parts[4]) == 12)
+        except:
+            return False
+    
     def test_uuid_validation_concept(self):
         """Test UUID validation concept"""
         valid_uuids = [
@@ -87,26 +103,10 @@ class TestSecurityFirstArchitecture:
         ]
         
         for uuid_str in valid_uuids:
-            # Check UUID format: 8-4-4-4-12 characters
-            parts = uuid_str.split("-")
-            assert len(parts) == 5
-            assert len(parts[0]) == 8
-            assert len(parts[1]) == 4
-            assert len(parts[2]) == 4
-            assert len(parts[3]) == 4
-            assert len(parts[4]) == 12
+            assert self._is_valid_uuid(uuid_str), f"Valid UUID '{uuid_str}' did not pass validation"
         
         for uuid_str in invalid_uuids:
-            if uuid_str != "not-a-uuid":
-                parts = uuid_str.split("-")
-                assert len(parts) == 5, f"Invalid UUID '{uuid_str}': should have 5 parts separated by '-'"
-                assert len(parts[0]) == 8, f"Invalid UUID '{uuid_str}': first part should have 8 characters"
-                assert len(parts[1]) == 4, f"Invalid UUID '{uuid_str}': second part should have 4 characters"
-                assert len(parts[2]) == 4, f"Invalid UUID '{uuid_str}': third part should have 4 characters"
-                assert len(parts[3]) == 4, f"Invalid UUID '{uuid_str}': fourth part should have 4 characters"
-                assert len(parts[4]) == 12, f"Invalid UUID '{uuid_str}': fifth part should have 12 characters"
-            else:
-                assert "-" not in uuid_str, f"Invalid UUID '{uuid_str}': should not contain '-'"
+            assert not self._is_valid_uuid(uuid_str), f"Invalid UUID '{uuid_str}' incorrectly passed validation"
     
     def test_oauth_credential_validation_concept(self):
         """Test OAuth credential validation concept"""
