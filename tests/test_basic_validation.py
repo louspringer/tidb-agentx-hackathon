@@ -47,22 +47,28 @@ try:
     # Import the module directly from the file path
     import sys
     module_path = Path(__file__).parent.parent / "src" / "streamlit" / "openflow_quickstart_app.py"
-    spec = importlib.util.spec_from_file_location("openflow_quickstart_app", module_path)
-    if spec is None:
-        raise ImportError("Could not create module spec")
-    openflow_module = importlib.util.module_from_spec(spec)
-    if spec.loader is None:
-        raise ImportError("Module loader is None")
-    spec.loader.exec_module(openflow_module)
     
-    SecurityManager = openflow_module.SecurityManager
-    InputValidator = openflow_module.InputValidator
-    DeploymentManager = openflow_module.DeploymentManager
-    MonitoringDashboard = openflow_module.MonitoringDashboard
-    OpenFlowQuickstartApp = openflow_module.OpenFlowQuickstartApp
-    SnowflakeConfig = openflow_module.SnowflakeConfig
-    OpenFlowConfig = openflow_module.OpenFlowConfig
-    SECURITY_CONFIG = openflow_module.SECURITY_CONFIG
+    # Add the src directory to sys.path for proper imports
+    src_path = Path(__file__).parent.parent / "src"
+    if str(src_path) not in sys.path:
+        sys.path.insert(0, str(src_path))
+    
+    # Import using exec to avoid module loading issues
+    with open(module_path, 'r') as f:
+        module_code = f.read()
+    
+    # Create a new module namespace
+    module_namespace = {}
+    exec(module_code, module_namespace)
+    
+    SecurityManager = module_namespace['SecurityManager']
+    InputValidator = module_namespace['InputValidator']
+    DeploymentManager = module_namespace['DeploymentManager']
+    MonitoringDashboard = module_namespace['MonitoringDashboard']
+    OpenFlowQuickstartApp = module_namespace['OpenFlowQuickstartApp']
+    SnowflakeConfig = module_namespace['SnowflakeConfig']
+    OpenFlowConfig = module_namespace['OpenFlowConfig']
+    SECURITY_CONFIG = module_namespace['SECURITY_CONFIG']
 except Exception as e:
     raise RuntimeError(f"Failed to import openflow_quickstart_app: {e}")
 
