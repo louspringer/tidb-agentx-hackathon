@@ -35,9 +35,26 @@ def setup_mocks():
 setup_mocks()
 
 # Use importlib for robust import handling
-import importlib
+import importlib.util
+import sys
+from pathlib import Path
+
+# Add src to Python path
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
 try:
-    openflow_module = importlib.import_module("src.streamlit.openflow_quickstart_app")
+    # Import the module directly from the file path
+    import sys
+    module_path = Path(__file__).parent.parent / "src" / "streamlit" / "openflow_quickstart_app.py"
+    spec = importlib.util.spec_from_file_location("openflow_quickstart_app", module_path)
+    if spec is None:
+        raise ImportError("Could not create module spec")
+    openflow_module = importlib.util.module_from_spec(spec)
+    if spec.loader is None:
+        raise ImportError("Module loader is None")
+    spec.loader.exec_module(openflow_module)
+    
     SecurityManager = openflow_module.SecurityManager
     InputValidator = openflow_module.InputValidator
     DeploymentManager = openflow_module.DeploymentManager
@@ -46,7 +63,7 @@ try:
     SnowflakeConfig = openflow_module.SnowflakeConfig
     OpenFlowConfig = openflow_module.OpenFlowConfig
     SECURITY_CONFIG = openflow_module.SECURITY_CONFIG
-except ImportError as e:
+except Exception as e:
     raise RuntimeError(f"Failed to import openflow_quickstart_app: {e}")
 
 class TestSecurityManager:
