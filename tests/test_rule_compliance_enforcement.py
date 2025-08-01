@@ -11,6 +11,7 @@ import os
 import sys
 import yaml
 import json
+import re
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
