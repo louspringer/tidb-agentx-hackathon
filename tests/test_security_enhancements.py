@@ -79,9 +79,9 @@ def test_requirement_34_rate_limiting():
     assert rate_limit_indicator in content_indicators, f"Missing rate limiting indicator: {rate_limit_indicator}"
     print(f"✅ Rate limiting indicator found: {rate_limit_indicator}")
     
-    # Check implementation file exists
-    https_file = Path("src/security_first/https_enforcement.py")
-    assert https_file.exists(), "Rate limiting module not found (in https_enforcement.py)"
+    # Check implementation file exists - rate limiting is in https_enforcement.py
+    rate_limit_file = Path("src/security_first/https_enforcement.py")
+    assert rate_limit_file.exists(), "Rate limiting module not found (in https_enforcement.py)"
     print("✅ Rate limiting module exists")
     
     print("✅ Requirement 34: Rate limiting - PASSED")
@@ -111,9 +111,9 @@ def test_requirement_35_csrf_protection():
     assert csrf_indicator in content_indicators, f"Missing CSRF indicator: {csrf_indicator}"
     print(f"✅ CSRF indicator found: {csrf_indicator}")
     
-    # Check implementation file exists
-    https_file = Path("src/security_first/https_enforcement.py")
-    assert https_file.exists(), "CSRF protection module not found (in https_enforcement.py)"
+    # Check implementation file exists - CSRF protection is in https_enforcement.py
+    csrf_file = Path("src/security_first/https_enforcement.py")
+    assert csrf_file.exists(), "CSRF protection module not found (in https_enforcement.py)"
     print("✅ CSRF protection module exists")
     
     print("✅ Requirement 35: CSRF protection - PASSED")

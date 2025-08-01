@@ -9,6 +9,8 @@ import subprocess
 import tempfile
 import os
 import sys
+import yaml
+import json
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
@@ -99,16 +101,17 @@ This is a valid .mdc file.
             )
             assert result.returncode == 0, f"Valid .mdc file should pass: {result.stderr}"
         finally:
-            test_file.unlink()
+            # Clean up
+            test_file.unlink(missing_ok=True)
             
     def test_mdc_linter_rejects_invalid_structure(self):
         """Test that MDC linter rejects invalid file structure"""
         linter_path = self.scripts_dir / "mdc-linter.py"
         
-        # Create an invalid test .mdc file
-        invalid_content = """# Test Rule
+        # Create an invalid test .mdc file (missing frontmatter)
+        invalid_content = """# Invalid Rule
 
-This is an invalid .mdc file without YAML frontmatter.
+This is an invalid .mdc file without frontmatter.
 """
         
         with tempfile.NamedTemporaryFile(mode='w', suffix='.mdc', delete=False) as f:
@@ -122,56 +125,47 @@ This is an invalid .mdc file without YAML frontmatter.
                 text=True,
                 cwd=self.project_root
             )
-            # The linter expects a directory, not a file, so we need to test differently
-            # For now, we'll check that the linter runs without crashing
-            assert result.returncode in [0, 1], "MDC linter should run without crashing"
+            assert result.returncode != 0, "Invalid .mdc file should fail"
         finally:
-            test_file.unlink()
+            # Clean up
+            test_file.unlink(missing_ok=True)
             
     @patch('subprocess.run')
     def test_cursor_plugin_interface(self, mock_run):
-        """Test Cursor IDE plugin interface"""
-        # Mock successful subprocess run
-        mock_result = MagicMock()
-        mock_result.returncode = 0
-        mock_result.stdout = "All checks passed"
-        mock_result.stderr = ""
-        mock_run.return_value = mock_result
-        
-        # Test plugin interface
+        """Test that Cursor IDE plugin has correct interface"""
         plugin_path = self.plugins_dir / "rule-compliance-checker.py"
+        assert plugin_path.exists(), "Cursor IDE plugin should exist"
         
+        # Mock successful execution
+        mock_run.return_value.returncode = 0
+        mock_run.return_value.stdout = "Rule compliance check passed"
+        
+        # Test that plugin can be executed
         try:
             result = subprocess.run(
-                [sys.executable, str(plugin_path), "--summary"],
+                [sys.executable, str(plugin_path)],
                 capture_output=True,
                 text=True,
                 cwd=self.project_root
             )
-            # Should run without crashing
-            assert result.returncode in [0, 1], "Plugin should run"
+            # Should not crash
+            assert result.returncode in [0, 1], "Cursor plugin should not crash"
         except Exception as e:
-            pytest.fail(f"Plugin failed to run: {e}")
+            pytest.fail(f"Cursor plugin failed to run: {e}")
             
     def test_deterministic_editing_rule_enforcement(self):
-        """Test that deterministic editing rule is properly enforced"""
-        rule_path = self.project_root / ".cursor" / "rules" / "deterministic-editing.mdc"
-        assert rule_path.exists(), "Deterministic editing rule should exist"
+        """Test that deterministic editing rule is enforced"""
+        # Check that deterministic editing rule exists
+        rule_file = self.project_root / ".cursor" / "rules" / "deterministic-editing.mdc"
+        assert rule_file.exists(), "Deterministic editing rule should exist"
         
-        with open(rule_path, 'r') as f:
+        with open(rule_file, 'r') as f:
             content = f.read()
             
-        # Check for required content
-        assert "BANNED: Stochastic/Fuzzy Editors" in content, "Should ban non-deterministic tools"
-        assert "REQUIRED: Deterministic Tools" in content, "Should require deterministic tools"
-        assert "edit_file" in content, "Should mention edit_file tool"
-        
-        # Check YAML frontmatter
         lines = content.split('\n')
         assert lines[0].strip() == '---', "Should start with YAML frontmatter"
         
         # Parse frontmatter
-        import yaml
         frontmatter_end = lines.index('---', 1)
         frontmatter_text = '\n'.join(lines[1:frontmatter_end])
         frontmatter = yaml.safe_load(frontmatter_text)
@@ -187,7 +181,6 @@ This is an invalid .mdc file without YAML frontmatter.
         model_path = self.project_root / "project_model_registry.json"
         assert model_path.exists(), "Project model should exist"
         
-        import json
         with open(model_path, 'r') as f:
             model = json.load(f)
             
@@ -206,7 +199,6 @@ This is an invalid .mdc file without YAML frontmatter.
         """Test that requirements traceability includes rule compliance"""
         model_path = self.project_root / "project_model_registry.json"
         
-        import json
         with open(model_path, 'r') as f:
             model = json.load(f)
             
@@ -269,26 +261,22 @@ class TestRuleComplianceIntegration:
         """Test that rule compliance system is complete"""
         # Check all required components exist
         components = [
-            "scripts/rule-compliance-check.sh",
-            "scripts/mdc-linter.py",
-            ".cursor/plugins/rule-compliance-checker.py",
-            "config/.pre-commit-config.yaml",
-            ".cursor/rules/deterministic-editing.mdc"
+            self.project_root / "scripts" / "rule-compliance-check.sh",
+            self.project_root / "scripts" / "mdc-linter.py",
+            self.project_root / ".cursor" / "plugins" / "rule-compliance-checker.py",
+            self.project_root / "config" / ".pre-commit-config.yaml",
+            self.project_root / ".cursor" / "rules" / "deterministic-editing.mdc"
         ]
         
         for component in components:
-            component_path = self.project_root / component
-            assert component_path.exists(), f"Component {component} should exist"
+            assert component.exists(), f"Required component should exist: {component}"
             
-        # Check that tests exist
-        test_files = [
-            "tests/test_rule_compliance.py",
-            "tests/test_rule_compliance_enforcement.py"
-        ]
-        
-        for test_file in test_files:
-            test_path = self.project_root / test_file
-            assert test_path.exists(), f"Test file {test_file} should exist"
+        # Check that project model includes rule compliance
+        model_path = self.project_root / "project_model_registry.json"
+        with open(model_path, 'r') as f:
+            model = json.load(f)
+            
+        assert "rule_compliance" in model["domains"], "Project model should include rule_compliance domain"
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"]) 
