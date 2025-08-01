@@ -108,8 +108,8 @@
       ]
     },
     "healthcare_cdc": {
-      "patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql"],
-      "content_indicators": ["healthcare", "cdc", "medical", "patient", "clinical"],
+      "patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql", "healthcare-cdc/*.yaml", "healthcare-cdc/*.json"],
+      "content_indicators": ["healthcare", "cdc", "medical", "patient", "clinical", "phi", "hipaa", "audit", "compliance"],
       "linter": "flake8",
       "formatter": "black",
       "validator": "pytest",
@@ -117,7 +117,12 @@
       "requirements": [
         "Use flake8 for healthcare CDC Python linting",
         "Format healthcare CDC code with black",
-        "Validate healthcare CDC with pytest"
+        "Validate healthcare CDC with pytest",
+        "Enforce HIPAA compliance validation",
+        "Implement PHI detection and validation",
+        "Ensure immutable audit logging",
+        "Validate healthcare data encryption",
+        "Enforce access control and authentication"
       ]
     },
     "yaml": {
@@ -455,6 +460,42 @@
       "domain": "mdc_generator",
       "implementation": "MDCGenerator class for automated .mdc file generation",
       "test": "test_requirement_26_mdc_projection"
+    },
+    {
+      "requirement": "HIPAA compliance validation",
+      "domain": "healthcare_cdc",
+      "implementation": "HIPAA validation rules and PHI detection in healthcare CDC domain",
+      "test": "test_requirement_27_hipaa_compliance_validation"
+    },
+    {
+      "requirement": "PHI detection and validation",
+      "domain": "healthcare_cdc",
+      "implementation": "PHI detection algorithms and validation rules in healthcare CDC",
+      "test": "test_requirement_28_phi_detection_validation"
+    },
+    {
+      "requirement": "Immutable audit logging",
+      "domain": "healthcare_cdc",
+      "implementation": "Immutable audit trail with S3 Object Lock for healthcare data access",
+      "test": "test_requirement_29_immutable_audit_logging"
+    },
+    {
+      "requirement": "Healthcare data encryption",
+      "domain": "healthcare_cdc",
+      "implementation": "AES-256 encryption at rest and TLS 1.3 for healthcare data transmission",
+      "test": "test_requirement_30_healthcare_data_encryption"
+    },
+    {
+      "requirement": "Healthcare access control and authentication",
+      "domain": "healthcare_cdc",
+      "implementation": "RBAC and JWT-based authentication for healthcare CDC domain",
+      "test": "test_requirement_31_healthcare_access_control"
+    },
+    {
+      "requirement": "Healthcare CDC CI/CD integration",
+      "domain": "healthcare_cdc",
+      "implementation": "CI/CD pipeline with healthcare-specific security scans and monitoring",
+      "test": "test_requirement_32_healthcare_cdc_cicd_integration"
     }
   ],
   "meta": {
