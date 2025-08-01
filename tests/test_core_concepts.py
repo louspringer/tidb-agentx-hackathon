@@ -99,9 +99,14 @@ class TestSecurityFirstArchitecture:
         for uuid_str in invalid_uuids:
             if uuid_str != "not-a-uuid":
                 parts = uuid_str.split("-")
-                assert len(parts) != 5 or any(len(part) != 8 for part in parts[:1]) or any(len(part) != 4 for part in parts[1:4]) or len(parts[4]) != 12
+                assert len(parts) == 5, f"Invalid UUID '{uuid_str}': should have 5 parts separated by '-'"
+                assert len(parts[0]) == 8, f"Invalid UUID '{uuid_str}': first part should have 8 characters"
+                assert len(parts[1]) == 4, f"Invalid UUID '{uuid_str}': second part should have 4 characters"
+                assert len(parts[2]) == 4, f"Invalid UUID '{uuid_str}': third part should have 4 characters"
+                assert len(parts[3]) == 4, f"Invalid UUID '{uuid_str}': fourth part should have 4 characters"
+                assert len(parts[4]) == 12, f"Invalid UUID '{uuid_str}': fifth part should have 12 characters"
             else:
-                assert "-" not in uuid_str
+                assert "-" not in uuid_str, f"Invalid UUID '{uuid_str}': should not contain '-'"
     
     def test_oauth_credential_validation_concept(self):
         """Test OAuth credential validation concept"""

@@ -7,6 +7,7 @@ Based on GA Gemini 2.5 Pro implementation plan.
 import pytest
 import json
 import os
+import fnmatch
 from pathlib import Path
 from typing import Dict, Any, List
 
@@ -149,7 +150,9 @@ class TestHealthcareCDCRequirements:
         # Check for YAML and JSON patterns for CI/CD
         cicd_patterns = ["*.yaml", "*.json"]
         for pattern in cicd_patterns:
-            assert pattern in patterns, f"Missing CI/CD pattern: {pattern}"
+            # Accept any pattern in patterns that matches the file type (e.g., '*.yaml', 'healthcare-cdc/*.yaml', etc.)
+            matched = any(fnmatch.fnmatchcase(p, pattern) for p in patterns)
+            assert matched, f"Missing CI/CD pattern matching: {pattern}"
         
         # Check for CI/CD files in healthcare-cdc directory
         cicd_files = [

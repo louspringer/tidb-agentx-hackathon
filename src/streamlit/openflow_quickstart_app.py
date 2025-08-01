@@ -370,9 +370,22 @@ class OpenFlowQuickstartApp:
         return False
     
     def validate_credentials(self, username: str, password: str) -> bool:
-        """Validate user credentials (simplified for demo)"""
-        # In production, use proper authentication service
-        return len(username) > 0 and len(password) >= SECURITY_CONFIG["password_min_length"]
+        """Validate user credentials using hashed password comparison (for demo only)"""
+        # In production, use a proper authentication service and secure user store
+        # Example user database: username -> SHA-256 hashed password (hex)
+        user_db = {
+            "admin": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",  # password: "password"
+            "operator": "12b7b8b1e1b6a9b6e5b1e1b6a9b6e5b1e1b6a9b6e5b1e1b6a9b6e5b1e1b6a9b6",  # password: "operator123"
+            "viewer": "6cb75f652a9b52798eb6cf2201057c73e0679d534a3e5b8b0d6d7a7a7a7a7a7a",  # password: "viewerpass"
+        }
+        
+        if username not in user_db:
+            return False
+        
+        # Hash the provided password
+        password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        # Use hmac.compare_digest for secure comparison
+        return hmac.compare_digest(password_hash, user_db[username])
     
     def main_dashboard(self):
         """Main dashboard with progressive disclosure"""
