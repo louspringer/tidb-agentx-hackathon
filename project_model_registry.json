@@ -1,6 +1,6 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.6",
+  "version": "1.7",
   "last_updated": "2024-12-19",
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
@@ -99,145 +99,60 @@
         "Apply schema validation for config files"
       ]
     },
-    "data": {
-      "patterns": ["data/*.json", "data/*.py", "data/*.csv", "data/*.yaml", "data/*.html"],
-      "content_indicators": ["results", "analysis", "output", "data"],
-      "linter": "jsonlint",
-      "validator": "jsonschema",
-      "exclusions": [],
-      "requirements": [
-        "Validate JSON data files",
-        "Apply schema validation for data files"
-      ]
-    },
-    "healthcare_cdc": {
-      "patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql", "healthcare-cdc/*.yaml", "healthcare-cdc/*.json"],
-      "content_indicators": ["healthcare", "cdc", "medical", "patient", "clinical", "phi", "hipaa", "audit", "compliance"],
+    "mdc_generator": {
+      "patterns": ["src/mdc_generator/*.py", "scripts/regenerate_mdc_files.py"],
+      "content_indicators": ["MDCFile", "MDCFrontmatter", "mdc_generator", "regenerate_mdc"],
       "linter": "flake8",
       "formatter": "black",
       "validator": "pytest",
       "exclusions": ["__pycache__/*", "*.pyc"],
       "requirements": [
-        "Use flake8 for healthcare CDC Python linting",
-        "Format healthcare CDC code with black",
-        "Validate healthcare CDC with pytest",
+        "Use flake8 for MDC generator Python linting",
+        "Format MDC generator code with black",
+        "Validate MDC generator with pytest"
+      ]
+    },
+    "healthcare_cdc": {
+      "patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql", "healthcare-cdc/*.yaml", "healthcare-cdc/*.json"],
+      "content_indicators": ["healthcare", "cdc", "phi", "hipaa", "patient", "medical", "audit", "compliance"],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "pytest",
+      "exclusions": ["__pycache__/*", "*.pyc"],
+      "requirements": [
         "Enforce HIPAA compliance validation",
         "Implement PHI detection and validation",
         "Ensure immutable audit logging",
         "Validate healthcare data encryption",
-        "Enforce access control and authentication"
-      ]
-    },
-    "yaml": {
-      "patterns": ["*.yaml", "*.yml"],
-      "content_indicators": ["---", "key: value"],
-      "linter": "yamllint",
-      "exclusions": ["config/*.yaml", "*.template.yaml"],
-      "requirements": [
-        "Lint generic YAML files with yamllint",
-        "Exclude CloudFormation files from generic YAML linting"
-      ]
-    },
-    "yaml_infrastructure": {
-      "patterns": ["*cloudformation*.yaml", "*infrastructure*.yaml", "*aws*.yaml", "config/*.yaml"],
-      "content_indicators": ["!Sub", "!Ref", "!GetAtt", "AWS::", "Type: 'AWS::"],
-      "linter": "cfn-lint",
-      "validator": "aws-cloudformation",
-      "exclusions": [],
-      "requirements": [
-        "Use cfn-lint for CloudFormation YAML files",
-        "Apply AWS-specific validation for infrastructure YAML"
-      ]
-    },
-    "yaml_config": {
-      "patterns": ["config*.yaml", "settings*.yaml", "*.config.yaml"],
-      "content_indicators": ["config:", "settings:", "environment:", "features:"],
-      "linter": "yamllint",
-      "validator": "jsonschema",
-      "exclusions": [],
-      "requirements": [
-        "Use yamllint for configuration YAML files",
-        "Apply schema validation for config files"
-      ]
-    },
-    "yaml_cicd": {
-      "patterns": [".github/*.yaml", ".gitlab-ci.yml", "*.workflow.yaml", "azure-pipelines*.yml"],
-      "content_indicators": ["on:", "jobs:", "steps:", "pipeline:", "stages:"],
-      "linter": "actionlint",
-      "validator": "gitlab-ci-lint",
-      "exclusions": [],
-      "requirements": [
-        "Use domain-specific CI/CD validators",
-        "Apply workflow syntax validation"
-      ]
-    },
-    "yaml_kubernetes": {
-      "patterns": ["k8s/*.yaml", "kubernetes/*.yaml", "*.k8s.yaml"],
-      "content_indicators": ["apiVersion:", "kind:", "metadata:", "spec:"],
-      "linter": "kubectl",
-      "validator": "kubeval",
-      "exclusions": [],
-      "requirements": [
-        "Use kubectl validate for Kubernetes YAML",
-        "Apply Kubernetes API validation"
-      ]
-    },
-    "security": {
-      "patterns": ["**/*"],
-      "content_indicators": ["password", "secret", "key", "token", "credential"],
-      "linter": "bandit",
-      "validator": "detect-secrets",
-      "exclusions": [],
-      "requirements": [
-        "Scan for hardcoded credentials and secrets",
-        "Enforce security policy via detect-secrets and bandit"
+        "Enforce access control and authentication",
+        "Integrate with CI/CD for healthcare compliance"
       ]
     },
     "rule_compliance": {
-      "patterns": ["scripts/rule-compliance-check.sh", "scripts/mdc-linter.py", ".cursor/plugins/*.py", "config/.pre-commit-config.yaml"],
-      "content_indicators": ["rule-compliance", "deterministic-editing", "pre-commit", "mdc-linter"],
+      "patterns": ["scripts/rule-compliance-check.sh", "scripts/mdc-linter.py", ".cursor/plugins/rule-compliance-checker.py"],
+      "content_indicators": ["rule-compliance", "mdc-linter", "deterministic-editing", "cursor-plugin"],
       "linter": "shellcheck",
-      "validator": "pytest",
       "formatter": "black",
+      "validator": "pytest",
       "exclusions": [],
       "requirements": [
-        "Use shellcheck for shell script linting",
-        "Validate rule compliance with pytest",
-        "Format Python code with black",
-        "Enforce deterministic editing rules",
-        "Validate .mdc file structure",
-        "Provide immediate IDE feedback"
-      ]
-    },
-    "mdc_generator": {
-      "patterns": ["src/mdc_generator/*.py", "scripts/regenerate_mdc_files.py"],
-      "content_indicators": ["MDCFile", "MDCFrontmatter", "MDCGenerator", "mdc_generator"],
-      "linter": "flake8",
-      "validator": "pytest",
-      "formatter": "black",
-      "exclusions": [],
-      "requirements": [
-        "Use flake8 for Python linting",
-        "Validate MDC generator with pytest",
-        "Format Python code with black",
-        "Model .mdc files with Python dataclasses",
-        "Generate .mdc files using standard libraries",
-        "Provide simple projection from model to file"
+        "Rule compliance enforcement system",
+        "Deterministic editing enforcement",
+        "Immediate IDE feedback"
       ]
     },
     "package_management": {
-      "patterns": ["pyproject.toml", "requirements*.txt", "Pipfile", "poetry.lock", "uv.lock"],
-      "content_indicators": ["uv", "pip", "poetry", "pipenv", "dependencies", "dev-dependencies"],
+      "patterns": ["pyproject.toml", "requirements*.txt", "uv.lock", "*.py"],
+      "content_indicators": ["uv", "dependencies", "dev-dependencies", "pyproject"],
       "linter": "uv check",
       "validator": "uv sync",
       "formatter": "uv format",
-      "exclusions": ["__pycache__/*", "*.pyc", ".venv/*", "venv/*"],
+      "exclusions": [],
       "requirements": [
-        "Use UV for all package management",
+        "Use UV for all Python package management",
         "Enforce UV lock file usage",
         "Validate dependencies with UV check",
-        "Sync dependencies with UV sync",
-        "Format with UV format"
+        "Sync dependencies with UV sync"
       ]
     }
   },

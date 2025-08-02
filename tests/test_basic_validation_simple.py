@@ -23,9 +23,21 @@ def setup_mocks():
     sys.modules['pydantic'] = Mock()
     sys.modules['requests'] = Mock()
     sys.modules['botocore.exceptions'] = Mock()
+    sys.modules['cryptography'] = Mock()
+    sys.modules['cryptography.fernet'] = Mock()
+    sys.modules['jwt'] = Mock()
+    sys.modules['bcrypt'] = Mock()
 
 # Setup mocks and import
 setup_mocks()
+
+# Set required environment variables for testing
+import os
+os.environ['JWT_SECRET'] = 'test-jwt-secret-for-testing-only'
+os.environ['FERNET_KEY'] = 'test-fernet-key-32-bytes-long-for-testing'
+os.environ['REDIS_URL'] = 'redis://localhost:6379'
+os.environ['AWS_REGION'] = 'us-east-1'
+os.environ['OPENFLOW_USER_DB'] = '{"admin": "$2b$12$test.hash.for.testing.only"}'
 
 # Use importlib for robust import handling
 import importlib.util

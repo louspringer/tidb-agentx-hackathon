@@ -1,244 +1,189 @@
 # OpenFlow Playground
 
-A comprehensive playground for setting up and experimenting with Snowflake Openflow infrastructure.
+A comprehensive, model-driven development environment with security-first architecture, multi-agent testing, and healthcare CDC compliance.
 
-## Overview
+## 🚀 Features
 
-This project contains a CloudFormation template that automates the deployment of Snowflake Openflow infrastructure on AWS. The template creates all necessary AWS resources including VPC, networking, IAM roles, and an EC2 instance that automatically sets up the Openflow agent.
+### **Model-Driven Development**
+- **Project Model Registry**: Single source of truth for domain detection, tool selection, and requirements traceability
+- **MDC Generator**: Python-based component for modeling and generating `.mdc` rule files
+- **Deterministic Editing**: Enforced through specialized tools and validation
 
-## Security Notice
+### **Security-First Architecture**
+- **Credential Management**: Environment variables and secure storage
+- **HTTPS Enforcement**: SSL/TLS validation and redirect enforcement
+- **Rate Limiting**: Redis-based rate limiting for API protection
+- **CSRF Protection**: Token-based CSRF protection for web forms
+- **Audit Logging**: Immutable audit trails for compliance
 
-⚠️ **IMPORTANT**: This template requires you to provide your own Snowflake-specific values. All hardcoded credentials and account-specific data have been removed for security.
+### **Multi-Agent Testing**
+- **Blind Spot Detection**: AI agents identify overlooked issues
+- **Diversity Testing**: Multiple perspectives for comprehensive coverage
+- **Automated Validation**: Continuous testing and validation
 
-## Prerequisites
+### **Healthcare CDC Compliance**
+- **HIPAA Compliance**: PHI detection and validation
+- **Data Encryption**: Healthcare data encryption at rest and in transit
+- **Access Control**: Role-based access control for clinical data
+- **Audit Logging**: Immutable audit trails for regulatory compliance
 
-### Snowflake Account Setup
+### **Package Management**
+- **UV Integration**: Modern Python package management with UV
+- **Lock File Enforcement**: Reproducible builds with `uv.lock`
+- **Security Scanning**: Automated vulnerability detection
 
-Before deploying the infrastructure, you need to set up your Snowflake account:
+## 🛠️ Quick Start
 
-1. **Create Image Repository**:
-```sql
-USE ROLE ACCOUNTADMIN;
-CREATE DATABASE IF NOT EXISTS OPENFLOW;
-USE OPENFLOW;
-CREATE SCHEMA IF NOT EXISTS OPENFLOW;
-USE SCHEMA OPENFLOW;
-CREATE IMAGE REPOSITORY IF NOT EXISTS OPENFLOW;
-GRANT USAGE ON DATABASE OPENFLOW TO ROLE PUBLIC;
-GRANT USAGE ON SCHEMA OPENFLOW TO ROLE PUBLIC;
-GRANT READ ON IMAGE REPOSITORY OPENFLOW.OPENFLOW.OPENFLOW TO ROLE PUBLIC;
-```
-
-2. **Grant Openflow Privileges**:
-```sql
--- Replace $OPENFLOW_ADMIN_ROLE with your admin role name
-GRANT CREATE OPENFLOW DATA PLANE INTEGRATION ON ACCOUNT TO ROLE $OPENFLOW_ADMIN_ROLE;
-GRANT CREATE OPENFLOW RUNTIME INTEGRATION ON ACCOUNT TO ROLE $OPENFLOW_ADMIN_ROLE;
-```
-
-3. **Configure User Roles**:
-```sql
--- Replace $OPENFLOW_USER with your user name
-ALTER USER $OPENFLOW_USER SET DEFAULT_SECONDARY_ROLES = ('ALL');
-```
-
-### AWS Requirements
-
-- AWS CLI installed and configured with appropriate permissions
-- CloudFormation permissions
-- IAM permissions for creating roles and policies
-
-## Configuration
-
-### Required Values from Snowflake
-
-You must obtain these values from Snowflake and configure them:
-
-1. **Copy the example configuration**:
-   ```bash
-   cp config.env.example config.env
-   ```
-
-2. **Edit `config.env` with your Snowflake values**:
-   ```bash
-   nano config.env
-   ```
-
-   **Required Snowflake Values** (obtain from Snowflake):
-   - `SNOWFLAKE_ACCOUNT_URL`: Your Snowflake account URL
-   - `SNOWFLAKE_ORGANIZATION`: Your Snowflake organization
-   - `SNOWFLAKE_ACCOUNT`: Your Snowflake account identifier
-   - `SNOWFLAKE_OAUTH_INTEGRATION_NAME`: OAuth integration name
-   - `SNOWFLAKE_OAUTH_CLIENT_ID`: OAuth client ID
-   - `SNOWFLAKE_OAUTH_CLIENT_SECRET`: OAuth client secret
-   - `DATA_PLANE_URL`: Data plane URL (provided by Snowflake)
-   - `DATA_PLANE_UUID`: Data plane UUID (provided by Snowflake)
-   - `TELEMETRY_URL`: Telemetry URL (provided by Snowflake)
-   - `CONTROL_PLANE_URL`: Control plane URL (provided by Snowflake)
-
-   **Your Values**:
-   - `DATA_PLANE_KEY`: A unique identifier for your deployment
-
-## Deployment
-
-### Option 1: Automated Deployment
-
+### **Installation**
 ```bash
-# Validate configuration first
-./deploy.sh validate
+# Clone the repository
+git clone <repository-url>
+cd OpenFlow-Playground
 
-# Deploy the infrastructure
-./deploy.sh deploy
+# Install dependencies with UV
+uv sync --all-extras
 
-# Monitor deployment
-./monitor.sh all
+# Run tests
+make test-python
 ```
 
-### Option 2: Manual Deployment
-
+### **Development**
 ```bash
-# Deploy the CloudFormation stack
-aws cloudformation create-stack \
-  --stack-name openflow-playground \
-  --template-body file://models/Openflow-Playground.yaml \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --parameters ParameterKey=SnowflakeAccountURL,ParameterValue="https://your-account.snowflakecomputing.com" \
-  --parameters ParameterKey=SnowflakeOrganization,ParameterValue="YOUR_ORG" \
-  --parameters ParameterKey=SnowflakeAccount,ParameterValue="YOUR_ACCOUNT" \
-  # ... (add all required parameters)
+# Install development dependencies
+uv sync --extra dev
 
-# Monitor deployment
-aws cloudformation describe-stacks --stack-name openflow-playground
+# Run linting
+make lint
+
+# Run formatting
+make format
+
+# Run all tests
+make test
 ```
 
-## Architecture
+## 📁 Project Structure
 
-The CloudFormation template creates:
+```
+OpenFlow-Playground/
+├── src/                          # Source code
+│   ├── streamlit/                # Streamlit application
+│   ├── security_first/           # Security components
+│   ├── multi_agent_testing/      # Multi-agent testing
+│   └── mdc_generator/           # MDC file generator
+├── tests/                        # Test suite
+├── scripts/                      # Utility scripts
+├── config/                       # Configuration files
+├── docs/                         # Documentation
+├── healthcare-cdc/              # Healthcare CDC components
+├── .cursor/                      # Cursor IDE configuration
+│   ├── rules/                   # MDC rule files
+│   └── plugins/                 # IDE plugins
+├── project_model_registry.json   # Model registry
+├── pyproject.toml               # UV project configuration
+├── uv.lock                      # UV lock file
+└── Makefile                     # Build system
+```
 
-- **VPC**: Custom VPC with public and private subnets
-- **Networking**: NAT Gateway, Internet Gateway, and routing tables
-- **IAM**: Roles and policies for Openflow agent
-- **EC2 Instance**: Agent instance that automatically sets up Openflow
-- **S3 Bucket**: For Terraform state management
-- **Secrets Manager**: For OAuth2 credentials
+## 🔧 Model-Driven Architecture
 
-## Monitoring
+### **Domain Detection**
+The project uses a model-driven approach with `project_model_registry.json` as the single source of truth:
 
-### Check Deployment Status
+- **Domain Detection**: Automatic detection of file types and domains
+- **Tool Selection**: Domain-specific linting, formatting, and validation
+- **Requirements Traceability**: Link requirements to implementations
 
+### **Rule Compliance**
+- **MDC Linter**: Validates `.mdc` files for proper structure
+- **Pre-commit Hooks**: Automated rule enforcement
+- **IDE Integration**: Cursor IDE plugin for immediate feedback
+
+## 🧪 Testing
+
+### **Test Categories**
+- **Python Tests**: Core functionality and security validation
+- **Core Concept Tests**: Architecture and design pattern validation
+- **Healthcare CDC Tests**: HIPAA compliance and PHI detection
+- **Rule Compliance Tests**: MDC validation and rule enforcement
+
+### **Running Tests**
 ```bash
-# Check all components
-./monitor.sh all
+# Run all tests
+make test
 
-# Check specific components
-./monitor.sh stack
-./monitor.sh instances
-./monitor.sh eks
+# Run specific test categories
+make test-python
+make test-core-concepts
+make test-healthcare-cdc
+make test-rule-compliance
 ```
 
-### View Logs
+## 🔒 Security Features
 
-The EC2 instance runs setup scripts that you can monitor:
+### **Credential Management**
+- Environment variables for all sensitive data
+- AWS Secrets Manager integration
+- No hardcoded credentials in source code
 
+### **Data Protection**
+- Encryption at rest and in transit
+- PHI detection and validation
+- Immutable audit logging
+
+### **Access Control**
+- Role-based access control (RBAC)
+- JWT-based session management
+- Multi-factor authentication support
+
+## 📊 Healthcare CDC Features
+
+### **HIPAA Compliance**
+- PHI detection and validation
+- Healthcare data encryption
+- Access control and authentication
+- Immutable audit logging
+
+### **CDC Integration**
+- Clinical data transformation
+- CDC format compliance
+- Data retention policies
+
+## 🚀 Deployment
+
+### **Streamlit Application**
 ```bash
-# Check instance logs (if accessible)
-aws ec2-instance-connect send-ssh-public-key \
-  --instance-id <instance-id> \
-  --availability-zone <az> \
-  --instance-os-user ec2-user \
-  --ssh-public-key file://~/.ssh/id_rsa.pub
+# Run the Streamlit app
+streamlit run src/streamlit/openflow_quickstart_app.py
 ```
 
-## Configuration Management
-
-### Security Best Practices
-
-1. **Never commit `config.env`** - it contains sensitive data
-2. **Use environment variables** for production deployments
-3. **Rotate OAuth credentials** regularly
-4. **Use AWS Secrets Manager** for sensitive values in production
-
-### Environment-Specific Configuration
-
+### **Security Validation**
 ```bash
-# Development
-cp config.env.example config.dev.env
-# Edit with development values
+# Run security scans
+make security
 
-# Production
-cp config.env.example config.prod.env
-# Edit with production values
-
-# Use specific config
-SNOWFLAKE_ACCOUNT_URL=https://your-account.snowflakecomputing.com ./deploy.sh deploy
+# Check for vulnerabilities
+uv run safety check
 ```
 
-## Troubleshooting
+## 📚 Documentation
 
-### Common Issues
+- **Architecture**: Model-driven development patterns
+- **Security**: Security-first design principles
+- **Testing**: Multi-agent testing framework
+- **Healthcare**: CDC compliance and HIPAA requirements
 
-1. **Missing Required Parameters**:
-   ```bash
-   ./deploy.sh validate
-   ```
-   This will show which parameters are missing.
+## 🤝 Contributing
 
-2. **Stack creation fails**:
-   ```bash
-   aws cloudformation describe-stack-events --stack-name openflow-playground
-   ```
+1. Follow the model-driven development approach
+2. Ensure all tests pass
+3. Follow security-first principles
+4. Update documentation as needed
 
-3. **Instance not starting**:
-   ```bash
-   ./monitor.sh instances
-   ```
+## 📄 License
 
-### Useful Commands
+[License information]
 
-```bash
-# Validate everything before deployment
-./deploy.sh validate
+---
 
-# Check deployment status
-./monitor.sh all
-
-# View stack events
-aws cloudformation describe-stack-events --stack-name openflow-playground
-
-# Update stack with new configuration
-./deploy.sh update
-```
-
-## Cleanup
-
-To remove all resources:
-
-```bash
-./deploy.sh delete
-```
-
-## Next Steps
-
-After successful deployment:
-
-1. **Test connectors** in Snowflake console
-2. **Create data flows** using the available connectors
-3. **Monitor performance** and costs
-4. **Scale resources** as needed
-
-## Support
-
-- **Documentation**: [Snowflake Openflow Docs](https://docs.snowflake.com/alias/openflow/setup-deployment)
-- **Issues**: Check CloudFormation events for detailed error messages
-- **Logs**: Use `./monitor.sh logs` for log locations
-
-## Security Improvements
-
-This template has been secured by:
-
-- ✅ **Removed all hardcoded credentials**
-- ✅ **Made all Snowflake-specific parameters required**
-- ✅ **Added parameter validation**
-- ✅ **Improved error handling**
-- ✅ **Added configuration validation**
-- ✅ **Separated secrets from infrastructure**
+**Built with security-first principles and model-driven development.**

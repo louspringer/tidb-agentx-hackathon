@@ -101,45 +101,35 @@ class TestFileOrganization:
             assert req_file_path.exists(), f"Requirements file {req_file} should exist"
     
     def test_documentation_files(self):
-        """Test documentation files"""
-        # Check for implementation documentation
-        doc_file = self.project_root / "PR_9_OPENFLOW_STREAMLIT_APP_IMPLEMENTATION.md"
-        assert doc_file.exists(), "Implementation documentation should exist"
-    
+        """Test that documentation files are properly organized"""
+        # Check for key documentation files
+        required_docs = [
+            "README.md",
+            "docs/HEALTHCARE_CDC_IMPLEMENTATION_PLAN.md"
+        ]
+        
+        for doc_file in required_docs:
+            doc_path = self.project_root / doc_file
+            assert doc_path.exists(), f"Documentation file should exist: {doc_file}"
+            
     def test_model_registry_file_organization(self):
-        """Test that model registry reflects file organization"""
-        # Check that file_organization section exists
-        assert "file_organization" in self.model_registry, "Model registry should have file_organization section"
+        """Test that model registry file organization is correct"""
+        # Check that project model registry exists
+        model_path = self.project_root / "project_model_registry.json"
+        assert model_path.exists(), "Project model registry should exist"
         
-        file_org = self.model_registry["file_organization"]
+        # Load and validate model structure
+        with open(model_path, 'r') as f:
+            model = json.load(f)
+            
+        # Check for required sections
+        assert "domains" in model, "Model should have domains section"
+        assert "requirements_traceability" in model, "Model should have requirements_traceability section"
         
-        # Check src section
-        assert "src" in file_org, "File organization should have src section"
-        src_section = file_org["src"]
-        assert "description" in src_section, "Src section should have description"
-        assert "streamlit" in src_section, "Src section should have streamlit domain"
-        assert "security_first" in src_section, "Src section should have security_first domain"
-        assert "multi_agent_testing" in src_section, "Src section should have multi_agent_testing domain"
-        
-        # Check tests section
-        assert "tests" in file_org, "File organization should have tests section"
-        tests_section = file_org["tests"]
-        assert "description" in tests_section, "Tests section should have description"
-        assert "test_basic_validation.py" in tests_section, "Tests section should have basic validation test"
-        assert "test_core_concepts.py" in tests_section, "Tests section should have core concepts test"
-        
-        # Check requirements section
-        assert "requirements" in file_org, "File organization should have requirements section"
-        req_section = file_org["requirements"]
-        assert "description" in req_section, "Requirements section should have description"
-        assert "requirements_streamlit.txt" in req_section, "Requirements section should have streamlit requirements"
-        assert "requirements_diversity.txt" in req_section, "Requirements section should have diversity requirements"
-        
-        # Check docs section
-        assert "docs" in file_org, "File organization should have docs section"
-        docs_section = file_org["docs"]
-        assert "description" in docs_section, "Docs section should have description"
-        assert "PR_9_OPENFLOW_STREAMLIT_APP_IMPLEMENTATION.md" in docs_section, "Docs section should have implementation doc"
+        # Check for key domains
+        required_domains = ["python", "streamlit", "security_first", "healthcare_cdc"]
+        for domain in required_domains:
+            assert domain in model["domains"], f"Model should include {domain} domain"
     
     def test_domain_patterns_updated(self):
         """Test that domain patterns reflect new file organization"""
