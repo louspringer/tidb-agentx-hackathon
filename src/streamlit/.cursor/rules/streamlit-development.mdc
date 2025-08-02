@@ -1,0 +1,39 @@
+---
+description: Streamlit development guidelines and best practices
+globs: ["src/streamlit/**/*.py", "**/*streamlit*.py", "app.py", "pages/*.py"]
+alwaysApply: true
+---
+
+# Streamlit Development Rules
+
+## Streamlit-Specific Guidelines
+
+### Security-First Streamlit Development
+- **Session State Security**: Never store sensitive data in `st.session_state`
+- **Input Validation**: Always validate user inputs before processing
+- **Credential Handling**: Use environment variables for all credentials
+- **Access Control**: Implement role-based access control for all features
+
+### Streamlit Best Practices
+- **Progressive Disclosure**: Use `st.expander()` for complex features
+- **Mobile Responsiveness**: Test on mobile devices and tablets
+- **Accessibility**: Use high-contrast colors and proper labels
+- **Performance**: Cache expensive operations with `@st.cache_data`
+
+### Testing Requirements
+- **Unit Tests**: Test all Streamlit components individually
+- **Integration Tests**: Test complete user workflows
+- **Security Tests**: Validate all security measures
+- **Accessibility Tests**: Ensure WCAG 2.1 AA compliance
+
+### Code Quality
+- **Type Hints**: Use type hints for all functions
+- **Documentation**: Document all Streamlit components
+- **Error Handling**: Implement comprehensive error handling
+- **Logging**: Add proper logging for debugging
+
+### Deployment
+- **Environment Variables**: Use `.env` files for configuration
+- **Dependencies**: Keep requirements minimal and secure
+- **Monitoring**: Implement health checks and monitoring
+- **Scaling**: Design for multiple concurrent users

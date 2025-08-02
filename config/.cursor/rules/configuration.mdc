@@ -1,0 +1,39 @@
+---
+description: Configuration management rules and guidelines
+globs: ["config/*.yaml", "config/*.yml", "config/*.json", "config/*.env"]
+alwaysApply: true
+---
+
+# Configuration Rules
+
+## Configuration Management Guidelines
+
+### Security Requirements
+- **No Hardcoded Secrets**: Never hardcode credentials in config files
+- **Environment Variables**: Use environment variables for sensitive data
+- **Access Control**: Restrict access to configuration files
+- **Encryption**: Encrypt sensitive configuration data
+
+### Configuration Standards
+- **Validation**: Validate all configuration values
+- **Defaults**: Provide sensible defaults
+- **Documentation**: Document all configuration options
+- **Examples**: Include example configurations
+
+### Environment Management
+- **Environment Separation**: Separate dev, staging, prod configs
+- **Version Control**: Track configuration changes
+- **Backup**: Maintain configuration backups
+- **Rollback**: Enable configuration rollback
+
+### Configuration Types
+- **Application Config**: Application-specific settings
+- **Infrastructure Config**: Infrastructure configuration
+- **Security Config**: Security-related settings
+- **Deployment Config**: Deployment-specific settings
+
+### Best Practices
+- **Minimal Configuration**: Keep configuration minimal
+- **Clear Naming**: Use clear, descriptive names
+- **Consistent Format**: Use consistent formatting
+- **Validation**: Validate configuration on startup

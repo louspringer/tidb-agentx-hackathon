@@ -1,6 +1,17 @@
 ---
 description: Use deterministic tools for file editing
-globs: ["**/*.yaml", "**/*.yml", "**/*.json", "**/*.toml", "**/*.ini", "**/*.cfg", "**/*.mdc", "**/*.py", "**/*.xml", "**/*.properties", "**/*.env"]
+globs:
+- '**/*.yaml'
+- '**/*.yml'
+- '**/*.json'
+- '**/*.toml'
+- '**/*.ini'
+- '**/*.cfg'
+- '**/*.mdc'
+- '**/*.py'
+- '**/*.xml'
+- '**/*.properties'
+- '**/*.env'
 alwaysApply: true
 ---
 

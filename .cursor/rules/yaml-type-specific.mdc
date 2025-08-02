@@ -1,3 +1,11 @@
+---
+description: YAML file type-specific rules and validation strategies
+globs:
+- '**/*.yaml'
+- '**/*.yml'
+alwaysApply: true
+---
+
 # YAML File Type-Specific Rules
 
 ## Core Principle: Heuristic Evaluation Over Enumeration
