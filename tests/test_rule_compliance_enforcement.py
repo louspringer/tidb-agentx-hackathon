@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Test Rule Compliance Enforcement System
+🧪 Test Rule Compliance Enforcement System
+
 Tests the pre-commit hooks, IDE plugins, and automated linting
 """
 
@@ -12,6 +13,7 @@ import sys
 import yaml
 import json
 import fnmatch
+import re
 from pathlib import Path
 from unittest.mock import patch
 

@@ -226,17 +226,35 @@ class MDCLinter:
 def main():
     """Main function"""
     parser = argparse.ArgumentParser(description="Lint .mdc files for proper structure")
-    parser.add_argument("directory", nargs="?", default=".", 
-                       help="Directory to lint (default: current directory)")
+    parser.add_argument("path", nargs="?", default=".", 
+                       help="File or directory to lint (default: current directory)")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Verbose output")
     
     args = parser.parse_args()
     
     linter = MDCLinter()
-    exit_code = linter.lint_directory(args.directory)
+    path = Path(args.path)
     
-    sys.exit(exit_code)
+    if path.is_file():
+        # Lint a single file
+        if not path.suffix == '.mdc':
+            print(f"Error: {path} is not a .mdc file")
+            sys.exit(1)
+            
+        success = linter.lint_file(str(path))
+        if success:
+            print(f"✅ {path} passes linting")
+            sys.exit(0)
+        else:
+            print(f"❌ {path} has violations:")
+            for violation in linter.violations:
+                print(f"  {violation}")
+            sys.exit(1)
+    else:
+        # Lint a directory
+        exit_code = linter.lint_directory(args.path)
+        sys.exit(exit_code)
 
 if __name__ == "__main__":
     main() 

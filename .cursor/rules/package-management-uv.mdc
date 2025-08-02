@@ -1,3 +1,9 @@
+---
+description: UV Package Management Rules
+globs: ["pyproject.toml", "requirements*.txt", "uv.lock", "*.py"]
+alwaysApply: true
+---
+
 # UV Package Management Rules
 
 ## Core Principle: UV-First Package Management
@@ -190,5 +196,11 @@ repos:
 ```
 
 ## Remember
+
+**UV is the ONLY package manager allowed. All dependencies must be managed through UV with proper lock files and pyproject.toml configuration.**
+
+
+**UV is the ONLY package manager allowed. All dependencies must be managed through UV with proper lock files and pyproject.toml configuration.**
+
 
 **UV is the ONLY package manager allowed. All dependencies must be managed through UV with proper lock files and pyproject.toml configuration.**
