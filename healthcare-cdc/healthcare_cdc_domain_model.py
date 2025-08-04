@@ -13,31 +13,42 @@ from typing import Dict, List, Optional, Any
 from enum import Enum
 from datetime import datetime
 import json
+import re
+import os
+from uuid import UUID
+
 
 class EventType(Enum):
     """CDC Event Types"""
+
     INSERT = "INSERT"
-    MODIFY = "MODIFY" 
+    MODIFY = "MODIFY"
     REMOVE = "REMOVE"
+
 
 class ClaimStatus(Enum):
     """Healthcare Claim Status"""
+
     PENDING = "Pending"
     IN_REVIEW = "In Review"
     APPROVED = "Approved"
     REJECTED = "Rejected"
     PAID = "Paid"
 
+
 class PaymentStatus(Enum):
     """Payment Status"""
+
     PENDING = "Pending"
     PROCESSING = "Processing"
     COMPLETED = "Completed"
     FAILED = "Failed"
 
+
 @dataclass
 class PatientInfo:
     """Patient Information"""
+
     patient_id: str
     first_name: str
     last_name: str
@@ -50,9 +61,11 @@ class PatientInfo:
     state: str
     zip_code: str
 
+
 @dataclass
 class ProviderInfo:
     """Healthcare Provider Information"""
+
     provider_name: str
     provider_npi: str
     street: str
@@ -60,16 +73,20 @@ class ProviderInfo:
     state: str
     zip_code: str
 
+
 @dataclass
 class PayerInfo:
     """Insurance Payer Information"""
+
     payer_name: str
     payer_id: str
     contact_number: str
 
+
 @dataclass
 class HealthcareClaim:
     """Healthcare Insurance Claim"""
+
     claim_id: str
     member_id: str
     insurance_plan: str
@@ -85,203 +102,218 @@ class HealthcareClaim:
     provider: ProviderInfo
     payer: PayerInfo
 
+
 @dataclass
 class CDCEvent:
     """Change Data Capture Event"""
+
     event_name: EventType
     event_creation_unix_time: int
     claim: HealthcareClaim
-    
+
     def to_json(self) -> str:
         """Convert to JSON for DynamoDB stream"""
-        return json.dumps({
-            "eventName": self.event_name.value,
-            "eventCreationUnixTime": self.event_creation_unix_time,
-            "claimId": self.claim.claim_id,
-            "claimStatus": self.claim.claim_status.value,
-            "paymentStatus": self.claim.payment_status.value,
-            "totalCharge": self.claim.total_charge,
-            "insurancePlan": self.claim.insurance_plan,
-            "memberId": self.claim.member_id,
-            "providerName": self.claim.provider.provider_name,
-            "patientFirstName": self.claim.patient.first_name,
-            "patientLastName": self.claim.patient.last_name,
-            "patientEmail": self.claim.patient.email,
-            "patientPhone": self.claim.patient.phone,
-            "patientDOB": self.claim.patient.date_of_birth,
-            "patientGender": self.claim.patient.gender,
-            "patientStreet": self.claim.patient.street,
-            "patientCity": self.claim.patient.city,
-            "patientState": self.claim.patient.state,
-            "patientZip": self.claim.patient.zip_code,
-            "providerNPI": self.claim.provider.provider_npi,
-            "providerStreet": self.claim.provider.street,
-            "providerCity": self.claim.provider.city,
-            "providerState": self.claim.provider.state,
-            "providerZip": self.claim.provider.zip_code,
-            "payerName": self.claim.payer.payer_name,
-            "payerId": self.claim.payer.payer_id,
-            "payerContactNumber": self.claim.payer.contact_number,
-            "diagnosisCodes": self.claim.diagnosis_codes,
-            "dateOfService": self.claim.date_of_service,
-            "procedureDetails": self.claim.procedure_details,
-            "createdTimeStamp": self.claim.created_timestamp,
-            "billSubmitDate": self.claim.bill_submit_date
-        })
+        return json.dumps(
+            {
+                "eventName": self.event_name.value,
+                "eventCreationUnixTime": self.event_creation_unix_time,
+                "claimId": self.claim.claim_id,
+                "claimStatus": self.claim.claim_status.value,
+                "paymentStatus": self.claim.payment_status.value,
+                "totalCharge": self.claim.total_charge,
+                "insurancePlan": self.claim.insurance_plan,
+                "memberId": self.claim.member_id,
+                "providerName": self.claim.provider.provider_name,
+                "patientFirstName": self.claim.patient.first_name,
+                "patientLastName": self.claim.patient.last_name,
+                "patientEmail": self.claim.patient.email,
+                "patientPhone": self.claim.patient.phone,
+                "patientDOB": self.claim.patient.date_of_birth,
+                "patientGender": self.claim.patient.gender,
+                "patientStreet": self.claim.patient.street,
+                "patientCity": self.claim.patient.city,
+                "patientState": self.claim.patient.state,
+                "patientZip": self.claim.patient.zip_code,
+                "providerNPI": self.claim.provider.provider_npi,
+                "providerStreet": self.claim.provider.street,
+                "providerCity": self.claim.provider.city,
+                "providerState": self.claim.provider.state,
+                "providerZip": self.claim.provider.zip_code,
+                "payerName": self.claim.payer.payer_name,
+                "payerId": self.claim.payer.payer_id,
+                "payerContactNumber": self.claim.payer.contact_number,
+                "diagnosisCodes": self.claim.diagnosis_codes,
+                "dateOfService": self.claim.date_of_service,
+                "procedureDetails": self.claim.procedure_details,
+                "createdTimeStamp": self.claim.created_timestamp,
+                "billSubmitDate": self.claim.bill_submit_date,
+            }
+        )
+
 
 @dataclass
 class InfrastructureComponents:
     """Infrastructure Components for Healthcare CDC"""
+
     # AWS Components
     dynamodb_table: str = "InsuranceClaims"
     kinesis_stream: str = "InsuranceClaimsStream"
     vpc_id: Optional[str] = None
     subnet_id: Optional[str] = None
     ec2_instance_type: str = "t3.medium"
-    
+
     # Snowflake Components
     database: str = "CDC_DB"
     schema: str = "CDC_SCHEMA"
     warehouse: str = "CDC_WH"
     role: str = "CDC_RL"
-    
+
     # Openflow Components
     openflow_runtime: Optional[str] = None
     data_plane_url: Optional[str] = None
     control_plane_url: Optional[str] = None
-    
+
     # Tables
     destination_table: str = "openflow_insclaim_dest_tbl"
     cdc_table: str = "openflow_insclaim_cdc_tbl"
     event_history_table: str = "openflow_insclaim_event_hist_tbl"
 
+
 @dataclass
 class PipelineConfiguration:
     """Openflow Pipeline Configuration"""
+
     pipeline_name: str = "HealthcareCDC"
     processors: List[Dict[str, Any]] = field(default_factory=list)
-    
+
     def add_processor(self, processor_type: str, config: Dict[str, Any]):
         """Add a processor to the pipeline"""
-        self.processors.append({
-            "type": processor_type,
-            "config": config
-        })
+        self.processors.append({"type": processor_type, "config": config})
+
 
 class HealthcareCDCDomainModel:
     """Domain Model for Healthcare CDC System"""
-    
+
     def __init__(self, sql_template_path: Optional[str] = None):
         self.infrastructure = InfrastructureComponents()
         self.pipeline_config = PipelineConfiguration()
         self.sql_template_path = sql_template_path
         self._setup_pipeline()
-    
+
     def _setup_pipeline(self):
         """Setup the Openflow pipeline configuration"""
         # Kinesis Consumer
-        self.pipeline_config.add_processor("KinesisConsumer", {
-            "streamName": self.infrastructure.kinesis_stream,
-            "region": "us-east-1"
-        })
-        
+        self.pipeline_config.add_processor(
+            "KinesisConsumer",
+            {"streamName": self.infrastructure.kinesis_stream, "region": "us-east-1"},
+        )
+
         # JSON Parser
-        self.pipeline_config.add_processor("ParseJson", {
-            "jsonPath": "$"
-        })
-        
+        self.pipeline_config.add_processor("ParseJson", {"jsonPath": "$"})
+
         # Flat JSON (for nested structures)
-        self.pipeline_config.add_processor("FlatJson", {
-            "flattenArrays": True,
-            "flattenObjects": True
-        })
-        
+        self.pipeline_config.add_processor(
+            "FlatJson", {"flattenArrays": True, "flattenObjects": True}
+        )
+
         # Jolt Transform (for data transformation)
-        self.pipeline_config.add_processor("JoltTransformJson", {
-            "joltSpec": [
-                {
-                    "operation": "shift",
-                    "spec": {
-                        "eventName": "eventName",
-                        "eventCreationUnixTime": "eventCreationUnixTime",
-                        "claimId": "claimId",
-                        "claimStatus": "claimStatus",
-                        "paymentStatus": "paymentStatus",
-                        "totalCharge": "totalCharge",
-                        "insurancePlan": "insurancePlan",
-                        "memberId": "memberId",
-                        "providerName": "providerName",
-                        "patientFirstName": "patientFirstName",
-                        "patientLastName": "patientLastName",
-                        "patientEmail": "patientEmail",
-                        "patientPhone": "patientPhone",
-                        "patientDOB": "patientDOB",
-                        "patientGender": "patientGender",
-                        "patientStreet": "patientStreet",
-                        "patientCity": "patientCity",
-                        "patientState": "patientState",
-                        "patientZip": "patientZip",
-                        "providerNPI": "providerNPI",
-                        "providerStreet": "providerStreet",
-                        "providerCity": "providerCity",
-                        "providerState": "providerState",
-                        "providerZip": "providerZip",
-                        "payerName": "payerName",
-                        "payerId": "payerId",
-                        "payerContactNumber": "payerContactNumber",
-                        "diagnosisCodes": "diagnosisCodes",
-                        "dateOfService": "dateOfService",
-                        "procedureDetails": "procedureDetails",
-                        "createdTimeStamp": "createdTimeStamp",
-                        "billSubmitDate": "billSubmitDate"
+        self.pipeline_config.add_processor(
+            "JoltTransformJson",
+            {
+                "joltSpec": [
+                    {
+                        "operation": "shift",
+                        "spec": {
+                            "eventName": "eventName",
+                            "eventCreationUnixTime": "eventCreationUnixTime",
+                            "claimId": "claimId",
+                            "claimStatus": "claimStatus",
+                            "paymentStatus": "paymentStatus",
+                            "totalCharge": "totalCharge",
+                            "insurancePlan": "insurancePlan",
+                            "memberId": "memberId",
+                            "providerName": "providerName",
+                            "patientFirstName": "patientFirstName",
+                            "patientLastName": "patientLastName",
+                            "patientEmail": "patientEmail",
+                            "patientPhone": "patientPhone",
+                            "patientDOB": "patientDOB",
+                            "patientGender": "patientGender",
+                            "patientStreet": "patientStreet",
+                            "patientCity": "patientCity",
+                            "patientState": "patientState",
+                            "patientZip": "patientZip",
+                            "providerNPI": "providerNPI",
+                            "providerStreet": "providerStreet",
+                            "providerCity": "providerCity",
+                            "providerState": "providerState",
+                            "providerZip": "providerZip",
+                            "payerName": "payerName",
+                            "payerId": "payerId",
+                            "payerContactNumber": "payerContactNumber",
+                            "diagnosisCodes": "diagnosisCodes",
+                            "dateOfService": "dateOfService",
+                            "procedureDetails": "procedureDetails",
+                            "createdTimeStamp": "createdTimeStamp",
+                            "billSubmitDate": "billSubmitDate",
+                        },
                     }
-                }
-            ]
-        })
-        
+                ]
+            },
+        )
+
         # Route to different tables based on event type
-        self.pipeline_config.add_processor("RouteOnAttribute", {
-            "Routing Strategy": "Route to Property name",
-            "Route to Property name": "eventName"
-        })
-        
+        self.pipeline_config.add_processor(
+            "RouteOnAttribute",
+            {
+                "Routing Strategy": "Route to Property name",
+                "Route to Property name": "eventName",
+            },
+        )
+
         # PutDatabaseRecord for destination table
-        self.pipeline_config.add_processor("PutDatabaseRecord", {
-            "tableName": self.infrastructure.destination_table,
-            "databaseType": "SNOWFLAKE"
-        })
-        
+        self.pipeline_config.add_processor(
+            "PutDatabaseRecord",
+            {
+                "tableName": self.infrastructure.destination_table,
+                "databaseType": "SNOWFLAKE",
+            },
+        )
+
         # PutDatabaseRecord for CDC table
-        self.pipeline_config.add_processor("PutDatabaseRecord", {
-            "tableName": self.infrastructure.cdc_table,
-            "databaseType": "SNOWFLAKE"
-        })
-        
+        self.pipeline_config.add_processor(
+            "PutDatabaseRecord",
+            {"tableName": self.infrastructure.cdc_table, "databaseType": "SNOWFLAKE"},
+        )
+
         # PutDatabaseRecord for event history table
-        self.pipeline_config.add_processor("PutDatabaseRecord", {
-            "tableName": self.infrastructure.event_history_table,
-            "databaseType": "SNOWFLAKE"
-        })
-        
+        self.pipeline_config.add_processor(
+            "PutDatabaseRecord",
+            {
+                "tableName": self.infrastructure.event_history_table,
+                "databaseType": "SNOWFLAKE",
+            },
+        )
+
         # Execute SQL for merging CDC events
-        self.pipeline_config.add_processor("ExecuteSQLStatement", {
-            "sqlStatement": self._get_merge_sql()
-        })
-    
+        self.pipeline_config.add_processor(
+            "ExecuteSQLStatement", {"sqlStatement": self._get_merge_sql()}
+        )
+
     def _get_merge_sql(self) -> str:
         """Get the SQL merge statement for CDC operations"""
         if self.sql_template_path:
             sql_file_path = Path(self.sql_template_path)
         else:
             sql_file_path = Path(__file__).parent / "sql" / "merge_cdc_operations.sql"
-        
+
         try:
-            with open(sql_file_path, 'r') as f:
+            with open(sql_file_path, "r") as f:
                 sql_template = f.read()
-            
+
             return sql_template.format(
                 cdc_table=self.infrastructure.cdc_table,
-                dest_table=self.infrastructure.destination_table
+                dest_table=self.infrastructure.destination_table,
             )
         except FileNotFoundError:
             raise FileNotFoundError(
@@ -294,7 +326,7 @@ class HealthcareCDCDomainModel:
             raise OSError(f"Error reading SQL template file: {e}")
         except (ValueError, TypeError) as e:
             raise ValueError(f"Error processing SQL template content: {e}")
-    
+
     def generate_cloudformation_template(self) -> Dict[str, Any]:
         """Generate CloudFormation template for the healthcare CDC infrastructure"""
         return {
@@ -303,17 +335,17 @@ class HealthcareCDCDomainModel:
             "Parameters": {
                 "VpcId": {
                     "Type": "AWS::EC2::VPC::Id",
-                    "Description": "VPC ID for the infrastructure"
+                    "Description": "VPC ID for the infrastructure",
                 },
                 "SubnetId": {
-                    "Type": "AWS::EC2::Subnet::Id", 
-                    "Description": "Subnet ID for the EC2 instance"
+                    "Type": "AWS::EC2::Subnet::Id",
+                    "Description": "Subnet ID for the EC2 instance",
                 },
                 "EC2InstanceType": {
                     "Type": "String",
                     "Default": self.infrastructure.ec2_instance_type,
-                    "Description": "EC2 instance type for data processing"
-                }
+                    "Description": "EC2 instance type for data processing",
+                },
             },
             "Resources": {
                 "InsuranceClaimsTable": {
@@ -321,30 +353,22 @@ class HealthcareCDCDomainModel:
                     "Properties": {
                         "TableName": self.infrastructure.dynamodb_table,
                         "AttributeDefinitions": [
-                            {
-                                "AttributeName": "claim_id",
-                                "AttributeType": "S"
-                            }
+                            {"AttributeName": "claim_id", "AttributeType": "S"}
                         ],
-                        "KeySchema": [
-                            {
-                                "AttributeName": "claim_id",
-                                "KeyType": "HASH"
-                            }
-                        ],
+                        "KeySchema": [{"AttributeName": "claim_id", "KeyType": "HASH"}],
                         "BillingMode": "PAY_PER_REQUEST",
                         "StreamSpecification": {
                             "StreamEnabled": True,
-                            "StreamViewType": "NEW_AND_OLD_IMAGES"
-                        }
-                    }
+                            "StreamViewType": "NEW_AND_OLD_IMAGES",
+                        },
+                    },
                 },
                 "InsuranceClaimsStream": {
                     "Type": "AWS::Kinesis::Stream",
                     "Properties": {
                         "Name": self.infrastructure.kinesis_stream,
-                        "ShardCount": 1
-                    }
+                        "ShardCount": 1,
+                    },
                 },
                 "EC2SecurityGroup": {
                     "Type": "AWS::EC2::SecurityGroup",
@@ -356,22 +380,17 @@ class HealthcareCDCDomainModel:
                                 "IpProtocol": "tcp",
                                 "FromPort": "22",
                                 "ToPort": "22",
-                                "CidrIp": "0.0.0.0/0"
+                                "CidrIp": "0.0.0.0/0",
                             }
                         ],
                         "SecurityGroupEgress": [
-                            {
-                                "IpProtocol": "-1",
-                                "CidrIp": "0.0.0.0/0"
-                            }
-                        ]
-                    }
+                            {"IpProtocol": "-1", "CidrIp": "0.0.0.0/0"}
+                        ],
+                    },
                 },
                 "EC2InstanceProfile": {
                     "Type": "AWS::IAM::InstanceProfile",
-                    "Properties": {
-                        "Roles": [{"Ref": "EC2InstanceRole"}]
-                    }
+                    "Properties": {"Roles": [{"Ref": "EC2InstanceRole"}]},
                 },
                 "EC2InstanceRole": {
                     "Type": "AWS::IAM::Role",
@@ -382,21 +401,23 @@ class HealthcareCDCDomainModel:
                                 {
                                     "Effect": "Allow",
                                     "Principal": {"Service": "ec2.amazonaws.com"},
-                                    "Action": "sts:AssumeRole"
+                                    "Action": "sts:AssumeRole",
                                 }
-                            ]
+                            ],
                         },
                         "ManagedPolicyArns": [
                             "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
-                            "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
-                        ]
-                    }
+                            "arn:aws:iam::aws:policy/AmazonKinesisFullAccess",
+                        ],
+                    },
                 },
                 "EC2Instance": {
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
                         "InstanceType": {"Ref": "EC2InstanceType"},
-                        "ImageId": {"Fn::Sub": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"},
+                        "ImageId": {
+                            "Fn::Sub": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+                        },
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
                         "IamInstanceProfile": {"Ref": "EC2InstanceProfile"},
@@ -412,39 +433,33 @@ class HealthcareCDCDomainModel:
                                     "pip install boto3\n",
                                     "echo 'Setting up Kinesis stream...' >> /var/log/user-data.log\n",
                                     "aws kinesis put-record --stream-name ${StreamName} --partition-key test --data test >> /var/log/user-data.log 2>&1\n",
-                                    "echo 'Setup complete.' >> /var/log/user-data.log\n"
+                                    "echo 'Setup complete.' >> /var/log/user-data.log\n",
                                 ],
-                                "StreamName": {"Ref": "InsuranceClaimsStream"}
+                                "StreamName": {"Ref": "InsuranceClaimsStream"},
                             }
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
             "Outputs": {
                 "DynamoDBTableName": {
                     "Description": "Name of the DynamoDB table",
                     "Value": self.infrastructure.dynamodb_table,
-                    "Export": {
-                        "Name": "HealthcareCDC-DynamoDBTableName"
-                    }
+                    "Export": {"Name": "HealthcareCDC-DynamoDBTableName"},
                 },
                 "KinesisStreamName": {
                     "Description": "Name of the Kinesis Data Stream",
                     "Value": self.infrastructure.kinesis_stream,
-                    "Export": {
-                        "Name": "HealthcareCDC-KinesisStreamName"
-                    }
+                    "Export": {"Name": "HealthcareCDC-KinesisStreamName"},
                 },
                 "EC2InstanceId": {
                     "Description": "ID of the EC2 instance",
                     "Value": {"Ref": "EC2Instance"},
-                    "Export": {
-                        "Name": "HealthcareCDC-EC2InstanceId"
-                    }
-                }
-            }
+                    "Export": {"Name": "HealthcareCDC-EC2InstanceId"},
+                },
+            },
         }
-    
+
     def generate_snowflake_schema(self) -> str:
         """Generate Snowflake schema creation SQL"""
         return f"""
@@ -569,10 +584,11 @@ class HealthcareCDCDomainModel:
         );
         """
 
+
 def main():
     """Main function to demonstrate the domain model"""
     model = HealthcareCDCDomainModel()
-    
+
     print("Healthcare CDC Domain Model")
     print("=" * 50)
     print(f"Database: {model.infrastructure.database}")
@@ -580,7 +596,7 @@ def main():
     print(f"Destination Table: {model.infrastructure.destination_table}")
     print(f"CDC Table: {model.infrastructure.cdc_table}")
     print(f"Event History Table: {model.infrastructure.event_history_table}")
-    
+
     # Generate sample claim
     patient = PatientInfo(
         patient_id="P001",
@@ -593,24 +609,24 @@ def main():
         street="123 Main St",
         city="Anytown",
         state="CA",
-        zip_code="90210"
+        zip_code="90210",
     )
-    
+
     provider = ProviderInfo(
         provider_name="City Medical Center",
         provider_npi="1234567890",
         street="456 Medical Blvd",
         city="Anytown",
         state="CA",
-        zip_code="90211"
+        zip_code="90211",
     )
-    
+
     payer = PayerInfo(
         payer_name="Blue Cross Blue Shield",
         payer_id="BCBS001",
-        contact_number="555-987-6543"
+        contact_number="555-987-6543",
     )
-    
+
     claim = HealthcareClaim(
         claim_id="CLM001",
         member_id="M001",
@@ -625,17 +641,18 @@ def main():
         bill_submit_date="2024-01-15",
         patient=patient,
         provider=provider,
-        payer=payer
+        payer=payer,
     )
-    
+
     cdc_event = CDCEvent(
         event_name=EventType.INSERT,
         event_creation_unix_time=int(datetime.now().timestamp() * 1000000),
-        claim=claim
+        claim=claim,
     )
-    
+
     print("\nSample CDC Event JSON:")
     print(cdc_event.to_json())
 
+
 if __name__ == "__main__":
-    main() 
+    main()

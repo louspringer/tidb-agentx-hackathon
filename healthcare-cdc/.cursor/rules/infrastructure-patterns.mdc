@@ -307,7 +307,4 @@ ORDER BY eventCreationUnixTime DESC;
 - Performance benchmarks achieved
 - Audit trail functional
 
-description: Healthcare CDC infrastructure patterns for CloudFormation and Snowflake
-globs: ["healthcare-cdc/**/*.yaml", "healthcare-cdc/**/*.sql", "healthcare-cdc/**/*.py"]
-alwaysApply: true
----
+
