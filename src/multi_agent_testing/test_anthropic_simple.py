@@ -14,13 +14,21 @@ def test_anthropic_smoke_test():
     # DEMO ONLY: This uses environment variables for demonstration purposes
     # In production, consider using 1Password SDK or secure credential management
     # For healthcare compliance, implement proper credential rotation and audit trails
+    # Allow for mocking in test environments
     api_key = os.getenv('ANTHROPIC_API_KEY')
+    mock_api_key = os.getenv('MOCK_ANTHROPIC_API_KEY')
+    if mock_api_key:
+        print("⚠️ Using MOCK_ANTHROPIC_API_KEY for testing purposes.")
+        api_key = mock_api_key
     if not api_key:
         print("❌ ANTHROPIC_API_KEY environment variable not set")
         print("💡 Consider using 1Password CLI or SDK instead of subprocess")
         return
-    
-    print(f"🔑 API Key: {api_key[:10]}...{api_key[-10:]}")
+    # Validate API key format (example: Anthropic keys often start with 'sk-' and are 40+ chars)
+    if not re.match(r'^sk-[A-Za-z0-9]{32,}$', api_key):
+        print("❌ API key format invalid. Please check your key.")
+        return
+    print(f"🔑 API Key: [REDACTED] (length: {len(api_key)})")
     
     # Replicate the exact smoke test request
     prompt = """

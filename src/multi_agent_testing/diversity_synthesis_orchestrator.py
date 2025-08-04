@@ -204,15 +204,13 @@ Return as a JSON array of fixes, prioritizing fixes that address multiple high-p
             row = []
             for stakeholder in stakeholders:
                 impact = fix.stakeholder_impacts.get(stakeholder, "No impact")
-                # Convert impact to numeric score
-                if "High" in impact or "Critical" in impact:
-                    score = 3
-                elif "Medium" in impact or "Moderate" in impact:
-                    score = 2
-                elif "Low" in impact or "Minor" in impact:
-                    score = 1
-                else:
-                    score = 0
+                # Convert impact to numeric score using mapping
+                # If impact string contains a known key, use its score; else default to 0
+                score = 0
+                for key, val in impact_score_map.items():
+                    if key in impact:
+                        score = val
+                        break
                 row.append(score)
             impact_matrix.append(row)
         

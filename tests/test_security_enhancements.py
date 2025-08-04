@@ -53,7 +53,6 @@ def test_requirement_33_https_enforcement():
     print("✅ HTTPS enforcement module exists")
     
     print("✅ Requirement 33: HTTPS enforcement - PASSED")
-    return True
 
 
 def test_requirement_34_rate_limiting():
@@ -85,7 +84,6 @@ def test_requirement_34_rate_limiting():
     print("✅ Rate limiting module exists")
     
     print("✅ Requirement 34: Rate limiting - PASSED")
-    return True
 
 
 def test_requirement_35_csrf_protection():
@@ -117,7 +115,6 @@ def test_requirement_35_csrf_protection():
     print("✅ CSRF protection module exists")
     
     print("✅ Requirement 35: CSRF protection - PASSED")
-    return True
 
 
 def test_security_enhancements_completeness():
@@ -162,7 +159,6 @@ def test_security_enhancements_completeness():
         print(f"✅ Security pattern found: {pattern}")
     
     print("✅ Security Enhancements Completeness - PASSED")
-    return True
 
 
 def main():
