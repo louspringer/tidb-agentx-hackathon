@@ -82,7 +82,6 @@ class TestHealthcareCDCRequirements:
         assert "healthcare_cdc" in project_model["domains"], "healthcare_cdc domain should exist"
         
         print("✅ Requirement 28: PHI detection and validation - PASSED")
-        return True
     
     def test_requirement_29_immutable_audit_logging(self):
         """Test immutable audit logging requirement."""
@@ -109,7 +108,6 @@ class TestHealthcareCDCRequirements:
         assert "healthcare_cdc" in project_model["domains"], "healthcare_cdc domain should exist"
         
         print("✅ Requirement 29: Immutable audit logging - PASSED")
-        return True
     
     def test_requirement_30_healthcare_data_encryption(self):
         """Test healthcare data encryption requirement."""
@@ -136,7 +134,6 @@ class TestHealthcareCDCRequirements:
         assert "healthcare_cdc" in project_model["domains"], "healthcare_cdc domain should exist"
         
         print("✅ Requirement 30: Healthcare data encryption - PASSED")
-        return True
     
     def test_requirement_31_healthcare_access_control(self):
         """Test healthcare access control and authentication requirement."""
@@ -163,7 +160,6 @@ class TestHealthcareCDCRequirements:
         assert "healthcare_cdc" in project_model["domains"], "healthcare_cdc domain should exist"
         
         print("✅ Requirement 31: Healthcare access control and authentication - PASSED")
-        return True
     
     def test_requirement_32_healthcare_cdc_cicd_integration(self):
         """Test healthcare CDC CI/CD integration requirement."""
@@ -232,7 +228,6 @@ class TestHealthcareCDCRequirements:
         assert len(requirements) > 0, "Healthcare CDC domain should have requirements"
         
         print("✅ Healthcare CDC domain completeness - PASSED")
-        return True
     
     def test_healthcare_cdc_file_organization(self):
         """Test that healthcare CDC files are properly organized."""
