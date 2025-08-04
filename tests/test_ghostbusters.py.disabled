@@ -1,0 +1,462 @@
+#!/usr/bin/env python3
+"""
+Tests for Ghostbusters Component
+"""
+
+import pytest
+import asyncio
+from pathlib import Path
+from typing import Any
+
+from src.ghostbusters import (
+    GhostbustersOrchestrator,
+    SecurityExpert,
+    CodeQualityExpert,
+    TestExpert,
+    BuildExpert,
+    ArchitectureExpert,
+    ModelExpert,
+    SecurityValidator,
+    CodeQualityValidator,
+    TestValidator,
+    BuildValidator,
+    ArchitectureValidator,
+    ModelValidator,
+    SyntaxRecoveryEngine,
+    IndentationFixer,
+    ImportResolver,
+    TypeAnnotationFixer,
+)
+
+
+class TestGhostbustersAgents:
+    """Test Ghostbusters expert agents"""
+
+    @pytest.fixture
+    def project_path(self) -> Path:
+        """Get project path for testing"""
+        return Path(".")
+
+    @pytest.mark.asyncio
+    async def test_security_expert(self, project_path: Path) -> None:
+        """Test SecurityExpert agent"""
+        expert = SecurityExpert()
+        result = await expert.detect_delusions(project_path)
+
+        assert hasattr(result, "delusions")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.delusions, list)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_code_quality_expert(self, project_path: Path) -> None:
+        """Test CodeQualityExpert agent"""
+        expert = CodeQualityExpert()
+        result = await expert.detect_delusions(project_path)
+
+        assert hasattr(result, "delusions")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.delusions, list)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_test_expert(self, project_path: Path) -> None:
+        """Test TestExpert agent"""
+        expert = TestExpert()
+        result = await expert.detect_delusions(project_path)
+
+        assert hasattr(result, "delusions")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.delusions, list)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_build_expert(self, project_path: Path) -> None:
+        """Test BuildExpert agent"""
+        expert = BuildExpert()
+        result = await expert.detect_delusions(project_path)
+
+        assert hasattr(result, "delusions")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.delusions, list)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_architecture_expert(self, project_path: Path) -> None:
+        """Test ArchitectureExpert agent"""
+        expert = ArchitectureExpert()
+        result = await expert.detect_delusions(project_path)
+
+        assert hasattr(result, "delusions")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.delusions, list)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_model_expert(self, project_path: Path) -> None:
+        """Test ModelExpert agent"""
+        expert = ModelExpert()
+        result = await expert.detect_delusions(project_path)
+
+        assert hasattr(result, "delusions")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.delusions, list)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+
+class TestGhostbustersValidators:
+    """Test Ghostbusters validators"""
+
+    @pytest.fixture
+    def sample_delusions(self) -> list[dict[str, Any]]:
+        """Sample delusions for testing"""
+        return [
+            {
+                "agent": "security",
+                "delusions": [
+                    {
+                        "type": "security_vulnerability",
+                        "description": "Hardcoded credential found",
+                    }
+                ],
+            },
+            {
+                "agent": "code_quality",
+                "delusions": [
+                    {"type": "syntax_error", "description": "Syntax error in file.py"}
+                ],
+            },
+        ]
+
+    @pytest.mark.asyncio
+    async def test_security_validator(
+        self, sample_delusions: list[dict[str, Any]]
+    ) -> None:
+        """Test SecurityValidator"""
+        validator = SecurityValidator()
+        result = await validator.validate_findings(sample_delusions)
+
+        assert hasattr(result, "is_valid")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "issues")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.is_valid, bool)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.issues, list)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_code_quality_validator(
+        self, sample_delusions: list[dict[str, Any]]
+    ) -> None:
+        """Test CodeQualityValidator"""
+        validator = CodeQualityValidator()
+        result = await validator.validate_findings(sample_delusions)
+
+        assert hasattr(result, "is_valid")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "issues")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.is_valid, bool)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.issues, list)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_test_validator(self, sample_delusions: list[dict[str, Any]]) -> None:
+        """Test TestValidator"""
+        validator = TestValidator()
+        result = await validator.validate_findings(sample_delusions)
+
+        assert hasattr(result, "is_valid")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "issues")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.is_valid, bool)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.issues, list)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_build_validator(
+        self, sample_delusions: list[dict[str, Any]]
+    ) -> None:
+        """Test BuildValidator"""
+        validator = BuildValidator()
+        result = await validator.validate_findings(sample_delusions)
+
+        assert hasattr(result, "is_valid")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "issues")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.is_valid, bool)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.issues, list)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_architecture_validator(
+        self, sample_delusions: list[dict[str, Any]]
+    ) -> None:
+        """Test ArchitectureValidator"""
+        validator = ArchitectureValidator()
+        result = await validator.validate_findings(sample_delusions)
+
+        assert hasattr(result, "is_valid")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "issues")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.is_valid, bool)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.issues, list)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+    @pytest.mark.asyncio
+    async def test_model_validator(
+        self, sample_delusions: list[dict[str, Any]]
+    ) -> None:
+        """Test ModelValidator"""
+        validator = ModelValidator()
+        result = await validator.validate_findings(sample_delusions)
+
+        assert hasattr(result, "is_valid")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "issues")
+        assert hasattr(result, "recommendations")
+        assert isinstance(result.is_valid, bool)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.issues, list)
+        assert isinstance(result.recommendations, list)
+        assert 0.0 <= result.confidence <= 1.0
+
+
+class TestGhostbustersRecovery:
+    """Test Ghostbusters recovery engines"""
+
+    @pytest.fixture
+    def sample_action(self) -> dict[str, Any]:
+        """Sample recovery action for testing"""
+        return {
+            "id": "test_action",
+            "agent": "code_quality",
+            "delusion": {"type": "syntax_error", "file": "test_file.py"},
+            "engine": "syntax",
+            "priority": "high",
+            "target_files": ["test_file.py"],
+        }
+
+    @pytest.mark.asyncio
+    async def test_syntax_recovery_engine(self, sample_action: dict[str, Any]) -> None:
+        """Test SyntaxRecoveryEngine"""
+        engine = SyntaxRecoveryEngine()
+        result = await engine.execute_recovery(sample_action)
+
+        assert hasattr(result, "success")
+        assert hasattr(result, "files_fixed")
+        assert hasattr(result, "errors")
+        assert hasattr(result, "warnings")
+        assert hasattr(result, "metadata")
+        assert isinstance(result.success, bool)
+        assert isinstance(result.files_fixed, list)
+        assert isinstance(result.errors, list)
+        assert isinstance(result.warnings, list)
+        assert isinstance(result.metadata, dict)
+
+    @pytest.mark.asyncio
+    async def test_indentation_fixer(self, sample_action: dict[str, Any]) -> None:
+        """Test IndentationFixer"""
+        engine = IndentationFixer()
+        result = await engine.execute_recovery(sample_action)
+
+        assert hasattr(result, "success")
+        assert hasattr(result, "files_fixed")
+        assert hasattr(result, "errors")
+        assert hasattr(result, "warnings")
+        assert hasattr(result, "metadata")
+        assert isinstance(result.success, bool)
+        assert isinstance(result.files_fixed, list)
+        assert isinstance(result.errors, list)
+        assert isinstance(result.warnings, list)
+        assert isinstance(result.metadata, dict)
+
+    @pytest.mark.asyncio
+    async def test_import_resolver(self, sample_action: dict[str, Any]) -> None:
+        """Test ImportResolver"""
+        engine = ImportResolver()
+        result = await engine.execute_recovery(sample_action)
+
+        assert hasattr(result, "success")
+        assert hasattr(result, "files_fixed")
+        assert hasattr(result, "errors")
+        assert hasattr(result, "warnings")
+        assert hasattr(result, "metadata")
+        assert isinstance(result.success, bool)
+        assert isinstance(result.files_fixed, list)
+        assert isinstance(result.errors, list)
+        assert isinstance(result.warnings, list)
+        assert isinstance(result.metadata, dict)
+
+    @pytest.mark.asyncio
+    async def test_type_annotation_fixer(self, sample_action: dict[str, Any]) -> None:
+        """Test TypeAnnotationFixer"""
+        engine = TypeAnnotationFixer()
+        result = await engine.execute_recovery(sample_action)
+
+        assert hasattr(result, "success")
+        assert hasattr(result, "files_fixed")
+        assert hasattr(result, "errors")
+        assert hasattr(result, "warnings")
+        assert hasattr(result, "metadata")
+        assert isinstance(result.success, bool)
+        assert isinstance(result.files_fixed, list)
+        assert isinstance(result.errors, list)
+        assert isinstance(result.warnings, list)
+        assert isinstance(result.metadata, dict)
+
+
+class TestGhostbustersOrchestrator:
+    """Test Ghostbusters orchestrator"""
+
+    @pytest.fixture
+    def orchestrator(self) -> GhostbustersOrchestrator:
+        """Create Ghostbusters orchestrator"""
+        return GhostbustersOrchestrator(".")
+
+    def test_orchestrator_initialization(
+        self, orchestrator: GhostbustersOrchestrator
+    ) -> None:
+        """Test orchestrator initialization"""
+        assert hasattr(orchestrator, "agents")
+        assert hasattr(orchestrator, "validators")
+        assert hasattr(orchestrator, "recovery_engines")
+        assert hasattr(orchestrator, "workflow")
+
+        # Check that all agents are initialized
+        expected_agents = [
+            "security",
+            "code_quality",
+            "test",
+            "build",
+            "architecture",
+            "model",
+        ]
+        for agent_name in expected_agents:
+            assert agent_name in orchestrator.agents
+
+        # Check that all validators are initialized
+        expected_validators = [
+            "security",
+            "code_quality",
+            "test",
+            "build",
+            "architecture",
+            "model",
+        ]
+        for validator_name in expected_validators:
+            assert validator_name in orchestrator.validators
+
+        # Check that all recovery engines are initialized
+        expected_engines = ["syntax", "indentation", "imports", "types"]
+        for engine_name in expected_engines:
+            assert engine_name in orchestrator.recovery_engines
+
+    @pytest.mark.asyncio
+    async def test_orchestrator_workflow(
+        self, orchestrator: GhostbustersOrchestrator
+    ) -> None:
+        """Test orchestrator workflow"""
+        # This is a basic test - in practice you'd mock the dependencies
+        # to avoid actually running the full workflow
+        assert orchestrator.workflow is not None
+
+        # Test that the workflow has the expected nodes
+        # Note: This is a simplified test - actual LangGraph testing would be more complex
+        assert hasattr(orchestrator, "_detect_delusions_node")
+        assert hasattr(orchestrator, "_validate_findings_node")
+        assert hasattr(orchestrator, "_plan_recovery_node")
+        assert hasattr(orchestrator, "_execute_recovery_node")
+        assert hasattr(orchestrator, "_validate_recovery_node")
+        assert hasattr(orchestrator, "_generate_report_node")
+
+
+class TestGhostbustersIntegration:
+    """Integration tests for Ghostbusters"""
+
+    @pytest.mark.asyncio
+    async def test_ghostbusters_component_imports(self) -> None:
+        """Test that all Ghostbusters components can be imported"""
+        # This test ensures that the component structure is correct
+        from src.ghostbusters import (
+            GhostbustersOrchestrator,
+            SecurityExpert,
+            CodeQualityExpert,
+            TestExpert,
+            BuildExpert,
+            ArchitectureExpert,
+            ModelExpert,
+            SecurityValidator,
+            CodeQualityValidator,
+            TestValidator,
+            BuildValidator,
+            ArchitectureValidator,
+            ModelValidator,
+            SyntaxRecoveryEngine,
+            IndentationFixer,
+            ImportResolver,
+            TypeAnnotationFixer,
+        )
+
+        # Test that classes can be instantiated
+        orchestrator = GhostbustersOrchestrator(".")
+        assert orchestrator is not None
+
+        # Test that agents can be instantiated
+        security_expert = SecurityExpert()
+        assert security_expert is not None
+
+        # Test that validators can be instantiated
+        security_validator = SecurityValidator()
+        assert security_validator is not None
+
+        # Test that recovery engines can be instantiated
+        syntax_engine = SyntaxRecoveryEngine()
+        assert syntax_engine is not None
+
+    def test_ghostbusters_rules_exist(self) -> None:
+        """Test that Ghostbusters rules file exists"""
+        rules_file = Path(".cursor/rules/ghostbusters.mdc")
+        assert rules_file.exists(), "Ghostbusters rules file should exist"
+
+        # Check that the file has content
+        content = rules_file.read_text()
+        assert len(content) > 0, "Ghostbusters rules file should have content"
+        assert (
+            "Ghostbusters Component" in content
+        ), "Rules file should contain component description"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
