@@ -1,0 +1,68 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-08-04T12:48:46.998366",
+  "nodes": {
+    "import_pandas": {
+      "id": "import_pandas",
+      "type": "import",
+      "content": "import pandas as pd",
+      "context": "data_processing",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top"
+      },
+      "projection_rules": {
+        "format": "black"
+      }
+    },
+    "import_numpy": {
+      "id": "import_numpy",
+      "type": "import",
+      "content": "import numpy as np",
+      "context": "data_processing",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top"
+      },
+      "projection_rules": {
+        "format": "black"
+      }
+    },
+    "validate_dataframe": {
+      "id": "validate_dataframe",
+      "type": "function",
+      "content": "def validate_dataframe(df):\n    \"\"\"Validate that input is a pandas DataFrame.\"\"\"\n    if not isinstance(df, pd.DataFrame):\n        raise ValueError(\"Input must be a pandas DataFrame\")\n    return df",
+      "context": "validation",
+      "dependencies": [
+        "import_pandas"
+      ],
+      "metadata": {
+        "type_hints": true,
+        "docstring": true
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "process_data": {
+      "id": "process_data",
+      "type": "function",
+      "content": "def process_data(df):\n    \"\"\"Process the input DataFrame.\"\"\"\n    validated_df = validate_dataframe(df)\n    # Add processing logic here\n    return validated_df",
+      "context": "data_processing",
+      "dependencies": [
+        "validate_dataframe"
+      ],
+      "metadata": {
+        "type_hints": true,
+        "docstring": true
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    }
+  }
+}

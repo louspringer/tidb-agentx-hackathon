@@ -1,0 +1,38 @@
+{
+  "ast_capabilities": {
+    "total_files": 40,
+    "valid_files": 0,
+    "syntax_error_files": 40,
+    "success_rate": 0.0
+  },
+  "project_insights": {
+    "total_imports": 0,
+    "total_functions": 0,
+    "total_classes": 0,
+    "unique_dependencies": [],
+    "detected_patterns": [],
+    "avg_complexity": {}
+  },
+  "ast_advantages": [
+    "Complete function signature analysis",
+    "Accurate dependency tracking",
+    "Precise complexity metrics",
+    "Pattern detection",
+    "Structure analysis",
+    "Type annotation extraction",
+    "Decorator analysis",
+    "Import resolution"
+  ],
+  "ast_limitations": [
+    "Cannot parse syntactically incorrect code",
+    "Requires valid Python syntax",
+    "No semantic analysis (only structural)",
+    "Cannot understand runtime behavior"
+  ],
+  "enhancement_opportunities": [
+    "Combine AST with fallback parsing for broken files",
+    "Use AST for valid files, regex for broken files",
+    "AST provides foundation for semantic analysis",
+    "AST enables precise code transformation"
+  ]
+}

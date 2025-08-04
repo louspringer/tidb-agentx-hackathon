@@ -1,0 +1,4737 @@
+{
+  "file_models": {
+    "fix_test_rule_compliance_indentation.py": {
+      "file_path": "fix_test_rule_compliance_indentation.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 64,
+      "line_count": 103,
+      "function_count": 2,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Fix indentation issues in test_rule_compliance.py",
+          "Fix indentation issues in test_rule_compliance.py",
+          "Fix the test file"
+        ],
+        "imports": [
+          "ast",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "fix_test_rule_compliance_indentation",
+            "docstring": "Fix indentation issues in test_rule_compliance.py"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix the test file"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 103
+      }
+    },
+    "final_syntax_fix.py": {
+      "file_path": "final_syntax_fix.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 134,
+      "line_count": 194,
+      "function_count": 7,
+      "class_count": 1,
+      "import_count": 5,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Final Syntax Fixer\nComprehensive fixer for all remaining syntax issues",
+          "Final comprehensive syntax fixer",
+          "Test the final syntax fixer",
+          "Fix all syntax issues in a file",
+          "Apply comprehensive syntax fixes",
+          "Check if we're inside a function or class definition",
+          "Validate that the fix produces valid Python",
+          "Fix multiple files",
+          "Save fixed content to file"
+        ],
+        "imports": [
+          "re",
+          "ast",
+          "pathlib.Path",
+          "typing.List",
+          "typing.Dict",
+          "shutil"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Test the final syntax fixer"
+          },
+          {
+            "name": "fix_file",
+            "docstring": "Fix all syntax issues in a file"
+          },
+          {
+            "name": "apply_comprehensive_fixes",
+            "docstring": "Apply comprehensive syntax fixes"
+          },
+          {
+            "name": "is_in_function_context",
+            "docstring": "Check if we're inside a function or class definition"
+          },
+          {
+            "name": "validate_fix",
+            "docstring": "Validate that the fix produces valid Python"
+          },
+          {
+            "name": "fix_multiple_files",
+            "docstring": "Fix multiple files"
+          },
+          {
+            "name": "save_fixed_file",
+            "docstring": "Save fixed content to file"
+          }
+        ],
+        "classes": [
+          {
+            "name": "FinalSyntaxFixer",
+            "docstring": "Final comprehensive syntax fixer"
+          }
+        ],
+        "variables": [],
+        "line_count": 194
+      }
+    },
+    "fix_test_rule_compliance.py": {
+      "file_path": "fix_test_rule_compliance.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 67,
+      "line_count": 108,
+      "function_count": 2,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Fix indentation issues in test_rule_compliance_enforcement.py",
+          "Fix indentation issues in test files",
+          "Fix the test file"
+        ],
+        "imports": [
+          "ast",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "fix_test_file_indentation",
+            "docstring": "Fix indentation issues in test files"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix the test file"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 108
+      }
+    },
+    "fix_remaining_indentation.py": {
+      "file_path": "fix_remaining_indentation.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 144,
+      "line_count": 200,
+      "function_count": 7,
+      "class_count": 0,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Fix the remaining indentation errors identified by flake8",
+          "Fix specific indentation errors in a file",
+          "Check if line is after a function definition",
+          "Check if line is after a control flow statement",
+          "Check if line is after a block start",
+          "Check if a line needs indentation fix",
+          "Find all Python files in the project",
+          "Fix remaining indentation errors"
+        ],
+        "imports": [
+          "subprocess",
+          "pathlib.Path",
+          "typing.List"
+        ],
+        "functions": [
+          {
+            "name": "fix_specific_indentation_errors",
+            "docstring": "Fix specific indentation errors in a file"
+          },
+          {
+            "name": "is_after_function_definition",
+            "docstring": "Check if line is after a function definition"
+          },
+          {
+            "name": "is_after_control_flow",
+            "docstring": "Check if line is after a control flow statement"
+          },
+          {
+            "name": "is_after_block_start",
+            "docstring": "Check if line is after a block start"
+          },
+          {
+            "name": "needs_indentation_fix",
+            "docstring": "Check if a line needs indentation fix"
+          },
+          {
+            "name": "find_python_files",
+            "docstring": "Find all Python files in the project"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix remaining indentation errors"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 200
+      }
+    },
+    "ast_projection_demo.py": {
+      "file_path": "ast_projection_demo.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 293,
+      "line_count": 364,
+      "function_count": 16,
+      "class_count": 1,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "AST Projection Demo\nShows how bridging model gaps could help project/reconstruct broken Python code",
+          "Demo of how AST-based projection could reconstruct broken code",
+          "Run the AST projection demo",
+          "Demonstrate how AST projection could work",
+          "Demonstrate function signature projection",
+          "Demonstrate class structure projection",
+          "Demonstrate import structure projection",
+          "Demonstrate expression structure projection",
+          "Project complete function signature from broken fragment",
+          "Project complete class structure from broken fragment",
+          "Project complete import structure from broken fragment",
+          "Project complete expression structure from broken fragment",
+          "Show what AST analysis could provide for function projection",
+          "Show what AST analysis could provide for class projection",
+          "Show what AST analysis could provide for import projection",
+          "Show what AST analysis could provide for expression projection",
+          "Generate comprehensive projection capabilities report"
+        ],
+        "imports": [
+          "ast",
+          "re",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Optional",
+          "typing.Tuple"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Run the AST projection demo"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "demonstrate_projection_capabilities",
+            "docstring": "Demonstrate how AST projection could work"
+          },
+          {
+            "name": "_demo_function_projection",
+            "docstring": "Demonstrate function signature projection"
+          },
+          {
+            "name": "_demo_class_projection",
+            "docstring": "Demonstrate class structure projection"
+          },
+          {
+            "name": "_demo_import_projection",
+            "docstring": "Demonstrate import structure projection"
+          },
+          {
+            "name": "_demo_expression_projection",
+            "docstring": "Demonstrate expression structure projection"
+          },
+          {
+            "name": "_project_function_signature",
+            "docstring": "Project complete function signature from broken fragment"
+          },
+          {
+            "name": "_project_class_structure",
+            "docstring": "Project complete class structure from broken fragment"
+          },
+          {
+            "name": "_project_import_structure",
+            "docstring": "Project complete import structure from broken fragment"
+          },
+          {
+            "name": "_project_expression_structure",
+            "docstring": "Project complete expression structure from broken fragment"
+          },
+          {
+            "name": "_analyze_function_ast_insights",
+            "docstring": "Show what AST analysis could provide for function projection"
+          },
+          {
+            "name": "_analyze_class_ast_insights",
+            "docstring": "Show what AST analysis could provide for class projection"
+          },
+          {
+            "name": "_analyze_import_ast_insights",
+            "docstring": "Show what AST analysis could provide for import projection"
+          },
+          {
+            "name": "_analyze_expression_ast_insights",
+            "docstring": "Show what AST analysis could provide for expression projection"
+          },
+          {
+            "name": "_generate_projection_report",
+            "docstring": "Generate comprehensive projection capabilities report"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ASTProjectionDemo",
+            "docstring": "Demo of how AST-based projection could reconstruct broken code"
+          }
+        ],
+        "variables": [],
+        "line_count": 364
+      }
+    },
+    "test_git_enhanced.py": {
+      "file_path": "test_git_enhanced.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 42,
+      "line_count": 62,
+      "function_count": 1,
+      "class_count": 0,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Test Git-Enhanced AST Fixer\nDemonstrates the Git-enhanced approach with files that have Git history",
+          "Test the Git-enhanced AST fixer with files that have Git history"
+        ],
+        "imports": [
+          "git_enhanced_ast_fixer.GitEnhancedASTFixer",
+          "pathlib.Path",
+          "subprocess",
+          "ast"
+        ],
+        "functions": [
+          {
+            "name": "test_git_enhanced_fixer",
+            "docstring": "Test the Git-enhanced AST fixer with files that have Git history"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 62
+      }
+    },
+    "multi_generational_git_analyzer.py": {
+      "file_path": "multi_generational_git_analyzer.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 428,
+      "line_count": 545,
+      "function_count": 26,
+      "class_count": 2,
+      "import_count": 9,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Multi-Generational Git Analyzer\nModels several commits back to understand file evolution and guide reconstruction",
+          "Model of a file at a specific commit",
+          "Analyzes multiple generations of Git history to understand file evolution",
+          "Test the multi-generational Git analyzer",
+          "Analyze file evolution across multiple Git generations",
+          "Get models for multiple generations of commits",
+          "Extract model from AST",
+          "Extract basic model from content",
+          "Extract functions from AST",
+          "Extract classes from AST",
+          "Extract imports from AST",
+          "Extract variables from AST",
+          "Extract decorator name from AST",
+          "Extract base class name from AST",
+          "Extract class methods from AST",
+          "Calculate complexity metrics from AST",
+          "Analyze patterns in file evolution",
+          "Analyze size evolution trend",
+          "Analyze structural evolution trend",
+          "Analyze complexity evolution trend",
+          "Calculate trend from a list of values",
+          "Calculate stability score based on model consistency",
+          "Calculate similarity between two models",
+          "Identify distinct phases in file evolution",
+          "Generate recommendations based on evolution analysis",
+          "Create a database of evolution information",
+          "Find the most stable generation",
+          "Find the best generation to use as a template"
+        ],
+        "imports": [
+          "json",
+          "subprocess",
+          "ast",
+          "tempfile",
+          "os",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Optional",
+          "dataclasses.dataclass",
+          "dataclasses.asdict",
+          "git_enhanced_ast_fixer.GitEnhancedASTFixer"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Test the multi-generational Git analyzer"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze_file_evolution",
+            "docstring": "Analyze file evolution across multiple Git generations"
+          },
+          {
+            "name": "get_commit_models",
+            "docstring": "Get models for multiple generations of commits"
+          },
+          {
+            "name": "extract_ast_model",
+            "docstring": "Extract model from AST"
+          },
+          {
+            "name": "extract_basic_model",
+            "docstring": "Extract basic model from content"
+          },
+          {
+            "name": "extract_functions_from_ast",
+            "docstring": "Extract functions from AST"
+          },
+          {
+            "name": "extract_classes_from_ast",
+            "docstring": "Extract classes from AST"
+          },
+          {
+            "name": "extract_imports_from_ast",
+            "docstring": "Extract imports from AST"
+          },
+          {
+            "name": "extract_variables_from_ast",
+            "docstring": "Extract variables from AST"
+          },
+          {
+            "name": "extract_decorator",
+            "docstring": "Extract decorator name from AST"
+          },
+          {
+            "name": "extract_base",
+            "docstring": "Extract base class name from AST"
+          },
+          {
+            "name": "extract_class_methods",
+            "docstring": "Extract class methods from AST"
+          },
+          {
+            "name": "calculate_complexity_metrics",
+            "docstring": "Calculate complexity metrics from AST"
+          },
+          {
+            "name": "analyze_evolution_patterns",
+            "docstring": "Analyze patterns in file evolution"
+          },
+          {
+            "name": "analyze_size_trend",
+            "docstring": "Analyze size evolution trend"
+          },
+          {
+            "name": "analyze_structure_trend",
+            "docstring": "Analyze structural evolution trend"
+          },
+          {
+            "name": "analyze_complexity_trend",
+            "docstring": "Analyze complexity evolution trend"
+          },
+          {
+            "name": "calculate_trend",
+            "docstring": "Calculate trend from a list of values"
+          },
+          {
+            "name": "calculate_stability_score",
+            "docstring": "Calculate stability score based on model consistency"
+          },
+          {
+            "name": "calculate_model_similarity",
+            "docstring": "Calculate similarity between two models"
+          },
+          {
+            "name": "identify_evolution_phases",
+            "docstring": "Identify distinct phases in file evolution"
+          },
+          {
+            "name": "generate_evolution_recommendations",
+            "docstring": "Generate recommendations based on evolution analysis"
+          },
+          {
+            "name": "create_evolution_database",
+            "docstring": "Create a database of evolution information"
+          },
+          {
+            "name": "find_most_stable_generation",
+            "docstring": "Find the most stable generation"
+          },
+          {
+            "name": "find_best_template_generation",
+            "docstring": "Find the best generation to use as a template"
+          }
+        ],
+        "classes": [
+          {
+            "name": "CommitModel",
+            "docstring": "Model of a file at a specific commit"
+          },
+          {
+            "name": "MultiGenerationalGitAnalyzer",
+            "docstring": "Analyzes multiple generations of Git history to understand file evolution"
+          }
+        ],
+        "variables": [],
+        "line_count": 545
+      }
+    },
+    "ast_model_gap_analyzer.py": {
+      "file_path": "ast_model_gap_analyzer.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 352,
+      "line_count": 388,
+      "function_count": 7,
+      "class_count": 1,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "AST Model Gap Analyzer\nIdentifies what AST models that we don't have, and how bridging the gap could help",
+          "Analyzer that identifies AST modeling capabilities we're missing",
+          "Run the AST model gap analyzer",
+          "Analyze what AST models that we don't have",
+          "Identify what we currently model in our syntax fixing approach",
+          "Identify what AST can model that we don't",
+          "Identify the gaps between current models and AST models",
+          "Generate comprehensive gap analysis report"
+        ],
+        "imports": [
+          "ast",
+          "json",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Set",
+          "typing.Optional"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Run the AST model gap analyzer"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze_model_gaps",
+            "docstring": "Analyze what AST models that we don't have"
+          },
+          {
+            "name": "_identify_current_models",
+            "docstring": "Identify what we currently model in our syntax fixing approach"
+          },
+          {
+            "name": "_identify_ast_models",
+            "docstring": "Identify what AST can model that we don't"
+          },
+          {
+            "name": "_identify_model_gaps",
+            "docstring": "Identify the gaps between current models and AST models"
+          },
+          {
+            "name": "_generate_gap_report",
+            "docstring": "Generate comprehensive gap analysis report"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ASTModelGapAnalyzer",
+            "docstring": "Analyzer that identifies AST modeling capabilities we're missing"
+          }
+        ],
+        "variables": [],
+        "line_count": 388
+      }
+    },
+    "model_sufficiency_analyzer.py": {
+      "file_path": "model_sufficiency_analyzer.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 377,
+      "line_count": 417,
+      "function_count": 11,
+      "class_count": 1,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Model Sufficiency Analyzer\nAnalyzes if our current models have sufficient information to determine requirements and recreate code",
+          "Analyzer that determines if our models are sufficient for requirements and recreation",
+          "Run the model sufficiency analyzer",
+          "Analyze if our models are sufficient for requirements and recreation",
+          "Define what models we currently have",
+          "Analyze if our models can determine requirements",
+          "Analyze if our models can recreate code",
+          "Generate comprehensive sufficiency analysis report",
+          "Calculate overall requirements determination score",
+          "Calculate overall code recreation score",
+          "Assess if requirements determination is sufficient",
+          "Assess if code recreation is sufficient"
+        ],
+        "imports": [
+          "json",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Set"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Run the model sufficiency analyzer"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze_model_sufficiency",
+            "docstring": "Analyze if our models are sufficient for requirements and recreation"
+          },
+          {
+            "name": "_define_current_models",
+            "docstring": "Define what models we currently have"
+          },
+          {
+            "name": "_analyze_requirements_capabilities",
+            "docstring": "Analyze if our models can determine requirements"
+          },
+          {
+            "name": "_analyze_recreation_capabilities",
+            "docstring": "Analyze if our models can recreate code"
+          },
+          {
+            "name": "_generate_sufficiency_report",
+            "docstring": "Generate comprehensive sufficiency analysis report"
+          },
+          {
+            "name": "_calculate_requirements_score",
+            "docstring": "Calculate overall requirements determination score"
+          },
+          {
+            "name": "_calculate_recreation_score",
+            "docstring": "Calculate overall code recreation score"
+          },
+          {
+            "name": "_assess_requirements_sufficiency",
+            "docstring": "Assess if requirements determination is sufficient"
+          },
+          {
+            "name": "_assess_recreation_sufficiency",
+            "docstring": "Assess if code recreation is sufficient"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ModelSufficiencyAnalyzer",
+            "docstring": "Analyzer that determines if our models are sufficient for requirements and recreation"
+          }
+        ],
+        "variables": [],
+        "line_count": 417
+      }
+    },
+    "ast_capability_analyzer.py": {
+      "file_path": "ast_capability_analyzer.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 383,
+      "line_count": 452,
+      "function_count": 26,
+      "class_count": 1,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "AST Capability Analyzer\nDemonstrates how AST can enhance Python project modeling",
+          "Analyzer that demonstrates AST capabilities for project modeling",
+          "Run the AST capability analyzer",
+          "Analyze what AST can tell us about Python projects",
+          "Find Python files in our project (excluding .venv)",
+          "Analyze what AST can extract from a file",
+          "Extract comprehensive insights using AST",
+          "Extract imports using AST - much more accurate than regex",
+          "Extract functions using AST - complete function analysis",
+          "Extract classes using AST - complete class analysis",
+          "Extract dependencies using AST - accurate dependency tracking",
+          "Calculate complexity using AST - precise metrics",
+          "Analyze code structure using AST",
+          "Detect code patterns using AST",
+          "Calculate comprehensive metrics using AST",
+          "Extract function arguments using AST",
+          "Extract decorator information using AST",
+          "Extract base class information using AST",
+          "Extract keyword arguments using AST",
+          "Extract expression information using AST",
+          "Extract class methods using AST",
+          "Extract return type using AST",
+          "Extract type annotation using AST",
+          "Calculate function complexity using AST",
+          "Record files that AST cannot parse",
+          "Generate comprehensive AST capability report",
+          "Calculate average complexity metrics"
+        ],
+        "imports": [
+          "ast",
+          "json",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Set"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Run the AST capability analyzer"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze_ast_capabilities",
+            "docstring": "Analyze what AST can tell us about Python projects"
+          },
+          {
+            "name": "_find_project_files",
+            "docstring": "Find Python files in our project (excluding .venv)"
+          },
+          {
+            "name": "_analyze_file_capabilities",
+            "docstring": "Analyze what AST can extract from a file"
+          },
+          {
+            "name": "_extract_ast_insights",
+            "docstring": "Extract comprehensive insights using AST"
+          },
+          {
+            "name": "_extract_imports_ast",
+            "docstring": "Extract imports using AST - much more accurate than regex"
+          },
+          {
+            "name": "_extract_functions_ast",
+            "docstring": "Extract functions using AST - complete function analysis"
+          },
+          {
+            "name": "_extract_classes_ast",
+            "docstring": "Extract classes using AST - complete class analysis"
+          },
+          {
+            "name": "_extract_dependencies_ast",
+            "docstring": "Extract dependencies using AST - accurate dependency tracking"
+          },
+          {
+            "name": "_calculate_complexity_ast",
+            "docstring": "Calculate complexity using AST - precise metrics"
+          },
+          {
+            "name": "_analyze_structure_ast",
+            "docstring": "Analyze code structure using AST"
+          },
+          {
+            "name": "_detect_patterns_ast",
+            "docstring": "Detect code patterns using AST"
+          },
+          {
+            "name": "_calculate_metrics_ast",
+            "docstring": "Calculate comprehensive metrics using AST"
+          },
+          {
+            "name": "_extract_function_args_ast",
+            "docstring": "Extract function arguments using AST"
+          },
+          {
+            "name": "_extract_decorator_ast",
+            "docstring": "Extract decorator information using AST"
+          },
+          {
+            "name": "_extract_base_ast",
+            "docstring": "Extract base class information using AST"
+          },
+          {
+            "name": "_extract_keyword_ast",
+            "docstring": "Extract keyword arguments using AST"
+          },
+          {
+            "name": "_extract_expression_ast",
+            "docstring": "Extract expression information using AST"
+          },
+          {
+            "name": "_extract_class_methods_ast",
+            "docstring": "Extract class methods using AST"
+          },
+          {
+            "name": "_extract_return_type_ast",
+            "docstring": "Extract return type using AST"
+          },
+          {
+            "name": "_extract_annotation_ast",
+            "docstring": "Extract type annotation using AST"
+          },
+          {
+            "name": "_calculate_function_complexity_ast",
+            "docstring": "Calculate function complexity using AST"
+          },
+          {
+            "name": "_record_syntax_error",
+            "docstring": "Record files that AST cannot parse"
+          },
+          {
+            "name": "_generate_capability_report",
+            "docstring": "Generate comprehensive AST capability report"
+          },
+          {
+            "name": "_calculate_avg_complexity",
+            "docstring": "Calculate average complexity metrics"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ASTCapabilityAnalyzer",
+            "docstring": "Analyzer that demonstrates AST capabilities for project modeling"
+          }
+        ],
+        "variables": [],
+        "line_count": 452
+      }
+    },
+    "test_syntax_fix_safety.py": {
+      "file_path": "test_syntax_fix_safety.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 109,
+      "line_count": 152,
+      "function_count": 4,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Test to ensure syntax fix scripts don't introduce structural issues",
+          "Test that files don't have duplicate shebang lines",
+          "Test that files don't have duplicate import statements",
+          "Test that files have proper Python structure",
+          "Test that syntax fix scripts don't introduce structural issues"
+        ],
+        "imports": [
+          "pathlib.Path",
+          "typing.List",
+          "typing.Dict",
+          "typing.Any"
+        ],
+        "functions": [
+          {
+            "name": "test_no_duplicate_shebangs",
+            "docstring": "Test that files don't have duplicate shebang lines"
+          },
+          {
+            "name": "test_no_duplicate_imports",
+            "docstring": "Test that files don't have duplicate import statements"
+          },
+          {
+            "name": "test_proper_structure",
+            "docstring": "Test that files have proper Python structure"
+          },
+          {
+            "name": "test_syntax_fix_safety",
+            "docstring": "Test that syntax fix scripts don't introduce structural issues"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 152
+      }
+    },
+    "setup.py": {
+      "file_path": "setup.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 153,
+      "line_count": 218,
+      "function_count": 10,
+      "class_count": 0,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Snowflake Openflow Setup Wizard\nInteractive setup for Openflow deployment configuration",
+          "Validate Snowflake account URL format",
+          "Validate UUID format",
+          "Validate general URL format",
+          "Prompt for input with validation",
+          "Generate config.env file content"
+        ],
+        "imports": [
+          "os",
+          "re",
+          "sys",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "print_header",
+            "docstring": null
+          },
+          {
+            "name": "print_success",
+            "docstring": null
+          },
+          {
+            "name": "print_error",
+            "docstring": null
+          },
+          {
+            "name": "print_warning",
+            "docstring": null
+          },
+          {
+            "name": "validate_snowflake_url",
+            "docstring": "Validate Snowflake account URL format"
+          },
+          {
+            "name": "validate_uuid",
+            "docstring": "Validate UUID format"
+          },
+          {
+            "name": "validate_url",
+            "docstring": "Validate general URL format"
+          },
+          {
+            "name": "prompt_with_validation",
+            "docstring": "Prompt for input with validation"
+          },
+          {
+            "name": "generate_config_env",
+            "docstring": "Generate config.env file content"
+          },
+          {
+            "name": "main",
+            "docstring": null
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 218
+      }
+    },
+    "improved_syntax_fix.py": {
+      "file_path": "improved_syntax_fix.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 121,
+      "line_count": 176,
+      "function_count": 5,
+      "class_count": 0,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Improved syntax fix script that's more careful about structural integrity",
+          "Fix syntax errors safely without introducing structural issues",
+          "Check if a line is inside a function definition",
+          "Check if a line needs indentation",
+          "Find all Python files in the project",
+          "Fix syntax errors safely in all Python files"
+        ],
+        "imports": [
+          "subprocess",
+          "pathlib.Path",
+          "typing.List"
+        ],
+        "functions": [
+          {
+            "name": "fix_syntax_safely",
+            "docstring": "Fix syntax errors safely without introducing structural issues"
+          },
+          {
+            "name": "is_inside_function",
+            "docstring": "Check if a line is inside a function definition"
+          },
+          {
+            "name": "needs_indentation",
+            "docstring": "Check if a line needs indentation"
+          },
+          {
+            "name": "find_python_files",
+            "docstring": "Find all Python files in the project"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix syntax errors safely in all Python files"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 176
+      }
+    },
+    "fix_all_syntax_errors.py": {
+      "file_path": "fix_all_syntax_errors.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 180,
+      "line_count": 245,
+      "function_count": 8,
+      "class_count": 0,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Comprehensive script to fix all remaining syntax errors",
+          "Fix syntax errors in a single file",
+          "Check if line is after a function definition",
+          "Check if line is after a control flow statement",
+          "Check if line is after a block start",
+          "Check if a line should be indented based on context",
+          "Check if a line needs indentation fix",
+          "Find all Python files in the project",
+          "Fix all remaining syntax errors"
+        ],
+        "imports": [
+          "subprocess",
+          "re",
+          "pathlib.Path",
+          "typing.List"
+        ],
+        "functions": [
+          {
+            "name": "fix_file_syntax",
+            "docstring": "Fix syntax errors in a single file"
+          },
+          {
+            "name": "is_after_function_definition",
+            "docstring": "Check if line is after a function definition"
+          },
+          {
+            "name": "is_after_control_flow",
+            "docstring": "Check if line is after a control flow statement"
+          },
+          {
+            "name": "is_after_block_start",
+            "docstring": "Check if line is after a block start"
+          },
+          {
+            "name": "should_be_indented",
+            "docstring": "Check if a line should be indented based on context"
+          },
+          {
+            "name": "needs_indentation_fix",
+            "docstring": "Check if a line needs indentation fix"
+          },
+          {
+            "name": "find_python_files",
+            "docstring": "Find all Python files in the project"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix all remaining syntax errors"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 245
+      }
+    },
+    "model_consistency_analyzer.py": {
+      "file_path": "model_consistency_analyzer.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 337,
+      "line_count": 435,
+      "function_count": 24,
+      "class_count": 1,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Model Consistency Analyzer\nAnalyzes whether files match persisted models or vary from committed models",
+          "Analyzes model consistency between current, persisted, and committed models",
+          "Test the model consistency analyzer",
+          "Analyze model consistency for a file",
+          "Check if file has Git history",
+          "Analyze file that has Git history",
+          "Analyze new artifact with no Git history",
+          "Extract current model from file",
+          "Extract model from most recent committed version",
+          "Get persisted model from project_model_registry.json",
+          "Extract model from AST",
+          "Extract model from broken interpreter",
+          "Extract basic model from content",
+          "Extract functions from AST",
+          "Extract classes from AST",
+          "Extract imports from AST",
+          "Extract variables from AST",
+          "Extract decorator name from AST",
+          "Extract base class name from AST",
+          "Extract class methods from AST",
+          "Compare two models",
+          "Calculate structural similarity between models",
+          "Find if current model matches any known patterns",
+          "Generate recommendations based on model comparison",
+          "Generate recommendations for new artifacts"
+        ],
+        "imports": [
+          "json",
+          "subprocess",
+          "ast",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Optional",
+          "typing.Tuple",
+          "git_enhanced_ast_fixer.GitEnhancedASTFixer"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Test the model consistency analyzer"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze_file_consistency",
+            "docstring": "Analyze model consistency for a file"
+          },
+          {
+            "name": "check_git_history",
+            "docstring": "Check if file has Git history"
+          },
+          {
+            "name": "analyze_with_git_history",
+            "docstring": "Analyze file that has Git history"
+          },
+          {
+            "name": "analyze_new_artifact",
+            "docstring": "Analyze new artifact with no Git history"
+          },
+          {
+            "name": "extract_current_model",
+            "docstring": "Extract current model from file"
+          },
+          {
+            "name": "extract_committed_model",
+            "docstring": "Extract model from most recent committed version"
+          },
+          {
+            "name": "get_persisted_model",
+            "docstring": "Get persisted model from project_model_registry.json"
+          },
+          {
+            "name": "extract_ast_model",
+            "docstring": "Extract model from AST"
+          },
+          {
+            "name": "extract_interpretation_model",
+            "docstring": "Extract model from broken interpreter"
+          },
+          {
+            "name": "extract_basic_model",
+            "docstring": "Extract basic model from content"
+          },
+          {
+            "name": "extract_functions_from_ast",
+            "docstring": "Extract functions from AST"
+          },
+          {
+            "name": "extract_classes_from_ast",
+            "docstring": "Extract classes from AST"
+          },
+          {
+            "name": "extract_imports_from_ast",
+            "docstring": "Extract imports from AST"
+          },
+          {
+            "name": "extract_variables_from_ast",
+            "docstring": "Extract variables from AST"
+          },
+          {
+            "name": "extract_decorator",
+            "docstring": "Extract decorator name from AST"
+          },
+          {
+            "name": "extract_base",
+            "docstring": "Extract base class name from AST"
+          },
+          {
+            "name": "extract_class_methods",
+            "docstring": "Extract class methods from AST"
+          },
+          {
+            "name": "compare_models",
+            "docstring": "Compare two models"
+          },
+          {
+            "name": "calculate_structure_similarity",
+            "docstring": "Calculate structural similarity between models"
+          },
+          {
+            "name": "find_pattern_match",
+            "docstring": "Find if current model matches any known patterns"
+          },
+          {
+            "name": "generate_recommendations",
+            "docstring": "Generate recommendations based on model comparison"
+          },
+          {
+            "name": "generate_new_artifact_recommendations",
+            "docstring": "Generate recommendations for new artifacts"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ModelConsistencyAnalyzer",
+            "docstring": "Analyzes model consistency between current, persisted, and committed models"
+          }
+        ],
+        "variables": [],
+        "line_count": 435
+      }
+    },
+    "comprehensive_indentation_fix.py": {
+      "file_path": "comprehensive_indentation_fix.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 134,
+      "line_count": 199,
+      "function_count": 7,
+      "class_count": 1,
+      "import_count": 5,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Comprehensive Indentation Fixer\nFixes all indentation issues in broken Python files",
+          "Comprehensive indentation fixer for broken Python files",
+          "Test the comprehensive indentation fixer",
+          "Fix all indentation issues in a file",
+          "Apply comprehensive indentation fixes",
+          "Determine if a line should be indented",
+          "Validate that the fix produces valid Python",
+          "Fix multiple files",
+          "Save fixed content to file"
+        ],
+        "imports": [
+          "re",
+          "ast",
+          "pathlib.Path",
+          "typing.List",
+          "typing.Dict",
+          "shutil"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Test the comprehensive indentation fixer"
+          },
+          {
+            "name": "fix_file",
+            "docstring": "Fix all indentation issues in a file"
+          },
+          {
+            "name": "apply_comprehensive_indentation_fixes",
+            "docstring": "Apply comprehensive indentation fixes"
+          },
+          {
+            "name": "should_be_indented",
+            "docstring": "Determine if a line should be indented"
+          },
+          {
+            "name": "validate_fix",
+            "docstring": "Validate that the fix produces valid Python"
+          },
+          {
+            "name": "fix_multiple_files",
+            "docstring": "Fix multiple files"
+          },
+          {
+            "name": "save_fixed_file",
+            "docstring": "Save fixed content to file"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ComprehensiveIndentationFixer",
+            "docstring": "Comprehensive indentation fixer for broken Python files"
+          }
+        ],
+        "variables": [],
+        "line_count": 199
+      }
+    },
+    "fix_f_strings.py": {
+      "file_path": "fix_f_strings.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 30,
+      "line_count": 46,
+      "function_count": 3,
+      "class_count": 0,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Fix f-string issues by converting them to regular strings",
+          "Fix f-string issues in a single file",
+          "Fix f-strings in all Python files"
+        ],
+        "imports": [
+          "re",
+          "sys",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "fix_f_strings_in_file",
+            "docstring": "Fix f-string issues in a single file"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix f-strings in all Python files"
+          },
+          {
+            "name": "replace_f_string",
+            "docstring": null
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 46
+      }
+    },
+    "focused_ast_modeler.py": {
+      "file_path": "focused_ast_modeler.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 145,
+      "line_count": 195,
+      "function_count": 7,
+      "class_count": 2,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Focused AST Modeler - Only model essential Python files",
+          "AST model for a Python file",
+          "Focused AST modeler that only models essential Python files",
+          "Model the project with focused approach",
+          "Check if file should be excluded",
+          "Find Python files to model, excluding generated/temporary files",
+          "Model a Python file using AST",
+          "Model all Python files in directory",
+          "Save database to JSON file"
+        ],
+        "imports": [
+          "ast",
+          "json",
+          "os",
+          "pathlib.Path",
+          "dataclasses.dataclass",
+          "dataclasses.asdict",
+          "typing.Dict",
+          "typing.Any",
+          "typing.List",
+          "typing.Optional"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Model the project with focused approach"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "should_exclude_file",
+            "docstring": "Check if file should be excluded"
+          },
+          {
+            "name": "find_python_files",
+            "docstring": "Find Python files to model, excluding generated/temporary files"
+          },
+          {
+            "name": "model_python_file",
+            "docstring": "Model a Python file using AST"
+          },
+          {
+            "name": "model_directory",
+            "docstring": "Model all Python files in directory"
+          },
+          {
+            "name": "save_database",
+            "docstring": "Save database to JSON file"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ASTModel",
+            "docstring": "AST model for a Python file"
+          },
+          {
+            "name": "FocusedASTModeler",
+            "docstring": "Focused AST modeler that only models essential Python files"
+          }
+        ],
+        "variables": [],
+        "line_count": 195
+      }
+    },
+    "debug_modeler.py": {
+      "file_path": "debug_modeler.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 34,
+      "line_count": 46,
+      "function_count": 1,
+      "class_count": 0,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Debug script to test PythonASTModeler"
+        ],
+        "imports": [
+          "comprehensive_ast_modeler.PythonASTModeler",
+          "ast",
+          "traceback"
+        ],
+        "functions": [
+          {
+            "name": "test_modeler",
+            "docstring": null
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 46
+      }
+    },
+    "model_driven_reconstructor.py": {
+      "file_path": "model_driven_reconstructor.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 318,
+      "line_count": 428,
+      "function_count": 18,
+      "class_count": 1,
+      "import_count": 9,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Model-Driven Artifact Reconstructor - Rebuild artifacts from models only",
+          "Reconstruct artifacts from model data only - no peeking at originals",
+          "Test model-driven reconstruction",
+          "Load the models database",
+          "Reconstruct artifact from model only - no peeking at original",
+          "Reconstruct Python file from model",
+          "Reconstruct MDC file from model",
+          "Reconstruct Markdown file from model",
+          "Reconstruct JSON file from model",
+          "Reconstruct YAML file from model",
+          "Reconstruct SQL file from model",
+          "Reconstruct HTML file from model",
+          "Reconstruct Shell script from model",
+          "Reconstruct generic file from model",
+          "Test semantic equivalence between reconstructed and original",
+          "Calculate similarity between original and reconstructed content",
+          "Compare structural elements",
+          "Heuristic LLM analysis of semantic equivalence",
+          "Test semantic equivalence for multiple files"
+        ],
+        "imports": [
+          "json",
+          "ast",
+          "yaml",
+          "re",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "typing.Optional",
+          "typing.Tuple",
+          "dataclasses.asdict",
+          "hashlib",
+          "difflib"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Test model-driven reconstruction"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "_load_models",
+            "docstring": "Load the models database"
+          },
+          {
+            "name": "reconstruct_from_model",
+            "docstring": "Reconstruct artifact from model only - no peeking at original"
+          },
+          {
+            "name": "_reconstruct_python",
+            "docstring": "Reconstruct Python file from model"
+          },
+          {
+            "name": "_reconstruct_mdc",
+            "docstring": "Reconstruct MDC file from model"
+          },
+          {
+            "name": "_reconstruct_markdown",
+            "docstring": "Reconstruct Markdown file from model"
+          },
+          {
+            "name": "_reconstruct_json",
+            "docstring": "Reconstruct JSON file from model"
+          },
+          {
+            "name": "_reconstruct_yaml",
+            "docstring": "Reconstruct YAML file from model"
+          },
+          {
+            "name": "_reconstruct_sql",
+            "docstring": "Reconstruct SQL file from model"
+          },
+          {
+            "name": "_reconstruct_html",
+            "docstring": "Reconstruct HTML file from model"
+          },
+          {
+            "name": "_reconstruct_shell",
+            "docstring": "Reconstruct Shell script from model"
+          },
+          {
+            "name": "_reconstruct_generic",
+            "docstring": "Reconstruct generic file from model"
+          },
+          {
+            "name": "test_semantic_equivalence",
+            "docstring": "Test semantic equivalence between reconstructed and original"
+          },
+          {
+            "name": "_calculate_similarity",
+            "docstring": "Calculate similarity between original and reconstructed content"
+          },
+          {
+            "name": "_compare_structure",
+            "docstring": "Compare structural elements"
+          },
+          {
+            "name": "_heuristic_analysis",
+            "docstring": "Heuristic LLM analysis of semantic equivalence"
+          },
+          {
+            "name": "batch_test_equivalence",
+            "docstring": "Test semantic equivalence for multiple files"
+          }
+        ],
+        "classes": [
+          {
+            "name": "ModelDrivenReconstructor",
+            "docstring": "Reconstruct artifacts from model data only - no peeking at originals"
+          }
+        ],
+        "variables": [],
+        "line_count": 428
+      }
+    },
+    "fix_test_indentation.py": {
+      "file_path": "fix_test_indentation.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 70,
+      "line_count": 113,
+      "function_count": 2,
+      "class_count": 0,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Fix indentation issues in test files using AST-based approach",
+          "Fix indentation issues in test files",
+          "Fix the test file"
+        ],
+        "imports": [
+          "ast",
+          "re",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "fix_test_file_indentation",
+            "docstring": "Fix indentation issues in test files"
+          },
+          {
+            "name": "main",
+            "docstring": "Fix the test file"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 113
+      }
+    },
+    "project_model.py": {
+      "file_path": "project_model.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 243,
+      "line_count": 294,
+      "function_count": 7,
+      "class_count": 3,
+      "import_count": 7,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Model-Driven Tool Glue Layer\nIntelligent tool selection and orchestration across domains",
+          "Configuration for a specific domain",
+          "Analysis of a file's domain and tooling needs",
+          "Model-driven tool orchestration",
+          "Test the model-driven tool orchestration",
+          "Initialize domain configurations",
+          "Analyze a file to determine its domain and tooling needs",
+          "Validate a file using the appropriate tools",
+          "Validate entire project using model-driven tool selection",
+          "Generate tool configurations based on project model"
+        ],
+        "imports": [
+          "os",
+          "re",
+          "json",
+          "subprocess",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Optional",
+          "typing.Tuple",
+          "dataclasses.dataclass",
+          "dataclasses.asdict",
+          "dataclasses.field"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Test the model-driven tool orchestration"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "_initialize_domains",
+            "docstring": "Initialize domain configurations"
+          },
+          {
+            "name": "analyze_file",
+            "docstring": "Analyze a file to determine its domain and tooling needs"
+          },
+          {
+            "name": "validate_file",
+            "docstring": "Validate a file using the appropriate tools"
+          },
+          {
+            "name": "validate_project",
+            "docstring": "Validate entire project using model-driven tool selection"
+          },
+          {
+            "name": "generate_tool_config",
+            "docstring": "Generate tool configurations based on project model"
+          }
+        ],
+        "classes": [
+          {
+            "name": "DomainConfig",
+            "docstring": "Configuration for a specific domain"
+          },
+          {
+            "name": "FileAnalysis",
+            "docstring": "Analysis of a file's domain and tooling needs"
+          },
+          {
+            "name": "ProjectModel",
+            "docstring": "Model-driven tool orchestration"
+          }
+        ],
+        "variables": [],
+        "line_count": 294
+      }
+    },
+    "test_functional_equivalence.py": {
+      "file_path": "test_functional_equivalence.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 120,
+      "line_count": 153,
+      "function_count": 3,
+      "class_count": 0,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Test functional equivalence between original and reconstructed Python files",
+          "Test functional equivalence using unit tests",
+          "Run pytest on a test file",
+          "Test functional equivalence for key files"
+        ],
+        "imports": [
+          "subprocess",
+          "tempfile",
+          "os",
+          "sys",
+          "pathlib.Path",
+          "model_driven_reconstructor.ModelDrivenReconstructor"
+        ],
+        "functions": [
+          {
+            "name": "test_functional_equivalence",
+            "docstring": "Test functional equivalence using unit tests"
+          },
+          {
+            "name": "run_tests",
+            "docstring": "Run pytest on a test file"
+          },
+          {
+            "name": "main",
+            "docstring": "Test functional equivalence for key files"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 153
+      }
+    },
+    "data/cost_analysis.py": {
+      "file_path": "data/cost_analysis.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 240,
+      "line_count": 336,
+      "function_count": 5,
+      "class_count": 0,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "\ud83d\udcb0 COST ANALYSIS FOR DIVERSITY HYPOTHESIS TESTING\n\nCalculate total tokens and costs for our multi-agent diversity analysis.",
+          "Rough estimate of tokens (4 characters per token)",
+          "Analyze costs from multi-dimensional smoke test",
+          "Analyze costs from LangGraph diversity orchestrator",
+          "Analyze costs from synthesis orchestrator",
+          "Calculate total costs for diversity hypothesis testing"
+        ],
+        "imports": [
+          "json",
+          "os",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "estimate_tokens",
+            "docstring": "Rough estimate of tokens (4 characters per token)"
+          },
+          {
+            "name": "analyze_multi_dimensional_costs",
+            "docstring": "Analyze costs from multi-dimensional smoke test"
+          },
+          {
+            "name": "analyze_langgraph_costs",
+            "docstring": "Analyze costs from LangGraph diversity orchestrator"
+          },
+          {
+            "name": "analyze_synthesis_costs",
+            "docstring": "Analyze costs from synthesis orchestrator"
+          },
+          {
+            "name": "main",
+            "docstring": "Calculate total costs for diversity hypothesis testing"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 336
+      }
+    },
+    "healthcare-cdc/healthcare_cdc_domain_model.py": {
+      "file_path": "healthcare-cdc/healthcare_cdc_domain_model.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 574,
+      "line_count": 659,
+      "function_count": 8,
+      "class_count": 11,
+      "import_count": 9,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Healthcare CDC Domain Model\nModel-driven implementation of Snowflake Healthcare CDC with DynamoDB and Openflow\n\nBased on: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/\nOriginal Contributors: Snowflake Inc.",
+          "CDC Event Types",
+          "Healthcare Claim Status",
+          "Payment Status",
+          "Patient Information",
+          "Healthcare Provider Information",
+          "Insurance Payer Information",
+          "Healthcare Insurance Claim",
+          "Change Data Capture Event",
+          "Infrastructure Components for Healthcare CDC",
+          "Openflow Pipeline Configuration",
+          "Domain Model for Healthcare CDC System",
+          "Main function to demonstrate the domain model",
+          "Convert to JSON for DynamoDB stream",
+          "Add a processor to the pipeline",
+          "Setup the Openflow pipeline configuration",
+          "Get the SQL merge statement for CDC operations",
+          "Generate CloudFormation template for the healthcare CDC infrastructure",
+          "Generate Snowflake schema creation SQL"
+        ],
+        "imports": [
+          "dataclasses.dataclass",
+          "dataclasses.field",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Optional",
+          "typing.Any",
+          "enum.Enum",
+          "datetime.datetime",
+          "json",
+          "re",
+          "os",
+          "uuid.UUID"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function to demonstrate the domain model"
+          },
+          {
+            "name": "to_json",
+            "docstring": "Convert to JSON for DynamoDB stream"
+          },
+          {
+            "name": "add_processor",
+            "docstring": "Add a processor to the pipeline"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "_setup_pipeline",
+            "docstring": "Setup the Openflow pipeline configuration"
+          },
+          {
+            "name": "_get_merge_sql",
+            "docstring": "Get the SQL merge statement for CDC operations"
+          },
+          {
+            "name": "generate_cloudformation_template",
+            "docstring": "Generate CloudFormation template for the healthcare CDC infrastructure"
+          },
+          {
+            "name": "generate_snowflake_schema",
+            "docstring": "Generate Snowflake schema creation SQL"
+          }
+        ],
+        "classes": [
+          {
+            "name": "EventType",
+            "docstring": "CDC Event Types"
+          },
+          {
+            "name": "ClaimStatus",
+            "docstring": "Healthcare Claim Status"
+          },
+          {
+            "name": "PaymentStatus",
+            "docstring": "Payment Status"
+          },
+          {
+            "name": "PatientInfo",
+            "docstring": "Patient Information"
+          },
+          {
+            "name": "ProviderInfo",
+            "docstring": "Healthcare Provider Information"
+          },
+          {
+            "name": "PayerInfo",
+            "docstring": "Insurance Payer Information"
+          },
+          {
+            "name": "HealthcareClaim",
+            "docstring": "Healthcare Insurance Claim"
+          },
+          {
+            "name": "CDCEvent",
+            "docstring": "Change Data Capture Event"
+          },
+          {
+            "name": "InfrastructureComponents",
+            "docstring": "Infrastructure Components for Healthcare CDC"
+          },
+          {
+            "name": "PipelineConfiguration",
+            "docstring": "Openflow Pipeline Configuration"
+          },
+          {
+            "name": "HealthcareCDCDomainModel",
+            "docstring": "Domain Model for Healthcare CDC System"
+          }
+        ],
+        "variables": [],
+        "line_count": 659
+      }
+    },
+    "healthcare-cdc/__init__.py": {
+      "file_path": "healthcare-cdc/__init__.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 32,
+      "line_count": 38,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 1,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Healthcare CDC Package\nModel-driven implementation of Snowflake Healthcare CDC with DynamoDB and Openflow\n\nBased on: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/\nOriginal Contributors: Snowflake Inc.\nEnhanced by: OpenFlow Playground Team"
+        ],
+        "imports": [
+          "healthcare_cdc_domain_model.HealthcareCDCDomainModel",
+          "healthcare_cdc_domain_model.HealthcareClaim",
+          "healthcare_cdc_domain_model.PatientInfo",
+          "healthcare_cdc_domain_model.ProviderInfo",
+          "healthcare_cdc_domain_model.PayerInfo",
+          "healthcare_cdc_domain_model.CDCEvent",
+          "healthcare_cdc_domain_model.EventType",
+          "healthcare_cdc_domain_model.ClaimStatus",
+          "healthcare_cdc_domain_model.PaymentStatus"
+        ],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 38
+      }
+    },
+    "healthcare-cdc/test_healthcare_cdc_domain_model.py": {
+      "file_path": "healthcare-cdc/test_healthcare_cdc_domain_model.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 303,
+      "line_count": 371,
+      "function_count": 12,
+      "class_count": 4,
+      "import_count": 5,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Tests for Healthcare CDC Domain Model",
+          "Test the healthcare CDC domain model",
+          "Test healthcare claim data structure",
+          "Test CDC event data structure",
+          "Test enum values",
+          "Integration test for the complete domain model",
+          "Test domain model initialization",
+          "Test pipeline configuration setup",
+          "Test SQL merge statement generation",
+          "Test CloudFormation template generation",
+          "Test Snowflake schema generation",
+          "Test creating a healthcare claim",
+          "Test creating a CDC event",
+          "Test CDC event JSON serialization",
+          "Test event type enum values",
+          "Test claim status enum values",
+          "Test payment status enum values"
+        ],
+        "imports": [
+          "pytest",
+          "json",
+          "datetime.datetime",
+          "re",
+          "healthcare_cdc_domain_model.HealthcareCDCDomainModel",
+          "healthcare_cdc_domain_model.HealthcareClaim",
+          "healthcare_cdc_domain_model.PatientInfo",
+          "healthcare_cdc_domain_model.ProviderInfo",
+          "healthcare_cdc_domain_model.PayerInfo",
+          "healthcare_cdc_domain_model.CDCEvent",
+          "healthcare_cdc_domain_model.EventType",
+          "healthcare_cdc_domain_model.ClaimStatus",
+          "healthcare_cdc_domain_model.PaymentStatus"
+        ],
+        "functions": [
+          {
+            "name": "test_integration",
+            "docstring": "Integration test for the complete domain model"
+          },
+          {
+            "name": "test_domain_model_initialization",
+            "docstring": "Test domain model initialization"
+          },
+          {
+            "name": "test_pipeline_configuration",
+            "docstring": "Test pipeline configuration setup"
+          },
+          {
+            "name": "test_merge_sql_generation",
+            "docstring": "Test SQL merge statement generation"
+          },
+          {
+            "name": "test_cloudformation_template_generation",
+            "docstring": "Test CloudFormation template generation"
+          },
+          {
+            "name": "test_snowflake_schema_generation",
+            "docstring": "Test Snowflake schema generation"
+          },
+          {
+            "name": "test_claim_creation",
+            "docstring": "Test creating a healthcare claim"
+          },
+          {
+            "name": "test_cdc_event_creation",
+            "docstring": "Test creating a CDC event"
+          },
+          {
+            "name": "test_cdc_event_json_serialization",
+            "docstring": "Test CDC event JSON serialization"
+          },
+          {
+            "name": "test_event_types",
+            "docstring": "Test event type enum values"
+          },
+          {
+            "name": "test_claim_status",
+            "docstring": "Test claim status enum values"
+          },
+          {
+            "name": "test_payment_status",
+            "docstring": "Test payment status enum values"
+          }
+        ],
+        "classes": [
+          {
+            "name": "TestHealthcareCDCDomainModel",
+            "docstring": "Test the healthcare CDC domain model"
+          },
+          {
+            "name": "TestHealthcareClaim",
+            "docstring": "Test healthcare claim data structure"
+          },
+          {
+            "name": "TestCDCEvent",
+            "docstring": "Test CDC event data structure"
+          },
+          {
+            "name": "TestEnums",
+            "docstring": "Test enum values"
+          }
+        ],
+        "variables": [],
+        "line_count": 371
+      }
+    },
+    "tests/test_rule_compliance.py": {
+      "file_path": "tests/test_rule_compliance.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 148,
+      "line_count": 203,
+      "function_count": 10,
+      "class_count": 3,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "\ud83e\uddea Rule Compliance Test Suite\n\nTests for rule compliance enforcement system including MDC linter,\nCursor IDE plugin, and pre-commit hooks.",
+          "Test MDC linter functionality",
+          "Test Cursor IDE plugin functionality",
+          "Test the complete rule compliance system",
+          "Setup test environment",
+          "Test that linter accepts valid .mdc file",
+          "Test that linter rejects .mdc file without frontmatter",
+          "Test that linter rejects .mdc file with missing required fields",
+          "Setup test environment",
+          "Test that Cursor IDE plugin exists and is executable",
+          "Test that plugin can check file compliance",
+          "Setup test environment",
+          "Test that all .mdc files in the project comply with rules",
+          "Test that rule compliance system is complete"
+        ],
+        "imports": [
+          "subprocess",
+          "tempfile",
+          "os",
+          "sys",
+          "json",
+          "pathlib.Path"
+        ],
+        "functions": [
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment"
+          },
+          {
+            "name": "test_valid_mdc_file",
+            "docstring": "Test that linter accepts valid .mdc file"
+          },
+          {
+            "name": "test_invalid_mdc_file_missing_frontmatter",
+            "docstring": "Test that linter rejects .mdc file without frontmatter"
+          },
+          {
+            "name": "test_invalid_mdc_file_missing_fields",
+            "docstring": "Test that linter rejects .mdc file with missing required fields"
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment"
+          },
+          {
+            "name": "test_plugin_exists",
+            "docstring": "Test that Cursor IDE plugin exists and is executable"
+          },
+          {
+            "name": "test_plugin_check_file_compliance",
+            "docstring": "Test that plugin can check file compliance"
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment"
+          },
+          {
+            "name": "test_all_mdc_files_comply",
+            "docstring": "Test that all .mdc files in the project comply with rules"
+          },
+          {
+            "name": "test_rule_compliance_system_completeness",
+            "docstring": "Test that rule compliance system is complete"
+          }
+        ],
+        "classes": [
+          {
+            "name": "TestMDCLinter",
+            "docstring": "Test MDC linter functionality"
+          },
+          {
+            "name": "TestCursorPlugin",
+            "docstring": "Test Cursor IDE plugin functionality"
+          },
+          {
+            "name": "TestRuleComplianceSystem",
+            "docstring": "Test the complete rule compliance system"
+          }
+        ],
+        "variables": [],
+        "line_count": 203
+      }
+    },
+    "tests/test_file_organization.py": {
+      "file_path": "tests/test_file_organization.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "tests/test_cline_plan_blind_spots.py": {
+      "file_path": "tests/test_cline_plan_blind_spots.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 31)"
+      }
+    },
+    "tests/test_data_fresh_cline_plan.py": {
+      "file_path": "tests/test_data_fresh_cline_plan.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 76,
+      "line_count": 132,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Test data for fresh Cline's healthcare CDC plan\nExtracted from test to improve maintainability"
+        ],
+        "imports": [],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 132
+      }
+    },
+    "tests/test_gemini_2_5_flash_lite_pr_review.py": {
+      "file_path": "tests/test_gemini_2_5_flash_lite_pr_review.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 16)"
+      }
+    },
+    "tests/test_code_quality_comprehensive.py": {
+      "file_path": "tests/test_code_quality_comprehensive.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "tests/validate_healthcare_cdc_simple.py": {
+      "file_path": "tests/validate_healthcare_cdc_simple.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 15)"
+      }
+    },
+    "tests/test_mdc_generator.py": {
+      "file_path": "tests/test_mdc_generator.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 25)"
+      }
+    },
+    "tests/test_file_existence.py": {
+      "file_path": "tests/test_file_existence.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 19)"
+      }
+    },
+    "tests/test_security_enhancements.py": {
+      "file_path": "tests/test_security_enhancements.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 15)"
+      }
+    },
+    "tests/test_basic_validation_simple.py": {
+      "file_path": "tests/test_basic_validation_simple.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 19)"
+      }
+    },
+    "tests/test_code_quality_system.py": {
+      "file_path": "tests/test_code_quality_system.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 19)"
+      }
+    },
+    "tests/test_basic_validation_pytest.py": {
+      "file_path": "tests/test_basic_validation_pytest.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 19)"
+      }
+    },
+    "tests/test_uv_package_management.py": {
+      "file_path": "tests/test_uv_package_management.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "tests/test_type_safety.py": {
+      "file_path": "tests/test_type_safety.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "tests/test_makefile_integration.py": {
+      "file_path": "tests/test_makefile_integration.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "tests/test_gemini_2_5_preview_pr_review.py": {
+      "file_path": "tests/test_gemini_2_5_preview_pr_review.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 16)"
+      }
+    },
+    "tests/test_rule_compliance_enforcement.py": {
+      "file_path": "tests/test_rule_compliance_enforcement.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 190,
+      "line_count": 263,
+      "function_count": 15,
+      "class_count": 2,
+      "import_count": 10,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "\ud83e\uddea Test Rule Compliance Enforcement System\n\nTests the pre-commit hooks, IDE plugins, and automated linting",
+          "Test the rule compliance enforcement system",
+          "Test that all MDC files comply with rules",
+          "Setup test environment",
+          "Test that rule compliance checker exists and is executable",
+          "Test that MDC linter exists and is executable",
+          "Test that Cursor IDE plugin exists and is executable",
+          "Test that pre-commit config includes rule compliance hooks",
+          "Test that rule compliance script runs without errors",
+          "Test that MDC linter validates file structure",
+          "Test that MDC linter rejects invalid file structure",
+          "Test that Cursor IDE plugin has proper interface",
+          "Test that deterministic editing rules are enforced",
+          "Test that project model includes rule compliance",
+          "Test that requirements traceability includes rule compliance",
+          "Setup test environment",
+          "Test that all MDC files comply with established rules",
+          "Test that rule compliance system is complete"
+        ],
+        "imports": [
+          "pytest",
+          "subprocess",
+          "tempfile",
+          "os",
+          "sys",
+          "yaml",
+          "json",
+          "fnmatch",
+          "pathlib.Path",
+          "unittest.mock.patch"
+        ],
+        "functions": [
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment"
+          },
+          {
+            "name": "test_rule_compliance_checker_exists",
+            "docstring": "Test that rule compliance checker exists and is executable"
+          },
+          {
+            "name": "test_mdc_linter_exists",
+            "docstring": "Test that MDC linter exists and is executable"
+          },
+          {
+            "name": "test_cursor_plugin_exists",
+            "docstring": "Test that Cursor IDE plugin exists and is executable"
+          },
+          {
+            "name": "test_pre_commit_config_updated",
+            "docstring": "Test that pre-commit config includes rule compliance hooks"
+          },
+          {
+            "name": "test_rule_compliance_script_runs",
+            "docstring": "Test that rule compliance script runs without errors"
+          },
+          {
+            "name": "test_mdc_linter_validates_structure",
+            "docstring": "Test that MDC linter validates file structure"
+          },
+          {
+            "name": "test_mdc_linter_rejects_invalid_structure",
+            "docstring": "Test that MDC linter rejects invalid file structure"
+          },
+          {
+            "name": "test_cursor_plugin_interface",
+            "docstring": "Test that Cursor IDE plugin has proper interface"
+          },
+          {
+            "name": "test_deterministic_editing_rule_enforcement",
+            "docstring": "Test that deterministic editing rules are enforced"
+          },
+          {
+            "name": "test_project_model_includes_rule_compliance",
+            "docstring": "Test that project model includes rule compliance"
+          },
+          {
+            "name": "test_requirements_traceability_includes_rule_compliance",
+            "docstring": "Test that requirements traceability includes rule compliance"
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment"
+          },
+          {
+            "name": "test_all_mdc_files_comply_with_rules",
+            "docstring": "Test that all MDC files comply with established rules"
+          },
+          {
+            "name": "test_rule_compliance_system_completeness",
+            "docstring": "Test that rule compliance system is complete"
+          }
+        ],
+        "classes": [
+          {
+            "name": "TestRuleComplianceEnforcement",
+            "docstring": "Test the rule compliance enforcement system"
+          },
+          {
+            "name": "TestMDCFileCompliance",
+            "docstring": "Test that all MDC files comply with rules"
+          }
+        ],
+        "variables": [],
+        "line_count": 263
+      }
+    },
+    "tests/test_code_quality.py": {
+      "file_path": "tests/test_code_quality.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 22)"
+      }
+    },
+    "tests/test_core_concepts.py": {
+      "file_path": "tests/test_core_concepts.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 24)"
+      }
+    },
+    "tests/test_healthcare_cdc_requirements.py": {
+      "file_path": "tests/test_healthcare_cdc_requirements.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "tests/test_cline_fresh_plan_blind_spots.py": {
+      "file_path": "tests/test_cline_fresh_plan_blind_spots.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 14)"
+      }
+    },
+    "tests/test_basic_validation.py": {
+      "file_path": "tests/test_basic_validation.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 21)"
+      }
+    },
+    "src/__init__.py": {
+      "file_path": "src/__init__.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 9,
+      "line_count": 12,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "OpenFlow Playground Source Package\n\nThis package contains the main application components organized by domain:\n- streamlit: Streamlit application components\n- security_first: Security-first architecture components\n- multi_agent_testing: Multi-agent testing framework components"
+        ],
+        "imports": [],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 12
+      }
+    },
+    "scripts/mdc-linter.py": {
+      "file_path": "scripts/mdc-linter.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 168,
+      "line_count": 242,
+      "function_count": 10,
+      "class_count": 1,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "MDC Linter for .mdc files with YAML frontmatter",
+          "Linter for .mdc files with YAML frontmatter",
+          "Main function",
+          "Log a violation",
+          "Log a warning",
+          "Validate YAML frontmatter structure",
+          "Validate markdown content structure",
+          "Validate file organization and naming",
+          "Validate deterministic editing compliance",
+          "Lint a single .mdc file",
+          "Lint all .mdc files in a directory"
+        ],
+        "imports": [
+          "sys",
+          "yaml",
+          "re",
+          "pathlib.Path",
+          "typing.List",
+          "argparse"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "log_violation",
+            "docstring": "Log a violation"
+          },
+          {
+            "name": "log_warning",
+            "docstring": "Log a warning"
+          },
+          {
+            "name": "validate_yaml_frontmatter",
+            "docstring": "Validate YAML frontmatter structure"
+          },
+          {
+            "name": "validate_markdown_content",
+            "docstring": "Validate markdown content structure"
+          },
+          {
+            "name": "validate_file_organization",
+            "docstring": "Validate file organization and naming"
+          },
+          {
+            "name": "validate_deterministic_editing_compliance",
+            "docstring": "Validate deterministic editing compliance"
+          },
+          {
+            "name": "lint_file",
+            "docstring": "Lint a single .mdc file"
+          },
+          {
+            "name": "lint_directory",
+            "docstring": "Lint all .mdc files in a directory"
+          }
+        ],
+        "classes": [
+          {
+            "name": "MDCLinter",
+            "docstring": "Linter for .mdc files with YAML frontmatter"
+          }
+        ],
+        "variables": [],
+        "line_count": 242
+      }
+    },
+    "scripts/fix_mypy_issues.py": {
+      "file_path": "scripts/fix_mypy_issues.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 163,
+      "line_count": 229,
+      "function_count": 5,
+      "class_count": 0,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Comprehensive Mypy Issue Fixer",
+          "Add missing type annotations to a file",
+          "Infer parameter type based on name",
+          "Infer variable type from assignment value",
+          "Fix mypy issues in all files",
+          "Main function"
+        ],
+        "imports": [
+          "re",
+          "subprocess",
+          "pathlib.Path",
+          "typing.List",
+          "typing.Dict",
+          "typing.Any"
+        ],
+        "functions": [
+          {
+            "name": "add_missing_type_annotations",
+            "docstring": "Add missing type annotations to a file"
+          },
+          {
+            "name": "infer_parameter_type",
+            "docstring": "Infer parameter type based on name"
+          },
+          {
+            "name": "infer_variable_type",
+            "docstring": "Infer variable type from assignment value"
+          },
+          {
+            "name": "fix_mypy_issues",
+            "docstring": "Fix mypy issues in all files"
+          },
+          {
+            "name": "main",
+            "docstring": "Main function"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 229
+      }
+    },
+    "scripts/regenerate_mdc_files.py": {
+      "file_path": "scripts/regenerate_mdc_files.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 29,
+      "line_count": 45,
+      "function_count": 1,
+      "class_count": 0,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Regenerate all .mdc files"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "sys",
+          "pathlib.Path",
+          "mdc_generator.MDCGenerator"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Regenerate all .mdc files"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 45
+      }
+    },
+    "scripts/fix_code_quality.py": {
+      "file_path": "scripts/fix_code_quality.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 141,
+      "line_count": 187,
+      "function_count": 5,
+      "class_count": 0,
+      "import_count": 7,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Main function for the code quality fixer",
+          "Analyze all files for linting issues",
+          "Fix all files",
+          "Analyze, fix, and re-analyze all files",
+          "Print a summary of the results"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "sys",
+          "json",
+          "pathlib.Path",
+          "typing.List",
+          "typing.Dict",
+          "typing.Any",
+          "code_quality_system.quality_model.CodeQualityModel",
+          "argparse"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function for the code quality fixer"
+          },
+          {
+            "name": "analyze_all_files",
+            "docstring": "Analyze all files for linting issues"
+          },
+          {
+            "name": "fix_all_files",
+            "docstring": "Fix all files"
+          },
+          {
+            "name": "analyze_and_fix_all_files",
+            "docstring": "Analyze, fix, and re-analyze all files"
+          },
+          {
+            "name": "print_summary",
+            "docstring": "Print a summary of the results"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 187
+      }
+    },
+    ".cursor/plugins/rule-compliance-checker.py": {
+      "file_path": ".cursor/plugins/rule-compliance-checker.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 124,
+      "line_count": 152,
+      "function_count": 7,
+      "class_count": 1,
+      "import_count": 8,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Cursor IDE plugin for rule compliance checking",
+          "Cursor IDE plugin for rule compliance checking.",
+          "Main function for testing",
+          "Check compliance for a single file.",
+          "Check .mdc file compliance specifically",
+          "Get a summary of all rules",
+          "Validate deterministic editing compliance",
+          "Provide immediate feedback for a file"
+        ],
+        "imports": [
+          "sys",
+          "json",
+          "subprocess",
+          "re",
+          "pathlib.Path",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "yaml",
+          "argparse"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function for testing"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "check_file_compliance",
+            "docstring": "Check compliance for a single file."
+          },
+          {
+            "name": "check_mdc_compliance",
+            "docstring": "Check .mdc file compliance specifically"
+          },
+          {
+            "name": "get_rule_summary",
+            "docstring": "Get a summary of all rules"
+          },
+          {
+            "name": "validate_deterministic_editing",
+            "docstring": "Validate deterministic editing compliance"
+          },
+          {
+            "name": "provide_immediate_feedback",
+            "docstring": "Provide immediate feedback for a file"
+          }
+        ],
+        "classes": [
+          {
+            "name": "RuleComplianceChecker",
+            "docstring": "Cursor IDE plugin for rule compliance checking."
+          }
+        ],
+        "variables": [],
+        "line_count": 152
+      }
+    },
+    "src/code_quality_system/quality_model.py": {
+      "file_path": "src/code_quality_system/quality_model.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 221,
+      "line_count": 271,
+      "function_count": 15,
+      "class_count": 2,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Defines a linting rule and its fix",
+          "Model-driven code quality system",
+          "Define all linting rules with their fixes",
+          "Define automated fixers for each rule type",
+          "Run autoflake to fix unused imports and variables",
+          "Run black to format code",
+          "Apply custom fixes for specific issues",
+          "Fix unused imports",
+          "Fix f-string issues",
+          "Fix trailing whitespace",
+          "Fix bare except clauses",
+          "Fix import order issues",
+          "Fix unused variables",
+          "Analyze a single file for all linting issues",
+          "Fix all issues in a file",
+          "Fix all files in the project"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "dataclasses.dataclass",
+          "dataclasses.field",
+          "typing.List",
+          "typing.Dict",
+          "typing.Any",
+          "typing.Callable",
+          "pathlib.Path",
+          "re",
+          "subprocess"
+        ],
+        "functions": [
+          {
+            "name": "__post_init__",
+            "docstring": null
+          },
+          {
+            "name": "_define_rules",
+            "docstring": "Define all linting rules with their fixes"
+          },
+          {
+            "name": "_define_fixers",
+            "docstring": "Define automated fixers for each rule type"
+          },
+          {
+            "name": "_run_autoflake",
+            "docstring": "Run autoflake to fix unused imports and variables"
+          },
+          {
+            "name": "_run_black",
+            "docstring": "Run black to format code"
+          },
+          {
+            "name": "_apply_custom_fixes",
+            "docstring": "Apply custom fixes for specific issues"
+          },
+          {
+            "name": "_fix_unused_imports",
+            "docstring": "Fix unused imports"
+          },
+          {
+            "name": "_fix_f_strings",
+            "docstring": "Fix f-string issues"
+          },
+          {
+            "name": "_fix_trailing_whitespace",
+            "docstring": "Fix trailing whitespace"
+          },
+          {
+            "name": "_fix_bare_except",
+            "docstring": "Fix bare except clauses"
+          },
+          {
+            "name": "_fix_import_order",
+            "docstring": "Fix import order issues"
+          },
+          {
+            "name": "_fix_unused_variables",
+            "docstring": "Fix unused variables"
+          },
+          {
+            "name": "analyze_file",
+            "docstring": "Analyze a single file for all linting issues"
+          },
+          {
+            "name": "fix_file",
+            "docstring": "Fix all issues in a file"
+          },
+          {
+            "name": "fix_all_files",
+            "docstring": "Fix all files in the project"
+          }
+        ],
+        "classes": [
+          {
+            "name": "LintingRule",
+            "docstring": "Defines a linting rule and its fix"
+          },
+          {
+            "name": "CodeQualityModel",
+            "docstring": "Model-driven code quality system"
+          }
+        ],
+        "variables": [],
+        "line_count": 271
+      }
+    },
+    "src/security_first/https_enforcement.py": {
+      "file_path": "src/security_first/https_enforcement.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 156,
+      "line_count": 204,
+      "function_count": 16,
+      "class_count": 4,
+      "import_count": 9,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "HTTPS enforcement and SSL/TLS configuration for security-first architecture",
+          "HTTPS enforcement and SSL/TLS configuration for security-first architecture.",
+          "Rate limiting implementation to prevent abuse.",
+          "CSRF protection implementation.",
+          "Comprehensive security manager implementing all critical blind spots.",
+          "Test HTTPS enforcement functionality",
+          "Create secure SSL context with modern TLS configuration.",
+          "Validate that URL uses HTTPS protocol.",
+          "Enforce HTTPS redirect for HTTP URLs.",
+          "Validate SSL certificate for given hostname.",
+          "Configure requests session with secure SSL settings.",
+          "Check if user has exceeded rate limit for endpoint.",
+          "Get remaining requests for user on endpoint.",
+          "Generate CSRF token for session.",
+          "Validate CSRF token for session.",
+          "Comprehensive request validation.",
+          "Get security headers for responses."
+        ],
+        "imports": [
+          "ssl",
+          "socket",
+          "logging",
+          "hashlib",
+          "time",
+          "urllib.parse.urlparse",
+          "typing.Dict",
+          "typing.Any",
+          "typing.Optional",
+          "certifi",
+          "requests"
+        ],
+        "functions": [
+          {
+            "name": "test_https_enforcement",
+            "docstring": "Test HTTPS enforcement functionality"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "_create_ssl_context",
+            "docstring": "Create secure SSL context with modern TLS configuration."
+          },
+          {
+            "name": "validate_https_url",
+            "docstring": "Validate that URL uses HTTPS protocol."
+          },
+          {
+            "name": "enforce_https_redirect",
+            "docstring": "Enforce HTTPS redirect for HTTP URLs."
+          },
+          {
+            "name": "validate_ssl_certificate",
+            "docstring": "Validate SSL certificate for given hostname."
+          },
+          {
+            "name": "configure_secure_requests_session",
+            "docstring": "Configure requests session with secure SSL settings."
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "check_rate_limit",
+            "docstring": "Check if user has exceeded rate limit for endpoint."
+          },
+          {
+            "name": "get_remaining_requests",
+            "docstring": "Get remaining requests for user on endpoint."
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "generate_csrf_token",
+            "docstring": "Generate CSRF token for session."
+          },
+          {
+            "name": "validate_csrf_token",
+            "docstring": "Validate CSRF token for session."
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "validate_request",
+            "docstring": "Comprehensive request validation."
+          },
+          {
+            "name": "get_security_headers",
+            "docstring": "Get security headers for responses."
+          }
+        ],
+        "classes": [
+          {
+            "name": "HTTPSEnforcement",
+            "docstring": "HTTPS enforcement and SSL/TLS configuration for security-first architecture."
+          },
+          {
+            "name": "RateLimiting",
+            "docstring": "Rate limiting implementation to prevent abuse."
+          },
+          {
+            "name": "CSRFProtection",
+            "docstring": "CSRF protection implementation."
+          },
+          {
+            "name": "SecurityManager",
+            "docstring": "Comprehensive security manager implementing all critical blind spots."
+          }
+        ],
+        "variables": [],
+        "line_count": 204
+      }
+    },
+    "src/security_first/test_https_enforcement.py": {
+      "file_path": "src/security_first/test_https_enforcement.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 182,
+      "line_count": 268,
+      "function_count": 22,
+      "class_count": 5,
+      "import_count": 5,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Tests for HTTPS Enforcement Module\nValidates critical security blind spot fixes identified by multi-agent analysis.",
+          "Test HTTPS enforcement functionality.",
+          "Test rate limiting functionality.",
+          "Test CSRF protection functionality.",
+          "Test comprehensive security manager.",
+          "Integration tests for security components.",
+          "Setup test environment.",
+          "Test validation of valid HTTPS URLs.",
+          "Test validation of invalid HTTP URLs.",
+          "Test HTTPS redirect enforcement.",
+          "Test SSL context configuration.",
+          "Test successful SSL certificate validation.",
+          "Test SSL certificate validation failure.",
+          "Setup test environment.",
+          "Test rate limit check for first request.",
+          "Test rate limit check when under limit.",
+          "Test rate limit check when over limit.",
+          "Test getting remaining requests.",
+          "Setup test environment.",
+          "Test CSRF token generation.",
+          "Test valid CSRF token validation.",
+          "Test invalid CSRF token validation.",
+          "Setup test environment.",
+          "Test request validation with all security checks passing.",
+          "Test request validation with invalid HTTPS.",
+          "Test request validation with rate limit exceeded.",
+          "Test security headers generation.",
+          "Test integration of all security components."
+        ],
+        "imports": [
+          "pytest",
+          "unittest.mock",
+          "unittest.mock.MagicMock",
+          "ssl",
+          "https_enforcement.HTTPSEnforcement",
+          "https_enforcement.RateLimiting",
+          "https_enforcement.CSRFProtection",
+          "https_enforcement.SecurityManager"
+        ],
+        "functions": [
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment."
+          },
+          {
+            "name": "test_validate_https_url_valid",
+            "docstring": "Test validation of valid HTTPS URLs."
+          },
+          {
+            "name": "test_validate_https_url_invalid",
+            "docstring": "Test validation of invalid HTTP URLs."
+          },
+          {
+            "name": "test_enforce_https_redirect",
+            "docstring": "Test HTTPS redirect enforcement."
+          },
+          {
+            "name": "test_ssl_context_configuration",
+            "docstring": "Test SSL context configuration."
+          },
+          {
+            "name": "test_validate_ssl_certificate_success",
+            "docstring": "Test successful SSL certificate validation."
+          },
+          {
+            "name": "test_validate_ssl_certificate_failure",
+            "docstring": "Test SSL certificate validation failure."
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment."
+          },
+          {
+            "name": "test_check_rate_limit_first_request",
+            "docstring": "Test rate limit check for first request."
+          },
+          {
+            "name": "test_check_rate_limit_under_limit",
+            "docstring": "Test rate limit check when under limit."
+          },
+          {
+            "name": "test_check_rate_limit_over_limit",
+            "docstring": "Test rate limit check when over limit."
+          },
+          {
+            "name": "test_get_remaining_requests",
+            "docstring": "Test getting remaining requests."
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment."
+          },
+          {
+            "name": "test_generate_csrf_token",
+            "docstring": "Test CSRF token generation."
+          },
+          {
+            "name": "test_validate_csrf_token_valid",
+            "docstring": "Test valid CSRF token validation."
+          },
+          {
+            "name": "test_validate_csrf_token_invalid",
+            "docstring": "Test invalid CSRF token validation."
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test environment."
+          },
+          {
+            "name": "test_validate_request_all_valid",
+            "docstring": "Test request validation with all security checks passing."
+          },
+          {
+            "name": "test_validate_request_https_invalid",
+            "docstring": "Test request validation with invalid HTTPS."
+          },
+          {
+            "name": "test_validate_request_rate_limit_exceeded",
+            "docstring": "Test request validation with rate limit exceeded."
+          },
+          {
+            "name": "test_get_security_headers",
+            "docstring": "Test security headers generation."
+          },
+          {
+            "name": "test_security_manager_integration",
+            "docstring": "Test integration of all security components."
+          }
+        ],
+        "classes": [
+          {
+            "name": "TestHTTPSEnforcement",
+            "docstring": "Test HTTPS enforcement functionality."
+          },
+          {
+            "name": "TestRateLimiting",
+            "docstring": "Test rate limiting functionality."
+          },
+          {
+            "name": "TestCSRFProtection",
+            "docstring": "Test CSRF protection functionality."
+          },
+          {
+            "name": "TestSecurityManager",
+            "docstring": "Test comprehensive security manager."
+          },
+          {
+            "name": "TestIntegration",
+            "docstring": "Integration tests for security components."
+          }
+        ],
+        "variables": [],
+        "line_count": 268
+      }
+    },
+    "src/security_first/rate_limiting.py": {
+      "file_path": "src/security_first/rate_limiting.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 20)"
+      }
+    },
+    "src/security_first/test_streamlit_security_first.py": {
+      "file_path": "src/security_first/test_streamlit_security_first.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 43)"
+      }
+    },
+    "src/security_first/test_security_model.py": {
+      "file_path": "src/security_first/test_security_model.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 30)"
+      }
+    },
+    "src/security_first/__init__.py": {
+      "file_path": "src/security_first/__init__.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 16,
+      "line_count": 22,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "https_enforcement.HTTPSEnforcement",
+          "https_enforcement.RateLimiting",
+          "https_enforcement.CSRFProtection",
+          "https_enforcement.SecurityManager"
+        ],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 22
+      }
+    },
+    "src/mdc_generator/mdc_model.py": {
+      "file_path": "src/mdc_generator/mdc_model.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 283,
+      "line_count": 409,
+      "function_count": 11,
+      "class_count": 3,
+      "import_count": 6,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Model for MDC file YAML frontmatter",
+          "Complete MDC file model",
+          "Generator for MDC files",
+          "Main function for command-line usage",
+          "Convert to YAML string",
+          "Generate complete .mdc file content",
+          "Save .mdc file",
+          "Load .mdc file from disk",
+          "Create a new MDC rule file",
+          "Generate all standard .mdc rules",
+          "Get standard rule definitions",
+          "Validate a single .mdc file",
+          "Validate all .mdc files in the project"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "yaml",
+          "dataclasses.dataclass",
+          "typing.List",
+          "typing.Dict",
+          "typing.Any",
+          "typing.Optional",
+          "pathlib.Path",
+          "argparse"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function for command-line usage"
+          },
+          {
+            "name": "to_yaml",
+            "docstring": "Convert to YAML string"
+          },
+          {
+            "name": "to_mdc_content",
+            "docstring": "Generate complete .mdc file content"
+          },
+          {
+            "name": "save",
+            "docstring": "Save .mdc file"
+          },
+          {
+            "name": "from_file",
+            "docstring": "Load .mdc file from disk"
+          },
+          {
+            "name": "create_rule",
+            "docstring": "Create a new MDC rule file"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "generate_all_rules",
+            "docstring": "Generate all standard .mdc rules"
+          },
+          {
+            "name": "_get_standard_rules",
+            "docstring": "Get standard rule definitions"
+          },
+          {
+            "name": "validate_mdc_file",
+            "docstring": "Validate a single .mdc file"
+          },
+          {
+            "name": "validate_all_mdc_files",
+            "docstring": "Validate all .mdc files in the project"
+          }
+        ],
+        "classes": [
+          {
+            "name": "MDCFrontmatter",
+            "docstring": "Model for MDC file YAML frontmatter"
+          },
+          {
+            "name": "MDCFile",
+            "docstring": "Complete MDC file model"
+          },
+          {
+            "name": "MDCGenerator",
+            "docstring": "Generator for MDC files"
+          }
+        ],
+        "variables": [],
+        "line_count": 409
+      }
+    },
+    "src/mdc_generator/__init__.py": {
+      "file_path": "src/mdc_generator/__init__.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 8,
+      "line_count": 12,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "mdc_model.MDCFile",
+          "mdc_model.MDCFrontmatter",
+          "mdc_model.MDCGenerator"
+        ],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 12
+      }
+    },
+    "src/multi_agent_testing/diversity_synthesis_orchestrator.py": {
+      "file_path": "src/multi_agent_testing/diversity_synthesis_orchestrator.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 432,
+      "line_count": 582,
+      "function_count": 9,
+      "class_count": 4,
+      "import_count": 13,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Main function to run synthesis",
+          "Create LLM client for synthesis",
+          "Load findings from diversity analysis",
+          "Synthesize diverse findings into prioritized fixes",
+          "Calculate stakeholder impact matrix",
+          "Create visualizations for synthesis results",
+          "Generate prioritized implementation report",
+          "Run complete synthesis analysis"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "json",
+          "os",
+          "dataclasses.dataclass",
+          "dataclasses.asdict",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "pathlib.Path",
+          "langchain_core.messages.HumanMessage",
+          "langchain_core.messages.SystemMessage",
+          "langchain_openai.ChatOpenAI",
+          "pydantic.BaseModel",
+          "pydantic.Field",
+          "matplotlib.pyplot",
+          "seaborn",
+          "pandas",
+          "numpy"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function to run synthesis"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "create_llm_client",
+            "docstring": "Create LLM client for synthesis"
+          },
+          {
+            "name": "load_diversity_findings",
+            "docstring": "Load findings from diversity analysis"
+          },
+          {
+            "name": "synthesize_fixes",
+            "docstring": "Synthesize diverse findings into prioritized fixes"
+          },
+          {
+            "name": "calculate_stakeholder_impact_matrix",
+            "docstring": "Calculate stakeholder impact matrix"
+          },
+          {
+            "name": "create_synthesis_visualizations",
+            "docstring": "Create visualizations for synthesis results"
+          },
+          {
+            "name": "generate_prioritized_report",
+            "docstring": "Generate prioritized implementation report"
+          },
+          {
+            "name": "run_synthesis",
+            "docstring": "Run complete synthesis analysis"
+          }
+        ],
+        "classes": [
+          {
+            "name": "Stakeholder",
+            "docstring": null
+          },
+          {
+            "name": "SynthesizedFix",
+            "docstring": null
+          },
+          {
+            "name": "FixSynthesis",
+            "docstring": null
+          },
+          {
+            "name": "DiversitySynthesisOrchestrator",
+            "docstring": null
+          }
+        ],
+        "variables": [],
+        "line_count": 582
+      }
+    },
+    "src/multi_agent_testing/test_anthropic_simple.py": {
+      "file_path": "src/multi_agent_testing/test_anthropic_simple.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 22)"
+      }
+    },
+    "src/multi_agent_testing/test_multi_agent_blind_spot_detection.py": {
+      "file_path": "src/multi_agent_testing/test_multi_agent_blind_spot_detection.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 463,
+      "line_count": 569,
+      "function_count": 27,
+      "class_count": 6,
+      "import_count": 3,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Multi-agent blind spot detection testing",
+          "Result of blind spot detection test",
+          "Diversity agent for blind spot detection",
+          "Multi-agent blind spot detection system",
+          "Test multi-agent blind spot detection",
+          "Test compliance with blind spot detection requirements",
+          "Test integration between blind spot detection and Streamlit app",
+          "Analyze context for blind spots",
+          "Analyze security blind spots",
+          "Analyze DevOps blind spots",
+          "Analyze code quality blind spots",
+          "Analyze UX blind spots",
+          "Analyze performance blind spots",
+          "Run complete multi-agent analysis",
+          "Setup test method",
+          "Test security blind spot detection",
+          "Test DevOps blind spot detection",
+          "Test code quality blind spot detection",
+          "Test UX blind spot detection",
+          "Test performance blind spot detection",
+          "Test complete multi-agent analysis",
+          "Test blind spot coverage across all agents",
+          "Test confidence score distribution",
+          "Test recommendation quality",
+          "Setup test method",
+          "Test security compliance",
+          "Test DevOps compliance",
+          "Test code quality compliance",
+          "Test UX compliance",
+          "Test performance compliance",
+          "Test that blind spots map to actual implementations",
+          "Test prioritization of remaining blind spots"
+        ],
+        "imports": [
+          "dataclasses.dataclass",
+          "typing.Dict",
+          "typing.List",
+          "unittest.mock.patch"
+        ],
+        "functions": [
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze",
+            "docstring": "Analyze context for blind spots"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "analyze_security_blind_spots",
+            "docstring": "Analyze security blind spots"
+          },
+          {
+            "name": "analyze_devops_blind_spots",
+            "docstring": "Analyze DevOps blind spots"
+          },
+          {
+            "name": "analyze_code_quality_blind_spots",
+            "docstring": "Analyze code quality blind spots"
+          },
+          {
+            "name": "analyze_ux_blind_spots",
+            "docstring": "Analyze UX blind spots"
+          },
+          {
+            "name": "analyze_performance_blind_spots",
+            "docstring": "Analyze performance blind spots"
+          },
+          {
+            "name": "run_complete_analysis",
+            "docstring": "Run complete multi-agent analysis"
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test method"
+          },
+          {
+            "name": "test_security_blind_spot_detection",
+            "docstring": "Test security blind spot detection"
+          },
+          {
+            "name": "test_devops_blind_spot_detection",
+            "docstring": "Test DevOps blind spot detection"
+          },
+          {
+            "name": "test_code_quality_blind_spot_detection",
+            "docstring": "Test code quality blind spot detection"
+          },
+          {
+            "name": "test_ux_blind_spot_detection",
+            "docstring": "Test UX blind spot detection"
+          },
+          {
+            "name": "test_performance_blind_spot_detection",
+            "docstring": "Test performance blind spot detection"
+          },
+          {
+            "name": "test_complete_multi_agent_analysis",
+            "docstring": "Test complete multi-agent analysis"
+          },
+          {
+            "name": "test_blind_spot_coverage",
+            "docstring": "Test blind spot coverage across all agents"
+          },
+          {
+            "name": "test_confidence_score_distribution",
+            "docstring": "Test confidence score distribution"
+          },
+          {
+            "name": "test_recommendation_quality",
+            "docstring": "Test recommendation quality"
+          },
+          {
+            "name": "setup_method",
+            "docstring": "Setup test method"
+          },
+          {
+            "name": "test_security_compliance",
+            "docstring": "Test security compliance"
+          },
+          {
+            "name": "test_devops_compliance",
+            "docstring": "Test DevOps compliance"
+          },
+          {
+            "name": "test_code_quality_compliance",
+            "docstring": "Test code quality compliance"
+          },
+          {
+            "name": "test_ux_compliance",
+            "docstring": "Test UX compliance"
+          },
+          {
+            "name": "test_performance_compliance",
+            "docstring": "Test performance compliance"
+          },
+          {
+            "name": "test_blind_spot_to_implementation_mapping",
+            "docstring": "Test that blind spots map to actual implementations"
+          },
+          {
+            "name": "test_remaining_blind_spots_prioritization",
+            "docstring": "Test prioritization of remaining blind spots"
+          }
+        ],
+        "classes": [
+          {
+            "name": "BlindSpotTestResult",
+            "docstring": "Result of blind spot detection test"
+          },
+          {
+            "name": "DiversityAgent",
+            "docstring": "Diversity agent for blind spot detection"
+          },
+          {
+            "name": "MultiAgentBlindSpotDetector",
+            "docstring": "Multi-agent blind spot detection system"
+          },
+          {
+            "name": "TestMultiAgentBlindSpotDetection",
+            "docstring": "Test multi-agent blind spot detection"
+          },
+          {
+            "name": "TestBlindSpotDetectionCompliance",
+            "docstring": "Test compliance with blind spot detection requirements"
+          },
+          {
+            "name": "TestBlindSpotDetectionIntegration",
+            "docstring": "Test integration between blind spot detection and Streamlit app"
+          }
+        ],
+        "variables": [],
+        "line_count": 569
+      }
+    },
+    "src/multi_agent_testing/debug_anthropic_api.py": {
+      "file_path": "src/multi_agent_testing/debug_anthropic_api.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 89,
+      "line_count": 106,
+      "function_count": 1,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Debug Anthropic API Issues",
+          "Test Anthropic API with different configurations"
+        ],
+        "imports": [
+          "os",
+          "requests"
+        ],
+        "functions": [
+          {
+            "name": "test_anthropic_api",
+            "docstring": "Test Anthropic API with different configurations"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 106
+      }
+    },
+    "src/multi_agent_testing/test_diversity_hypothesis.py": {
+      "file_path": "src/multi_agent_testing/test_diversity_hypothesis.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 30)"
+      }
+    },
+    "src/multi_agent_testing/meta_cognitive_orchestrator.py": {
+      "file_path": "src/multi_agent_testing/meta_cognitive_orchestrator.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 120,
+      "line_count": 158,
+      "function_count": 9,
+      "class_count": 1,
+      "import_count": 1,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Meta-Cognitive Orchestrator for LLM self-awareness",
+          "Orchestrates meta-cognitive awareness through partner LLM questioning",
+          "Test the meta-cognitive orchestrator",
+          "Detect when I'm making assumptions or missing information",
+          "Generate Jeopardy-style question for partner LLM",
+          "Simulate partner LLM investigation with Jeopardy-style questions",
+          "Analyze partner LLM feedback and identify blind spots",
+          "Calculate confidence based on detected issues",
+          "Make final decision based on confidence and blind spots",
+          "Orchestrate meta-cognitive awareness for a given context"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Any"
+        ],
+        "functions": [
+          {
+            "name": "test_meta_cognitive_orchestrator",
+            "docstring": "Test the meta-cognitive orchestrator"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "detect_assumptions",
+            "docstring": "Detect when I'm making assumptions or missing information"
+          },
+          {
+            "name": "generate_jeopardy_question",
+            "docstring": "Generate Jeopardy-style question for partner LLM"
+          },
+          {
+            "name": "simulate_partner_investigation",
+            "docstring": "Simulate partner LLM investigation with Jeopardy-style questions"
+          },
+          {
+            "name": "identify_blind_spots",
+            "docstring": "Analyze partner LLM feedback and identify blind spots"
+          },
+          {
+            "name": "calculate_confidence",
+            "docstring": "Calculate confidence based on detected issues"
+          },
+          {
+            "name": "make_decision",
+            "docstring": "Make final decision based on confidence and blind spots"
+          },
+          {
+            "name": "orchestrate",
+            "docstring": "Orchestrate meta-cognitive awareness for a given context"
+          }
+        ],
+        "classes": [
+          {
+            "name": "MetaCognitiveOrchestrator",
+            "docstring": "Orchestrates meta-cognitive awareness through partner LLM questioning"
+          }
+        ],
+        "variables": [],
+        "line_count": 158
+      }
+    },
+    "src/multi_agent_testing/test_live_smoke_test.py": {
+      "file_path": "src/multi_agent_testing/test_live_smoke_test.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 66)"
+      }
+    },
+    "src/multi_agent_testing/test_model_traceability.py": {
+      "file_path": "src/multi_agent_testing/test_model_traceability.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 13)"
+      }
+    },
+    "src/multi_agent_testing/multi_dimensional_smoke_test.py": {
+      "file_path": "src/multi_agent_testing/multi_dimensional_smoke_test.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 140)"
+      }
+    },
+    "src/multi_agent_testing/langgraph_diversity_orchestrator.py": {
+      "file_path": "src/multi_agent_testing/langgraph_diversity_orchestrator.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 678,
+      "line_count": 875,
+      "function_count": 12,
+      "class_count": 4,
+      "import_count": 24,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Main function to run the diversity analysis",
+          "Create LLM client based on agent configuration",
+          "Analyze context with a specific agent",
+          "Run analysis with all agents in parallel",
+          "Calculate comprehensive diversity metrics",
+          "Create comprehensive visualizations",
+          "Create network graph showing agent relationships and findings overlap",
+          "Create detailed findings analysis visualization",
+          "Generate comprehensive PDF report",
+          "Generate comprehensive Markdown report",
+          "Run complete diversity analysis with all outputs"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "json",
+          "os",
+          "concurrent.futures.ThreadPoolExecutor",
+          "concurrent.futures.as_completed",
+          "dataclasses.dataclass",
+          "datetime.datetime",
+          "typing.Dict",
+          "typing.List",
+          "typing.Any",
+          "matplotlib.pyplot",
+          "seaborn",
+          "pandas",
+          "numpy",
+          "pathlib.Path",
+          "langchain_core.messages.HumanMessage",
+          "langchain_core.messages.SystemMessage",
+          "langchain_openai.ChatOpenAI",
+          "langchain_anthropic.ChatAnthropic",
+          "langchain_core.output_parsers.JsonOutputParser",
+          "pydantic.BaseModel",
+          "pydantic.Field",
+          "networkx",
+          "reportlab.lib.pagesizes.letter",
+          "reportlab.platypus.SimpleDocTemplate",
+          "reportlab.platypus.Paragraph",
+          "reportlab.platypus.Spacer",
+          "reportlab.platypus.Table",
+          "reportlab.platypus.TableStyle",
+          "reportlab.lib.styles.getSampleStyleSheet",
+          "reportlab.lib.styles.ParagraphStyle",
+          "reportlab.lib.colors",
+          "markdown",
+          "jinja2.Template"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function to run the diversity analysis"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "create_llm_client",
+            "docstring": "Create LLM client based on agent configuration"
+          },
+          {
+            "name": "analyze_with_agent",
+            "docstring": "Analyze context with a specific agent"
+          },
+          {
+            "name": "run_multi_threaded_analysis",
+            "docstring": "Run analysis with all agents in parallel"
+          },
+          {
+            "name": "calculate_diversity_metrics",
+            "docstring": "Calculate comprehensive diversity metrics"
+          },
+          {
+            "name": "create_visualizations",
+            "docstring": "Create comprehensive visualizations"
+          },
+          {
+            "name": "create_network_graph",
+            "docstring": "Create network graph showing agent relationships and findings overlap"
+          },
+          {
+            "name": "create_findings_analysis",
+            "docstring": "Create detailed findings analysis visualization"
+          },
+          {
+            "name": "generate_pdf_report",
+            "docstring": "Generate comprehensive PDF report"
+          },
+          {
+            "name": "generate_markdown_report",
+            "docstring": "Generate comprehensive Markdown report"
+          },
+          {
+            "name": "run_complete_analysis",
+            "docstring": "Run complete diversity analysis with all outputs"
+          }
+        ],
+        "classes": [
+          {
+            "name": "DiversityAgent",
+            "docstring": null
+          },
+          {
+            "name": "BlindSpotFinding",
+            "docstring": null
+          },
+          {
+            "name": "DiversityAnalysis",
+            "docstring": null
+          },
+          {
+            "name": "LangGraphDiversityOrchestrator",
+            "docstring": null
+          }
+        ],
+        "variables": [],
+        "line_count": 875
+      }
+    },
+    "src/multi_agent_testing/cost_analysis.py": {
+      "file_path": "src/multi_agent_testing/cost_analysis.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 240,
+      "line_count": 336,
+      "function_count": 5,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "\ud83d\udcb0 COST ANALYSIS FOR DIVERSITY HYPOTHESIS TESTING\n\nCalculate total tokens and costs for our multi-agent diversity analysis.",
+          "Rough estimate of tokens (4 characters per token)",
+          "Analyze costs from multi-dimensional smoke test",
+          "Analyze costs from LangGraph diversity orchestrator",
+          "Analyze costs from synthesis orchestrator",
+          "Calculate total costs for diversity hypothesis testing"
+        ],
+        "imports": [
+          "json",
+          "os"
+        ],
+        "functions": [
+          {
+            "name": "estimate_tokens",
+            "docstring": "Rough estimate of tokens (4 characters per token)"
+          },
+          {
+            "name": "analyze_multi_dimensional_costs",
+            "docstring": "Analyze costs from multi-dimensional smoke test"
+          },
+          {
+            "name": "analyze_langgraph_costs",
+            "docstring": "Analyze costs from LangGraph diversity orchestrator"
+          },
+          {
+            "name": "analyze_synthesis_costs",
+            "docstring": "Analyze costs from synthesis orchestrator"
+          },
+          {
+            "name": "main",
+            "docstring": "Calculate total costs for diversity hypothesis testing"
+          }
+        ],
+        "classes": [],
+        "variables": [],
+        "line_count": 336
+      }
+    },
+    "src/multi_agent_testing/test_meta_cognitive_orchestrator.py": {
+      "file_path": "src/multi_agent_testing/test_meta_cognitive_orchestrator.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 14)"
+      }
+    },
+    "src/multi_agent_testing/live_smoke_test.py": {
+      "file_path": "src/multi_agent_testing/live_smoke_test.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 158,
+      "line_count": 201,
+      "function_count": 8,
+      "class_count": 1,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Live LLM integration for real smoke testing",
+          "Live LLM integration for real smoke testing",
+          "Test live LLM with PR workflow scenario",
+          "Test live LLM with security scenario",
+          "Test live LLM with edge case scenario",
+          "Compare our analysis with live LLM results",
+          "Call live LLM API for real second opinion"
+        ],
+        "imports": [
+          "os",
+          "json",
+          "requests",
+          "typing.Dict",
+          "typing.Any",
+          "typing.Optional"
+        ],
+        "functions": [
+          {
+            "name": "test_live_scenario_1",
+            "docstring": "Test live LLM with PR workflow scenario"
+          },
+          {
+            "name": "test_live_scenario_2",
+            "docstring": "Test live LLM with security scenario"
+          },
+          {
+            "name": "test_live_edge_case",
+            "docstring": "Test live LLM with edge case scenario"
+          },
+          {
+            "name": "compare_live_results",
+            "docstring": "Compare our analysis with live LLM results"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "_get_base_url",
+            "docstring": null
+          },
+          {
+            "name": "_get_model",
+            "docstring": null
+          },
+          {
+            "name": "call_live_llm",
+            "docstring": "Call live LLM API for real second opinion"
+          }
+        ],
+        "classes": [
+          {
+            "name": "LiveLLMOrchestrator",
+            "docstring": "Live LLM integration for real smoke testing"
+          }
+        ],
+        "variables": [],
+        "line_count": 201
+      }
+    },
+    "src/multi_agent_testing/diversity_hypothesis_demo.py": {
+      "file_path": "src/multi_agent_testing/diversity_hypothesis_demo.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 222,
+      "line_count": 274,
+      "function_count": 6,
+      "class_count": 2,
+      "import_count": 4,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "Simulate an AI reviewer's analysis based on their perspective",
+          "Analyze how diversity improves blind spot detection",
+          "Compare our diverse AI reviewers with GitHub Copilot findings",
+          "Run the complete diversity hypothesis demonstration"
+        ],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "json",
+          "typing.Dict",
+          "typing.Any",
+          "dataclasses.dataclass"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": null
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "simulate_ai_review",
+            "docstring": "Simulate an AI reviewer's analysis based on their perspective"
+          },
+          {
+            "name": "analyze_diversity_impact",
+            "docstring": "Analyze how diversity improves blind spot detection"
+          },
+          {
+            "name": "compare_with_github_copilot",
+            "docstring": "Compare our diverse AI reviewers with GitHub Copilot findings"
+          },
+          {
+            "name": "run_demo",
+            "docstring": "Run the complete diversity hypothesis demonstration"
+          }
+        ],
+        "classes": [
+          {
+            "name": "AIReviewer",
+            "docstring": null
+          },
+          {
+            "name": "DiversityHypothesisDemo",
+            "docstring": null
+          }
+        ],
+        "variables": [],
+        "line_count": 274
+      }
+    },
+    "src/multi_agent_testing/live_smoke_test_langchain.py": {
+      "file_path": "src/multi_agent_testing/live_smoke_test_langchain.py",
+      "file_type": "python",
+      "model_type": "error",
+      "complexity_score": 0.0,
+      "line_count": 0,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 0,
+      "error_count": 1,
+      "model_data": {
+        "error": "unexpected indent (<unknown>, line 23)"
+      }
+    },
+    "src/multi_agent_testing/__init__.py": {
+      "file_path": "src/multi_agent_testing/__init__.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 11,
+      "line_count": 16,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 2,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any",
+          "test_multi_agent_blind_spot_detection.MultiAgentBlindSpotDetector"
+        ],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 16
+      }
+    },
+    "src/streamlit/openflow_quickstart_app.py": {
+      "file_path": "src/streamlit/openflow_quickstart_app.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 495,
+      "line_count": 608,
+      "function_count": 41,
+      "class_count": 8,
+      "import_count": 16,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [
+          "OpenFlow Quickstart Application - Security-first Streamlit dashboard",
+          "Security-first credential and session management",
+          "Input validation and sanitization",
+          "AWS CloudFormation deployment management",
+          "Real-time monitoring and visualization dashboard",
+          "Main Streamlit application",
+          "Main function",
+          "Encrypt sensitive credentials",
+          "Decrypt sensitive credentials",
+          "Store credential securely in Redis with encryption",
+          "Retrieve credential securely from Redis",
+          "Validate JWT session token",
+          "Create JWT session token",
+          "Validate Snowflake account URL format",
+          "Validate UUID format",
+          "Sanitize user input to prevent injection attacks",
+          "Validate OAuth credentials format",
+          "Create CloudFormation stack",
+          "Update CloudFormation stack",
+          "Delete CloudFormation stack",
+          "Get stack status",
+          "Get stack events for monitoring",
+          "Rollback stack to previous state",
+          "Create deployment timeline visualization",
+          "Create resource status matrix visualization",
+          "Setup Streamlit page configuration",
+          "Login page with security validation",
+          "Validate user credentials (demo implementation)",
+          "Main dashboard with role-based access",
+          "Viewer dashboard with read-only access",
+          "Operator dashboard with deployment management",
+          "Admin dashboard with full access",
+          "Configuration management section",
+          "Deployment management section",
+          "Create new deployment",
+          "Update existing deployment",
+          "Rollback deployment",
+          "Monitoring and visualization section",
+          "Security management section",
+          "User management section",
+          "Run the Streamlit application"
+        ],
+        "imports": [
+          "os",
+          "time",
+          "redis",
+          "jwt",
+          "streamlit",
+          "plotly.graph_objects",
+          "datetime.datetime",
+          "datetime.timezone",
+          "datetime.timedelta",
+          "dataclasses.dataclass",
+          "typing.Dict",
+          "typing.Optional",
+          "typing.List",
+          "pydantic.BaseModel",
+          "pydantic.Field",
+          "pydantic.validator",
+          "cryptography.fernet.Fernet",
+          "boto3",
+          "botocore.exceptions.ClientError",
+          "re",
+          "re",
+          "html"
+        ],
+        "functions": [
+          {
+            "name": "main",
+            "docstring": "Main function"
+          },
+          {
+            "name": "validate_account_url",
+            "docstring": null
+          },
+          {
+            "name": "validate_uuid",
+            "docstring": null
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "encrypt_credential",
+            "docstring": "Encrypt sensitive credentials"
+          },
+          {
+            "name": "decrypt_credential",
+            "docstring": "Decrypt sensitive credentials"
+          },
+          {
+            "name": "store_credential_secure",
+            "docstring": "Store credential securely in Redis with encryption"
+          },
+          {
+            "name": "get_credential_secure",
+            "docstring": "Retrieve credential securely from Redis"
+          },
+          {
+            "name": "validate_session",
+            "docstring": "Validate JWT session token"
+          },
+          {
+            "name": "create_session_token",
+            "docstring": "Create JWT session token"
+          },
+          {
+            "name": "validate_snowflake_url",
+            "docstring": "Validate Snowflake account URL format"
+          },
+          {
+            "name": "validate_uuid",
+            "docstring": "Validate UUID format"
+          },
+          {
+            "name": "sanitize_input",
+            "docstring": "Sanitize user input to prevent injection attacks"
+          },
+          {
+            "name": "validate_oauth_credentials",
+            "docstring": "Validate OAuth credentials format"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "create_stack",
+            "docstring": "Create CloudFormation stack"
+          },
+          {
+            "name": "update_stack",
+            "docstring": "Update CloudFormation stack"
+          },
+          {
+            "name": "delete_stack",
+            "docstring": "Delete CloudFormation stack"
+          },
+          {
+            "name": "get_stack_status",
+            "docstring": "Get stack status"
+          },
+          {
+            "name": "get_stack_events",
+            "docstring": "Get stack events for monitoring"
+          },
+          {
+            "name": "rollback_stack",
+            "docstring": "Rollback stack to previous state"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "create_deployment_timeline",
+            "docstring": "Create deployment timeline visualization"
+          },
+          {
+            "name": "create_resource_status_matrix",
+            "docstring": "Create resource status matrix visualization"
+          },
+          {
+            "name": "__init__",
+            "docstring": null
+          },
+          {
+            "name": "setup_page_config",
+            "docstring": "Setup Streamlit page configuration"
+          },
+          {
+            "name": "login_page",
+            "docstring": "Login page with security validation"
+          },
+          {
+            "name": "validate_credentials",
+            "docstring": "Validate user credentials (demo implementation)"
+          },
+          {
+            "name": "main_dashboard",
+            "docstring": "Main dashboard with role-based access"
+          },
+          {
+            "name": "viewer_dashboard",
+            "docstring": "Viewer dashboard with read-only access"
+          },
+          {
+            "name": "operator_dashboard",
+            "docstring": "Operator dashboard with deployment management"
+          },
+          {
+            "name": "admin_dashboard",
+            "docstring": "Admin dashboard with full access"
+          },
+          {
+            "name": "configuration_section",
+            "docstring": "Configuration management section"
+          },
+          {
+            "name": "deployment_section",
+            "docstring": "Deployment management section"
+          },
+          {
+            "name": "new_deployment",
+            "docstring": "Create new deployment"
+          },
+          {
+            "name": "update_deployment",
+            "docstring": "Update existing deployment"
+          },
+          {
+            "name": "rollback_deployment",
+            "docstring": "Rollback deployment"
+          },
+          {
+            "name": "monitoring_section",
+            "docstring": "Monitoring and visualization section"
+          },
+          {
+            "name": "security_section",
+            "docstring": "Security management section"
+          },
+          {
+            "name": "user_management_section",
+            "docstring": "User management section"
+          },
+          {
+            "name": "run",
+            "docstring": "Run the Streamlit application"
+          }
+        ],
+        "classes": [
+          {
+            "name": "SnowflakeConfig",
+            "docstring": null
+          },
+          {
+            "name": "OpenFlowConfig",
+            "docstring": null
+          },
+          {
+            "name": "DeploymentStatus",
+            "docstring": null
+          },
+          {
+            "name": "SecurityManager",
+            "docstring": "Security-first credential and session management"
+          },
+          {
+            "name": "InputValidator",
+            "docstring": "Input validation and sanitization"
+          },
+          {
+            "name": "DeploymentManager",
+            "docstring": "AWS CloudFormation deployment management"
+          },
+          {
+            "name": "MonitoringDashboard",
+            "docstring": "Real-time monitoring and visualization dashboard"
+          },
+          {
+            "name": "OpenFlowQuickstartApp",
+            "docstring": "Main Streamlit application"
+          }
+        ],
+        "variables": [],
+        "line_count": 608
+      }
+    },
+    "src/streamlit/__init__.py": {
+      "file_path": "src/streamlit/__init__.py",
+      "file_type": "python",
+      "model_type": "ast",
+      "complexity_score": 7,
+      "line_count": 14,
+      "function_count": 0,
+      "class_count": 0,
+      "import_count": 1,
+      "error_count": 0,
+      "model_data": {
+        "docstrings": [],
+        "imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Tuple",
+          "typing.Optional",
+          "typing.Union",
+          "typing.Any"
+        ],
+        "functions": [],
+        "classes": [],
+        "variables": [],
+        "line_count": 14
+      }
+    }
+  },
+  "summary": {
+    "total_files": 83,
+    "valid_files": 53,
+    "error_files": 30,
+    "model_type_counts": {
+      "ast": 53,
+      "error": 30
+    }
+  }
+}

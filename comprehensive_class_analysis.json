@@ -1,0 +1,269 @@
+{
+  "version": "2.5",
+  "analyzed_at": "2025-08-04T15:36:38.803566",
+  "class_definitions": [
+    "DeploymentStatus",
+    "SnowflakeConfig",
+    "MonitoringDashboard",
+    "DeploymentManager",
+    "OpenFlowQuickstartApp",
+    "InputValidator",
+    "SecurityManager",
+    "OpenFlowConfig"
+  ],
+  "class_instantiations": [],
+  "method_calls": [],
+  "attribute_access": [],
+  "class_dependencies": {},
+  "nodes": {
+    "class_SnowflakeConfig_37": {
+      "id": "class_SnowflakeConfig_37",
+      "type": "class_definition",
+      "content": "class SnowflakeConfig(BaseModel):\n    account_url: str = Field(..., description='Snowflake account URL')\n    organization: str = Field(..., description='Snowflake organization')\n    account: str = Field(..., description='Snowflake account identifier')\n    oauth_integration_name: str = Field(..., description='OAuth integration name')\n    oauth_client_id: str = Field(..., description='OAuth client ID')\n    oauth_client_secret: str = Field(..., description='OAuth client secret')\n\n    @field_validator('account_url')\n    def validate_account_url(cls, v):\n        if not v.startswith('https://') or 'snowflakecomputing.com' not in v:\n            raise ValueError('Invalid Snowflake account URL format')\n        return v",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "SnowflakeConfig",
+        "line_number": 37,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 37,
+        "order": 0,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "validate_account_url"
+        ],
+        "method_count": 1
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 0
+      }
+    },
+    "class_OpenFlowConfig_52": {
+      "id": "class_OpenFlowConfig_52",
+      "type": "class_definition",
+      "content": "class OpenFlowConfig(BaseModel):\n    data_plane_url: str = Field(..., description='Data plane URL')\n    data_plane_uuid: str = Field(..., description='Data plane UUID')\n    data_plane_key: str = Field(..., description='Data plane key')\n    telemetry_url: str = Field(..., description='Telemetry URL')\n    control_plane_url: str = Field(..., description='Control plane URL')\n\n    @field_validator('data_plane_uuid')\n    def validate_uuid(cls, v):\n        import re\n        uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n        if not re.match(uuid_pattern, v):\n            raise ValueError('Invalid UUID format')\n        return v",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "OpenFlowConfig",
+        "line_number": 52,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 52,
+        "order": 1,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "validate_uuid"
+        ],
+        "method_count": 1
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 1
+      }
+    },
+    "class_DeploymentStatus_70": {
+      "id": "class_DeploymentStatus_70",
+      "type": "class_definition",
+      "content": "@dataclass\nclass DeploymentStatus:\n    stack_name: str\n    status: str\n    progress: int\n    resources_created: int\n    resources_total: int\n    error_message: Optional[str] = None\n    last_updated: Optional[datetime] = None",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "DeploymentStatus",
+        "line_number": 70,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 70,
+        "order": 2,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [],
+        "method_count": 0
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 2
+      }
+    },
+    "class_SecurityManager_80": {
+      "id": "class_SecurityManager_80",
+      "type": "class_definition",
+      "content": "class SecurityManager:\n    \"\"\"Security-first credential and session management\"\"\"\n\n    def __init__(self) -> None:\n        self.fernet = Fernet(SECURITY_CONFIG['fernet_key'])\n        self.redis_client = redis.from_url(SECURITY_CONFIG['redis_url'])\n\n    def encrypt_credential(self, credential: str) -> str:\n        \"\"\"Encrypt sensitive credentials\"\"\"\n        return self.fernet.encrypt(credential.encode()).decode()\n\n    def decrypt_credential(self, encrypted_credential: str) -> str:\n        \"\"\"Decrypt sensitive credentials\"\"\"\n        return self.fernet.decrypt(encrypted_credential.encode()).decode()\n\n    def store_credential_secure(self, key: str, value: str) -> None:\n        \"\"\"Store credential securely in Redis with encryption\"\"\"\n        encrypted_value = self.encrypt_credential(value)\n        self.redis_client.setex(f'credential:{key}', 3600, encrypted_value)\n\n    def store_credential(self, key: str, value: str) -> None:\n        \"\"\"Store credential securely in Redis with encryption (alias for store_credential_secure)\"\"\"\n        self.store_credential_secure(key, value)\n\n    def get_credential_secure(self, key: str) -> Optional[str]:\n        \"\"\"Retrieve credential securely from Redis\"\"\"\n        encrypted_value = self.redis_client.get(f'credential:{key}')\n        if encrypted_value:\n            return self.decrypt_credential(encrypted_value.decode())\n        return None\n\n    def retrieve_credential(self, key: str) -> Optional[str]:\n        \"\"\"Retrieve credential securely from Redis (alias for get_credential_secure)\"\"\"\n        return self.get_credential_secure(key)\n\n    def validate_session_token(self, session_token: str) -> bool:\n        \"\"\"Validate JWT session token (alias for validate_session)\"\"\"\n        return self.validate_session(session_token)\n\n    def validate_session(self, session_token: str) -> bool:\n        \"\"\"Validate JWT session token\"\"\"\n        try:\n            payload = jwt.decode(session_token, str(SECURITY_CONFIG['jwt_secret']), algorithms=['HS256'])\n            return payload.get('exp', 0) > time.time()\n        except jwt.InvalidTokenError:\n            return False\n\n    def create_session_token(self, user_id: str, role: str) -> str:\n        \"\"\"Create JWT session token\"\"\"\n        timeout_minutes = SECURITY_CONFIG['session_timeout_minutes']\n        assert timeout_minutes is not None, 'session_timeout_minutes should be set'\n        payload = {'user_id': user_id, 'role': role, 'exp': datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes))}\n        return jwt.encode(payload, str(SECURITY_CONFIG['jwt_secret']), algorithm='HS256')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "SecurityManager",
+        "line_number": 80,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 80,
+        "order": 3,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "__init__",
+          "encrypt_credential",
+          "decrypt_credential",
+          "store_credential_secure",
+          "store_credential",
+          "get_credential_secure",
+          "retrieve_credential",
+          "validate_session_token",
+          "validate_session",
+          "create_session_token"
+        ],
+        "method_count": 10
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 3
+      }
+    },
+    "class_InputValidator_145": {
+      "id": "class_InputValidator_145",
+      "type": "class_definition",
+      "content": "class InputValidator:\n    \"\"\"Input validation and sanitization\"\"\"\n\n    @staticmethod\n    def validate_snowflake_url(url: str) -> bool:\n        \"\"\"Validate Snowflake account URL format\"\"\"\n        return url.startswith('https://') and 'snowflakecomputing.com' in url\n\n    @staticmethod\n    def validate_uuid(uuid_str: str) -> bool:\n        \"\"\"Validate UUID format\"\"\"\n        import re\n        uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n        return bool(re.match(uuid_pattern, uuid_str))\n\n    @staticmethod\n    def sanitize_input(input_str: str) -> str:\n        \"\"\"Sanitize user input to prevent injection attacks\"\"\"\n        import html\n        return html.escape(input_str.strip())\n\n    @staticmethod\n    def validate_oauth_credentials(credentials: Dict[str, str]) -> bool:\n        \"\"\"Validate OAuth credentials format from a dictionary\"\"\"\n        client_id = credentials.get('client_id', '')\n        client_secret = credentials.get('client_secret', '')\n        if client_id == 'test_id' and client_secret == os.getenv('TEST_SECRET', os.getenv('TEST_SECRET', 'test_secret')):\n            return True\n        return len(client_id) >= 8 and len(client_secret) >= 8",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "InputValidator",
+        "line_number": 145,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 145,
+        "order": 4,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "validate_snowflake_url",
+          "validate_uuid",
+          "sanitize_input",
+          "validate_oauth_credentials"
+        ],
+        "method_count": 4
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 4
+      }
+    },
+    "class_DeploymentManager_180": {
+      "id": "class_DeploymentManager_180",
+      "type": "class_definition",
+      "content": "class DeploymentManager:\n    \"\"\"AWS CloudFormation deployment management\"\"\"\n\n    def __init__(self, region: str='us-east-1') -> None:\n        self.cf_client = boto3.client('cloudformation', region_name=region, aws_access_key_id=AWS_CONFIG['access_key'], aws_secret_access_key=AWS_CONFIG['secret_key'])\n\n    def create_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n        \"\"\"Create CloudFormation stack\"\"\"\n        try:\n            response = self.cf_client.create_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n            return {'success': True, 'stack_id': response['StackId']}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}\n\n    def deploy_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n        \"\"\"Deploy CloudFormation stack (alias for create_stack)\"\"\"\n        return self.create_stack(stack_name, template_body, parameters)\n\n    def update_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n        \"\"\"Update CloudFormation stack\"\"\"\n        try:\n            response = self.cf_client.update_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n            return {'success': True, 'stack_id': response['StackId']}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}\n\n    def delete_stack(self, stack_name: str) -> Dict:\n        \"\"\"Delete CloudFormation stack\"\"\"\n        try:\n            self.cf_client.delete_stack(StackName=stack_name)\n            return {'success': True}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}\n\n    def get_stack_status(self, stack_name: str) -> Dict:\n        \"\"\"Get stack status\"\"\"\n        try:\n            response = self.cf_client.describe_stacks(StackName=stack_name)\n            stack = response['Stacks'][0]\n            return {'status': stack['StackStatus'], 'resources': len(stack.get('Outputs', [])), 'creation_time': stack['CreationTime'].isoformat()}\n        except ClientError as e:\n            return {'error': str(e)}\n\n    def get_stack_events(self, stack_name: str) -> List[Dict]:\n        \"\"\"Get stack events for monitoring\"\"\"\n        try:\n            response = self.cf_client.describe_stack_events(StackName=stack_name)\n            return response['StackEvents']\n        except ClientError:\n            return []\n\n    def rollback_stack(self, stack_name: str) -> Dict:\n        \"\"\"Rollback stack to previous state\"\"\"\n        try:\n            self.cf_client.rollback_stack(StackName=stack_name)\n            return {'success': True}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "DeploymentManager",
+        "line_number": 180,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 180,
+        "order": 5,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "__init__",
+          "create_stack",
+          "deploy_stack",
+          "update_stack",
+          "delete_stack",
+          "get_stack_status",
+          "get_stack_events",
+          "rollback_stack"
+        ],
+        "method_count": 8
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 5
+      }
+    },
+    "class_MonitoringDashboard_265": {
+      "id": "class_MonitoringDashboard_265",
+      "type": "class_definition",
+      "content": "class MonitoringDashboard:\n    \"\"\"Real-time monitoring and visualization dashboard\"\"\"\n\n    def __init__(self, deployment_manager: DeploymentManager) -> None:\n        self.deployment_manager = deployment_manager\n\n    def create_deployment_timeline(self, stack_name: str) -> go.Figure:\n        \"\"\"Create deployment timeline visualization\"\"\"\n        events = self.deployment_manager.get_stack_events(stack_name)\n        fig = go.Figure()\n        if events:\n            timestamps = [event['Timestamp'] for event in events]\n            statuses = [event['ResourceStatus'] for event in events]\n            resources = [event['LogicalResourceId'] for event in events]\n            fig.add_trace(go.Scatter(x=timestamps, y=statuses, mode='markers+lines', text=resources, name='Deployment Progress'))\n        fig.update_layout(title='Deployment Timeline', xaxis_title='Time', yaxis_title='Status', height=400)\n        return fig\n\n    def create_resource_status_matrix(self, stack_name: str) -> go.Figure:\n        \"\"\"Create resource status matrix visualization\"\"\"\n        events = self.deployment_manager.get_stack_events(stack_name)\n        if not events:\n            fig = go.Figure()\n            fig.add_annotation(text='No deployment data available', xref='paper', yref='paper', x=0.5, y=0.5, showarrow=False)\n            return fig\n        resource_status = {}\n        for event in events:\n            resource = event['LogicalResourceId']\n            status = event['ResourceStatus']\n            timestamp = event['Timestamp']\n            if resource not in resource_status:\n                resource_status[resource] = []\n            resource_status[resource].append({'status': status, 'timestamp': timestamp})\n        resources = list(resource_status.keys())\n        statuses = ['CREATE_COMPLETE', 'UPDATE_COMPLETE', 'DELETE_COMPLETE', 'CREATE_FAILED', 'UPDATE_FAILED']\n        status_matrix = []\n        for resource in resources:\n            latest_status = resource_status[resource][-1]['status'] if resource_status[resource] else 'UNKNOWN'\n            row = [1 if latest_status == status else 0 for status in statuses]\n            status_matrix.append(row)\n        fig = go.Figure(data=go.Heatmap(z=status_matrix, x=statuses, y=resources, colorscale='RdYlGn'))\n        fig.update_layout(title='Resource Status Matrix', xaxis_title='Status', yaxis_title='Resource', height=500)\n        return fig",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "MonitoringDashboard",
+        "line_number": 265,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 265,
+        "order": 6,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "__init__",
+          "create_deployment_timeline",
+          "create_resource_status_matrix"
+        ],
+        "method_count": 3
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 6
+      }
+    },
+    "class_OpenFlowQuickstartApp_365": {
+      "id": "class_OpenFlowQuickstartApp_365",
+      "type": "class_definition",
+      "content": "class OpenFlowQuickstartApp:\n    \"\"\"Main Streamlit application\"\"\"\n\n    def __init__(self) -> None:\n        self.security_manager = SecurityManager()\n        self.deployment_manager = DeploymentManager()\n        self.monitoring_dashboard = MonitoringDashboard(self.deployment_manager)\n        self.input_validator = InputValidator()\n\n    def setup_page_config(self) -> None:\n        \"\"\"Setup Streamlit page configuration\"\"\"\n        st.set_page_config(page_title='OpenFlow Quickstart', page_icon='\ud83d\ude80', layout='wide', initial_sidebar_state='expanded')\n\n    def login_page(self) -> None:\n        \"\"\"Login page with security validation\"\"\"\n        st.title('\ud83d\udd10 OpenFlow Quickstart Login')\n        with st.form('login_form'):\n            username = st.text_input('Username')\n            password = st.text_input('Password', type='password')\n            submit_button = st.form_submit_button('Login')\n            if submit_button:\n                if self.validate_credentials(username, password):\n                    session_token = self.security_manager.create_session_token(username, 'admin')\n                    st.session_state['authenticated'] = True\n                    st.session_state['session_token'] = session_token\n                    st.session_state['user_id'] = username\n                    st.success('Login successful!')\n                    st.rerun()\n                else:\n                    st.error('Invalid credentials')\n\n    def validate_credentials(self, username: str, password: str) -> bool:\n        \"\"\"Validate user credentials with enhanced security\"\"\"\n        password_checks = self.input_validator.validate_password_strength(password)\n        if not password_checks['strong']:\n            return False\n        if len(password) < SECURITY_CONFIG['password_min_length']:\n            return False\n        valid_users = {'admin': 'AdminSecure123!', 'operator': 'OperatorSecure456!', 'viewer': 'ViewerSecure789!'}\n        return username in valid_users and valid_users[username] == password\n\n    def main_dashboard(self) -> None:\n        \"\"\"Main dashboard with role-based access\"\"\"\n        user_role = st.session_state.get('user_role', 'viewer')\n        if user_role == 'viewer':\n            self.viewer_dashboard()\n        elif user_role == 'operator':\n            self.operator_dashboard()\n        elif user_role == 'admin':\n            self.admin_dashboard()\n\n    def viewer_dashboard(self) -> None:\n        \"\"\"Viewer dashboard with read-only access\"\"\"\n        st.title('\ud83d\udcca OpenFlow Quickstart - Viewer Dashboard')\n        st.info('You have read-only access to deployment information.')\n\n    def operator_dashboard(self) -> None:\n        \"\"\"Operator dashboard with deployment management\"\"\"\n        st.title('\u2699\ufe0f OpenFlow Quickstart - Operator Dashboard')\n        st.warning('You have deployment management access.')\n\n    def admin_dashboard(self) -> None:\n        \"\"\"Admin dashboard with full access\"\"\"\n        st.title('\ud83d\udd27 OpenFlow Quickstart - Admin Dashboard')\n        page = st.sidebar.selectbox('Navigation', ['Configuration', 'Deployment', 'Monitoring', 'Security', 'User Management'])\n        if page == 'Configuration':\n            self.configuration_section()\n        elif page == 'Deployment':\n            self.deployment_section()\n        elif page == 'Monitoring':\n            self.monitoring_section()\n        elif page == 'Security':\n            self.security_section()\n        elif page == 'User Management':\n            self.user_management_section()\n\n    def configuration_section(self) -> None:\n        \"\"\"Configuration management section\"\"\"\n        st.header('\u2699\ufe0f Configuration Management')\n        tab1, tab2 = st.tabs(['Snowflake Configuration', 'OpenFlow Configuration'])\n        with tab1:\n            st.subheader('Snowflake Configuration')\n            with st.form('snowflake_config'):\n                account_url = st.text_input('Account URL', placeholder='https://your-account.snowflakecomputing.com')\n                st.text_input('Organization')\n                st.text_input('Account Identifier')\n                st.text_input('OAuth Integration Name')\n                oauth_client_id = st.text_input('OAuth Client ID', type='password')\n                oauth_client_secret = st.text_input('OAuth Client Secret', type='password')\n                if st.form_submit_button('Save Snowflake Config'):\n                    if self.input_validator.validate_snowflake_url(account_url):\n                        self.security_manager.store_credential_secure('snowflake_account_url', account_url)\n                        self.security_manager.store_credential_secure('snowflake_oauth_client_id', oauth_client_id)\n                        self.security_manager.store_credential_secure('snowflake_oauth_client_secret', oauth_client_secret)\n                        st.success('Snowflake configuration saved securely!')\n                    else:\n                        st.error('Invalid Snowflake account URL format')\n        with tab2:\n            st.subheader('OpenFlow Configuration')\n            with st.form('openflow_config'):\n                st.text_input('Data Plane URL')\n                data_plane_uuid = st.text_input('Data Plane UUID')\n                data_plane_key = st.text_input('Data Plane Key', type='password')\n                st.text_input('Telemetry URL')\n                st.text_input('Control Plane URL')\n                if st.form_submit_button('Save OpenFlow Config'):\n                    if self.input_validator.validate_uuid(data_plane_uuid):\n                        self.security_manager.store_credential_secure('openflow_data_plane_key', data_plane_key)\n                        st.success('OpenFlow configuration saved securely!')\n                    else:\n                        st.error('Invalid UUID format')\n\n    def deployment_section(self) -> None:\n        \"\"\"Deployment management section\"\"\"\n        st.header('\ud83d\ude80 Deployment Management')\n        col1, col2, col3 = st.columns(3)\n        with col1:\n            if st.button('New Deployment'):\n                self.new_deployment()\n        with col2:\n            if st.button('Update Deployment'):\n                self.update_deployment()\n        with col3:\n            if st.button('Rollback Deployment'):\n                self.rollback_deployment()\n\n    def new_deployment(self) -> None:\n        \"\"\"Create new deployment\"\"\"\n        st.subheader('Create New Deployment')\n        with st.form('new_deployment'):\n            stack_name = st.text_input('Stack Name')\n            template_body = st.text_area('CloudFormation Template')\n            if st.form_submit_button('Deploy'):\n                if stack_name and template_body:\n                    result = self.deployment_manager.create_stack(stack_name, template_body, [])\n                    if result['success']:\n                        st.success(f\"Deployment started: {result['stack_id']}\")\n                    else:\n                        st.error(f\"Deployment failed: {result['error']}\")\n\n    def update_deployment(self) -> None:\n        \"\"\"Update existing deployment\"\"\"\n        st.subheader('Update Deployment')\n        st.info('Update functionality would be implemented here')\n\n    def rollback_deployment(self) -> None:\n        \"\"\"Rollback deployment\"\"\"\n        st.subheader('Rollback Deployment')\n        st.info('Rollback functionality would be implemented here')\n\n    def monitoring_section(self) -> None:\n        \"\"\"Monitoring and visualization section\"\"\"\n        st.header('\ud83d\udcca Monitoring Dashboard')\n        stack_name = st.text_input('Enter Stack Name for Monitoring')\n        if stack_name:\n            col1, col2 = st.columns(2)\n            with col1:\n                st.subheader('Deployment Timeline')\n                timeline_fig = self.monitoring_dashboard.create_deployment_timeline(stack_name)\n                st.plotly_chart(timeline_fig, use_container_width=True)\n            with col2:\n                st.subheader('Resource Status Matrix')\n                matrix_fig = self.monitoring_dashboard.create_resource_status_matrix(stack_name)\n                st.plotly_chart(matrix_fig, use_container_width=True)\n\n    def security_section(self) -> None:\n        \"\"\"Security management section\"\"\"\n        st.header('\ud83d\udd12 Security Management')\n        st.subheader('Session Information')\n        if 'session_token' in st.session_state:\n            session_valid = self.security_manager.validate_session(st.session_state['session_token'])\n            st.write(f\"Session Valid: {('\u2705 Yes' if session_valid else '\u274c No')}\")\n            st.write(f\"User ID: {st.session_state.get('user_id', 'Unknown')}\")\n        st.subheader('Security Configuration')\n        st.json(SECURITY_CONFIG)\n\n    def user_management_section(self) -> None:\n        \"\"\"User management section\"\"\"\n        st.header('\ud83d\udc65 User Management')\n        st.info('User management functionality would be implemented here')\n\n    def run(self) -> None:\n        \"\"\"Run the Streamlit application\"\"\"\n        self.setup_page_config()\n        if 'authenticated' not in st.session_state:\n            self.login_page()\n        else:\n            session_token = st.session_state.get('session_token')\n            if session_token and self.security_manager.validate_session(session_token):\n                self.main_dashboard()\n            else:\n                st.session_state.clear()\n                st.error('Session expired. Please login again.')\n                self.login_page()",
+      "context": "streamlit",
+      "dependencies": [
+        "SecurityManager",
+        "DeploymentManager",
+        "MonitoringDashboard",
+        "InputValidator"
+      ],
+      "metadata": {
+        "class_name": "OpenFlowQuickstartApp",
+        "line_number": 365,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 365,
+        "order": 7,
+        "is_definition": true,
+        "is_usage": false,
+        "methods": [
+          "__init__",
+          "setup_page_config",
+          "login_page",
+          "validate_credentials",
+          "main_dashboard",
+          "viewer_dashboard",
+          "operator_dashboard",
+          "admin_dashboard",
+          "configuration_section",
+          "deployment_section",
+          "new_deployment",
+          "update_deployment",
+          "rollback_deployment",
+          "monitoring_section",
+          "security_section",
+          "user_management_section",
+          "run"
+        ],
+        "method_count": 17
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 7
+      }
+    }
+  },
+  "total_nodes": 8
+}

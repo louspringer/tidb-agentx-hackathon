@@ -1,0 +1,2090 @@
+{
+  "version": "1.0",
+  "extracted_at": "2025-08-04T12:50:09.510680",
+  "nodes": {
+    "import_os": {
+      "id": "import_os",
+      "type": "import",
+      "content": "import os",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_time": {
+      "id": "import_time",
+      "type": "import",
+      "content": "import time",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_redis": {
+      "id": "import_redis",
+      "type": "import",
+      "content": "import redis",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_jwt": {
+      "id": "import_jwt",
+      "type": "import",
+      "content": "import jwt",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_streamlit": {
+      "id": "import_streamlit",
+      "type": "import",
+      "content": "import streamlit as st",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_plotly.graph_objects": {
+      "id": "import_plotly.graph_objects",
+      "type": "import",
+      "content": "import plotly.graph_objects as go",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_datetime": {
+      "id": "import_from_datetime",
+      "type": "import",
+      "content": "from datetime import datetime, timezone, timedelta",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_dataclasses": {
+      "id": "import_from_dataclasses",
+      "type": "import",
+      "content": "from dataclasses import dataclass",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_typing": {
+      "id": "import_from_typing",
+      "type": "import",
+      "content": "from typing import Dict, List, Any, Optional",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_pydantic": {
+      "id": "import_from_pydantic",
+      "type": "import",
+      "content": "from pydantic import BaseModel, Field, field_validator",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_cryptography.fernet": {
+      "id": "import_from_cryptography.fernet",
+      "type": "import",
+      "content": "from cryptography.fernet import Fernet",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_boto3": {
+      "id": "import_boto3",
+      "type": "import",
+      "content": "import boto3",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_botocore.exceptions": {
+      "id": "import_from_botocore.exceptions",
+      "type": "import",
+      "content": "from botocore.exceptions import ClientError",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_re": {
+      "id": "import_re",
+      "type": "import",
+      "content": "import re",
+      "context": "security",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_html": {
+      "id": "import_html",
+      "type": "import",
+      "content": "import html",
+      "context": "security",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "function_main": {
+      "id": "function_main",
+      "type": "function",
+      "content": "def main():\n    \"\"\"Run live smoke tests with LangChain integration\"\"\"\n    print('\ud83d\udd25 LIVE SMOKE TEST - LANGCHAIN INTEGRATION')\n    print('=' * 60)\n    openai_key = os.getenv('OPENAI_API_KEY')\n    anthropic_key = os.getenv('ANTHROPIC_API_KEY')\n    print(f\"\ud83d\udd11 OpenAI API Key: {('\u2705 SET' if openai_key else '\u274c NOT SET')}\")\n    print(f\"\ud83d\udd11 Anthropic API Key: {('\u2705 SET' if anthropic_key else '\u274c NOT SET')}\")\n    if not openai_key and (not anthropic_key):\n        print('\\n\u26a0\ufe0f No API credentials found!')\n        print('To run live tests, set one of:')\n        print(\"  export OPENAI_API_KEY='your-key-here'\")\n        print(\"  export ANTHROPIC_API_KEY='your-key-here'\")\n        return\n    tests = [('Healthcare CDC Implementation', test_live_scenario_1), ('Security Implementation', test_live_scenario_2), ('Edge Case', test_live_edge_case)]\n    for test_name, test_func in tests:\n        print(f'\\n\ud83e\uddea Running: {test_name}')\n        try:\n            test_func()\n            print(f'\u2705 {test_name} completed')\n        except Exception as e:\n            print(f'\u274c {test_name} failed: {e}')\n    print('\\n' + '=' * 60)\n    print('\ud83c\udfaf LANGCHAIN LIVE TEST COMPLETED!')\n    print('- Clean, maintainable LLM integration')\n    print('- No manual API glue code')\n    print('- Built-in JSON parsing and error handling')\n    print('- Production-ready LangChain patterns')",
+      "context": "multi_agent",
+      "dependencies": [
+        "import_os",
+        "import_os",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_from_urllib.parse",
+        "import_from_jsonschema",
+        "import_from_langchain_openai",
+        "import_from_langchain_core.messages",
+        "import_from_langchain_core.output_parsers",
+        "import_from_langchain_core.prompts",
+        "import_from_meta_cognitive_orchestrator"
+      ],
+      "metadata": {
+        "function_name": "main",
+        "has_docstring": true,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_account_url": {
+      "id": "function_validate_account_url",
+      "type": "function",
+      "content": "@field_validator('account_url')\ndef validate_account_url(cls, v):\n    if not v.startswith('https://') or 'snowflakecomputing.com' not in v:\n        raise ValueError('Invalid Snowflake account URL format')\n    return v",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic"
+      ],
+      "metadata": {
+        "function_name": "validate_account_url",
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_uuid": {
+      "id": "function_validate_uuid",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_uuid(uuid_str: str) -> bool:\n    \"\"\"Validate UUID format\"\"\"\n    uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n    return bool(re.match(uuid_pattern, uuid_str))",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_uuid",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function___init__": {
+      "id": "function___init__",
+      "type": "function",
+      "content": "def __init__(self, api_key: Optional[str]=None, provider: str='openai'):\n    self.provider = provider\n    self.api_key = api_key or os.getenv(f'{provider.upper()}_API_KEY')\n    if provider not in ['openai', 'anthropic']:\n        raise ValueError(f'Unsupported provider: {provider}')\n    self.llm = None\n    if self.api_key:\n        try:\n            if provider == 'openai':\n                self.llm = ChatOpenAI(api_key=self.api_key, model='gpt-4-turbo', temperature=0.7)\n            elif provider == 'anthropic':\n                self.llm = ChatAnthropic(api_key=self.api_key, model='claude-3-5-sonnet-20241022', temperature=0.7)\n        except ImportError as e:\n            raise ValueError(f'Failed to import {provider} dependencies: {str(e)}. Install required packages.')\n        except ValueError as e:\n            raise ValueError(f'Invalid {provider} configuration: {str(e)}. Check API key format.')\n        except Exception as e:\n            raise ValueError(f'Failed to initialize {provider} model: {str(e)}. Check API key validity and model availability.')\n    self.output_parser = JsonOutputParser()\n    self.prompt = ChatPromptTemplate.from_template('\\nYou are a partner LLM helping to detect blind spots and unknown unknowns.\\n\\nContext: {context}\\n\\nJeopardy Question: {jeopardy_question}\\n\\nGenerate 5 probing questions that would reveal blind spots, assumptions, or unknown unknowns. \\nFocus on questions that challenge the approach and reveal what might be missing.\\n\\n{format_instructions}\\n')\n    self.chain = None\n    if self.llm:\n        self.chain = self.prompt | self.llm | self.output_parser",
+      "context": "multi_agent",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_langchain_core.output_parsers",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_langchain_core.prompts",
+        "import_os",
+        "import_from_langchain_openai",
+        "import_from_langchain_anthropic",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_from_urllib.parse",
+        "import_from_jsonschema",
+        "import_from_langchain_openai",
+        "import_from_langchain_core.messages",
+        "import_from_langchain_core.output_parsers",
+        "import_from_langchain_core.prompts",
+        "import_from_meta_cognitive_orchestrator",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_from_urllib.parse",
+        "import_from_jsonschema",
+        "import_from_langchain_openai",
+        "import_from_langchain_core.messages",
+        "import_from_langchain_core.output_parsers",
+        "import_from_langchain_core.prompts",
+        "import_from_meta_cognitive_orchestrator",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_from_urllib.parse",
+        "import_from_jsonschema",
+        "import_from_langchain_openai",
+        "import_from_langchain_core.messages",
+        "import_from_langchain_core.output_parsers",
+        "import_from_langchain_core.prompts",
+        "import_from_meta_cognitive_orchestrator"
+      ],
+      "metadata": {
+        "function_name": "__init__",
+        "has_docstring": false,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_encrypt_credential": {
+      "id": "function_encrypt_credential",
+      "type": "function",
+      "content": "def encrypt_credential(self, credential: str) -> str:\n    \"\"\"Encrypt sensitive credentials\"\"\"\n    return self.fernet.encrypt(credential.encode()).decode()",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "encrypt_credential",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_decrypt_credential": {
+      "id": "function_decrypt_credential",
+      "type": "function",
+      "content": "def decrypt_credential(self, encrypted_credential: str) -> str:\n    \"\"\"Decrypt sensitive credentials\"\"\"\n    return self.fernet.decrypt(encrypted_credential.encode()).decode()",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "decrypt_credential",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_store_credential_secure": {
+      "id": "function_store_credential_secure",
+      "type": "function",
+      "content": "def store_credential_secure(self, key: str, value: str) -> None:\n    \"\"\"Store credential securely in Redis with encryption\"\"\"\n    encrypted_value = self.encrypt_credential(value)\n    self.redis_client.setex(f'credential:{key}', 3600, encrypted_value)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "store_credential_secure",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_store_credential": {
+      "id": "function_store_credential",
+      "type": "function",
+      "content": "def store_credential(self, key: str, value: str) -> None:\n    \"\"\"Store credential securely in Redis with encryption (alias for store_credential_secure)\"\"\"\n    self.store_credential_secure(key, value)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "store_credential",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_get_credential_secure": {
+      "id": "function_get_credential_secure",
+      "type": "function",
+      "content": "def get_credential_secure(self, key: str) -> Optional[str]:\n    \"\"\"Retrieve credential securely from Redis\"\"\"\n    encrypted_value = self.redis_client.get(f'credential:{key}')\n    if encrypted_value:\n        return self.decrypt_credential(encrypted_value.decode())\n    return None",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "get_credential_secure",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_retrieve_credential": {
+      "id": "function_retrieve_credential",
+      "type": "function",
+      "content": "def retrieve_credential(self, key: str) -> Optional[str]:\n    \"\"\"Retrieve credential securely from Redis (alias for get_credential_secure)\"\"\"\n    return self.get_credential_secure(key)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "retrieve_credential",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_session_token": {
+      "id": "function_validate_session_token",
+      "type": "function",
+      "content": "def validate_session_token(self, session_token: str) -> bool:\n    \"\"\"Validate JWT session token (alias for validate_session)\"\"\"\n    return self.validate_session(session_token)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "validate_session_token",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_session": {
+      "id": "function_validate_session",
+      "type": "function",
+      "content": "def validate_session(self, session_token: str) -> bool:\n    \"\"\"Validate JWT session token\"\"\"\n    try:\n        payload = jwt.decode(session_token, str(SECURITY_CONFIG['jwt_secret']), algorithms=['HS256'])\n        return payload.get('exp', 0) > time.time()\n    except jwt.InvalidTokenError:\n        return False",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_jwt",
+        "import_jwt",
+        "import_streamlit",
+        "import_time",
+        "import_from_datetime"
+      ],
+      "metadata": {
+        "function_name": "validate_session",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_create_session_token": {
+      "id": "function_create_session_token",
+      "type": "function",
+      "content": "def create_session_token(self, user_id: str, role: str) -> str:\n    \"\"\"Create JWT session token\"\"\"\n    timeout_minutes = SECURITY_CONFIG['session_timeout_minutes']\n    assert timeout_minutes is not None, 'session_timeout_minutes should be set'\n    payload = {'user_id': user_id, 'role': role, 'exp': datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes))}\n    return jwt.encode(payload, str(SECURITY_CONFIG['jwt_secret']), algorithm='HS256')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit",
+        "import_streamlit",
+        "import_jwt",
+        "import_streamlit",
+        "import_from_datetime",
+        "import_from_datetime",
+        "import_from_datetime"
+      ],
+      "metadata": {
+        "function_name": "create_session_token",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_snowflake_url": {
+      "id": "function_validate_snowflake_url",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_snowflake_url(url: str) -> bool:\n    \"\"\"Validate Snowflake account URL format\"\"\"\n    return url.startswith('https://') and 'snowflakecomputing.com' in url",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_urllib.parse",
+        "import_from_urllib.parse"
+      ],
+      "metadata": {
+        "function_name": "validate_snowflake_url",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_sanitize_input": {
+      "id": "function_sanitize_input",
+      "type": "function",
+      "content": "@staticmethod\ndef sanitize_input(input_str: str) -> str:\n    \"\"\"Sanitize user input to prevent injection attacks\"\"\"\n    return html.escape(input_str.strip())",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit",
+        "import_html"
+      ],
+      "metadata": {
+        "function_name": "sanitize_input",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_oauth_credentials": {
+      "id": "function_validate_oauth_credentials",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_oauth_credentials(credentials: Dict[str, str]) -> bool:\n    \"\"\"Validate OAuth credentials format from a dictionary\"\"\"\n    client_id = credentials.get('client_id', '')\n    client_secret = credentials.get('client_secret', '')\n    return len(client_id) >= 8 and len(client_secret) >= 8",
+      "context": "security",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "validate_oauth_credentials",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_create_stack": {
+      "id": "function_create_stack",
+      "type": "function",
+      "content": "def create_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n    \"\"\"Create CloudFormation stack\"\"\"\n    try:\n        response = self.cf_client.create_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n        return {'success': True, 'stack_id': response['StackId']}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_from_typing",
+        "import_from_typing",
+        "import_streamlit",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "create_stack",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_deploy_stack": {
+      "id": "function_deploy_stack",
+      "type": "function",
+      "content": "def deploy_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n    \"\"\"Deploy CloudFormation stack (alias for create_stack)\"\"\"\n    return self.create_stack(stack_name, template_body, parameters)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit",
+        "import_from_typing",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "deploy_stack",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_update_stack": {
+      "id": "function_update_stack",
+      "type": "function",
+      "content": "def update_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n    \"\"\"Update CloudFormation stack\"\"\"\n    try:\n        response = self.cf_client.update_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n        return {'success': True, 'stack_id': response['StackId']}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_from_typing",
+        "import_from_typing",
+        "import_streamlit",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "update_stack",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_delete_stack": {
+      "id": "function_delete_stack",
+      "type": "function",
+      "content": "def delete_stack(self, stack_name: str) -> Dict:\n    \"\"\"Delete CloudFormation stack\"\"\"\n    try:\n        self.cf_client.delete_stack(StackName=stack_name)\n        return {'success': True}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_streamlit",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "delete_stack",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_get_stack_status": {
+      "id": "function_get_stack_status",
+      "type": "function",
+      "content": "def get_stack_status(self, stack_name: str) -> Dict:\n    \"\"\"Get stack status\"\"\"\n    try:\n        response = self.cf_client.describe_stacks(StackName=stack_name)\n        stack = response['Stacks'][0]\n        return {'status': stack['StackStatus'], 'resources': len(stack.get('Outputs', [])), 'creation_time': stack['CreationTime'].isoformat()}\n    except ClientError as e:\n        return {'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_streamlit",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "get_stack_status",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_get_stack_events": {
+      "id": "function_get_stack_events",
+      "type": "function",
+      "content": "def get_stack_events(self, stack_name: str) -> List[Dict]:\n    \"\"\"Get stack events for monitoring\"\"\"\n    try:\n        response = self.cf_client.describe_stack_events(StackName=stack_name)\n        return response['StackEvents']\n    except ClientError:\n        return []",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_botocore.exceptions"
+      ],
+      "metadata": {
+        "function_name": "get_stack_events",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_rollback_stack": {
+      "id": "function_rollback_stack",
+      "type": "function",
+      "content": "def rollback_stack(self, stack_name: str) -> Dict:\n    \"\"\"Rollback stack to previous state\"\"\"\n    try:\n        self.cf_client.rollback_stack(StackName=stack_name)\n        return {'success': True}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_streamlit",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "rollback_stack",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_create_deployment_timeline": {
+      "id": "function_create_deployment_timeline",
+      "type": "function",
+      "content": "def create_deployment_timeline(self, stack_name: str) -> go.Figure:\n    \"\"\"Create deployment timeline visualization\"\"\"\n    events = self.deployment_manager.get_stack_events(stack_name)\n    fig = go.Figure()\n    if events:\n        timestamps = [event['Timestamp'] for event in events]\n        statuses = [event['ResourceStatus'] for event in events]\n        resources = [event['LogicalResourceId'] for event in events]\n        fig.add_trace(go.Scatter(x=timestamps, y=statuses, mode='markers+lines', text=resources, name='Deployment Progress'))\n    fig.update_layout(title='Deployment Timeline', xaxis_title='Time', yaxis_title='Status', height=400)\n    return fig",
+      "context": "streamlit",
+      "dependencies": [
+        "import_plotly.graph_objects",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_plotly.graph_objects"
+      ],
+      "metadata": {
+        "function_name": "create_deployment_timeline",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_create_resource_status_matrix": {
+      "id": "function_create_resource_status_matrix",
+      "type": "function",
+      "content": "def create_resource_status_matrix(self, stack_name: str) -> go.Figure:\n    \"\"\"Create resource status matrix visualization\"\"\"\n    events = self.deployment_manager.get_stack_events(stack_name)\n    if not events:\n        fig = go.Figure()\n        fig.add_annotation(text='No deployment data available', xref='paper', yref='paper', x=0.5, y=0.5, showarrow=False)\n        return fig\n    resource_status = {}\n    for event in events:\n        resource = event['LogicalResourceId']\n        status = event['ResourceStatus']\n        timestamp = event['Timestamp']\n        if resource not in resource_status:\n            resource_status[resource] = []\n        resource_status[resource].append({'status': status, 'timestamp': timestamp})\n    resources = list(resource_status.keys())\n    statuses = ['CREATE_COMPLETE', 'UPDATE_COMPLETE', 'DELETE_COMPLETE', 'CREATE_FAILED', 'UPDATE_FAILED']\n    status_matrix = []\n    for resource in resources:\n        latest_status = resource_status[resource][-1]['status'] if resource_status[resource] else 'UNKNOWN'\n        row = [1 if latest_status == status else 0 for status in statuses]\n        status_matrix.append(row)\n    fig = go.Figure(data=go.Heatmap(z=status_matrix, x=statuses, y=resources, colorscale='RdYlGn'))\n    fig.update_layout(title='Resource Status Matrix', xaxis_title='Status', yaxis_title='Resource', height=500)\n    return fig",
+      "context": "streamlit",
+      "dependencies": [
+        "import_plotly.graph_objects",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_plotly.graph_objects",
+        "import_plotly.graph_objects"
+      ],
+      "metadata": {
+        "function_name": "create_resource_status_matrix",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_setup_page_config": {
+      "id": "function_setup_page_config",
+      "type": "function",
+      "content": "def setup_page_config(self) -> None:\n    \"\"\"Setup Streamlit page configuration\"\"\"\n    st.set_page_config(page_title='OpenFlow Quickstart', page_icon='\ud83d\ude80', layout='wide', initial_sidebar_state='expanded')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "setup_page_config",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_login_page": {
+      "id": "function_login_page",
+      "type": "function",
+      "content": "def login_page(self) -> None:\n    \"\"\"Login page with security validation\"\"\"\n    st.title('\ud83d\udd10 OpenFlow Quickstart Login')\n    with st.form('login_form'):\n        username = st.text_input('Username')\n        password = st.text_input('Password', type='password')\n        submit_button = st.form_submit_button('Login')\n        if submit_button:\n            if self.validate_credentials(username, password):\n                session_token = self.security_manager.create_session_token(username, 'admin')\n                st.session_state['authenticated'] = True\n                st.session_state['session_token'] = session_token\n                st.session_state['user_id'] = username\n                st.success('Login successful!')\n                st.rerun()\n            else:\n                st.error('Invalid credentials')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "login_page",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_credentials": {
+      "id": "function_validate_credentials",
+      "type": "function",
+      "content": "def validate_credentials(self, username: str, password: str) -> bool:\n    \"\"\"Validate user credentials with enhanced security\"\"\"\n    password_checks = self.input_validator.validate_password_strength(password)\n    if not password_checks['strong']:\n        return False\n    if len(password) < SECURITY_CONFIG['password_min_length']:\n        return False\n    valid_users = {'admin': 'AdminSecure123!', 'operator': 'OperatorSecure456!', 'viewer': 'ViewerSecure789!'}\n    return username in valid_users and valid_users[username] == password",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "validate_credentials",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_main_dashboard": {
+      "id": "function_main_dashboard",
+      "type": "function",
+      "content": "def main_dashboard(self) -> None:\n    \"\"\"Main dashboard with role-based access\"\"\"\n    user_role = st.session_state.get('user_role', 'viewer')\n    if user_role == 'viewer':\n        self.viewer_dashboard()\n    elif user_role == 'operator':\n        self.operator_dashboard()\n    elif user_role == 'admin':\n        self.admin_dashboard()",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "main_dashboard",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_viewer_dashboard": {
+      "id": "function_viewer_dashboard",
+      "type": "function",
+      "content": "def viewer_dashboard(self) -> None:\n    \"\"\"Viewer dashboard with read-only access\"\"\"\n    st.title('\ud83d\udcca OpenFlow Quickstart - Viewer Dashboard')\n    st.info('You have read-only access to deployment information.')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "viewer_dashboard",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_operator_dashboard": {
+      "id": "function_operator_dashboard",
+      "type": "function",
+      "content": "def operator_dashboard(self) -> None:\n    \"\"\"Operator dashboard with deployment management\"\"\"\n    st.title('\u2699\ufe0f OpenFlow Quickstart - Operator Dashboard')\n    st.warning('You have deployment management access.')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "operator_dashboard",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_admin_dashboard": {
+      "id": "function_admin_dashboard",
+      "type": "function",
+      "content": "def admin_dashboard(self) -> None:\n    \"\"\"Admin dashboard with full access\"\"\"\n    st.title('\ud83d\udd27 OpenFlow Quickstart - Admin Dashboard')\n    page = st.sidebar.selectbox('Navigation', ['Configuration', 'Deployment', 'Monitoring', 'Security', 'User Management'])\n    if page == 'Configuration':\n        self.configuration_section()\n    elif page == 'Deployment':\n        self.deployment_section()\n    elif page == 'Monitoring':\n        self.monitoring_section()\n    elif page == 'Security':\n        self.security_section()\n    elif page == 'User Management':\n        self.user_management_section()",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "admin_dashboard",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_configuration_section": {
+      "id": "function_configuration_section",
+      "type": "function",
+      "content": "def configuration_section(self) -> None:\n    \"\"\"Configuration management section\"\"\"\n    st.header('\u2699\ufe0f Configuration Management')\n    tab1, tab2 = st.tabs(['Snowflake Configuration', 'OpenFlow Configuration'])\n    with tab1:\n        st.subheader('Snowflake Configuration')\n        with st.form('snowflake_config'):\n            account_url = st.text_input('Account URL', placeholder='https://your-account.snowflakecomputing.com')\n            st.text_input('Organization')\n            st.text_input('Account Identifier')\n            st.text_input('OAuth Integration Name')\n            oauth_client_id = st.text_input('OAuth Client ID', type='password')\n            oauth_client_secret = st.text_input('OAuth Client Secret', type='password')\n            if st.form_submit_button('Save Snowflake Config'):\n                if self.input_validator.validate_snowflake_url(account_url):\n                    self.security_manager.store_credential_secure('snowflake_account_url', account_url)\n                    self.security_manager.store_credential_secure('snowflake_oauth_client_id', oauth_client_id)\n                    self.security_manager.store_credential_secure('snowflake_oauth_client_secret', oauth_client_secret)\n                    st.success('Snowflake configuration saved securely!')\n                else:\n                    st.error('Invalid Snowflake account URL format')\n    with tab2:\n        st.subheader('OpenFlow Configuration')\n        with st.form('openflow_config'):\n            st.text_input('Data Plane URL')\n            data_plane_uuid = st.text_input('Data Plane UUID')\n            data_plane_key = st.text_input('Data Plane Key', type='password')\n            st.text_input('Telemetry URL')\n            st.text_input('Control Plane URL')\n            if st.form_submit_button('Save OpenFlow Config'):\n                if self.input_validator.validate_uuid(data_plane_uuid):\n                    self.security_manager.store_credential_secure('openflow_data_plane_key', data_plane_key)\n                    st.success('OpenFlow configuration saved securely!')\n                else:\n                    st.error('Invalid UUID format')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "configuration_section",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_deployment_section": {
+      "id": "function_deployment_section",
+      "type": "function",
+      "content": "def deployment_section(self) -> None:\n    \"\"\"Deployment management section\"\"\"\n    st.header('\ud83d\ude80 Deployment Management')\n    col1, col2, col3 = st.columns(3)\n    with col1:\n        if st.button('New Deployment'):\n            self.new_deployment()\n    with col2:\n        if st.button('Update Deployment'):\n            self.update_deployment()\n    with col3:\n        if st.button('Rollback Deployment'):\n            self.rollback_deployment()",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "deployment_section",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_new_deployment": {
+      "id": "function_new_deployment",
+      "type": "function",
+      "content": "def new_deployment(self) -> None:\n    \"\"\"Create new deployment\"\"\"\n    st.subheader('Create New Deployment')\n    with st.form('new_deployment'):\n        stack_name = st.text_input('Stack Name')\n        template_body = st.text_area('CloudFormation Template')\n        if st.form_submit_button('Deploy'):\n            if stack_name and template_body:\n                result = self.deployment_manager.create_stack(stack_name, template_body, [])\n                if result['success']:\n                    st.success(f\"Deployment started: {result['stack_id']}\")\n                else:\n                    st.error(f\"Deployment failed: {result['error']}\")",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "new_deployment",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_update_deployment": {
+      "id": "function_update_deployment",
+      "type": "function",
+      "content": "def update_deployment(self) -> None:\n    \"\"\"Update existing deployment\"\"\"\n    st.subheader('Update Deployment')\n    st.info('Update functionality would be implemented here')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "update_deployment",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_rollback_deployment": {
+      "id": "function_rollback_deployment",
+      "type": "function",
+      "content": "def rollback_deployment(self) -> None:\n    \"\"\"Rollback deployment\"\"\"\n    st.subheader('Rollback Deployment')\n    st.info('Rollback functionality would be implemented here')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "rollback_deployment",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_monitoring_section": {
+      "id": "function_monitoring_section",
+      "type": "function",
+      "content": "def monitoring_section(self) -> None:\n    \"\"\"Monitoring and visualization section\"\"\"\n    st.header('\ud83d\udcca Monitoring Dashboard')\n    stack_name = st.text_input('Enter Stack Name for Monitoring')\n    if stack_name:\n        col1, col2 = st.columns(2)\n        with col1:\n            st.subheader('Deployment Timeline')\n            timeline_fig = self.monitoring_dashboard.create_deployment_timeline(stack_name)\n            st.plotly_chart(timeline_fig, use_container_width=True)\n        with col2:\n            st.subheader('Resource Status Matrix')\n            matrix_fig = self.monitoring_dashboard.create_resource_status_matrix(stack_name)\n            st.plotly_chart(matrix_fig, use_container_width=True)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "monitoring_section",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_security_section": {
+      "id": "function_security_section",
+      "type": "function",
+      "content": "def security_section(self) -> None:\n    \"\"\"Security management section\"\"\"\n    st.header('\ud83d\udd12 Security Management')\n    st.subheader('Session Information')\n    if 'session_token' in st.session_state:\n        session_valid = self.security_manager.validate_session(st.session_state['session_token'])\n        st.write(f\"Session Valid: {('\u2705 Yes' if session_valid else '\u274c No')}\")\n        st.write(f\"User ID: {st.session_state.get('user_id', 'Unknown')}\")\n    st.subheader('Security Configuration')\n    st.json(SECURITY_CONFIG)",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "security_section",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_user_management_section": {
+      "id": "function_user_management_section",
+      "type": "function",
+      "content": "def user_management_section(self) -> None:\n    \"\"\"User management section\"\"\"\n    st.header('\ud83d\udc65 User Management')\n    st.info('User management functionality would be implemented here')",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "user_management_section",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_run": {
+      "id": "function_run",
+      "type": "function",
+      "content": "def run(self) -> None:\n    \"\"\"Run the Streamlit application\"\"\"\n    self.setup_page_config()\n    if 'authenticated' not in st.session_state:\n        self.login_page()\n    else:\n        session_token = st.session_state.get('session_token')\n        if session_token and self.security_manager.validate_session(session_token):\n            self.main_dashboard()\n        else:\n            st.session_state.clear()\n            st.error('Session expired. Please login again.')\n            self.login_page()",
+      "context": "streamlit",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing"
+      ],
+      "metadata": {
+        "function_name": "run",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_SnowflakeConfig": {
+      "id": "class_SnowflakeConfig",
+      "type": "class",
+      "content": "class SnowflakeConfig(BaseModel):\n    account_url: str = Field(..., description='Snowflake account URL')\n    organization: str = Field(..., description='Snowflake organization')\n    account: str = Field(..., description='Snowflake account identifier')\n    oauth_integration_name: str = Field(..., description='OAuth integration name')\n    oauth_client_id: str = Field(..., description='OAuth client ID')\n    oauth_client_secret: str = Field(..., description='OAuth client secret')\n\n    @field_validator('account_url')\n    def validate_account_url(cls, v):\n        if not v.startswith('https://') or 'snowflakecomputing.com' not in v:\n            raise ValueError('Invalid Snowflake account URL format')\n        return v",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "SnowflakeConfig",
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_OpenFlowConfig": {
+      "id": "class_OpenFlowConfig",
+      "type": "class",
+      "content": "class OpenFlowConfig(BaseModel):\n    data_plane_url: str = Field(..., description='Data plane URL')\n    data_plane_uuid: str = Field(..., description='Data plane UUID')\n    data_plane_key: str = Field(..., description='Data plane key')\n    telemetry_url: str = Field(..., description='Telemetry URL')\n    control_plane_url: str = Field(..., description='Control plane URL')\n\n    @field_validator('data_plane_uuid')\n    def validate_uuid(cls, v):\n        import re\n        uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n        if not re.match(uuid_pattern, v):\n            raise ValueError('Invalid UUID format')\n        return v",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "OpenFlowConfig",
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_DeploymentStatus": {
+      "id": "class_DeploymentStatus",
+      "type": "class",
+      "content": "@dataclass\nclass DeploymentStatus:\n    stack_name: str\n    status: str\n    progress: int\n    resources_created: int\n    resources_total: int\n    error_message: Optional[str] = None\n    last_updated: Optional[datetime] = None",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "DeploymentStatus",
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_SecurityManager": {
+      "id": "class_SecurityManager",
+      "type": "class",
+      "content": "class SecurityManager:\n    \"\"\"Security-first credential and session management\"\"\"\n\n    def __init__(self) -> None:\n        self.fernet = Fernet(SECURITY_CONFIG['fernet_key'])\n        self.redis_client = redis.from_url(SECURITY_CONFIG['redis_url'])\n\n    def encrypt_credential(self, credential: str) -> str:\n        \"\"\"Encrypt sensitive credentials\"\"\"\n        return self.fernet.encrypt(credential.encode()).decode()\n\n    def decrypt_credential(self, encrypted_credential: str) -> str:\n        \"\"\"Decrypt sensitive credentials\"\"\"\n        return self.fernet.decrypt(encrypted_credential.encode()).decode()\n\n    def store_credential_secure(self, key: str, value: str) -> None:\n        \"\"\"Store credential securely in Redis with encryption\"\"\"\n        encrypted_value = self.encrypt_credential(value)\n        self.redis_client.setex(f'credential:{key}', 3600, encrypted_value)\n\n    def store_credential(self, key: str, value: str) -> None:\n        \"\"\"Store credential securely in Redis with encryption (alias for store_credential_secure)\"\"\"\n        self.store_credential_secure(key, value)\n\n    def get_credential_secure(self, key: str) -> Optional[str]:\n        \"\"\"Retrieve credential securely from Redis\"\"\"\n        encrypted_value = self.redis_client.get(f'credential:{key}')\n        if encrypted_value:\n            return self.decrypt_credential(encrypted_value.decode())\n        return None\n\n    def retrieve_credential(self, key: str) -> Optional[str]:\n        \"\"\"Retrieve credential securely from Redis (alias for get_credential_secure)\"\"\"\n        return self.get_credential_secure(key)\n\n    def validate_session_token(self, session_token: str) -> bool:\n        \"\"\"Validate JWT session token (alias for validate_session)\"\"\"\n        return self.validate_session(session_token)\n\n    def validate_session(self, session_token: str) -> bool:\n        \"\"\"Validate JWT session token\"\"\"\n        try:\n            payload = jwt.decode(session_token, str(SECURITY_CONFIG['jwt_secret']), algorithms=['HS256'])\n            return payload.get('exp', 0) > time.time()\n        except jwt.InvalidTokenError:\n            return False\n\n    def create_session_token(self, user_id: str, role: str) -> str:\n        \"\"\"Create JWT session token\"\"\"\n        timeout_minutes = SECURITY_CONFIG['session_timeout_minutes']\n        assert timeout_minutes is not None, 'session_timeout_minutes should be set'\n        payload = {'user_id': user_id, 'role': role, 'exp': datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes))}\n        return jwt.encode(payload, str(SECURITY_CONFIG['jwt_secret']), algorithm='HS256')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "SecurityManager",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_InputValidator": {
+      "id": "class_InputValidator",
+      "type": "class",
+      "content": "class InputValidator:\n    \"\"\"Comprehensive input validation and sanitization\"\"\"\n\n    @staticmethod\n    def validate_input(input_str: str, input_type: str='text') -> bool:\n        \"\"\"Validate general input based on type\"\"\"\n        if not input_str or not isinstance(input_str, str):\n            return False\n        if input_type == 'text':\n            return len(input_str.strip()) > 0\n        elif input_type == 'email':\n            return InputValidator.validate_email(input_str)\n        elif input_type == 'url':\n            return InputValidator.validate_url(input_str)\n        elif input_type == 'phone':\n            return InputValidator.validate_phone_number(input_str)\n        elif input_type == 'uuid':\n            return InputValidator.validate_uuid(input_str)\n        else:\n            return len(input_str.strip()) > 0\n\n    @staticmethod\n    def validate_snowflake_url(url: str) -> bool:\n        \"\"\"Validate Snowflake account URL format\"\"\"\n        return url.startswith('https://') and 'snowflakecomputing.com' in url\n\n    @staticmethod\n    def validate_uuid(uuid_str: str) -> bool:\n        \"\"\"Validate UUID format\"\"\"\n        uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n        return bool(re.match(uuid_pattern, uuid_str))\n\n    @staticmethod\n    def sanitize_input(input_str: str) -> str:\n        \"\"\"Sanitize user input to prevent injection attacks\"\"\"\n        return html.escape(input_str.strip())\n\n    @staticmethod\n    def validate_oauth_credentials(credentials: Dict[str, str]) -> bool:\n        \"\"\"Validate OAuth credentials format from a dictionary\"\"\"\n        client_id = credentials.get('client_id', '')\n        client_secret = credentials.get('client_secret', '')\n        return len(client_id) >= 8 and len(client_secret) >= 8\n\n    @staticmethod\n    def validate_email(email: str) -> bool:\n        \"\"\"Validate email format\"\"\"\n        email_pattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$'\n        return bool(re.match(email_pattern, email))\n\n    @staticmethod\n    def validate_password_strength(password: str) -> Dict[str, Any]:\n        \"\"\"Validate password strength\"\"\"\n        checks = {'length': len(password) >= 8, 'uppercase': bool(re.search('[A-Z]', password)), 'lowercase': bool(re.search('[a-z]', password)), 'digit': bool(re.search('\\\\d', password)), 'special': bool(re.search('[!@#$%^&*(),.?\\\\\":{}|<>]', password))}\n        checks['strong'] = all(checks.values())\n        return checks\n\n    @staticmethod\n    def validate_url(url: str) -> bool:\n        \"\"\"Validate URL format\"\"\"\n        try:\n            result = urlparse(url)\n            return all([result.scheme, result.netloc])\n        except Exception:\n            return False\n\n    @staticmethod\n    def validate_phone_number(phone: str) -> bool:\n        \"\"\"Validate phone number format\"\"\"\n        digits_only = re.sub('\\\\D', '', phone)\n        return len(digits_only) >= 10\n\n    @staticmethod\n    def validate_credit_card(card_number: str) -> bool:\n        \"\"\"Validate credit card number using Luhn algorithm\"\"\"\n        card_number = re.sub('\\\\s+|-', '', card_number)\n        if not card_number.isdigit():\n            return False\n        digits = [int(d) for d in card_number]\n        odd_digits = digits[-1::-2]\n        even_digits = digits[-2::-2]\n        checksum = sum(odd_digits)\n        for d in even_digits:\n            checksum += sum(divmod(d * 2, 10))\n        return checksum % 10 == 0\n\n    @staticmethod\n    def validate_json_schema(data: Dict[str, Any], schema: Dict[str, Any]) -> bool:\n        \"\"\"Validate data against JSON schema\"\"\"\n        try:\n            from jsonschema import validate\n            validate(instance=data, schema=schema)\n            return True\n        except ImportError:\n            return isinstance(data, dict)\n\n    @staticmethod\n    def validate_file_extension(filename: str, allowed_extensions: list[str]) -> bool:\n        \"\"\"Validate file extension\"\"\"\n        if not filename:\n            return False\n        file_ext = filename.lower().split('.')[-1] if '.' in filename else ''\n        return file_ext in [ext.lower() for ext in allowed_extensions]\n\n    @staticmethod\n    def validate_file_size(file_size: int, max_size_mb: int) -> bool:\n        \"\"\"Validate file size\"\"\"\n        max_size_bytes = max_size_mb * 1024 * 1024\n        return file_size <= max_size_bytes\n\n    @staticmethod\n    def validate_sql_injection_safe(sql: str) -> bool:\n        \"\"\"Check if SQL string is safe from injection\"\"\"\n        dangerous_patterns = ['(\\\\b(union|select|insert|update|delete|drop|create|alter)\\\\b)', '(--|#|/\\\\*|\\\\*/)', '(\\\\b(exec|execute|script)\\\\b)', '(\\\\b(xp_|sp_)\\\\b)']\n        sql_lower = sql.lower()\n        for pattern in dangerous_patterns:\n            if re.search(pattern, sql_lower):\n                return False\n        return True\n\n    @staticmethod\n    def validate_xss_safe(text: str) -> bool:\n        \"\"\"Check if text is safe from XSS attacks\"\"\"\n        dangerous_patterns = ['<script[^>]*>.*?</script>', 'javascript:', 'on\\\\w+\\\\s*=', '<iframe[^>]*>', '<object[^>]*>', '<embed[^>]*>']\n        text_lower = text.lower()\n        for pattern in dangerous_patterns:\n            if re.search(pattern, text_lower):\n                return False\n        return True\n\n    @staticmethod\n    def validate_file_upload(filename: str, file_size: int, allowed_extensions: list[str], max_size_mb: int=10) -> Dict[str, Any]:\n        \"\"\"Validate file upload for security and size constraints\"\"\"\n        validation_result: Dict[str, Any] = {'valid': True, 'errors': [], 'warnings': []}\n        if not InputValidator.validate_file_extension(filename, allowed_extensions):\n            validation_result['valid'] = False\n            validation_result['errors'].append(f'File extension not allowed. Allowed: {allowed_extensions}')\n        if not InputValidator.validate_file_size(file_size, max_size_mb):\n            validation_result['valid'] = False\n            validation_result['errors'].append(f'File too large. Max size: {max_size_mb}MB')\n        dangerous_extensions = ['exe', 'bat', 'cmd', 'com', 'pif', 'scr', 'vbs', 'js']\n        file_ext = filename.lower().split('.')[-1] if '.' in filename else ''\n        if file_ext in dangerous_extensions:\n            validation_result['valid'] = False\n            validation_result['errors'].append(f'Dangerous file type: {file_ext}')\n        suspicious_patterns = ['\\\\.\\\\./', '\\\\.\\\\.\\\\\\\\', 'cmd\\\\.', '\\\\.tmp$']\n        for pattern in suspicious_patterns:\n            if re.search(pattern, filename, re.IGNORECASE):\n                validation_result['valid'] = False\n                validation_result['errors'].append(f'Suspicious filename pattern: {pattern}')\n                break\n        return validation_result",
+      "context": "security",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "InputValidator",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_DeploymentManager": {
+      "id": "class_DeploymentManager",
+      "type": "class",
+      "content": "class DeploymentManager:\n    \"\"\"AWS CloudFormation deployment management\"\"\"\n\n    def __init__(self, region: str='us-east-1') -> None:\n        self.cf_client = boto3.client('cloudformation', region_name=region, aws_access_key_id=AWS_CONFIG['access_key'], aws_secret_access_key=AWS_CONFIG['secret_key'])\n\n    def create_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n        \"\"\"Create CloudFormation stack\"\"\"\n        try:\n            response = self.cf_client.create_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n            return {'success': True, 'stack_id': response['StackId']}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}\n\n    def deploy_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n        \"\"\"Deploy CloudFormation stack (alias for create_stack)\"\"\"\n        return self.create_stack(stack_name, template_body, parameters)\n\n    def update_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n        \"\"\"Update CloudFormation stack\"\"\"\n        try:\n            response = self.cf_client.update_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n            return {'success': True, 'stack_id': response['StackId']}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}\n\n    def delete_stack(self, stack_name: str) -> Dict:\n        \"\"\"Delete CloudFormation stack\"\"\"\n        try:\n            self.cf_client.delete_stack(StackName=stack_name)\n            return {'success': True}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}\n\n    def get_stack_status(self, stack_name: str) -> Dict:\n        \"\"\"Get stack status\"\"\"\n        try:\n            response = self.cf_client.describe_stacks(StackName=stack_name)\n            stack = response['Stacks'][0]\n            return {'status': stack['StackStatus'], 'resources': len(stack.get('Outputs', [])), 'creation_time': stack['CreationTime'].isoformat()}\n        except ClientError as e:\n            return {'error': str(e)}\n\n    def get_stack_events(self, stack_name: str) -> List[Dict]:\n        \"\"\"Get stack events for monitoring\"\"\"\n        try:\n            response = self.cf_client.describe_stack_events(StackName=stack_name)\n            return response['StackEvents']\n        except ClientError:\n            return []\n\n    def rollback_stack(self, stack_name: str) -> Dict:\n        \"\"\"Rollback stack to previous state\"\"\"\n        try:\n            self.cf_client.rollback_stack(StackName=stack_name)\n            return {'success': True}\n        except ClientError as e:\n            return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "DeploymentManager",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_MonitoringDashboard": {
+      "id": "class_MonitoringDashboard",
+      "type": "class",
+      "content": "class MonitoringDashboard:\n    \"\"\"Real-time monitoring and visualization dashboard\"\"\"\n\n    def __init__(self, deployment_manager: DeploymentManager) -> None:\n        self.deployment_manager = deployment_manager\n\n    def create_deployment_timeline(self, stack_name: str) -> go.Figure:\n        \"\"\"Create deployment timeline visualization\"\"\"\n        events = self.deployment_manager.get_stack_events(stack_name)\n        fig = go.Figure()\n        if events:\n            timestamps = [event['Timestamp'] for event in events]\n            statuses = [event['ResourceStatus'] for event in events]\n            resources = [event['LogicalResourceId'] for event in events]\n            fig.add_trace(go.Scatter(x=timestamps, y=statuses, mode='markers+lines', text=resources, name='Deployment Progress'))\n        fig.update_layout(title='Deployment Timeline', xaxis_title='Time', yaxis_title='Status', height=400)\n        return fig\n\n    def create_resource_status_matrix(self, stack_name: str) -> go.Figure:\n        \"\"\"Create resource status matrix visualization\"\"\"\n        events = self.deployment_manager.get_stack_events(stack_name)\n        if not events:\n            fig = go.Figure()\n            fig.add_annotation(text='No deployment data available', xref='paper', yref='paper', x=0.5, y=0.5, showarrow=False)\n            return fig\n        resource_status = {}\n        for event in events:\n            resource = event['LogicalResourceId']\n            status = event['ResourceStatus']\n            timestamp = event['Timestamp']\n            if resource not in resource_status:\n                resource_status[resource] = []\n            resource_status[resource].append({'status': status, 'timestamp': timestamp})\n        resources = list(resource_status.keys())\n        statuses = ['CREATE_COMPLETE', 'UPDATE_COMPLETE', 'DELETE_COMPLETE', 'CREATE_FAILED', 'UPDATE_FAILED']\n        status_matrix = []\n        for resource in resources:\n            latest_status = resource_status[resource][-1]['status'] if resource_status[resource] else 'UNKNOWN'\n            row = [1 if latest_status == status else 0 for status in statuses]\n            status_matrix.append(row)\n        fig = go.Figure(data=go.Heatmap(z=status_matrix, x=statuses, y=resources, colorscale='RdYlGn'))\n        fig.update_layout(title='Resource Status Matrix', xaxis_title='Status', yaxis_title='Resource', height=500)\n        return fig",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "MonitoringDashboard",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_OpenFlowQuickstartApp": {
+      "id": "class_OpenFlowQuickstartApp",
+      "type": "class",
+      "content": "class OpenFlowQuickstartApp:\n    \"\"\"Main Streamlit application\"\"\"\n\n    def __init__(self) -> None:\n        self.security_manager = SecurityManager()\n        self.deployment_manager = DeploymentManager()\n        self.monitoring_dashboard = MonitoringDashboard(self.deployment_manager)\n        self.input_validator = InputValidator()\n\n    def setup_page_config(self) -> None:\n        \"\"\"Setup Streamlit page configuration\"\"\"\n        st.set_page_config(page_title='OpenFlow Quickstart', page_icon='\ud83d\ude80', layout='wide', initial_sidebar_state='expanded')\n\n    def login_page(self) -> None:\n        \"\"\"Login page with security validation\"\"\"\n        st.title('\ud83d\udd10 OpenFlow Quickstart Login')\n        with st.form('login_form'):\n            username = st.text_input('Username')\n            password = st.text_input('Password', type='password')\n            submit_button = st.form_submit_button('Login')\n            if submit_button:\n                if self.validate_credentials(username, password):\n                    session_token = self.security_manager.create_session_token(username, 'admin')\n                    st.session_state['authenticated'] = True\n                    st.session_state['session_token'] = session_token\n                    st.session_state['user_id'] = username\n                    st.success('Login successful!')\n                    st.rerun()\n                else:\n                    st.error('Invalid credentials')\n\n    def validate_credentials(self, username: str, password: str) -> bool:\n        \"\"\"Validate user credentials with enhanced security\"\"\"\n        password_checks = self.input_validator.validate_password_strength(password)\n        if not password_checks['strong']:\n            return False\n        if len(password) < SECURITY_CONFIG['password_min_length']:\n            return False\n        valid_users = {'admin': 'AdminSecure123!', 'operator': 'OperatorSecure456!', 'viewer': 'ViewerSecure789!'}\n        return username in valid_users and valid_users[username] == password\n\n    def main_dashboard(self) -> None:\n        \"\"\"Main dashboard with role-based access\"\"\"\n        user_role = st.session_state.get('user_role', 'viewer')\n        if user_role == 'viewer':\n            self.viewer_dashboard()\n        elif user_role == 'operator':\n            self.operator_dashboard()\n        elif user_role == 'admin':\n            self.admin_dashboard()\n\n    def viewer_dashboard(self) -> None:\n        \"\"\"Viewer dashboard with read-only access\"\"\"\n        st.title('\ud83d\udcca OpenFlow Quickstart - Viewer Dashboard')\n        st.info('You have read-only access to deployment information.')\n\n    def operator_dashboard(self) -> None:\n        \"\"\"Operator dashboard with deployment management\"\"\"\n        st.title('\u2699\ufe0f OpenFlow Quickstart - Operator Dashboard')\n        st.warning('You have deployment management access.')\n\n    def admin_dashboard(self) -> None:\n        \"\"\"Admin dashboard with full access\"\"\"\n        st.title('\ud83d\udd27 OpenFlow Quickstart - Admin Dashboard')\n        page = st.sidebar.selectbox('Navigation', ['Configuration', 'Deployment', 'Monitoring', 'Security', 'User Management'])\n        if page == 'Configuration':\n            self.configuration_section()\n        elif page == 'Deployment':\n            self.deployment_section()\n        elif page == 'Monitoring':\n            self.monitoring_section()\n        elif page == 'Security':\n            self.security_section()\n        elif page == 'User Management':\n            self.user_management_section()\n\n    def configuration_section(self) -> None:\n        \"\"\"Configuration management section\"\"\"\n        st.header('\u2699\ufe0f Configuration Management')\n        tab1, tab2 = st.tabs(['Snowflake Configuration', 'OpenFlow Configuration'])\n        with tab1:\n            st.subheader('Snowflake Configuration')\n            with st.form('snowflake_config'):\n                account_url = st.text_input('Account URL', placeholder='https://your-account.snowflakecomputing.com')\n                st.text_input('Organization')\n                st.text_input('Account Identifier')\n                st.text_input('OAuth Integration Name')\n                oauth_client_id = st.text_input('OAuth Client ID', type='password')\n                oauth_client_secret = st.text_input('OAuth Client Secret', type='password')\n                if st.form_submit_button('Save Snowflake Config'):\n                    if self.input_validator.validate_snowflake_url(account_url):\n                        self.security_manager.store_credential_secure('snowflake_account_url', account_url)\n                        self.security_manager.store_credential_secure('snowflake_oauth_client_id', oauth_client_id)\n                        self.security_manager.store_credential_secure('snowflake_oauth_client_secret', oauth_client_secret)\n                        st.success('Snowflake configuration saved securely!')\n                    else:\n                        st.error('Invalid Snowflake account URL format')\n        with tab2:\n            st.subheader('OpenFlow Configuration')\n            with st.form('openflow_config'):\n                st.text_input('Data Plane URL')\n                data_plane_uuid = st.text_input('Data Plane UUID')\n                data_plane_key = st.text_input('Data Plane Key', type='password')\n                st.text_input('Telemetry URL')\n                st.text_input('Control Plane URL')\n                if st.form_submit_button('Save OpenFlow Config'):\n                    if self.input_validator.validate_uuid(data_plane_uuid):\n                        self.security_manager.store_credential_secure('openflow_data_plane_key', data_plane_key)\n                        st.success('OpenFlow configuration saved securely!')\n                    else:\n                        st.error('Invalid UUID format')\n\n    def deployment_section(self) -> None:\n        \"\"\"Deployment management section\"\"\"\n        st.header('\ud83d\ude80 Deployment Management')\n        col1, col2, col3 = st.columns(3)\n        with col1:\n            if st.button('New Deployment'):\n                self.new_deployment()\n        with col2:\n            if st.button('Update Deployment'):\n                self.update_deployment()\n        with col3:\n            if st.button('Rollback Deployment'):\n                self.rollback_deployment()\n\n    def new_deployment(self) -> None:\n        \"\"\"Create new deployment\"\"\"\n        st.subheader('Create New Deployment')\n        with st.form('new_deployment'):\n            stack_name = st.text_input('Stack Name')\n            template_body = st.text_area('CloudFormation Template')\n            if st.form_submit_button('Deploy'):\n                if stack_name and template_body:\n                    result = self.deployment_manager.create_stack(stack_name, template_body, [])\n                    if result['success']:\n                        st.success(f\"Deployment started: {result['stack_id']}\")\n                    else:\n                        st.error(f\"Deployment failed: {result['error']}\")\n\n    def update_deployment(self) -> None:\n        \"\"\"Update existing deployment\"\"\"\n        st.subheader('Update Deployment')\n        st.info('Update functionality would be implemented here')\n\n    def rollback_deployment(self) -> None:\n        \"\"\"Rollback deployment\"\"\"\n        st.subheader('Rollback Deployment')\n        st.info('Rollback functionality would be implemented here')\n\n    def monitoring_section(self) -> None:\n        \"\"\"Monitoring and visualization section\"\"\"\n        st.header('\ud83d\udcca Monitoring Dashboard')\n        stack_name = st.text_input('Enter Stack Name for Monitoring')\n        if stack_name:\n            col1, col2 = st.columns(2)\n            with col1:\n                st.subheader('Deployment Timeline')\n                timeline_fig = self.monitoring_dashboard.create_deployment_timeline(stack_name)\n                st.plotly_chart(timeline_fig, use_container_width=True)\n            with col2:\n                st.subheader('Resource Status Matrix')\n                matrix_fig = self.monitoring_dashboard.create_resource_status_matrix(stack_name)\n                st.plotly_chart(matrix_fig, use_container_width=True)\n\n    def security_section(self) -> None:\n        \"\"\"Security management section\"\"\"\n        st.header('\ud83d\udd12 Security Management')\n        st.subheader('Session Information')\n        if 'session_token' in st.session_state:\n            session_valid = self.security_manager.validate_session(st.session_state['session_token'])\n            st.write(f\"Session Valid: {('\u2705 Yes' if session_valid else '\u274c No')}\")\n            st.write(f\"User ID: {st.session_state.get('user_id', 'Unknown')}\")\n        st.subheader('Security Configuration')\n        st.json(SECURITY_CONFIG)\n\n    def user_management_section(self) -> None:\n        \"\"\"User management section\"\"\"\n        st.header('\ud83d\udc65 User Management')\n        st.info('User management functionality would be implemented here')\n\n    def run(self) -> None:\n        \"\"\"Run the Streamlit application\"\"\"\n        self.setup_page_config()\n        if 'authenticated' not in st.session_state:\n            self.login_page()\n        else:\n            session_token = st.session_state.get('session_token')\n            if session_token and self.security_manager.validate_session(session_token):\n                self.main_dashboard()\n            else:\n                st.session_state.clear()\n                st.error('Session expired. Please login again.')\n                self.login_page()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "OpenFlowQuickstartApp",
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "constant_SECURITY_CONFIG": {
+      "id": "constant_SECURITY_CONFIG",
+      "type": "constant",
+      "content": "SECURITY_CONFIG = {'fernet_key': os.getenv('FERNET_KEY', Fernet.generate_key()), 'redis_url': os.getenv('REDIS_URL', 'redis://localhost:6379'), 'jwt_secret': os.getenv('JWT_SECRET', 'your-secret-key'), 'session_timeout_minutes': int(os.getenv('SESSION_TIMEOUT_MINUTES', '15')), 'max_login_attempts': int(os.getenv('MAX_LOGIN_ATTEMPTS', '3')), 'password_min_length': int(os.getenv('PASSWORD_MIN_LENGTH', '12'))}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "constant_name": "SECURITY_CONFIG",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black"
+      }
+    },
+    "constant_AWS_CONFIG": {
+      "id": "constant_AWS_CONFIG",
+      "type": "constant",
+      "content": "AWS_CONFIG = {'region': os.getenv('AWS_REGION', 'us-east-1'), 'access_key': os.getenv('AWS_ACCESS_KEY_ID'), 'secret_key': os.getenv('AWS_SECRET_ACCESS_KEY')}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "constant_name": "AWS_CONFIG",
+        "source_file": "src/streamlit/openflow_quickstart_app.py"
+      },
+      "projection_rules": {
+        "format": "black"
+      }
+    },
+    "import_from_urllib.parse": {
+      "id": "import_from_urllib.parse",
+      "type": "import",
+      "content": "from urllib.parse import urlparse",
+      "context": "security",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_jsonschema": {
+      "id": "import_from_jsonschema",
+      "type": "import",
+      "content": "from jsonschema import validate",
+      "context": "security",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "function_test_input_validator": {
+      "id": "function_test_input_validator",
+      "type": "function",
+      "content": "def test_input_validator() -> None:\n    \"\"\"Test input validator functionality\"\"\"\n    validator = InputValidator()\n    assert validator.validate_snowflake_url('https://account.snowflakecomputing.com')\n    assert not validator.validate_snowflake_url('http://invalid.com')\n    assert not validator.validate_snowflake_url('not-a-url')\n    assert validator.validate_uuid('123e4567-e89b-12d3-a456-426614174000')\n    assert not validator.validate_uuid('not-a-uuid')\n    assert validator.validate_oauth_credentials({'client_id': 'test_id', 'client_secret': 'test_secret'})\n    assert not validator.validate_oauth_credentials({'client_id': '', 'client_secret': ''})\n    print('\u2705 Input Validator tests passed')",
+      "context": "security",
+      "dependencies": [
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic",
+        "import_from_pydantic"
+      ],
+      "metadata": {
+        "function_name": "test_input_validator",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_input": {
+      "id": "function_validate_input",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_input(input_str: str, input_type: str='text') -> bool:\n    \"\"\"Validate general input based on type\"\"\"\n    if not input_str or not isinstance(input_str, str):\n        return False\n    if input_type == 'text':\n        return len(input_str.strip()) > 0\n    elif input_type == 'email':\n        return InputValidator.validate_email(input_str)\n    elif input_type == 'url':\n        return InputValidator.validate_url(input_str)\n    elif input_type == 'phone':\n        return InputValidator.validate_phone_number(input_str)\n    elif input_type == 'uuid':\n        return InputValidator.validate_uuid(input_str)\n    else:\n        return len(input_str.strip()) > 0",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "validate_input",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_email": {
+      "id": "function_validate_email",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_email(email: str) -> bool:\n    \"\"\"Validate email format\"\"\"\n    email_pattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$'\n    return bool(re.match(email_pattern, email))",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_email",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_password_strength": {
+      "id": "function_validate_password_strength",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_password_strength(password: str) -> Dict[str, Any]:\n    \"\"\"Validate password strength\"\"\"\n    checks = {'length': len(password) >= 8, 'uppercase': bool(re.search('[A-Z]', password)), 'lowercase': bool(re.search('[a-z]', password)), 'digit': bool(re.search('\\\\d', password)), 'special': bool(re.search('[!@#$%^&*(),.?\\\\\":{}|<>]', password))}\n    checks['strong'] = all(checks.values())\n    return checks",
+      "context": "security",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit",
+        "import_from_typing",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_password_strength",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_url": {
+      "id": "function_validate_url",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_url(url: str) -> bool:\n    \"\"\"Validate URL format\"\"\"\n    try:\n        result = urlparse(url)\n        return all([result.scheme, result.netloc])\n    except Exception:\n        return False",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_from_urllib.parse",
+        "import_from_urllib.parse"
+      ],
+      "metadata": {
+        "function_name": "validate_url",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_phone_number": {
+      "id": "function_validate_phone_number",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_phone_number(phone: str) -> bool:\n    \"\"\"Validate phone number format\"\"\"\n    digits_only = re.sub('\\\\D', '', phone)\n    return len(digits_only) >= 10",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_phone_number",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_credit_card": {
+      "id": "function_validate_credit_card",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_credit_card(card_number: str) -> bool:\n    \"\"\"Validate credit card number using Luhn algorithm\"\"\"\n    card_number = re.sub('\\\\s+|-', '', card_number)\n    if not card_number.isdigit():\n        return False\n    digits = [int(d) for d in card_number]\n    odd_digits = digits[-1::-2]\n    even_digits = digits[-2::-2]\n    checksum = sum(odd_digits)\n    for d in even_digits:\n        checksum += sum(divmod(d * 2, 10))\n    return checksum % 10 == 0",
+      "context": "security",
+      "dependencies": [
+        "import_redis",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_jsonschema",
+        "import_streamlit",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_redis",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_jsonschema",
+        "import_redis",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_jsonschema",
+        "import_redis",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_jsonschema"
+      ],
+      "metadata": {
+        "function_name": "validate_credit_card",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_json_schema": {
+      "id": "function_validate_json_schema",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_json_schema(data: Dict[str, Any], schema: Dict[str, Any]) -> bool:\n    \"\"\"Validate data against JSON schema\"\"\"\n    try:\n        from jsonschema import validate\n        validate(instance=data, schema=schema)\n        return True\n    except ImportError:\n        return isinstance(data, dict)",
+      "context": "security",
+      "dependencies": [
+        "import_from_typing",
+        "import_from_typing",
+        "import_from_jsonschema",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_from_dataclasses",
+        "import_from_jsonschema",
+        "import_from_dataclasses"
+      ],
+      "metadata": {
+        "function_name": "validate_json_schema",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_file_extension": {
+      "id": "function_validate_file_extension",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_file_extension(filename: str, allowed_extensions: list[str]) -> bool:\n    \"\"\"Validate file extension\"\"\"\n    if not filename:\n        return False\n    file_ext = filename.lower().split('.')[-1] if '.' in filename else ''\n    return file_ext in [ext.lower() for ext in allowed_extensions]",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_streamlit"
+      ],
+      "metadata": {
+        "function_name": "validate_file_extension",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_file_size": {
+      "id": "function_validate_file_size",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_file_size(file_size: int, max_size_mb: int) -> bool:\n    \"\"\"Validate file size\"\"\"\n    max_size_bytes = max_size_mb * 1024 * 1024\n    return file_size <= max_size_bytes",
+      "context": "security",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_file_size",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_sql_injection_safe": {
+      "id": "function_validate_sql_injection_safe",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_sql_injection_safe(sql: str) -> bool:\n    \"\"\"Check if SQL string is safe from injection\"\"\"\n    dangerous_patterns = ['(\\\\b(union|select|insert|update|delete|drop|create|alter)\\\\b)', '(--|#|/\\\\*|\\\\*/)', '(\\\\b(exec|execute|script)\\\\b)', '(\\\\b(xp_|sp_)\\\\b)']\n    sql_lower = sql.lower()\n    for pattern in dangerous_patterns:\n        if re.search(pattern, sql_lower):\n            return False\n    return True",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_sql_injection_safe",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_xss_safe": {
+      "id": "function_validate_xss_safe",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_xss_safe(text: str) -> bool:\n    \"\"\"Check if text is safe from XSS attacks\"\"\"\n    dangerous_patterns = ['<script[^>]*>.*?</script>', 'javascript:', 'on\\\\w+\\\\s*=', '<iframe[^>]*>', '<object[^>]*>', '<embed[^>]*>']\n    text_lower = text.lower()\n    for pattern in dangerous_patterns:\n        if re.search(pattern, text_lower):\n            return False\n    return True",
+      "context": "security",
+      "dependencies": [
+        "import_streamlit",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_xss_safe",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_validate_file_upload": {
+      "id": "function_validate_file_upload",
+      "type": "function",
+      "content": "@staticmethod\ndef validate_file_upload(filename: str, file_size: int, allowed_extensions: list[str], max_size_mb: int=10) -> Dict[str, Any]:\n    \"\"\"Validate file upload for security and size constraints\"\"\"\n    validation_result: Dict[str, Any] = {'valid': True, 'errors': [], 'warnings': []}\n    if not InputValidator.validate_file_extension(filename, allowed_extensions):\n        validation_result['valid'] = False\n        validation_result['errors'].append(f'File extension not allowed. Allowed: {allowed_extensions}')\n    if not InputValidator.validate_file_size(file_size, max_size_mb):\n        validation_result['valid'] = False\n        validation_result['errors'].append(f'File too large. Max size: {max_size_mb}MB')\n    dangerous_extensions = ['exe', 'bat', 'cmd', 'com', 'pif', 'scr', 'vbs', 'js']\n    file_ext = filename.lower().split('.')[-1] if '.' in filename else ''\n    if file_ext in dangerous_extensions:\n        validation_result['valid'] = False\n        validation_result['errors'].append(f'Dangerous file type: {file_ext}')\n    suspicious_patterns = ['\\\\.\\\\./', '\\\\.\\\\.\\\\\\\\', 'cmd\\\\.', '\\\\.tmp$']\n    for pattern in suspicious_patterns:\n        if re.search(pattern, filename, re.IGNORECASE):\n            validation_result['valid'] = False\n            validation_result['errors'].append(f'Suspicious filename pattern: {pattern}')\n            break\n    return validation_result",
+      "context": "security",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_typing",
+        "import_streamlit",
+        "import_streamlit",
+        "import_from_typing",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_redis",
+        "import_streamlit",
+        "import_from_botocore.exceptions",
+        "import_re"
+      ],
+      "metadata": {
+        "function_name": "validate_file_upload",
+        "has_docstring": true,
+        "source_file": "src/security_first/input_validator.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "import_json": {
+      "id": "import_json",
+      "type": "import",
+      "content": "import json",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_langchain_openai": {
+      "id": "import_from_langchain_openai",
+      "type": "import",
+      "content": "from langchain_openai import ChatOpenAI",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_langchain_anthropic": {
+      "id": "import_from_langchain_anthropic",
+      "type": "import",
+      "content": "from langchain_anthropic import ChatAnthropic",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_langchain_core.messages": {
+      "id": "import_from_langchain_core.messages",
+      "type": "import",
+      "content": "from langchain_core.messages import HumanMessage",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_langchain_core.output_parsers": {
+      "id": "import_from_langchain_core.output_parsers",
+      "type": "import",
+      "content": "from langchain_core.output_parsers import JsonOutputParser",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_langchain_core.prompts": {
+      "id": "import_from_langchain_core.prompts",
+      "type": "import",
+      "content": "from langchain_core.prompts import ChatPromptTemplate",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "import_from_meta_cognitive_orchestrator": {
+      "id": "import_from_meta_cognitive_orchestrator",
+      "type": "import",
+      "content": "from meta_cognitive_orchestrator import MetaCognitiveOrchestrator",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "file_pattern": "*.py",
+        "position": "top",
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "position": "top"
+      }
+    },
+    "function_test_live_scenario_1": {
+      "id": "function_test_live_scenario_1",
+      "type": "function",
+      "content": "def test_live_scenario_1():\n    \"\"\"Test with real LLM - Healthcare CDC implementation\"\"\"\n    print('=== LIVE TEST 1: Healthcare CDC Implementation ===')\n    orchestrator = MetaCognitiveOrchestrator()\n    openai_llm = LiveLLMOrchestrator(provider='openai')\n    context = \"\\n    I'm implementing a Healthcare CDC pipeline with DynamoDB and Snowflake.\\n    I think using CloudFormation for infrastructure is the right approach.\\n    Obviously the data model should match the Snowflake quickstart.\\n    I assume the CDC events will work the same way as other databases.\\n    \"\n    result = orchestrator.orchestrate(context)\n    print('\ud83e\udde0 Our Orchestrator Analysis:')\n    print(f\"Assumptions: {result['assumptions_detected']}\")\n    print(f\"Blind Spots: {result['blind_spots_identified']}\")\n    print(f\"Confidence: {result['confidence']:.2f}\")\n    print(f\"Decision: {result['final_decision']}\")\n    live_result = openai_llm.call_live_llm(context, result['jeopardy_question'])\n    print('\\n\ud83e\udd16 Live OpenAI Analysis:')\n    print(json.dumps(live_result, indent=2))\n    assert 'assumptions_detected' in result, 'Missing assumptions_detected'\n    assert 'blind_spots_identified' in result, 'Missing blind_spots_identified'\n    assert 'confidence' in result, 'Missing confidence'\n    assert 'final_decision' in result, 'Missing final_decision'\n    if 'error' in live_result:\n        print(f\"\u26a0\ufe0f Live LLM failed: {live_result['error']}\")\n    else:\n        assert 'questions' in live_result, 'Live LLM missing questions'\n        print(f\"\u2705 Live LLM generated {len(live_result['questions'])} questions\")",
+      "context": "multi_agent",
+      "dependencies": [
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_jsonschema",
+        "import_json"
+      ],
+      "metadata": {
+        "function_name": "test_live_scenario_1",
+        "has_docstring": true,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_test_live_scenario_2": {
+      "id": "function_test_live_scenario_2",
+      "type": "function",
+      "content": "def test_live_scenario_2():\n    \"\"\"Test with real LLM - Security implementation\"\"\"\n    print('\\n=== LIVE TEST 2: Security Implementation ===')\n    orchestrator = MetaCognitiveOrchestrator()\n    anthropic_llm = LiveLLMOrchestrator(provider='anthropic')\n    context = \"\\n    I'm implementing OAuth2 for our healthcare application.\\n    I assume using the standard library will be secure enough.\\n    Probably I don't need to worry about token refresh.\\n    Obviously the Snowflake integration will handle the rest.\\n    \"\n    result = orchestrator.orchestrate(context)\n    print('\ud83e\udde0 Our Orchestrator Analysis:')\n    print(f\"Assumptions: {result['assumptions_detected']}\")\n    print(f\"Blind Spots: {result['blind_spots_identified']}\")\n    print(f\"Confidence: {result['confidence']:.2f}\")\n    print(f\"Decision: {result['final_decision']}\")\n    live_result = anthropic_llm.call_live_llm(context, result['jeopardy_question'])\n    print('\\n\ud83e\udd16 Live Anthropic Analysis:')\n    print(json.dumps(live_result, indent=2))\n    assert 'assumptions_detected' in result, 'Missing assumptions_detected'\n    assert 'blind_spots_identified' in result, 'Missing blind_spots_identified'\n    assert 'confidence' in result, 'Missing confidence'\n    assert 'final_decision' in result, 'Missing final_decision'\n    if 'error' in live_result:\n        print(f\"\u26a0\ufe0f Live LLM failed: {live_result['error']}\")\n    else:\n        assert 'questions' in live_result, 'Live LLM missing questions'\n        print(f\"\u2705 Live LLM generated {len(live_result['questions'])} questions\")",
+      "context": "multi_agent",
+      "dependencies": [
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_jsonschema",
+        "import_json"
+      ],
+      "metadata": {
+        "function_name": "test_live_scenario_2",
+        "has_docstring": true,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_test_live_edge_case": {
+      "id": "function_test_live_edge_case",
+      "type": "function",
+      "content": "def test_live_edge_case():\n    \"\"\"Test with real LLM - Edge case with legitimate assumptions\"\"\"\n    print('\\n=== LIVE TEST 3: Edge Case - Legitimate Assumptions ===')\n    orchestrator = MetaCognitiveOrchestrator()\n    openai_llm = LiveLLMOrchestrator(provider='openai')\n    context = '\\n    I think the user is right about the PR workflow.\\n    Obviously we should use GitHub PRs instead of direct merges.\\n    I assume this is the standard approach for this project.\\n    '\n    result = orchestrator.orchestrate(context)\n    print('\ud83e\udde0 Our Orchestrator Analysis:')\n    print(f\"Assumptions: {result['assumptions_detected']}\")\n    print(f\"Blind Spots: {result['blind_spots_identified']}\")\n    print(f\"Confidence: {result['confidence']:.2f}\")\n    print(f\"Decision: {result['final_decision']}\")\n    live_result = openai_llm.call_live_llm(context, result['jeopardy_question'])\n    print('\\n\ud83e\udd16 Live OpenAI Analysis:')\n    print(json.dumps(live_result, indent=2))\n    assert 'assumptions_detected' in result, 'Missing assumptions_detected'\n    assert 'blind_spots_identified' in result, 'Missing blind_spots_identified'\n    assert 'confidence' in result, 'Missing confidence'\n    assert 'final_decision' in result, 'Missing final_decision'\n    if 'error' in live_result:\n        print(f\"\u26a0\ufe0f Live LLM failed: {live_result['error']}\")\n    else:\n        assert 'questions' in live_result, 'Live LLM missing questions'\n        print(f\"\u2705 Live LLM generated {len(live_result['questions'])} questions\")",
+      "context": "multi_agent",
+      "dependencies": [
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_jsonschema",
+        "import_json"
+      ],
+      "metadata": {
+        "function_name": "test_live_edge_case",
+        "has_docstring": true,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "function_call_live_llm": {
+      "id": "function_call_live_llm",
+      "type": "function",
+      "content": "def call_live_llm(self, context: str, jeopardy_question: str) -> Dict[str, Any]:\n    \"\"\"Call live LLM API using LangChain\"\"\"\n    if not self.api_key or not self.chain:\n        return {'error': f'No {self.provider.upper()}_API_KEY available', 'questions': []}\n    try:\n        result = self.chain.invoke({'context': context, 'jeopardy_question': jeopardy_question, 'format_instructions': self.output_parser.get_format_instructions()})\n        return result\n    except Exception as e:\n        return {'error': f'Request failed: {str(e)}', 'questions': []}",
+      "context": "multi_agent",
+      "dependencies": [
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_from_typing",
+        "import_streamlit",
+        "import_from_meta_cognitive_orchestrator",
+        "import_time",
+        "import_redis",
+        "import_streamlit",
+        "import_plotly.graph_objects",
+        "import_from_datetime",
+        "import_from_dataclasses",
+        "import_from_pydantic",
+        "import_from_cryptography.fernet",
+        "import_from_botocore.exceptions",
+        "import_re",
+        "import_from_urllib.parse",
+        "import_from_jsonschema",
+        "import_from_langchain_openai",
+        "import_from_langchain_core.messages",
+        "import_from_langchain_core.output_parsers",
+        "import_from_langchain_core.prompts",
+        "import_from_meta_cognitive_orchestrator"
+      ],
+      "metadata": {
+        "function_name": "call_live_llm",
+        "has_docstring": true,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    },
+    "class_LiveLLMOrchestrator": {
+      "id": "class_LiveLLMOrchestrator",
+      "type": "class",
+      "content": "class LiveLLMOrchestrator:\n    \"\"\"Clean LangChain-based LLM integration\"\"\"\n\n    def __init__(self, api_key: Optional[str]=None, provider: str='openai'):\n        self.provider = provider\n        self.api_key = api_key or os.getenv(f'{provider.upper()}_API_KEY')\n        if provider not in ['openai', 'anthropic']:\n            raise ValueError(f'Unsupported provider: {provider}')\n        self.llm = None\n        if self.api_key:\n            try:\n                if provider == 'openai':\n                    self.llm = ChatOpenAI(api_key=self.api_key, model='gpt-4-turbo', temperature=0.7)\n                elif provider == 'anthropic':\n                    self.llm = ChatAnthropic(api_key=self.api_key, model='claude-3-5-sonnet-20241022', temperature=0.7)\n            except ImportError as e:\n                raise ValueError(f'Failed to import {provider} dependencies: {str(e)}. Install required packages.')\n            except ValueError as e:\n                raise ValueError(f'Invalid {provider} configuration: {str(e)}. Check API key format.')\n            except Exception as e:\n                raise ValueError(f'Failed to initialize {provider} model: {str(e)}. Check API key validity and model availability.')\n        self.output_parser = JsonOutputParser()\n        self.prompt = ChatPromptTemplate.from_template('\\nYou are a partner LLM helping to detect blind spots and unknown unknowns.\\n\\nContext: {context}\\n\\nJeopardy Question: {jeopardy_question}\\n\\nGenerate 5 probing questions that would reveal blind spots, assumptions, or unknown unknowns. \\nFocus on questions that challenge the approach and reveal what might be missing.\\n\\n{format_instructions}\\n')\n        self.chain = None\n        if self.llm:\n            self.chain = self.prompt | self.llm | self.output_parser\n\n    def call_live_llm(self, context: str, jeopardy_question: str) -> Dict[str, Any]:\n        \"\"\"Call live LLM API using LangChain\"\"\"\n        if not self.api_key or not self.chain:\n            return {'error': f'No {self.provider.upper()}_API_KEY available', 'questions': []}\n        try:\n            result = self.chain.invoke({'context': context, 'jeopardy_question': jeopardy_question, 'format_instructions': self.output_parser.get_format_instructions()})\n            return result\n        except Exception as e:\n            return {'error': f'Request failed: {str(e)}', 'questions': []}",
+      "context": "multi_agent",
+      "dependencies": [],
+      "metadata": {
+        "class_name": "LiveLLMOrchestrator",
+        "has_docstring": true,
+        "source_file": "src/multi_agent_testing/live_smoke_test_langchain.py"
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8"
+      }
+    }
+  },
+  "file_contexts": {
+    "src/streamlit/openflow_quickstart_app.py": "streamlit",
+    "src/security_first/input_validator.py": "security",
+    "src/multi_agent_testing/live_smoke_test_langchain.py": "multi_agent"
+  }
+}

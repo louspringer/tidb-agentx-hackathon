@@ -1,0 +1,103 @@
+---
+title: "Dynamic Prevention Rules"
+description: "Automatically generated prevention rules based on violations"
+globs: ["*.py", "*.js", "*.ts", "*.yaml", "*.yml", "*.json"]
+alwaysApply: true
+---
+
+# Dynamic Prevention Rules
+
+## Core Principle
+**These rules are automatically generated based on detected violations to prevent future occurrences.**
+
+## Prevention Strategies
+
+
+
+### Unused Import Prevention
+
+**Rule Code:** IMPORT_PREVENTION
+**Description:** Prevent unused imports before they happen
+**Pattern:** import.*unused
+**Suggestion:** Only import modules that are actually used
+
+#### Prevention Code
+```python
+
+# BEFORE writing imports
+def validate_imports(imports: List[str], file_content: str):
+    """Validate that imports are actually used"""
+    used_imports = []
+    for imp in imports:
+        if is_import_used(imp, file_content):
+            used_imports.append(imp)
+        else:
+            suggest_removal(imp)
+    return used_imports
+
+```
+
+#### Ignore Directive (if intentional)
+```python
+# noqa: F401  # Import needed for type checking
+```
+
+#### Implementation
+- Check for pattern before writing code
+- Apply prevention strategy
+- Use ignore directive only when truly intentional
+
+
+
+
+
+### Blank Line Prevention
+
+**Rule Code:** BLANK_LINE_PREVENTION
+**Description:** Prevent missing blank lines before definitions
+**Pattern:** def.*|class.*
+**Suggestion:** Add two blank lines before class/function definitions
+
+#### Prevention Code
+```python
+
+# BEFORE writing class/function definitions
+def validate_spacing(context: str, definition_type: str):
+    """Validate proper spacing around definitions"""
+    if definition_type in ['class', 'function']:
+        ensure_two_blank_lines_before(context)
+
+```
+
+#### Ignore Directive (if intentional)
+```python
+# noqa: E302  # Compact module structure
+```
+
+#### Implementation
+- Check for pattern before writing code
+- Apply prevention strategy
+- Use ignore directive only when truly intentional
+
+
+### Generic Prevention
+
+**Rule Code:** GENERIC_PREVENTION
+**Description:** Prevent BLACK001 violations
+**Pattern:** .*
+**Suggestion:** Fix BLACK001 violation
+
+#### Prevention Code
+```python
+
+```
+
+#### Ignore Directive (if intentional)
+```python
+# noqa: BLACK001  # Code needs formatting
+```
+
+#### Implementation
+- Check for pattern before writing code
+- Apply prevention strategy
+- Use ignore directive only when truly intentional

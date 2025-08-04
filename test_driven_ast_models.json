@@ -1,0 +1,335 @@
+{
+  "file_models": {},
+  "test_requirements": {
+    "tests/test_rule_compliance.py": [],
+    "tests/test_file_organization.py": [],
+    "tests/test_cline_plan_blind_spots.py": [],
+    "tests/test_data_fresh_cline_plan.py": [],
+    "tests/test_gemini_2_5_flash_lite_pr_review.py": [],
+    "tests/test_code_quality_comprehensive.py": [],
+    "tests/validate_healthcare_cdc_simple.py": [
+      {
+        "requirement_id": "requirement_27",
+        "description": "Test HIPAA compliance validation requirement.",
+        "test_files": [
+          "test_requirement_27_hipaa_compliance_validation"
+        ],
+        "target_files": [
+          "healthcare_cdc_domain_model.py",
+          "test_healthcare_cdc_domain_model.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_28",
+        "description": "Test PHI detection and validation requirement.",
+        "test_files": [
+          "test_requirement_28_phi_detection_validation"
+        ],
+        "target_files": [
+          "healthcare_cdc_domain_model.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_29",
+        "description": "Test immutable audit logging requirement.",
+        "test_files": [
+          "test_requirement_29_immutable_audit_logging"
+        ],
+        "target_files": [
+          "healthcare_cdc_domain_model.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_30",
+        "description": "Test healthcare data encryption requirement.",
+        "test_files": [
+          "test_requirement_30_healthcare_data_encryption"
+        ],
+        "target_files": [
+          "healthcare_cdc_domain_model.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_31",
+        "description": "Test healthcare access control and authentication requirement.",
+        "test_files": [
+          "test_requirement_31_healthcare_access_control"
+        ],
+        "target_files": [
+          "healthcare_cdc_domain_model.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_32",
+        "description": "Test healthcare CDC CI/CD integration requirement.",
+        "test_files": [
+          "test_requirement_32_healthcare_cdc_cicd_integration"
+        ],
+        "target_files": [
+          "healthcare-cdc/*.json",
+          "*.yaml",
+          "healthcare-cdc/*.yaml",
+          "healthcare-cdc-config.json",
+          "healthcare-cdc-infrastructure.yaml"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      }
+    ],
+    "tests/test_mdc_generator.py": [],
+    "tests/test_file_existence.py": [],
+    "tests/test_security_enhancements.py": [
+      {
+        "requirement_id": "requirement_33",
+        "description": "Test HTTPS enforcement requirement.",
+        "test_files": [
+          "test_requirement_33_https_enforcement"
+        ],
+        "target_files": [
+          "src/security_first/https_enforcement.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_34",
+        "description": "Test rate limiting requirement.",
+        "test_files": [
+          "test_requirement_34_rate_limiting"
+        ],
+        "target_files": [
+          "src/security_first/rate_limiting.py",
+          "Rate limiting module not found (expected src/security_first/rate_limiting.py)"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_35",
+        "description": "Test CSRF protection requirement.",
+        "test_files": [
+          "test_requirement_35_csrf_protection"
+        ],
+        "target_files": [
+          "src/security_first/https_enforcement.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "assert",
+        "priority": "low",
+        "status": "unknown"
+      }
+    ],
+    "tests/test_basic_validation_simple.py": [],
+    "tests/test_code_quality_system.py": [],
+    "tests/test_basic_validation_pytest.py": [],
+    "tests/test_uv_package_management.py": [
+      {
+        "requirement_id": "requirement_36",
+        "description": "Test UV package management enforcement requirement.",
+        "test_files": [
+          "test_requirement_36_uv_package_management"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_37",
+        "description": "Test Streamlit app dependencies with UV requirement.",
+        "test_files": [
+          "test_requirement_37_streamlit_dependencies_uv"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_38",
+        "description": "Test security-first dependencies with UV requirement.",
+        "test_files": [
+          "test_requirement_38_security_dependencies_uv"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_39",
+        "description": "Test development dependencies with UV requirement.",
+        "test_files": [
+          "test_requirement_39_dev_dependencies_uv"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      }
+    ],
+    "tests/test_type_safety.py": [],
+    "tests/test_makefile_integration.py": [],
+    "tests/test_gemini_2_5_preview_pr_review.py": [],
+    "tests/test_rule_compliance_enforcement.py": [],
+    "tests/test_code_quality.py": [],
+    "tests/test_core_concepts.py": [],
+    "tests/test_healthcare_cdc_requirements.py": [
+      {
+        "requirement_id": "requirement_27",
+        "description": "Test HIPAA compliance validation requirement.",
+        "test_files": [
+          "test_requirement_27_hipaa_compliance_validation"
+        ],
+        "target_files": [
+          "healthcare_cdc_domain_model.py",
+          "test_healthcare_cdc_domain_model.py"
+        ],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_28",
+        "description": "Test PHI detection and validation requirement.",
+        "test_files": [
+          "test_requirement_28_phi_detection_validation"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_29",
+        "description": "Test immutable audit logging requirement.",
+        "test_files": [
+          "test_requirement_29_immutable_audit_logging"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_30",
+        "description": "Test healthcare data encryption requirement.",
+        "test_files": [
+          "test_requirement_30_healthcare_data_encryption"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_31",
+        "description": "Test healthcare access control requirement.",
+        "test_files": [
+          "test_requirement_31_healthcare_access_control"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      },
+      {
+        "requirement_id": "requirement_32",
+        "description": "Test healthcare CDC CI/CD integration requirement.",
+        "test_files": [
+          "test_requirement_32_healthcare_cdc_cicd_integration"
+        ],
+        "target_files": [],
+        "recovery_targets": [],
+        "validation_method": "pytest",
+        "priority": "low",
+        "status": "unknown"
+      }
+    ],
+    "tests/test_cline_fresh_plan_blind_spots.py": [],
+    "tests/test_basic_validation.py": []
+  },
+  "recovery_targets": [
+    {
+      "target_file": "tests/test_syntax_fixes.py",
+      "target_type": "syntax",
+      "failure_pattern": "syntax_error",
+      "recovery_strategy": "fix_indentation_and_syntax",
+      "dependencies": [],
+      "test_requirements": []
+    },
+    {
+      "target_file": "tests/test_imports.py",
+      "target_type": "import",
+      "failure_pattern": "import_error",
+      "recovery_strategy": "fix_imports_and_dependencies",
+      "dependencies": [],
+      "test_requirements": []
+    },
+    {
+      "target_file": "tests/test_classes.py",
+      "target_type": "class",
+      "failure_pattern": "name_error",
+      "recovery_strategy": "implement_missing_classes_and_functions",
+      "dependencies": [],
+      "test_requirements": []
+    }
+  ],
+  "test_results": {
+    "tests/test_syntax_fixes.py": {
+      "status": "FAILED",
+      "error": "IndentationError"
+    },
+    "tests/test_imports.py": {
+      "status": "ERROR",
+      "error": "ModuleNotFoundError"
+    },
+    "tests/test_classes.py": {
+      "status": "FAILED",
+      "error": "NameError: name 'CodeQualityModel' is not defined"
+    }
+  },
+  "metadata": {
+    "created_at": "2025-08-03T10:14:12.645375",
+    "version": "2.0.0",
+    "total_files": 0,
+    "total_requirements": 23,
+    "total_recovery_targets": 3,
+    "last_updated": "2025-08-03T10:14:12.876381"
+  }
+}
