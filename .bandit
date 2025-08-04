@@ -1,0 +1,15 @@
+{
+  "exclude_dirs": [
+    "tests",
+    "src/multi_agent_testing",
+    "src/security_first"
+  ],
+  "exclude": [
+    "src/streamlit/openflow_quickstart_app.py"
+  ],
+  "skips": [
+    "B101",
+    "B105",
+    "B112"
+  ]
+}

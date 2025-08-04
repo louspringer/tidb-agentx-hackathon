@@ -1,0 +1,158 @@
+---
+title: "No Bash/Zsh Oneliners Rule"
+description: "NEVER use bash/zsh oneliners with complex escaping. ALWAYS create proper Python scripts that can be run reliably from the command line."
+category: "code_quality"
+priority: "high"
+globs: ["*.py", "*.sh", "*.bash", "*.zsh"]
+alwaysApply: false
+---
+
+# No Bash/Zsh Oneliners Rule
+
+## 🚨 **Rule Definition**
+**"NEVER use bash/zsh oneliners with complex escaping. ALWAYS create proper Python scripts that can be run reliably from the command line."**
+
+## ❌ **BANNED: Bash/Zsh Oneliners**
+```bash
+# ❌ NEVER DO THIS - Complex escaping nightmare
+python -c "import json; model = json.load(open('project_model_registry.json')); print('🎯 GHOSTBUSTERS TEAM ASSEMBLED:'); print('📊 Model Registry Version:', model['version']); print('🏢 Domains Available:', len(model['domains'])); print('📋 Requirements Tracked:', len(model['requirements_traceability']))"
+
+# ❌ NEVER DO THIS - Escaping hell
+python -c "import json; model = json.load(open('project_model_registry.json')); security_domain = model['domains']['security_first']; print('🔒 SECURITY GHOSTBUSTER REPORT:'); print('📋 Requirements:', len(security_domain['requirements'])); print('🛠️ Tools:', security_domain['linter'], security_domain['validator'], security_domain['formatter']); print('🎯 Content Indicators:', len(security_domain['content_indicators']))"
+
+# ❌ NEVER DO THIS - Shell interpretation issues
+python -c "import json; model = json.load(open('project_model_registry.json')); print('🎯 MODEL GHOSTBUSTER REPORT:'); print('❌ DELUSION DETECTED: Not using model-driven approach!'); print('📊 Model Registry Status: ACTIVE'); print('🔍 Missing Model Updates: YES'); print('🎯 Required Action: Update model with test failures')"
+```
+
+## ✅ **REQUIRED: Proper Python Scripts**
+```python
+#!/usr/bin/env python3
+"""
+Ghostbusters Validation Script
+Multi-agent validation with deterministic tools
+"""
+
+import json
+import sys
+from typing import Dict, Any
+
+
+def load_model_registry() -> Dict[str, Any]:
+    """Load the project model registry"""
+    try:
+        with open('project_model_registry.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("❌ ERROR: project_model_registry.json not found!")
+        sys.exit(1)
+    except json.JSONDecodeError as e:
+        print(f"❌ ERROR: Invalid JSON in project_model_registry.json: {e}")
+        sys.exit(1)
+
+
+def main():
+    """Main function"""
+    model_registry = load_model_registry()
+    
+    print("🎯 GHOSTBUSTERS TEAM ASSEMBLED:")
+    print(f"📊 Model Registry Version: {model_registry['version']}")
+    print(f"🏢 Domains Available: {len(model_registry['domains'])}")
+    print(f"📋 Requirements Tracked: {len(model_registry['requirements_traceability'])}")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## 🎯 **When to Use Scripts vs Oneliners**
+
+### ✅ **ALWAYS Use Scripts For:**
+- **Complex logic** (more than 2-3 operations)
+- **Error handling** (try/catch blocks)
+- **File operations** (reading/writing files)
+- **Data processing** (JSON parsing, data transformation)
+- **Multi-step operations** (validation, analysis, reporting)
+- **Reusable functionality** (functions that might be called again)
+- **Debugging** (when you need to inspect intermediate results)
+
+### ⚠️ **Rarely Use Oneliners For:**
+- **Simple status checks** (`python -c "import os; print(os.path.exists('file.txt'))"`)
+- **Quick version checks** (`python -c "import sys; print(sys.version)"`)
+- **Simple environment checks** (`python -c "import os; print(os.getenv('PATH'))"`)
+
+## 🛠️ **Script Creation Guidelines**
+
+### **1. Always Include Shebang**
+```python
+#!/usr/bin/env python3
+```
+
+### **2. Always Include Docstring**
+```python
+"""
+Script Name: What this script does
+Author: Who created it
+Date: When it was created
+Purpose: Why it exists
+"""
+```
+
+### **3. Always Include Type Hints**
+```python
+from typing import Dict, List, Any, Optional
+
+def process_data(data: Dict[str, Any]) -> List[str]:
+    """Process data and return results"""
+    pass
+```
+
+### **4. Always Include Error Handling**
+```python
+try:
+    result = risky_operation()
+except SpecificException as e:
+    logger.error(f"Operation failed: {e}")
+    sys.exit(1)
+```
+
+### **5. Always Include Main Function**
+```python
+def main():
+    """Main function with proper argument parsing"""
+    pass
+
+if __name__ == "__main__":
+    main()
+```
+
+## 🚨 **Security Considerations**
+
+### **❌ NEVER Hardcode Credentials**
+```python
+# ❌ NEVER DO THIS
+SECRET_KEY = "my-secret-key-123"
+```
+
+### **✅ ALWAYS Use Environment Variables**
+```python
+# ✅ ALWAYS DO THIS
+import os
+SECRET_KEY = os.getenv("SECRET_KEY", "default-for-development-only")
+```
+
+## 🎯 **Enforcement**
+
+This rule is enforced by:
+1. **Pre-commit hooks** that scan for complex oneliners
+2. **Code review** processes that flag oneliner usage
+3. **Automated testing** that validates script creation
+4. **Documentation** that provides script templates
+
+## 📋 **Compliance Checklist**
+
+- [ ] No complex Python oneliners in shell scripts
+- [ ] All file operations use proper Python scripts
+- [ ] All data processing uses proper Python scripts
+- [ ] All error handling uses proper Python scripts
+- [ ] All debugging uses proper Python scripts
+- [ ] All reusable functionality uses proper Python scripts
