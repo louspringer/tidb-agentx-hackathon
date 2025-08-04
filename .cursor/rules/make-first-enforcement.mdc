@@ -1,0 +1,85 @@
+---
+title: "Make-First Command Enforcement"
+description: "ALWAYS use Make targets - never run commands directly"
+category: "orchestration"
+priority: "high"
+globs: ["*.py", "*.sh", "*.bash", "*.zsh"]
+alwaysApply: false
+---
+
+# Make-First Command Enforcement
+
+## ALWAYS Use Make Targets
+
+### The Rule
+**"If there's a Make target for it, use the Make target. Never run commands directly."**
+
+### Mandatory Pre-Action Checklist
+Before running ANY command:
+
+1. **✅ Check if there's a Make target** - Look in Makefile first
+2. **✅ Use the Make target** - If it exists, use it
+3. **✅ Only run direct commands if no Make target exists** - And document why
+4. **✅ Update Makefile if needed** - Add missing targets
+
+### Available Make Targets
+```bash
+# Testing
+make test                      # Full test suite with model-driven approach
+make test-model-driven         # Model-driven testing enforcement
+make test-ghostbusters         # Ghostbusters-specific tests
+make test-healthcare-cdc       # Healthcare CDC tests
+
+# Code Quality
+make lint                      # Linting with flake8
+make format                    # Formatting with black
+make type-check               # Type checking with mypy
+make quality-check            # Comprehensive quality checks
+
+# Security
+make security-check           # Security scanning
+make security-scan           # Detailed security analysis
+
+# Development
+make install                  # Install dependencies
+make clean                    # Clean build artifacts
+make help                     # Show all available targets
+```
+
+### Common Violations
+- ❌ `python -m pytest tests/` (use `make test`)
+- ❌ `python -m flake8 tests/` (use `make lint`)
+- ❌ `python -m black tests/` (use `make format`)
+- ❌ `python -m mypy tests/` (use `make type-check`)
+- ❌ `uv run pytest tests/` (use `make test`)
+- ❌ `uv run flake8 tests/` (use `make lint`)
+
+### Correct Approach
+- ✅ `make test` - Run all tests
+- ✅ `make lint` - Run linting
+- ✅ `make format` - Run formatting
+- ✅ `make type-check` - Run type checking
+- ✅ `make security-check` - Run security checks
+
+### When No Make Target Exists
+If you need to run a command that doesn't have a Make target:
+
+1. **Check if it should have a Make target** - Most commands should
+2. **Add the Make target** - Update Makefile with the new target
+3. **Document why** - Add a comment explaining the target's purpose
+4. **Use the new Make target** - Then use `make target-name`
+
+### Example: Adding Missing Targets
+```makefile
+# Add to Makefile
+test-specific:
+	@echo "🧪 Running specific tests..."
+	$(UV) run pytest tests/test_specific.py -v
+
+lint-specific:
+	@echo "🔍 Linting specific files..."
+	$(UV) run flake8 src/specific/ --select=F401,E302
+```
+
+## Remember
+**Make targets provide consistency, documentation, and proper tool orchestration. Always prefer Make over direct commands.**

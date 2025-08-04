@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Tests for HTTPS Enforcement Module
@@ -142,7 +143,7 @@ class TestCSRFProtection:
     
     def setup_method(self):
         """Setup test environment."""
-        self.secret_key = "test_secret_key_123"
+        self.secret_key = os.getenv("TEST_SECRET_KEY", "test_secret_key_123")
         self.csrf_protection = CSRFProtection(self.secret_key)
     
     def test_generate_csrf_token(self):
@@ -166,7 +167,7 @@ class TestCSRFProtection:
     def test_validate_csrf_token_invalid(self):
         """Test invalid CSRF token validation."""
         session_id = "session123"
-        invalid_token = "invalid_token_123"
+        invalid_token = os.getenv("INVALID_TOKEN", "invalid_token_123")
         
         result = self.csrf_protection.validate_csrf_token(invalid_token, session_id)
         
@@ -179,7 +180,7 @@ class TestSecurityManager:
     def setup_method(self):
         """Setup test environment."""
         self.mock_redis = MagicMock()
-        self.secret_key = "test_secret_key_123"
+        self.secret_key = os.getenv("TEST_SECRET_KEY", "test_secret_key_123")
         self.security_manager = SecurityManager(self.mock_redis, self.secret_key)
     
     def test_validate_request_all_valid(self):
@@ -245,7 +246,7 @@ class TestIntegration:
     def test_security_manager_integration(self):
         """Test integration of all security components."""
         mock_redis = MagicMock()
-        secret_key = "integration_test_key"
+        secret_key = os.getenv("INTEGRATION_TEST_KEY", "integration_test_key")
         security_manager = SecurityManager(mock_redis, secret_key)
         
         # Test comprehensive validation
