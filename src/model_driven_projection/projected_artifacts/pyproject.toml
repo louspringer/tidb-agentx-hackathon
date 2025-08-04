@@ -1,0 +1,200 @@
+[project]
+name = "openflow-playground"
+version = "1.0.0"
+description = "OpenFlow Playground with Security-First Architecture and Multi-Agent Blind Spot Detection"
+authors = [
+    {name = "Lou Springer", email = "lou@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # Core Framework
+    "streamlit>=1.28.0",
+    
+    # Security Dependencies
+    "bcrypt>=4.0.0",
+    "cryptography>=41.0.0",
+    "PyJWT>=2.8.0",
+    
+    # Data Processing
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    
+    # Visualization
+    "plotly>=5.15.0",
+    
+    # AWS Integration
+    "boto3>=1.28.0",
+    "botocore>=1.31.0",
+    
+    # Database and Caching
+    "redis>=4.6.0",
+    
+    # HTTP Requests
+    "requests>=2.31.0",
+    
+    # Data Validation
+    "pydantic>=2.10.0",
+    
+    # LangChain and LangGraph
+    "langchain>=0.1.0",
+    "langgraph>=0.1.0",
+    "langchain-core>=0.1.0",
+]
+
+
+[project.optional-dependencies]
+dev = [
+    # Development and Testing
+    "pytest>=7.4.0",
+    "pytest-mock>=3.11.0",
+    
+    # Code Quality
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    
+    # Security Scanning
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    
+    # Type Stubs
+    "types-requests>=2.31.0",
+    "pandas-stubs>=2.0.0",
+    "types-pyyaml>=6.0.12.20250516",
+]
+
+security = [
+    # Security Tools
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    "detect-secrets>=1.4.0",
+]
+
+
+[project.scripts]
+openflow-app = "src.streamlit.openflow_quickstart_app:main"
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+
+[tool.hatch.build]
+include = [
+    "src/**/*.py",
+    "tests/**/*.py",
+    "README.md",
+    "LICENSE",
+]
+
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.4.0",
+    "pytest-mock>=3.11.0",
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    "types-requests>=2.31.0",
+    "pandas-stubs>=2.0.0",
+    "types-pyyaml>=6.0.12.20250516",
+    "autoflake>=2.3.1",
+]
+
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503", "E501", "F541", "F401", "E265", "F811", "E402", "F841", "F821", "W293"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+    "venv",
+    ".mypy_cache",
+    ".tox"
+]
+
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+show_column_numbers = true
+
+# Ignore missing stubs for external libraries
+
+[[tool.mypy.overrides]]
+module = [
+    "src.streamlit.*",
+    "src.security_first.*",
+    "src.mdc_generator.*",
+    "tests.test_basic_validation.*",
+    "tests.test_core_concepts.*",
+    "tests.test_healthcare_cdc_requirements.*",
+    "tests.test_rule_compliance.*",
+    "tests.test_uv_package_management.*",
+    "tests.test_makefile_integration.*",
+    "tests.test_type_safety.*",
+    "scripts.*",
+    ".cursor.*"
+]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv"]
+skips = ["B101", "B601"]
+
+
+[tool.safety]
+output = "json"
