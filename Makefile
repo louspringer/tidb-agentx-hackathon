@@ -18,6 +18,9 @@ PYTHON := python3
 UV := uv
 MAKE := make
 
+# Warning system for usage outside of spec
+WARN_OUTSIDE_SPEC := @echo "$(YELLOW)⚠️  WARNING: Running outside of recommended spec$(NC)" && echo "$(YELLOW)   Consider using make targets for better integration$(NC)"
+
 # Colors for output
 RED := \033[0;31m
 GREEN := \033[0;32m
@@ -98,15 +101,23 @@ install-healthcare: ## Install healthcare CDC dependencies
 # TESTING TARGETS
 # =============================================================================
 
-test: test-all ## Run all tests (default: test-all)
+test: test-model-driven ## Run all tests including type safety
+	@echo "🧪 Running all tests..."
+	$(UV) run pytest tests/ -v
+	@echo "✅ All tests completed"
 
-test-all: test-python test-bash test-cloudformation test-docs test-security test-streamlit test-healthcare ## Run tests for all domains
+test-all: test-python test-python-enhanced test-bash test-cloudformation test-docs test-security test-streamlit test-healthcare ## Run tests for all domains
 	@echo "$(GREEN)✅ All tests completed$(NC)"
 
 test-python: ## Run Python tests
 	@echo "$(BLUE)🐍 Running Python tests...$(NC)"
 	@$(UV) run pytest tests/ -v
 	@echo "$(GREEN)✅ Python tests completed$(NC)"
+
+test-python-enhanced: ## Run enhanced Python quality tests with model updates
+	@echo "$(BLUE)🐍 Running enhanced Python quality tests...$(NC)"
+	@$(UV) run python tests/test_python_quality_enhanced.py
+	@echo "$(GREEN)✅ Enhanced Python quality tests completed$(NC)"
 
 test-bash: ## Run bash script tests
 	@echo "$(BLUE)🐚 Running bash script tests...$(NC)"
@@ -125,7 +136,7 @@ test-docs: ## Run documentation tests
 
 test-security: ## Run security tests and scans
 	@echo "$(BLUE)🔒 Running security tests...$(NC)"
-	@$(UV) run bandit -r src/
+	@$(UV) run bandit -c .bandit -r src/
 	@$(UV) run safety check
 	@$(UV) run detect-secrets scan
 	@echo "$(GREEN)✅ Security tests completed$(NC)"
@@ -141,24 +152,64 @@ test-healthcare: ## Run healthcare CDC tests
 	@$(UV) run pytest tests/test_healthcare_cdc_requirements.py -v
 	@echo "$(GREEN)✅ Healthcare CDC tests completed$(NC)"
 
+# Model-driven testing enforcement
+test-model-driven:
+	@echo "🧪 ENFORCING MODEL-DRIVEN TESTING"
+	@echo "=================================="
+	@python scripts/pre_test_model_check.py
+
 # =============================================================================
 # LINTING TARGETS
 # =============================================================================
 
 lint: lint-all ## Lint all code (default: lint-all)
 
-lint-all: lint-python lint-bash lint-cloudformation lint-docs lint-security lint-streamlit lint-healthcare ## Lint all domains
+lint-all: lint-python lint-python-enhanced lint-bash lint-cloudformation lint-docs lint-security lint-streamlit lint-healthcare ## Lint all domains
 	@echo "$(GREEN)✅ All linting completed$(NC)"
 
 lint-python: ## Lint Python code
 	@echo "$(BLUE)🐍 Linting Python code...$(NC)"
-	@$(UV) run flake8 src/ tests/
-	@$(UV) run mypy src/
+	@$(UV) run flake8 src/ tests/ scripts/ .cursor/
+	@$(UV) run mypy src/ tests/ scripts/ .cursor/ --exclude tests/test_data_fresh_cline_plan.py
 	@echo "$(GREEN)✅ Python linting completed$(NC)"
+
+lint-python-enhanced: ## Lint Python code with enhanced quality checks
+	@echo "$(BLUE)🐍 Running enhanced Python linting...$(NC)"
+	@$(UV) run flake8 src/ tests/ scripts/ .cursor/
+	@$(UV) run mypy src/ tests/ scripts/ .cursor/ --exclude tests/test_data_fresh_cline_plan.py
+	@$(UV) run black --check src/ tests/ scripts/ .cursor/
+	@$(UV) run bandit -r src/ tests/ scripts/ .cursor/
+	@echo "$(GREEN)✅ Enhanced Python linting completed$(NC)"
+
+lint-python-file: ## Lint specific Python file (usage: make lint-python-file FILE=path/to/file.py)
+	@echo "$(BLUE)🐍 Linting Python file: $(FILE)$(NC)"
+	@$(UV) run flake8 $(FILE)
+	@$(UV) run mypy $(FILE)
+	@echo "$(GREEN)✅ Python file linting completed$(NC)"
+
+lint-python-files: ## Lint specific Python files (usage: make lint-python-files FILES="file1.py file2.py")
+	@echo "$(BLUE)🐍 Linting Python files: $(FILES)$(NC)"
+	@$(UV) run flake8 $(FILES)
+	@$(UV) run mypy $(FILES)
+	@echo "$(GREEN)✅ Python files linting completed$(NC)"
+
+lint-python-test: ## Lint Python files with test-specific config
+	@echo "$(BLUE)🐍 Linting Python files for testing...$(NC)"
+	@$(UV) run flake8 --select=F401,E302,E305,W291,W292 src/artifact_forge/agents/artifact_detector.py tests/test_basic_validation_simple.py tests/test_type_safety.py scripts/mdc-linter.py
+	@echo "$(GREEN)✅ Python test linting completed$(NC)"
+
+lint-python-comprehensive: ## Comprehensive Python linting and fixing
+	@echo "$(BLUE)🔧 Running comprehensive code quality system...$(NC)"
+	@python3 scripts/fix_code_quality.py --verbose
+	@echo "$(GREEN)✅ Comprehensive code quality completed$(NC)"
 
 lint-bash: ## Lint bash scripts
 	@echo "$(BLUE)🐚 Linting bash scripts...$(NC)"
-	@find scripts/ -name "*.sh" -exec shellcheck {} \;
+	@if command -v shellcheck >/dev/null 2>&1; then \
+		find scripts/ -name "*.sh" -exec shellcheck {} \; ; \
+	else \
+		echo "$(YELLOW)⚠️  shellcheck not installed, skipping bash linting$(NC)" ; \
+	fi
 	@echo "$(GREEN)✅ Bash script linting completed$(NC)"
 
 lint-cloudformation: ## Lint CloudFormation templates
@@ -168,7 +219,11 @@ lint-cloudformation: ## Lint CloudFormation templates
 
 lint-docs: ## Lint documentation
 	@echo "$(BLUE)📚 Linting documentation...$(NC)"
-	@find docs/ -name "*.md" -exec markdownlint {} \;
+	@if command -v markdownlint >/dev/null 2>&1; then \
+		find docs/ -name "*.md" -exec markdownlint {} \; ; \
+	else \
+		echo "$(YELLOW)⚠️  markdownlint not installed, skipping documentation linting$(NC)" ; \
+	fi
 	@echo "$(GREEN)✅ Documentation linting completed$(NC)"
 
 lint-security: ## Lint security code
@@ -194,13 +249,19 @@ lint-healthcare: ## Lint healthcare CDC code
 
 format: format-all ## Format all code (default: format-all)
 
-format-all: format-python format-bash format-docs ## Format all domains
+format-all: format-python format-python-enhanced format-bash format-docs ## Format all domains
 	@echo "$(GREEN)✅ All formatting completed$(NC)"
 
 format-python: ## Format Python code
 	@echo "$(BLUE)🐍 Formatting Python code...$(NC)"
-	@$(UV) run black src/ tests/
+	@$(UV) run black src/ tests/ scripts/ .cursor/
 	@echo "$(GREEN)✅ Python formatting completed$(NC)"
+
+format-python-enhanced: ## Format Python code with enhanced quality enforcement
+	@echo "$(BLUE)🐍 Running enhanced Python formatting...$(NC)"
+	@$(UV) run black src/ tests/ scripts/ .cursor/
+	@$(UV) run isort src/ tests/ scripts/ .cursor/
+	@echo "$(GREEN)✅ Enhanced Python formatting completed$(NC)"
 
 format-bash: ## Format bash scripts
 	@echo "$(BLUE)🐚 Formatting bash scripts...$(NC)"
@@ -366,3 +427,9 @@ status: ## Show project status
 	@echo "$(BLUE)🔧 Available make targets:$(NC)"
 	@make help | grep -E "^[a-zA-Z_-]+:" | head -10
 	@echo "$(YELLOW)... and more (run 'make help' for full list)$(NC)" 
+
+type-safety: ## Run type safety checks
+	@echo "🔍 Running type safety checks..."
+	$(UV) run mypy src/ tests/ scripts/ .cursor/ --exclude tests/test_data_fresh_cline_plan.py
+	$(UV) run pytest tests/test_type_safety.py -v
+	@echo "✅ Type safety checks completed" 

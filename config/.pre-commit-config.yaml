@@ -167,3 +167,13 @@ repos:
               .*cloudformation.*\.yml
           )$
         description: "Validate CloudFormation templates with cfn-lint" 
+
+  - repo: local
+    hooks:
+      - id: type-safety
+        name: Type Safety Check
+        entry: make type-safety
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [commit, push] 
