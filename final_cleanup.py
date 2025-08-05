@@ -23,10 +23,8 @@ def get_files_to_remove() -> List[str]:
         "test_results.log",
         "test_results_main.log",
         "test_results_updated.log",
-        
         # Temporary files
         "organize_root_files.py",
-        
         # Temporary directories
         "context_aware_projected_artifacts",
         "__pycache__",
@@ -35,12 +33,12 @@ def get_files_to_remove() -> List[str]:
 
 def cleanup_files() -> None:
     """Remove temporary files and directories."""
-    
+
     files_to_remove = get_files_to_remove()
-    
+
     print("🧹 Final cleanup of temporary files...")
     print(f"📋 Found {len(files_to_remove)} items to remove")
-    
+
     removed_count = 0
     for item in files_to_remove:
         if os.path.exists(item):
@@ -56,13 +54,13 @@ def cleanup_files() -> None:
                 print(f"❌ Error removing {item}: {e}")
         else:
             print(f"⚠️  {item} not found, skipping")
-    
+
     print(f"\n✅ Cleanup complete! Removed {removed_count} items")
 
 
 def main() -> None:
     """Main cleanup function."""
-    
+
     # Show what will be removed
     files_to_remove = get_files_to_remove()
     print("📋 Files and directories to remove:")
@@ -72,16 +70,16 @@ def main() -> None:
             print(f"  📁 {item} ({size})")
         else:
             print(f"  ⚠️  {item} (not found)")
-    
+
     # Confirm before proceeding
     response = input("\nProceed with cleanup? (y/N): ")
-    if response.lower() != 'y':
+    if response.lower() != "y":
         print("Cleanup cancelled.")
         return
-    
+
     # Perform cleanup
     cleanup_files()
 
 
 if __name__ == "__main__":
-    main() 
+    main()

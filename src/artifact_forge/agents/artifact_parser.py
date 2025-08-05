@@ -23,7 +23,7 @@ class BlockBoundary:
 
     start_line: int
     end_line: int
-    block_type: str  # 'function', 'class', 'if', 'for', 'while', 'try', 'with'
+    block_type: str  # 'function', 'class', 'i', 'for', 'while', 'try', 'with'
     indent_level: int
     content: str
     parent_block: Optional["BlockBoundary"] = None
@@ -44,7 +44,7 @@ class ParsedArtifact:
 class ArtifactParser:
     """Enhanced parser with recursive descent block analysis"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.parsers = {
             "python": self._parse_python_enhanced,
             "mdc": self._parse_mdc,
@@ -192,9 +192,9 @@ class ArtifactParser:
 
         # Control flow blocks
         if re.match(r"^if\s+", line):
-            return "if"
+            return "i"
         if re.match(r"^elif\s+", line):
-            return "elif"
+            return "eli"
         if re.match(r"^else\s*:", line):
             return "else"
         if re.match(r"^for\s+", line):
@@ -224,7 +224,7 @@ class ArtifactParser:
             return True  # New function starts
         if block_type == "class" and re.match(r"^class\s+", line):
             return True  # New class starts
-        if block_type in ["if", "elif", "else"] and re.match(
+        if block_type in ["i", "eli", "else"] and re.match(
             r"^(elif|else|if)\s+", line
         ):
             return True  # New control flow starts
@@ -406,7 +406,7 @@ class ArtifactParser:
 
         if len(parts) >= 3:
             try:
-                import yaml
+                import yaml  # type: ignore
 
                 frontmatter = yaml.safe_load(parts[1]) or {}
                 markdown_content = parts[2]
@@ -442,7 +442,7 @@ class ArtifactParser:
             content = f.read()
 
         try:
-            import yaml
+            import yaml  # type: ignore
 
             data = yaml.safe_load(content)
             parsed_data = {
@@ -614,7 +614,7 @@ class ArtifactParser:
             return current_depth
 
 
-def main():
+def main() -> None:
     """Test Enhanced ArtifactParser"""
     parser = ArtifactParser()
 
@@ -622,7 +622,7 @@ def main():
     test_file = "src/artifact_forge/agents/artifact_detector.py"
     if Path(test_file).exists():
         parsed = parser.parse_artifact(test_file, "python")
-        print(f"🔍 **ENHANCED PARSED ARTIFACT:**")
+        print("🔍 **ENHANCED PARSED ARTIFACT:**")
         print(f"Path: {parsed.path}")
         print(f"Type: {parsed.artifact_type}")
         print(

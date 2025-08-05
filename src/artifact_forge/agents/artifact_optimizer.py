@@ -7,8 +7,7 @@ Identifies optimization opportunities and fixes issues
 import logging
 import ast
 import re
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -33,7 +32,7 @@ class OptimizationOpportunity:
 class ArtifactOptimizer:
     """Identifies optimization opportunities in artifacts"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.optimization_types = {
             "syntax_error": self._find_syntax_errors,
             "performance": self._find_performance_issues,
@@ -71,7 +70,7 @@ class ArtifactOptimizer:
         """Analyze a single artifact for optimization opportunities"""
         opportunities = []
         artifact_path = artifact.get("path", "")
-        artifact_type = artifact.get("artifact_type", "")
+        artifact.get("artifact_type", "")
 
         # Run all optimization checks
         for opt_type, finder_func in self.optimization_types.items():
@@ -332,7 +331,7 @@ class ArtifactOptimizer:
         return scores.get(severity, 0)
 
 
-def main():
+def main() -> None:
     """Test ArtifactOptimizer"""
     logger.info("Starting ArtifactOptimizer test")
 
@@ -354,7 +353,7 @@ def main():
     logger.info("Running optimization analysis on sample artifacts")
     opportunities = optimizer.optimize_artifacts(sample_artifacts)
 
-    print(f"🔍 **OPTIMIZATION OPPORTUNITIES:**")
+    print("🔍 **OPTIMIZATION OPPORTUNITIES:**")
     print(f"Total opportunities found: {len(opportunities)}")
 
     for opp in opportunities[:5]:  # Show first 5

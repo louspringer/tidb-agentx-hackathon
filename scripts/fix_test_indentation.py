@@ -11,61 +11,61 @@ import re
 def fix_test_file(file_path: str) -> None:
     """Fix indentation issues in a test file"""
     print(f"🔧 Fixing {file_path}")
-    
-    with open(file_path, 'r') as f:
+
+    with open(file_path, "r") as f:
         content = f.read()
-    
+
     # Remove merge conflict markers
-    pattern = r'<<<<<<< HEAD.*?=======.*?>>>>>>> [^\n]+'
-    content = re.sub(pattern, '', content, flags=re.DOTALL)
-    
+    pattern = r"<<<<<<< HEAD.*?=======.*?>>>>>>> [^\n]+"
+    content = re.sub(pattern, "", content, flags=re.DOTALL)
+
     # Fix common indentation issues
-    lines = content.split('\n')
+    lines = content.split("\n")
     fixed_lines = []
-    
+
     for line in lines:
         # Skip empty lines
         if not line.strip():
-            fixed_lines.append('')
+            fixed_lines.append("")
             continue
-        
+
         # Fix indentation for class definitions
-        if line.strip().startswith('class '):
+        if line.strip().startswith("class "):
             fixed_lines.append(line.strip())
             continue
-        
+
         # Fix indentation for method definitions
-        if line.strip().startswith('def '):
-            fixed_lines.append('    ' + line.strip())
+        if line.strip().startswith("def "):
+            fixed_lines.append("    " + line.strip())
             continue
-        
+
         # Fix indentation for docstrings
         if line.strip().startswith('"""'):
-            fixed_lines.append('    ' + line.strip())
+            fixed_lines.append("    " + line.strip())
             continue
-        
+
         # Fix indentation for assert statements
-        if line.strip().startswith('assert '):
-            fixed_lines.append('        ' + line.strip())
+        if line.strip().startswith("assert "):
+            fixed_lines.append("        " + line.strip())
             continue
-        
+
         # Fix indentation for variable assignments
-        if ' = ' in line and not line.strip().startswith('#'):
-            fixed_lines.append('        ' + line.strip())
+        if " = " in line and not line.strip().startswith("#"):
+            fixed_lines.append("        " + line.strip())
             continue
-        
+
         # Keep other lines as is
         fixed_lines.append(line)
-    
+
     # Write the fixed content
-    with open(file_path, 'w') as f:
-        f.write('\n'.join(fixed_lines))
+    with open(file_path, "w") as f:
+        f.write("\n".join(fixed_lines))
 
 
 def main() -> None:
     """Main function to fix all test files"""
     print("🚀 Fixing test file indentation issues...")
-    
+
     # Get all test files
     test_files = [
         "tests/test_basic_validation_simple.py",
@@ -86,13 +86,13 @@ def main() -> None:
         "tests/test_security_enhancements.py",
         "tests/test_uv_package_management.py",
     ]
-    
+
     for file_path in test_files:
         if os.path.exists(file_path):
             fix_test_file(file_path)
-    
+
     print("✅ Test file indentation fixes completed!")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

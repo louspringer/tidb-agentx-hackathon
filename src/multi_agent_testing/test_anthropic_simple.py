@@ -3,13 +3,13 @@
 Simple test to replicate the smoke test Anthropic API call
 """
 
-import os
 import json
 import requests
 
-def test_anthropic_smoke_test():
+
+def test_anthropic_smoke_test() -> None:
     """Test the exact same request as the smoke test"""
-    
+
     # Get API key from 1Password using environment variable or secure method
     # DEMO ONLY: This uses environment variables for demonstration purposes
     # In production, consider using 1Password SDK or secure credential management
@@ -20,7 +20,6 @@ def test_anthropic_smoke_test():
         print("💡 Consider using 1Password CLI or SDK instead of subprocess")
         return
 
-    
     # Replicate the exact smoke test request
     prompt = """
 You are a partner LLM helping to detect blind spots and unknown unknowns.
@@ -43,41 +42,41 @@ Format as JSON:
     "recommendation": "ASK_HUMAN|INVESTIGATE|PROCEED"
 }
 """
-    
-    print(f"\n🧪 Testing exact smoke test request...")
-    print(f"URL: https://api.anthropic.com/v1/messages")
-    print(f"Model: claude-3-5-sonnet-20241022")
+
+    print("\n🧪 Testing exact smoke test request...")
+    print("URL: https://api.anthropic.com/v1/messages")
+    print("Model: claude-3-5-sonnet-20241022")
     print(f"Prompt length: {len(prompt)} characters")
-    
+
     try:
         response = requests.post(
             "https://api.anthropic.com/v1/messages",
             headers={
                 "x-api-key": api_key,
                 "Content-Type": "application/json",
-                "anthropic-version": "2023-06-01"
+                "anthropic-version": "2023-06-01",
             },
             json={
                 "model": "claude-3-5-sonnet-20241022",
                 "max_tokens": 500,
-                "messages": [{"role": "user", "content": prompt}]
+                "messages": [{"role": "user", "content": prompt}],
             },
-            timeout=30
+            timeout=30,
         )
-        
+
         print(f"Status Code: {response.status_code}")
         print(f"Response Headers: {dict(response.headers)}")
-        
+
         if response.status_code == 200:
             result = response.json()
             content = result["content"][0]["text"]
             print(f"✅ Success! Content length: {len(content)}")
             print(f"Content preview: {content[:200]}...")
-            
+
             # Try to parse JSON
             try:
                 parsed = json.loads(content)
-                print(f"✅ JSON parsed successfully!")
+                print("✅ JSON parsed successfully!")
                 print(f"Questions: {len(parsed.get('questions', []))}")
                 print(f"Confidence: {parsed.get('confidence', 'N/A')}")
             except json.JSONDecodeError as e:
@@ -85,9 +84,10 @@ Format as JSON:
                 print(f"Raw content: {content}")
         else:
             print(f"❌ Error: {response.text}")
-            
+
     except Exception as e:
         print(f"❌ Exception: {e}")
 
+
 if __name__ == "__main__":
-    test_anthropic_smoke_test() 
+    test_anthropic_smoke_test()

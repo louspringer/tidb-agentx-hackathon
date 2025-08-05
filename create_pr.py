@@ -10,11 +10,11 @@ import logging
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler('pr_creation.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
+        logging.FileHandler("pr_creation.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -24,11 +24,7 @@ def run_command(cmd, capture_output=True):
     try:
         logger.info(f"Running command: {cmd}")
         result = subprocess.run(
-            cmd,
-            shell=True,
-            capture_output=capture_output,
-            text=True,
-            check=True
+            cmd, shell=True, capture_output=capture_output, text=True, check=True
         )
         if capture_output:
             logger.info(f"Command output: {result.stdout}")
@@ -51,7 +47,7 @@ def get_diff_summary():
     """Get summary of changes"""
     result = run_command("git diff develop..HEAD --name-only")
     if result:
-        return result.stdout.strip().split('\n')
+        return result.stdout.strip().split("\n")
     return []
 
 
@@ -117,8 +113,10 @@ conflicts that prevented PR #6 from being merged.
 """
 
     # Create PR using GitHub CLI
-    cmd = (f'gh pr create --title "🔧 Fix Copilot Security Review Issues" '
-           f'--body "{pr_body}" --base develop')
+    cmd = (
+        f'gh pr create --title "🔧 Fix Copilot Security Review Issues" '
+        f'--body "{pr_body}" --base develop'
+    )
 
     logger.info("Creating GitHub PR...")
     result = run_command(cmd, capture_output=False)
@@ -138,8 +136,10 @@ def main():
     # Check if we're on the right branch
     current_branch = get_current_branch()
     if current_branch != "feature/code-quality-enforcement-fixed":
-        logger.error(f"Expected to be on feature/code-quality-enforcement-fixed, "
-                    f"but on {current_branch}")
+        logger.error(
+            f"Expected to be on feature/code-quality-enforcement-fixed, "
+            f"but on {current_branch}"
+        )
         return False
 
     # Create the PR
@@ -151,8 +151,10 @@ def main():
     else:
         logger.error("💥 PR creation failed")
         logger.info("📋 Manual steps:")
-        logger.info("1. Visit: https://github.com/louspringer/OpenFlow-Playground/"
-                   "pull/new/feature/code-quality-enforcement-fixed")
+        logger.info(
+            "1. Visit: https://github.com/louspringer/OpenFlow-Playground/"
+            "pull/new/feature/code-quality-enforcement-fixed"
+        )
         logger.info("2. Create PR manually with the provided description")
 
     return success
@@ -160,4 +162,4 @@ def main():
 
 if __name__ == "__main__":
     success = main()
-    sys.exit(0 if success else 1) 
+    sys.exit(0 if success else 1)

@@ -47,7 +47,7 @@ class EnhancedArtifactForgeState:
 class EnhancedArtifactForgeWorkflow:
     """Enhanced ArtifactForge workflow with LangGraph orchestration"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.detector = ArtifactDetector()
         self.parser = ArtifactParser()
         self.correlator = ArtifactCorrelator()
@@ -263,7 +263,7 @@ class EnhancedArtifactForgeWorkflow:
             end_line = block["end_line"]
 
             # Apply consistent indentation
-            base_indent = block["indent_level"]
+            block["indent_level"]
             for i in range(start_line, end_line):
                 if i < len(lines):
                     line = lines[i]
@@ -405,7 +405,7 @@ class EnhancedArtifactForgeWorkflow:
             return final_state
 
 
-def main():
+def main() -> None:
     """Test the enhanced ArtifactForge workflow"""
     print("🚀 **ENHANCED ARTIFACTFORGE WORKFLOW TEST**")
     print("=" * 50)
@@ -413,11 +413,11 @@ def main():
     workflow = EnhancedArtifactForgeWorkflow()
     state = workflow.run_workflow(".")
 
-    print(f"\n✅ **WORKFLOW COMPLETED**")
+    print("\n✅ **WORKFLOW COMPLETED**")
     print(f"  Processing time: {state.processing_time:.2f} seconds")
     print(f"  Confidence score: {state.confidence_score:.2f}")
 
-    print(f"\n📊 **WORKFLOW SUMMARY:**")
+    print("\n📊 **WORKFLOW SUMMARY:**")
     print(f"Artifacts discovered: {len(state.artifacts or [])}")
     print(f"Artifacts parsed: {len(state.parsed_artifacts or [])}")
     print(f"Relationships found: {len(state.relationships or [])}")
@@ -428,12 +428,12 @@ def main():
     print(f"Confidence score: {state.confidence_score:.2f}")
 
     if state.errors:
-        print(f"\n❌ **ERRORS:**")
+        print("\n❌ **ERRORS:**")
         for error in state.errors:
             print(f"  - {error}")
 
     if state.block_analysis:
-        print(f"\n🔧 **FIX VALIDATION:**")
+        print("\n🔧 **FIX VALIDATION:**")
         validation_results = state.block_analysis.get("validation_results", [])
         for result in validation_results:
             status_emoji = "✅" if result["status"] == "SUCCESS" else "⚠️"

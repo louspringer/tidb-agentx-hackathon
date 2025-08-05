@@ -31,7 +31,7 @@ class ArtifactInsight:
 class ArtifactSynthesizer:
     """Creates unified insights from artifact analysis"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.insight_types = {
             "health": self._analyze_codebase_health,
             "complexity": self._analyze_complexity_distribution,
@@ -155,7 +155,7 @@ class ArtifactSynthesizer:
 
         if complexities:
             avg_complexity = sum(complexities) / len(complexities)
-            max_complexity = max(complexities)
+            max(complexities)
             high_complexity_count = len([c for c in complexities if c > 10])
 
             if avg_complexity > 8:
@@ -382,7 +382,7 @@ class ArtifactSynthesizer:
         return scores.get(severity, 0)
 
 
-def main():
+def main() -> None:
     """Test ArtifactSynthesizer"""
     logger.info("Starting ArtifactSynthesizer test")
 
@@ -422,7 +422,7 @@ def main():
         sample_artifacts, sample_relationships, sample_opportunities
     )
 
-    print(f"🔍 **ARTIFACT INSIGHTS:**")
+    print("🔍 **ARTIFACT INSIGHTS:**")
     print(f"Total insights generated: {len(insights)}")
 
     for insight in insights[:3]:  # Show first 3

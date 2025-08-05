@@ -22,7 +22,7 @@ class ValidationResult:
 class BaseValidator(ABC):
     """Base class for all validators"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
@@ -30,7 +30,6 @@ class BaseValidator(ABC):
         self, delusions: List[Dict[str, Any]]
     ) -> ValidationResult:
         """Validate findings from delusion detection"""
-        pass
 
 
 class SecurityValidator(BaseValidator):

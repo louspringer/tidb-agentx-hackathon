@@ -35,7 +35,7 @@ class ArtifactDetector:
             "sql": ["*.sql"],
             "shell": ["*.sh", "*.bash", "*.zsh"],
             "docker": ["Dockerfile", "*.dockerfile"],
-            "terraform": ["*.tf", "*.tfvars"],
+            "terraform": ["*.t", "*.tfvars"],
             "kubernetes": ["*.yaml", "*.yml"],  # Overlaps with yaml
             "html": ["*.html", "*.htm"],
             "css": ["*.css", "*.scss", "*.sass"],

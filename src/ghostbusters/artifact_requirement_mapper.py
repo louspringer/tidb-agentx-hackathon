@@ -31,7 +31,7 @@ class ArtifactRequirementMapping:
 class ArtifactRequirementMapper:
     """Map individual AST models to specific requirements"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.project_model = self._load_project_model()
         self.ast_models = self._load_ast_models()
         self.test_requirements = self._load_test_requirements()
@@ -280,7 +280,7 @@ class ArtifactRequirementMapper:
         return artifacts
 
 
-def main():
+def main() -> None:
     """Main function for testing"""
     mapper = ArtifactRequirementMapper()
 
