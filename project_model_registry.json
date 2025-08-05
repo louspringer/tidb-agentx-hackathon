@@ -100,6 +100,66 @@
         "Integrate with CI/CD for healthcare compliance"
       ]
     },
+    "go": {
+      "patterns": [
+        "*.go",
+        "go.mod",
+        "go.sum"
+      ],
+      "content_indicators": [
+        "package main",
+        "import (",
+        "func ",
+        "type ",
+        "go 1."
+      ],
+      "linter": "go vet",
+      "formatter": "go fmt",
+      "validator": "go build",
+      "exclusions": [
+        "vendor/*",
+        "*.pb.go"
+      ],
+      "requirements": [
+        "Use go vet for Go code linting",
+        "Format Go code with go fmt",
+        "All Go files must compile successfully",
+        "Use go modules for dependency management",
+        "Generate protobuf code with protoc"
+      ]
+    },
+    "secure_shell": {
+      "patterns": [
+        "src/secure_shell_service/*.go",
+        "src/secure_shell_service/*.proto",
+        "src/secure_shell_service/*.py",
+        "src/secure_shell_service/*.md"
+      ],
+      "content_indicators": [
+        "SecureShellService",
+        "ExecuteCommand",
+        "gRPC",
+        "protobuf",
+        "subprocess",
+        "secure_execute"
+      ],
+      "linter": "go vet",
+      "formatter": "go fmt",
+      "validator": "go build",
+      "exclusions": [
+        "*.pb.go"
+      ],
+      "requirements": [
+        "Replace subprocess calls with secure gRPC service",
+        "Implement timeout enforcement for all commands",
+        "Add input validation and command sanitization",
+        "Provide resource limits and monitoring",
+        "Use Go for performance-critical shell operations",
+        "Implement health checks and service monitoring",
+        "Address subprocess security vulnerabilities",
+        "Provide secure alternatives to Python subprocess"
+      ]
+    },
     "ide_performance": {
       "patterns": [
         "rules/ide_performance_optimization.md",
@@ -125,7 +185,27 @@
         "Clear cache files before debugging complex issues",
         "Create MDC files for performance optimization rules",
         "Project performance rules to structured MDC format"
-      ]
+      ],
+      "completion_status": {
+        "status": "completed",
+        "pr_number": 17,
+        "merged_at": "2025-08-05T15:58:47Z",
+        "implementation_files": [
+          "rules/ide_performance_optimization.md",
+          "rules/ide_performance_optimization.mdc",
+          "fix_ide_performance.sh",
+          "fix_ide_performance_severe.sh",
+          "src/ghostbusters/agents.py",
+          "src/ghostbusters/web_tool_discovery.py",
+          ".cursor/rules/cleanup-before-next-thing.mdc"
+        ],
+        "test_results": {
+          "ghostbusters_security_detection": "197 security issues detected",
+          "web_tool_discovery": "10 GitHub tools found for subprocess security",
+          "performance_scripts": "Tested and working",
+          "branch_management": "Enhanced with best practices"
+        }
+      }
     },
     "rule_compliance": {
       "linter": "shellcheck",
@@ -177,7 +257,10 @@
         "syntax_error",
         "indentation_error",
         "import_error",
-        "type_error"
+        "type_error",
+        "subprocess_vulnerability",
+        "shell_security",
+        "performance_hanging"
       ],
       "linter": "ghostbusters-orchestrator",
       "formatter": "ghostbusters-recovery",
@@ -197,7 +280,11 @@
         "Perfect recovery success rate",
         "Complete test compatibility with original artifacts",
         "All Ghostbusters components must pass same lints as original",
-        "Multi-agent orchestration must be deterministic"
+        "Multi-agent orchestration must be deterministic",
+        "Detect subprocess security vulnerabilities",
+        "Provide web-based security tool recommendations",
+        "Recommend Go/Rust alternatives for shell operations",
+        "Implement gRPC shell service for secure command execution"
       ]
     }
   },

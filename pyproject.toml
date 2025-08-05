@@ -32,6 +32,8 @@ dependencies = [
     # Multi-Agent Framework
     "langgraph>=0.2.0",
     "langchain>=0.2.0",
+    "grpcio>=1.74.0",
+    "grpcio-tools>=1.74.0",
 ]
 
 [project.optional-dependencies]

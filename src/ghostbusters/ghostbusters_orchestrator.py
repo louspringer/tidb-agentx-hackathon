@@ -173,9 +173,10 @@ class GhostbustersOrchestrator:
         recovery_actions = []
 
         # Analyze delusions and plan recovery
-        for delusion in state.delusions_detected:
-            agent_name = delusion["agent"]
-            for delusion_item in delusion["delusions"]:
+        for agent_result in state.delusions_detected:
+            agent_name = agent_result["agent"]
+            delusions = agent_result.get("delusions", [])
+            for delusion_item in delusions:
                 action = await self._plan_recovery_action(agent_name, delusion_item)
                 if action:
                     recovery_actions.append(action)
@@ -194,7 +195,11 @@ class GhostbustersOrchestrator:
 
         recovery_results = {}
 
-        for action in state.recovery_actions:
+        # Limit recovery actions to prevent infinite loops
+        max_recovery_actions = 10
+        actions_to_execute = state.recovery_actions[:max_recovery_actions]
+
+        for action in actions_to_execute:
             engine_name = action["engine"]
             if engine_name in self.recovery_engines:
                 try:
@@ -205,6 +210,11 @@ class GhostbustersOrchestrator:
                 except Exception as e:
                     self.logger.error(f"❌ Recovery action {action['id']} failed: {e}")
                     state.errors.append(f"Recovery error: {e}")
+
+        if len(state.recovery_actions) > max_recovery_actions:
+            self.logger.warning(
+                f"⚠️ Limited recovery actions to {max_recovery_actions} to prevent infinite loops",
+            )
 
         state.recovery_results = recovery_results
         state.current_phase = "recovery_complete"
@@ -255,6 +265,19 @@ class GhostbustersOrchestrator:
             "warnings": state.warnings,
             "current_phase": state.current_phase,
         }
+
+        # Calculate confidence score based on results
+        if state.delusions_detected:
+            # Higher confidence if we found issues and have recovery actions
+            base_confidence = 0.8
+            if state.recovery_actions:
+                base_confidence += 0.1
+            if not state.errors:
+                base_confidence += 0.1
+            state.confidence_score = min(base_confidence, 1.0)
+        else:
+            # No issues found - high confidence
+            state.confidence_score = 0.9
 
         state.metadata["report"] = report
         state.current_phase = "complete"
