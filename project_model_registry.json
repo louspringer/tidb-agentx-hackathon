@@ -1,6 +1,5 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
     "model_driven_projection": {
@@ -35,7 +34,6 @@
       ]
     },
     "cloudformation": {
-
       "linter": "cfn-lint",
       "validator": "aws-cloudformation",
       "exclusions": [],
@@ -70,7 +68,6 @@
       ]
     },
     "streamlit": {
-
       "requirements": [
         "Use flake8 for Streamlit Python linting",
         "Format Streamlit code with black",
@@ -78,7 +75,6 @@
       ]
     },
     "security_first": {
-
       "linter": "yamllint",
       "validator": "jsonschema",
       "exclusions": [],
@@ -88,7 +84,6 @@
       ]
     },
     "mdc_generator": {
-
       "requirements": [
         "Use flake8 for MDC generator Python linting",
         "Format MDC generator code with black",
@@ -96,7 +91,6 @@
       ]
     },
     "healthcare_cdc": {
-
       "requirements": [
         "Enforce HIPAA compliance validation",
         "Implement PHI detection and validation",
@@ -107,7 +101,6 @@
       ]
     },
     "rule_compliance": {
-
       "linter": "shellcheck",
       "formatter": "black",
       "validator": "pytest",
@@ -119,7 +112,6 @@
       ]
     },
     "package_management": {
-
       "linter": "uv check",
       "validator": "uv sync",
       "formatter": "uv format",
