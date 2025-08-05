@@ -86,34 +86,34 @@ class CodeQualityModel:
         }
 
     def _run_autoflake(self, file_path: Path) -> bool:
-        """Run autoflake to fix unused imports and variables"""
+        """Run autoflake to fix unused imports and variables - ELEGANT VERSION! 🎉"""
         try:
-            result = subprocess.run(
-                [
-                    "uv",
-                    "run",
-                    "autoflake",
-                    "--in-place",
-                    "--remove-all-unused-imports",
-                    "--remove-unused-variables",
-                    str(file_path),
-                ],
-                capture_output=True,
-                text=True,
-            )
-            return result.returncode == 0
+            # Use our elegant secure shell service instead of subprocess!
+            import asyncio
+            from src.secure_shell_service.elegant_client import secure_execute
+            
+            # Build the command elegantly
+            command = f'uv run autoflake --in-place --remove-all-unused-imports --remove-unused-variables "{file_path}"'
+            
+            # Execute with timeout protection
+            result = asyncio.run(secure_execute(command, timeout=30))
+            return result['success']
         except Exception:
             return False
 
     def _run_black(self, file_path: Path) -> bool:
-        """Run black to format code"""
+        """Run black to format code - ELEGANT VERSION! 🎉"""
         try:
-            result = subprocess.run(
-                ["uv", "run", "black", str(file_path)],
-                capture_output=True,
-                text=True,
-            )
-            return result.returncode == 0
+            # Use our elegant secure shell service instead of subprocess!
+            import asyncio
+            from src.secure_shell_service.elegant_client import secure_execute
+            
+            # Build the command elegantly
+            command = f'uv run black "{file_path}"'
+            
+            # Execute with timeout protection
+            result = asyncio.run(secure_execute(command, timeout=30))
+            return result['success']
         except Exception:
             return False
 
@@ -190,26 +190,33 @@ class CodeQualityModel:
         """Analyze a single file for all linting issues"""
         issues: list[Any] = []
 
-        # Run flake8
+        # Run flake8 - ELEGANT VERSION! 🎉
         try:
-            result = subprocess.run(
-                ["uv", "run", "flake8", str(file_path)],
-                capture_output=True,
-                text=True,
-            )
-
-            for line in result.stdout.split("\n"):
-                if line.strip():
-                    parts = line.split(":")
-                    if len(parts) >= 3:
-                        issue: Any = {
-                            "file": parts[0],
-                            "line": int(parts[1]),
-                            "column": int(parts[2]),
-                            "code": parts[3].split()[0] if parts[3].split() else "",
-                            "message": ":".join(parts[3:]).strip(),
-                        }
-                        issues.append(issue)
+            # Use our elegant secure shell service instead of subprocess!
+            import asyncio
+            from src.secure_shell_service.elegant_client import secure_execute
+            
+            # Build the command elegantly
+            command = f'uv run flake8 "{file_path}"'
+            
+            # Execute with timeout protection
+            result = asyncio.run(secure_execute(command, timeout=30))
+            
+            if result['success']:
+                for line in result['output'].split("\n"):
+                    if line.strip():
+                        parts = line.split(":")
+                        if len(parts) >= 3:
+                            issue: Any = {
+                                "file": parts[0],
+                                "line": int(parts[1]),
+                                "column": int(parts[2]),
+                                "code": parts[3].split()[0] if parts[3].split() else "",
+                                "message": ":".join(parts[3:]).strip(),
+                            }
+                            issues.append(issue)
+            else:
+                issues.append({"error": result['error']})
         except Exception as e:
             issues.append({"error": str(e)})
 
