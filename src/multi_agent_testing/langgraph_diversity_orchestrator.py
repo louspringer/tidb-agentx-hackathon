@@ -4,4 +4,3 @@
 
 class LangGraphDiversityOrchestrator:
     """LangGraph-based diversity orchestrator"""
-    

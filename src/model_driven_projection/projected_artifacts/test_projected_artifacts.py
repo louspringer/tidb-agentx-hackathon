@@ -8,8 +8,8 @@ This test verifies that the projected artifacts:
 3. Can be executed
 """
 
-import sys
 import ast
+import sys
 from pathlib import Path
 
 
@@ -53,7 +53,7 @@ def test_projected_artifacts_syntax() -> None:
     for file_path in test_files:
         if Path(file_path).exists():
             try:
-                with open(file_path, "r") as f:
+                with open(file_path) as f:
                     content = f.read()
 
                 # Parse with AST to check syntax
@@ -77,7 +77,7 @@ def test_projected_artifacts_structure() -> None:
     # Test streamlit app structure
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     if streamlit_file.exists():
-        with open(streamlit_file, "r") as f:
+        with open(streamlit_file) as f:
             content = f.read()
 
         tree = ast.parse(content)
@@ -110,7 +110,7 @@ def test_projected_artifacts_structure() -> None:
     # Test security module structure
     security_file = Path("src/security_first/input_validator.py")
     if security_file.exists():
-        with open(security_file, "r") as f:
+        with open(security_file) as f:
             content = f.read()
 
         tree = ast.parse(content)
@@ -191,9 +191,8 @@ def main() -> None:
     if passed == total:
         print("🎉 All tests passed! Projected artifacts are working correctly.")
         return True
-    else:
-        print("⚠️  Some tests failed. Check the projected artifacts.")
-        return False
+    print("⚠️  Some tests failed. Check the projected artifacts.")
+    return False
 
 
 if __name__ == "__main__":

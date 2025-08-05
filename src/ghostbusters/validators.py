@@ -4,9 +4,9 @@ Ghostbusters Validators - Validation components for findings
 """
 
 import logging
-from typing import Dict, List, Any
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -15,8 +15,8 @@ class ValidationResult:
 
     is_valid: bool
     confidence: float
-    issues: List[str]
-    recommendations: List[str]
+    issues: list[str]
+    recommendations: list[str]
 
 
 class BaseValidator(ABC):
@@ -27,7 +27,8 @@ class BaseValidator(ABC):
 
     @abstractmethod
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate findings from delusion detection"""
 
@@ -36,7 +37,8 @@ class SecurityValidator(BaseValidator):
     """Security validator for validating security findings"""
 
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate security findings"""
         issues = []
@@ -48,8 +50,9 @@ class SecurityValidator(BaseValidator):
                     if delusion_item.get("type") == "security_vulnerability":
                         issues.append(
                             delusion_item.get(
-                                "description", "Security vulnerability found"
-                            )
+                                "description",
+                                "Security vulnerability found",
+                            ),
                         )
                         recommendations.append("Remove hardcoded credentials")
                         recommendations.append("Use environment variables")
@@ -69,7 +72,8 @@ class CodeQualityValidator(BaseValidator):
     """Code quality validator for validating quality findings"""
 
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate code quality findings"""
         issues = []
@@ -83,7 +87,10 @@ class CodeQualityValidator(BaseValidator):
                         "indentation_error",
                     ]:
                         issues.append(
-                            delusion_item.get("description", "Code quality issue found")
+                            delusion_item.get(
+                                "description",
+                                "Code quality issue found",
+                            ),
                         )
                         recommendations.append("Fix syntax errors")
                         recommendations.append("Use consistent indentation")
@@ -103,7 +110,8 @@ class TestValidator(BaseValidator):
     """Test validator for validating test findings"""
 
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate test findings"""
         issues = []
@@ -117,7 +125,7 @@ class TestValidator(BaseValidator):
                         "test_failure",
                     ]:
                         issues.append(
-                            delusion_item.get("description", "Test issue found")
+                            delusion_item.get("description", "Test issue found"),
                         )
                         recommendations.append("Add more tests")
                         recommendations.append("Fix failing tests")
@@ -137,7 +145,8 @@ class BuildValidator(BaseValidator):
     """Build validator for validating build findings"""
 
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate build findings"""
         issues = []
@@ -151,7 +160,7 @@ class BuildValidator(BaseValidator):
                         "dependency_issue",
                     ]:
                         issues.append(
-                            delusion_item.get("description", "Build issue found")
+                            delusion_item.get("description", "Build issue found"),
                         )
                         recommendations.append("Add missing build files")
                         recommendations.append("Configure dependencies properly")
@@ -171,7 +180,8 @@ class ArchitectureValidator(BaseValidator):
     """Architecture validator for validating architectural findings"""
 
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate architectural findings"""
         issues = []
@@ -185,7 +195,10 @@ class ArchitectureValidator(BaseValidator):
                         "module_structure_issue",
                     ]:
                         issues.append(
-                            delusion_item.get("description", "Architecture issue found")
+                            delusion_item.get(
+                                "description",
+                                "Architecture issue found",
+                            ),
                         )
                         recommendations.append("Organize code in src directory")
                         recommendations.append("Add __init__.py files")
@@ -205,7 +218,8 @@ class ModelValidator(BaseValidator):
     """Model validator for validating model findings"""
 
     async def validate_findings(
-        self, delusions: List[Dict[str, Any]]
+        self,
+        delusions: list[dict[str, Any]],
     ) -> ValidationResult:
         """Validate model findings"""
         issues = []
@@ -219,7 +233,7 @@ class ModelValidator(BaseValidator):
                         "model_structure_issue",
                     ]:
                         issues.append(
-                            delusion_item.get("description", "Model issue found")
+                            delusion_item.get("description", "Model issue found"),
                         )
                         recommendations.append("Add model registry")
                         recommendations.append("Structure models properly")

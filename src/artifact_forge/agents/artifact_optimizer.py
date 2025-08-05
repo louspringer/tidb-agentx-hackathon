@@ -4,12 +4,12 @@ ArtifactOptimizer Agent
 Identifies optimization opportunities and fixes issues
 """
 
-import logging
 import ast
+import logging
 import re
-from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -41,8 +41,9 @@ class ArtifactOptimizer:
         }
 
     def optimize_artifacts(
-        self, artifacts: List[Dict[str, Any]]
-    ) -> List[OptimizationOpportunity]:
+        self,
+        artifacts: list[dict[str, Any]],
+    ) -> list[OptimizationOpportunity]:
         """Find optimization opportunities in artifacts"""
         logger.info(f"Starting optimization analysis of {len(artifacts)} artifacts")
 
@@ -58,15 +59,17 @@ class ArtifactOptimizer:
 
         # Sort by severity and confidence
         opportunities.sort(
-            key=lambda x: (self._severity_score(x.severity), x.confidence), reverse=True
+            key=lambda x: (self._severity_score(x.severity), x.confidence),
+            reverse=True,
         )
 
         logger.info(f"Found {len(opportunities)} optimization opportunities")
         return opportunities
 
     def _analyze_artifact(
-        self, artifact: Dict[str, Any]
-    ) -> List[OptimizationOpportunity]:
+        self,
+        artifact: dict[str, Any],
+    ) -> list[OptimizationOpportunity]:
         """Analyze a single artifact for optimization opportunities"""
         opportunities = []
         artifact_path = artifact.get("path", "")
@@ -83,8 +86,9 @@ class ArtifactOptimizer:
         return opportunities
 
     def _find_syntax_errors(
-        self, artifact: Dict[str, Any]
-    ) -> List[OptimizationOpportunity]:
+        self,
+        artifact: dict[str, Any],
+    ) -> list[OptimizationOpportunity]:
         """Find syntax errors in artifacts"""
         opportunities = []
         artifact_path = artifact.get("path", "")
@@ -92,7 +96,7 @@ class ArtifactOptimizer:
 
         if artifact_type == "python":
             try:
-                with open(artifact_path, "r", encoding="utf-8") as f:
+                with open(artifact_path, encoding="utf-8") as f:
                     content = f.read()
 
                 # Try to parse with ast
@@ -108,7 +112,7 @@ class ArtifactOptimizer:
                             suggested_fix=self._suggest_syntax_fix(content, str(e)),
                             confidence=0.95,
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
 
                 # Check for common indentation issues
@@ -123,7 +127,7 @@ class ArtifactOptimizer:
                             suggested_fix="Fix indentation using consistent spacing (4 spaces)",
                             confidence=0.8,
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
 
             except Exception as e:
@@ -136,14 +140,15 @@ class ArtifactOptimizer:
                         suggested_fix="Check file permissions and encoding",
                         confidence=0.9,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return opportunities
 
     def _find_performance_issues(
-        self, artifact: Dict[str, Any]
-    ) -> List[OptimizationOpportunity]:
+        self,
+        artifact: dict[str, Any],
+    ) -> list[OptimizationOpportunity]:
         """Find performance issues in artifacts"""
         opportunities = []
         artifact_path = artifact.get("path", "")
@@ -165,7 +170,7 @@ class ArtifactOptimizer:
                             suggested_fix="Consider using a configuration object or data class",
                             confidence=0.7,
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
 
             # Check for high complexity
@@ -180,14 +185,15 @@ class ArtifactOptimizer:
                         suggested_fix="Break down complex functions into smaller, simpler functions",
                         confidence=0.8,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return opportunities
 
     def _find_quality_issues(
-        self, artifact: Dict[str, Any]
-    ) -> List[OptimizationOpportunity]:
+        self,
+        artifact: dict[str, Any],
+    ) -> list[OptimizationOpportunity]:
         """Find code quality issues"""
         opportunities = []
         artifact_path = artifact.get("path", "")
@@ -195,7 +201,7 @@ class ArtifactOptimizer:
 
         if artifact_type == "python":
             try:
-                with open(artifact_path, "r", encoding="utf-8") as f:
+                with open(artifact_path, encoding="utf-8") as f:
                     content = f.read()
 
                 # Check for long lines
@@ -211,7 +217,7 @@ class ArtifactOptimizer:
                             suggested_fix="Break long lines to improve readability",
                             confidence=0.6,
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
 
                 # Check for missing docstrings
@@ -227,7 +233,7 @@ class ArtifactOptimizer:
                             suggested_fix="Add docstrings to improve code documentation",
                             confidence=0.5,
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
 
             except Exception as e:
@@ -236,8 +242,9 @@ class ArtifactOptimizer:
         return opportunities
 
     def _find_security_issues(
-        self, artifact: Dict[str, Any]
-    ) -> List[OptimizationOpportunity]:
+        self,
+        artifact: dict[str, Any],
+    ) -> list[OptimizationOpportunity]:
         """Find security issues in artifacts"""
         opportunities = []
         artifact_path = artifact.get("path", "")
@@ -245,7 +252,7 @@ class ArtifactOptimizer:
 
         if artifact_type == "python":
             try:
-                with open(artifact_path, "r", encoding="utf-8") as f:
+                with open(artifact_path, encoding="utf-8") as f:
                     content = f.read()
 
                 # Check for hardcoded credentials
@@ -268,7 +275,7 @@ class ArtifactOptimizer:
                                 suggested_fix="Use environment variables or secure configuration management",
                                 confidence=0.8,
                                 created_at=datetime.now(),
-                            )
+                            ),
                         )
                         break
 
@@ -287,7 +294,7 @@ class ArtifactOptimizer:
                                     suggested_fix="Review and validate the use of this import",
                                     confidence=0.6,
                                     created_at=datetime.now(),
-                                )
+                                ),
                             )
 
             except Exception as e:
@@ -299,16 +306,15 @@ class ArtifactOptimizer:
         """Suggest a fix for a syntax error"""
         if "unterminated string literal" in error_msg:
             return "Check for missing quotes or escape sequences in strings"
-        elif "unindent does not match" in error_msg:
+        if "unindent does not match" in error_msg:
             return "Fix indentation - ensure consistent use of spaces or tabs"
-        elif "unexpected indent" in error_msg:
+        if "unexpected indent" in error_msg:
             return "Remove unexpected indentation or fix indentation level"
-        elif "invalid syntax" in error_msg:
+        if "invalid syntax" in error_msg:
             return "Check for missing colons, parentheses, or invalid characters"
-        else:
-            return "Review the syntax error and fix according to Python syntax rules"
+        return "Review the syntax error and fix according to Python syntax rules"
 
-    def _check_indentation(self, content: str) -> List[str]:
+    def _check_indentation(self, content: str) -> list[str]:
         """Check for indentation issues"""
         issues = []
         lines = content.splitlines()
@@ -347,7 +353,7 @@ def main() -> None:
                 "complexity": 15,
                 "imports": ["import ast", "import pickle"],
             },
-        }
+        },
     ]
 
     logger.info("Running optimization analysis on sample artifacts")
@@ -358,7 +364,7 @@ def main() -> None:
 
     for opp in opportunities[:5]:  # Show first 5
         print(
-            f"  {opp.artifact_path} ({opp.opportunity_type}, {opp.severity}): {opp.description}"
+            f"  {opp.artifact_path} ({opp.opportunity_type}, {opp.severity}): {opp.description}",
         )
 
 

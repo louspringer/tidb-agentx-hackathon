@@ -6,12 +6,12 @@ Comprehensive integration of linter APIs, AI-powered linters, and dynamic rule u
 
 import logging
 import subprocess
-from pathlib import Path
-from typing import Dict, List, Any
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
-from src.linter_api_integration import LinterAPIIntegration, LinterViolation
 from src.dynamic_rule_updater import DynamicRuleUpdater
+from src.linter_api_integration import LinterAPIIntegration, LinterViolation
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -24,9 +24,9 @@ class IntelligentLinterSystem:
     def __init__(self) -> None:
         self.linter_api = LinterAPIIntegration()
         self.rule_updater = DynamicRuleUpdater()
-        self.violation_history: List[Dict[str, Any]] = []
+        self.violation_history: list[dict[str, Any]] = []
 
-    def setup_ai_powered_linters(self) -> Dict[str, Any]:
+    def setup_ai_powered_linters(self) -> dict[str, Any]:
         """Setup AI-powered linters (Ruff, etc.)"""
         logger.info("🤖 **SETTING UP AI-POWERED LINTERS**")
         logger.info("=" * 50)
@@ -36,10 +36,13 @@ class IntelligentLinterSystem:
         # Check if Ruff is available
         try:
             result = subprocess.run(
-                ["ruf", "--version"], capture_output=True, text=True, timeout=10
+                ["ru", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
             if result.returncode == 0:
-                setup_results["ruf"] = {
+                setup_results["ru"] = {
                     "status": "available",
                     "version": result.stdout.strip(),
                     "ai_capabilities": ["auto-fix", "suggestions", "formatting"],
@@ -47,15 +50,18 @@ class IntelligentLinterSystem:
                 logger.info("✅ Ruff (AI-powered) is available")
             else:
                 setup_results["ruff"] = {"status": "not_available"}
-                logger.warning("⚠️ Ruff not available - install with: pip install ruf")
+                logger.warning("⚠️ Ruff not available - install with: pip install ru")
         except Exception as e:
             setup_results["ruff"] = {"status": "error", "error": str(e)}
-            logger.error("❌ Error checking Ruff: {}".format(e))
+            logger.error(f"❌ Error checking Ruff: {e}")
 
         # Check if pre-commit is available
         try:
             result = subprocess.run(
-                ["pre-commit", "--version"], capture_output=True, text=True, timeout=10
+                ["pre-commit", "--version"],
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
             if result.returncode == 0:
                 setup_results["pre-commit"] = {
@@ -66,37 +72,36 @@ class IntelligentLinterSystem:
             else:
                 setup_results["pre-commit"] = {"status": "not_available"}
                 logger.warning(
-                    "⚠️ Pre-commit not available - install with: pip install pre-commit"
+                    "⚠️ Pre-commit not available - install with: pip install pre-commit",
                 )
         except Exception as e:
             setup_results["pre-commit"] = {"status": "error", "error": str(e)}
-            logger.error("❌ Error checking pre-commit: {}".format(e))
+            logger.error(f"❌ Error checking pre-commit: {e}")
 
         return setup_results
 
-    def query_all_linter_apis(self, file_path: str) -> Dict[str, Any]:
+    def query_all_linter_apis(self, file_path: str) -> dict[str, Any]:
         """Query all available linter APIs for a file"""
         logger.info("🔍 **QUERYING ALL LINTER APIS**")
         logger.info("=" * 40)
-        logger.info("File: {}".format(file_path))
+        logger.info(f"File: {file_path}")
 
         results = {}
 
         # Query each linter
         for linter_name in self.linter_api.linters:
-            logger.info("\n📝 Querying {} API...".format(linter_name))
-            violations: List[LinterViolation] = self.linter_api.query_linter_api(
-                linter_name, file_path
+            logger.info(f"\n📝 Querying {linter_name} API...")
+            violations: list[LinterViolation] = self.linter_api.query_linter_api(
+                linter_name,
+                file_path,
             )
             results[linter_name] = violations
 
             if violations:
-                logger.info("Found {} violations:".format(len(violations)))
+                logger.info(f"Found {len(violations)} violations:")
                 for violation in violations[:3]:  # Show first 3
                     logger.info(
-                        "  - {}: {} (line {})".format(
-                            violation.code, violation.message, violation.line_number
-                        )
+                        f"  - {violation.code}: {violation.message} (line {violation.line_number})",
                     )
             else:
                 logger.info("No violations found")
@@ -105,21 +110,24 @@ class IntelligentLinterSystem:
         ai_suggestions = self.linter_api.get_ai_suggestions(file_path)
         if ai_suggestions:
             results["ai_suggestions"] = ai_suggestions
-            logger.info("Found {} AI suggestions".format(len(ai_suggestions)))
+            logger.info(f"Found {len(ai_suggestions)} AI suggestions")
 
         return results
 
     def prevent_violations_before_writing(
-        self, file_path: str, code_block: str
-    ) -> Dict[str, Any]:
+        self,
+        file_path: str,
+        code_block: str,
+    ) -> dict[str, Any]:
         """Prevent violations before writing code"""
         logger.info("🛡️ **PREVENTING VIOLATIONS BEFORE WRITING**")
         logger.info("=" * 50)
-        logger.info("File: {}".format(file_path))
+        logger.info(f"File: {file_path}")
 
         # Get prevention analysis
         prevention_result = self.linter_api.prevent_violations_before_writing(
-            file_path, code_block
+            file_path,
+            code_block,
         )
 
         # Log potential violations
@@ -128,33 +136,36 @@ class IntelligentLinterSystem:
             for violation in prevention_result["potential_violations"]:
                 logger.info(
                     "  - {}: {} (line {})".format(
-                        violation["type"], violation["suggestion"], violation["line"]
-                    )
+                        violation["type"],
+                        violation["suggestion"],
+                        violation["line"],
+                    ),
                 )
 
         # Log prevention suggestions
         if prevention_result["suggestions"]:
             logger.info("Prevention suggestions:")
             for suggestion in prevention_result["suggestions"]:
-                logger.info("  - {}".format(suggestion))
+                logger.info(f"  - {suggestion}")
 
         # Log auto-fixes
         if prevention_result["auto_fixes"]:
             logger.info("Auto-fixes available:")
             for fix in prevention_result["auto_fixes"]:
                 logger.info(
-                    "  - {}: {} (line {})".format(fix["type"], fix["fix"], fix["line"])
+                    "  - {}: {} (line {})".format(fix["type"], fix["fix"], fix["line"]),
                 )
 
         return prevention_result
 
     def update_rules_on_violations(
-        self, violations: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+        self,
+        violations: list[dict[str, Any]],
+    ) -> dict[str, Any]:
         """Update rules when violations are detected"""
         logger.info("🔄 **UPDATING RULES ON VIOLATIONS**")
         logger.info("=" * 40)
-        logger.info("Violations to process: {}".format(len(violations)))
+        logger.info(f"Violations to process: {len(violations)}")
 
         update_results = {
             "violations_processed": 0,
@@ -179,7 +190,7 @@ class IntelligentLinterSystem:
                     **violation,
                     "timestamp": datetime.now().isoformat(),
                     "rule_updated": True,
-                }
+                },
             )
 
         # Learn from all violations
@@ -189,7 +200,7 @@ class IntelligentLinterSystem:
         logger.info("\n📊 **UPDATE RESULTS**")
         logger.info("=" * 25)
         logger.info(
-            "Violations processed: {}".format(update_results["violations_processed"])
+            "Violations processed: {}".format(update_results["violations_processed"]),
         )
         logger.info("Rules updated: {}".format(update_results["rules_updated"]))
         logger.info("Patterns learned: {}".format(update_results["patterns_learned"]))
@@ -364,11 +375,11 @@ extend-select = ["TCH"]
         logger.info("Created Ruff configuration for AI-powered linting")
         return config_content
 
-    def run_comprehensive_analysis(self, file_path: str) -> Dict[str, Any]:
+    def run_comprehensive_analysis(self, file_path: str) -> dict[str, Any]:
         """Run comprehensive analysis of a file"""
         logger.info("🔬 **COMPREHENSIVE ANALYSIS**")
         logger.info("=" * 40)
-        logger.info("File: {}".format(file_path))
+        logger.info(f"File: {file_path}")
 
         # Query all linter APIs
         linter_results = self.query_all_linter_apis(file_path)
@@ -377,7 +388,7 @@ extend-select = ["TCH"]
         ai_suggestions = self.linter_api.get_ai_suggestions(file_path)
 
         # Analyze violation patterns
-        all_violations: List[Dict[str, Any]] = []
+        all_violations: list[dict[str, Any]] = []
         for linter_name, violations_obj in linter_results.items():
             if linter_name != "ai_suggestions":
                 if violations_obj and isinstance(violations_obj, list):
@@ -391,7 +402,7 @@ extend-select = ["TCH"]
                                 "linter": linter_name,
                                 "severity": violation.severity,
                                 "fix_available": violation.fix_available,
-                            }
+                            },
                         )
 
         # Update rules based on violations
@@ -413,21 +424,24 @@ extend-select = ["TCH"]
             "violations": all_violations,
             "update_results": update_results,
             "recommendations": self._generate_recommendations(
-                all_violations, ai_suggestions
+                all_violations,
+                ai_suggestions,
             ),
         }
 
         logger.info("\n📊 **ANALYSIS REPORT**")
         logger.info("=" * 25)
-        logger.info("Total violations: {}".format(len(all_violations)))
-        logger.info("AI suggestions: {}".format(len(ai_suggestions)))
+        logger.info(f"Total violations: {len(all_violations)}")
+        logger.info(f"AI suggestions: {len(ai_suggestions)}")
         logger.info("Rules updated: {}".format(update_results["rules_updated"]))
 
         return analysis_report
 
     def _generate_recommendations(
-        self, violations: List[Dict[str, Any]], ai_suggestions: List[Dict[str, Any]]
-    ) -> List[str]:
+        self,
+        violations: list[dict[str, Any]],
+        ai_suggestions: list[dict[str, Any]],
+    ) -> list[str]:
         """Generate recommendations based on analysis"""
         recommendations = []
 
@@ -443,26 +457,24 @@ extend-select = ["TCH"]
         for rule_code, count in violation_types.items():
             if count > 2:
                 recommendations.append(
-                    "High frequency {} violations: Consider adding specific prevention rule".format(
-                        rule_code
-                    )
+                    f"High frequency {rule_code} violations: Consider adding specific prevention rule",
                 )
 
             if rule_code == "F401":
                 recommendations.append(
-                    "Unused imports detected: Review import statements and remove unused imports"
+                    "Unused imports detected: Review import statements and remove unused imports",
                 )
 
                 recommendations.append(
-                    "F-strings without placeholders: Use regular strings when no variables are needed"
+                    "F-strings without placeholders: Use regular strings when no variables are needed",
                 )
             elif rule_code == "E302":
                 recommendations.append(
-                    "Missing blank lines: Add two blank lines before class/function definitions"
+                    "Missing blank lines: Add two blank lines before class/function definitions",
                 )
             elif rule_code == "W291":
                 recommendations.append(
-                    "Trailing whitespace: Remove trailing whitespace from lines"
+                    "Trailing whitespace: Remove trailing whitespace from lines",
                 )
             elif rule_code == "W292":
                 recommendations.append("Missing newline: Add newline at end of file")
@@ -470,20 +482,20 @@ extend-select = ["TCH"]
         # Add AI-specific recommendations
         if ai_suggestions:
             recommendations.append(
-                "AI suggestions available: Consider applying AI-powered fixes"
+                "AI suggestions available: Consider applying AI-powered fixes",
             )
 
         return recommendations
 
-    def generate_summary_report(self) -> Dict[str, Any]:
+    def generate_summary_report(self) -> dict[str, Any]:
         """Generate summary report of all activities"""
         logger.info("📋 **GENERATING SUMMARY REPORT**")
         logger.info("=" * 40)
 
         # Analyze violation history
         total_violations = len(self.violation_history)
-        unique_rules = set(v.get("code") for v in self.violation_history)
-        unique_files = set(v.get("file_path") for v in self.violation_history)
+        unique_rules = {v.get("code") for v in self.violation_history}
+        unique_files = {v.get("file_path") for v in self.violation_history}
 
         # Calculate statistics
         rule_frequencies = {}
@@ -500,21 +512,23 @@ extend-select = ["TCH"]
             "unique_files": len(unique_files),
             "rule_frequencies": rule_frequencies,
             "most_common_violations": sorted(
-                rule_frequencies.items(), key=lambda x: x[1], reverse=True
+                rule_frequencies.items(),
+                key=lambda x: x[1],
+                reverse=True,
             )[:5],
             "violation_history": self.violation_history,
             "timestamp": datetime.now().isoformat(),
         }
 
         logger.info("Summary statistics:")
-        logger.info("  - Total violations: {}".format(total_violations))
-        logger.info("  - Unique rules: {}".format(len(unique_rules)))
-        logger.info("  - Unique files: {}".format(len(unique_files)))
+        logger.info(f"  - Total violations: {total_violations}")
+        logger.info(f"  - Unique rules: {len(unique_rules)}")
+        logger.info(f"  - Unique files: {len(unique_files)}")
 
         if rule_frequencies:
             logger.info("  - Most common violations:")
             for rule_code, count in summary["most_common_violations"]:
-                logger.info("    - {}: {} occurrences".format(rule_code, count))
+                logger.info(f"    - {rule_code}: {count} occurrences")
 
         return summary
 
@@ -528,7 +542,7 @@ def main() -> None:
 
     # Setup AI-powered linters
     setup_results = system.setup_ai_powered_linters()
-    logger.info("Setup results: {}".format(setup_results))
+    logger.info(f"Setup results: {setup_results}")
 
     # Test with a sample file
     test_file = "tests/test_python_quality_enforcement.py"
@@ -552,7 +566,7 @@ def main() -> None:
         logger.info("  - .cursor/rules/dynamic-prevention-rules.mdc")
 
     else:
-        logger.error("Test file {} not found".format(test_file))
+        logger.error(f"Test file {test_file} not found")
 
 
 if __name__ == "__main__":

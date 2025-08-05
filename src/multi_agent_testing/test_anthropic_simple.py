@@ -4,6 +4,7 @@ Simple test to replicate the smoke test Anthropic API call
 """
 
 import json
+
 import requests
 
 
@@ -31,7 +32,7 @@ Obviously the Snowflake integration will handle the rest.
 
 Jeopardy Question: What assumptions am I making about OAuth2 security and token management?
 
-Generate 5 probing questions that would reveal blind spots, assumptions, or unknown unknowns. 
+Generate 5 probing questions that would reveal blind spots, assumptions, or unknown unknowns.
 Focus on questions that challenge the approach and reveal what might be missing.
 
 Format as JSON:

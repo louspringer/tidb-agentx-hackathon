@@ -2,8 +2,9 @@
 """Generated from improved model-driven projection"""
 
 import os
-from pydantic import BaseModel, Field, field_validator
+
 from cryptography.fernet import Fernet
+from pydantic import BaseModel, Field, field_validator
 
 SECURITY_CONFIG = {
     "fernet_key": os.getenv("FERNET_KEY", Fernet.generate_key()),
@@ -29,8 +30,9 @@ class SnowflakeConfig(BaseModel):
     oauth_client_secret: str = Field(..., description="OAuth client secret")
 
     @field_validator("account_url")
-    def validate_account_url(cls, v: str) -> str:
+    def validate_account_url(self, v: str) -> str:
         """Validate Snowflake account URL format"""
         if not v.startswith("https://") or "snowflakecomputing.com" not in v:
-            raise ValueError("Invalid Snowflake account URL format")
+            msg = "Invalid Snowflake account URL format"
+            raise ValueError(msg)
         return v

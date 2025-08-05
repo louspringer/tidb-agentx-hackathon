@@ -19,7 +19,7 @@ def test_projected_artifacts_syntax() -> None:
     for file_path in test_files:
         if Path(file_path).exists():
             try:
-                with open(file_path, "r") as f:
+                with open(file_path) as f:
                     content = f.read()
 
                 # Parse with AST to check syntax
@@ -28,13 +28,16 @@ def test_projected_artifacts_syntax() -> None:
 
             except SyntaxError as e:
                 print(f"❌ Syntax error in {file_path}: {e}")
-                assert False, f"Syntax error in {file_path}: {e}"
+                msg = f"Syntax error in {file_path}: {e}"
+                raise AssertionError(msg)
             except Exception as e:
                 print(f"❌ Error reading {file_path}: {e}")
-                assert False, f"Error reading {file_path}: {e}"
+                msg = f"Error reading {file_path}: {e}"
+                raise AssertionError(msg)
         else:
             print(f"⚠️  File not found: {file_path}")
-            assert False, f"File not found: {file_path}"
+            msg = f"File not found: {file_path}"
+            raise AssertionError(msg)
 
 
 def test_projected_artifacts_structure() -> None:
@@ -43,7 +46,7 @@ def test_projected_artifacts_structure() -> None:
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     assert streamlit_file.exists(), "Streamlit app file should exist"
 
-    with open(streamlit_file, "r") as f:
+    with open(streamlit_file) as f:
         content = f.read()
 
     tree = ast.parse(content)
@@ -77,7 +80,7 @@ def test_projected_artifacts_structure() -> None:
     security_file = Path("src/security_first/input_validator.py")
     assert security_file.exists(), "Security module file should exist"
 
-    with open(security_file, "r") as f:
+    with open(security_file) as f:
         content = f.read()
 
     tree = ast.parse(content)
@@ -113,7 +116,7 @@ def test_projected_artifacts_content() -> None:
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     assert streamlit_file.exists(), "Streamlit app file should exist"
 
-    with open(streamlit_file, "r") as f:
+    with open(streamlit_file) as f:
         content = f.read()
 
     # Check for expected content
@@ -148,7 +151,7 @@ def test_projected_artifacts_content() -> None:
     security_file = Path("src/security_first/input_validator.py")
     assert security_file.exists(), "Security module file should exist"
 
-    with open(security_file, "r") as f:
+    with open(security_file) as f:
         content = f.read()
 
     # Check for expected content
@@ -195,7 +198,7 @@ def test_projected_artifacts_import_structure() -> None:
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     assert streamlit_file.exists(), "Streamlit app file should exist"
 
-    with open(streamlit_file, "r") as f:
+    with open(streamlit_file) as f:
         lines = f.readlines()
 
     # Check that imports are in the first 20 lines
@@ -210,7 +213,7 @@ def test_projected_artifacts_import_structure() -> None:
     # Check that imports are properly formatted
     for line_num, import_line in import_lines:
         assert import_line.startswith(
-            ("import ", "from ")
+            ("import ", "from "),
         ), f"Line {line_num} should be an import"
         print(f"✅ Import at line {line_num}: {import_line}")
 
@@ -220,7 +223,7 @@ def test_projected_artifacts_class_structure() -> None:
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     assert streamlit_file.exists(), "Streamlit app file should exist"
 
-    with open(streamlit_file, "r") as f:
+    with open(streamlit_file) as f:
         content = f.read()
 
     tree = ast.parse(content)
@@ -246,7 +249,7 @@ def test_projected_artifacts_function_structure() -> None:
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     assert streamlit_file.exists(), "Streamlit app file should exist"
 
-    with open(streamlit_file, "r") as f:
+    with open(streamlit_file) as f:
         content = f.read()
 
     tree = ast.parse(content)

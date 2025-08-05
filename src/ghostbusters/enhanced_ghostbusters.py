@@ -217,9 +217,11 @@ class EnhancedGhostbustersOrchestrator:
         confidence = max(0.0, 1.0 - (issues_per_file / 10.0))
 
         self.logger.info(
-            "📊 Analysis: %d issues in %d files", total_issues, total_files
+            "📊 Analysis: %d issues in %d files",
+            total_issues,
+            total_files,
         )
-        self.logger.info("📊 Issues per file: %.2f", issues_per_file)
+        self.logger.info("📊 Issues per file: %.2", issues_per_file)
         self.logger.info("📊 Calculated confidence: %.2f%%", confidence * 100)
 
         return confidence

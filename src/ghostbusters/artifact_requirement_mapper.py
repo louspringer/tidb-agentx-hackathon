@@ -4,10 +4,10 @@ Artifact Requirement Mapper - Maps individual AST models to specific requirement
 """
 
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
 
 
 @dataclass
@@ -19,9 +19,9 @@ class ArtifactRequirementMapping:
     requirement_id: str
     requirement_domain: str
     requirement_description: str
-    implementation_files: List[str]
-    test_files: List[str]
-    ast_model: Dict[str, Any]
+    implementation_files: list[str]
+    test_files: list[str]
+    ast_model: dict[str, Any]
     complexity_score: float
     coverage_score: float
     compliance_score: float
@@ -36,36 +36,37 @@ class ArtifactRequirementMapper:
         self.ast_models = self._load_ast_models()
         self.test_requirements = self._load_test_requirements()
 
-    def _load_project_model(self) -> Dict[str, Any]:
+    def _load_project_model(self) -> dict[str, Any]:
         """Load project model registry"""
         try:
-            with open("project_model_registry.json", "r") as f:
+            with open("project_model_registry.json") as f:
                 return json.load(f)
         except Exception as e:
             print(f"Error loading project model: {e}")
             return {}
 
-    def _load_ast_models(self) -> Dict[str, Any]:
+    def _load_ast_models(self) -> dict[str, Any]:
         """Load AST models"""
         try:
-            with open("ast_models_focused.json", "r") as f:
+            with open("ast_models_focused.json") as f:
                 return json.load(f)
         except Exception as e:
             print(f"Error loading AST models: {e}")
             return {}
 
-    def _load_test_requirements(self) -> Dict[str, Any]:
+    def _load_test_requirements(self) -> dict[str, Any]:
         """Load test-driven requirements"""
         try:
-            with open("test_driven_ast_models.json", "r") as f:
+            with open("test_driven_ast_models.json") as f:
                 return json.load(f)
         except Exception as e:
             print(f"Error loading test requirements: {e}")
             return {}
 
     def map_artifact_to_requirements(
-        self, artifact_path: str
-    ) -> List[ArtifactRequirementMapping]:
+        self,
+        artifact_path: str,
+    ) -> list[ArtifactRequirementMapping]:
         """Map a specific artifact to its requirements"""
         mappings = []
 
@@ -80,7 +81,9 @@ class ArtifactRequirementMapper:
 
         for req in requirements:
             mapping = self._create_artifact_requirement_mapping(
-                artifact_path, artifact_model, req
+                artifact_path,
+                artifact_model,
+                req,
             )
             if mapping:
                 mappings.append(mapping)
@@ -88,7 +91,9 @@ class ArtifactRequirementMapper:
         return mappings
 
     def _determine_artifact_domain(
-        self, artifact_path: str, artifact_model: Dict[str, Any]
+        self,
+        artifact_path: str,
+        artifact_model: dict[str, Any],
     ) -> str:
         """Determine which domain an artifact belongs to"""
         path = Path(artifact_path)
@@ -116,7 +121,9 @@ class ArtifactRequirementMapper:
         return pattern in str(path) or path.match(pattern)
 
     def _content_contains_indicator(
-        self, content: Dict[str, Any], indicator: str
+        self,
+        content: dict[str, Any],
+        indicator: str,
     ) -> bool:
         """Check if content contains indicator"""
         # Check in docstrings, imports, function names, etc.
@@ -138,7 +145,7 @@ class ArtifactRequirementMapper:
 
         return False
 
-    def _get_requirements_for_domain(self, domain: str) -> List[Dict[str, Any]]:
+    def _get_requirements_for_domain(self, domain: str) -> list[dict[str, Any]]:
         """Get requirements for a specific domain"""
         requirements = self.project_model.get("requirements_traceability", [])
         return [req for req in requirements if req.get("domain") == domain]
@@ -146,8 +153,8 @@ class ArtifactRequirementMapper:
     def _create_artifact_requirement_mapping(
         self,
         artifact_path: str,
-        artifact_model: Dict[str, Any],
-        requirement: Dict[str, Any],
+        artifact_model: dict[str, Any],
+        requirement: dict[str, Any],
     ) -> Optional[ArtifactRequirementMapping]:
         """Create mapping between artifact and requirement"""
 
@@ -176,7 +183,9 @@ class ArtifactRequirementMapper:
         )
 
     def _calculate_coverage_score(
-        self, artifact_path: str, requirement: Dict[str, Any]
+        self,
+        artifact_path: str,
+        requirement: dict[str, Any],
     ) -> float:
         """Calculate how well the artifact covers the requirement"""
         # This would analyze the AST model to see how well it implements the requirement
@@ -184,28 +193,30 @@ class ArtifactRequirementMapper:
         return 0.8  # Placeholder
 
     def _calculate_compliance_score(
-        self, artifact_path: str, requirement: Dict[str, Any]
+        self,
+        artifact_path: str,
+        requirement: dict[str, Any],
     ) -> float:
         """Calculate compliance score for the requirement"""
         # This would check if the artifact follows the requirement's guidelines
         # For now, return a simple score
         return 0.9  # Placeholder
 
-    def _get_implementation_files(self, requirement: Dict[str, Any]) -> List[str]:
+    def _get_implementation_files(self, requirement: dict[str, Any]) -> list[str]:
         """Get implementation files for a requirement"""
         implementation = requirement.get("implementation", "")
         # Extract file patterns from implementation description
         # This is a simplified version
         return [implementation]
 
-    def _get_test_files(self, requirement: Dict[str, Any]) -> List[str]:
+    def _get_test_files(self, requirement: dict[str, Any]) -> list[str]:
         """Get test files for a requirement"""
         test_file = requirement.get("test", "")
         if test_file:
             return [test_file]
         return []
 
-    def generate_artifact_requirement_report(self) -> Dict[str, Any]:
+    def generate_artifact_requirement_report(self) -> dict[str, Any]:
         """Generate comprehensive report of artifact-requirement mappings"""
         print("🔍 Generating Artifact-Requirement Mapping Report...")
 
@@ -214,7 +225,8 @@ class ArtifactRequirementMapper:
 
         # Process all artifacts
         for artifact_path, artifact_model in self.ast_models.get(
-            "file_models", {}
+            "file_models",
+            {},
         ).items():
             mappings = self.map_artifact_to_requirements(artifact_path)
             all_mappings.extend(mappings)
@@ -251,20 +263,23 @@ class ArtifactRequirementMapper:
         }
 
     def find_requirements_for_artifact(
-        self, artifact_path: str
-    ) -> List[Dict[str, Any]]:
+        self,
+        artifact_path: str,
+    ) -> list[dict[str, Any]]:
         """Find all requirements that apply to a specific artifact"""
         mappings = self.map_artifact_to_requirements(artifact_path)
         return [asdict(mapping) for mapping in mappings]
 
     def find_artifacts_for_requirement(
-        self, requirement_id: str
-    ) -> List[Dict[str, Any]]:
+        self,
+        requirement_id: str,
+    ) -> list[dict[str, Any]]:
         """Find all artifacts that implement a specific requirement"""
         artifacts = []
 
         for artifact_path, artifact_model in self.ast_models.get(
-            "file_models", {}
+            "file_models",
+            {},
         ).items():
             mappings = self.map_artifact_to_requirements(artifact_path)
             for mapping in mappings:
@@ -274,7 +289,7 @@ class ArtifactRequirementMapper:
                             "artifact_path": artifact_path,
                             "artifact_model": artifact_model,
                             "mapping": asdict(mapping),
-                        }
+                        },
                     )
 
         return artifacts

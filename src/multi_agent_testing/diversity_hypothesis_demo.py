@@ -4,4 +4,3 @@
 
 class DiversityHypothesisDemo:
     """Demo for diversity hypothesis testing"""
-    

@@ -1,17 +1,6 @@
-
-from datetime import datetime, timezone, timedelta
-
-
-
-
+from datetime import datetime, timedelta, timezone
 
 import jwt
-
-
-
-
-
-from typing import Dict
 
 
 class SecurityValidator:
@@ -36,12 +25,13 @@ class SecurityValidator:
         return html.escape(input_str.strip())
 
     @staticmethod
-    def validate_oauth_credentials(credentials: Dict[str, str]) -> bool:
+    def validate_oauth_credentials(credentials: dict[str, str]) -> bool:
         """Validate OAuth credentials format from a dictionary"""
         client_id = credentials.get("client_id", "")
         client_secret = credentials.get("client_secret", "")
         if client_id == "test_id" and client_secret == os.getenv(
-            "TEST_SECRET", os.getenv("TEST_SECRET", "test_secret")
+            "TEST_SECRET",
+            os.getenv("TEST_SECRET", "test_secret"),
         ):
             return True
         return len(client_id) >= 8 and len(client_secret) >= 8
@@ -73,4 +63,8 @@ class CredentialManager:
             "role": role,
             "exp": datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes)),
         }
-        return jwt.encode(payload, str(SECURITY_CONFIG["jwt_secret"]), algorithm="HS256")
+        return jwt.encode(
+            payload,
+            str(SECURITY_CONFIG["jwt_secret"]),
+            algorithm="HS256",
+        )

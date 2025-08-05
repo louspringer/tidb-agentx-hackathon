@@ -123,12 +123,11 @@ class ToolDiscovery:
         """Infer the purpose of a script from its name"""
         if "return_value" in script_name:
             return "Fix MyPy return value issues"
-        elif "flake8" in script_name:
+        if "flake8" in script_name:
             return "Fix Flake8 style issues"
-        elif "type" in script_name:
+        if "type" in script_name:
             return "Fix type annotation issues"
-        else:
-            return "Unknown purpose"
+        return "Unknown purpose"
 
     def get_smart_recommendations(self, analysis_results: dict[str, Any]) -> list[str]:
         """Get smart recommendations based on available tools, usage history, and web search"""

@@ -4,17 +4,19 @@ MDC File Model and Generator
 Uses standard Python libraries to model and generate .mdc files
 """
 
-import yaml  # type: ignore
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
 from pathlib import Path
+from typing import Any, Optional
+
+import yaml  # type: ignore
 
 
 @dataclass
 class MDCFrontmatter:
     """Model for MDC file YAML frontmatter"""
+
     description: str
-    globs: List[str]
+    globs: list[str]
     always_apply: bool = True
 
     def to_yaml(self) -> str:
@@ -22,7 +24,7 @@ class MDCFrontmatter:
         data = {
             "description": self.description,
             "globs": self.globs,
-            "alwaysApply": self.always_apply
+            "alwaysApply": self.always_apply,
         }
         return yaml.dump(data, default_flow_style=False, sort_keys=False)
 
@@ -30,6 +32,7 @@ class MDCFrontmatter:
 @dataclass
 class MDCFile:
     """Complete MDC file model"""
+
     frontmatter: MDCFrontmatter
     content: str
     file_path: Optional[Path] = None
@@ -43,81 +46,86 @@ class MDCFile:
         """Save .mdc file"""
         target_path = file_path or self.file_path
         if not target_path:
-            raise ValueError("No file path specified")
+            msg = "No file path specified"
+            raise ValueError(msg)
         target_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(target_path, 'w') as f:
+        with open(target_path, "w") as f:
             f.write(self.to_mdc_content())
 
     @classmethod
-    def from_file(cls, file_path: Path) -> 'MDCFile':
+    def from_file(cls, file_path: Path) -> "MDCFile":
         """Load .mdc file from disk"""
-        with open(file_path, 'r') as f:
+        with open(file_path) as f:
             content = f.read()
-        
+
         # Parse YAML frontmatter
-        lines = content.split('\n')
-        if not lines or lines[0].strip() != '---':
-            raise ValueError(f"Invalid .mdc file: {file_path}")
-        
+        lines = content.split("\n")
+        if not lines or lines[0].strip() != "---":
+            msg = f"Invalid .mdc file: {file_path}"
+            raise ValueError(msg)
+
         # Find frontmatter end
         frontmatter_end = None
         for i, line in enumerate(lines[1:], 1):
-            if line.strip() == '---':
+            if line.strip() == "---":
                 frontmatter_end = i
                 break
-        
+
         if frontmatter_end is None:
-            raise ValueError(f"Invalid .mdc file structure: {file_path}")
-        
+            msg = f"Invalid .mdc file structure: {file_path}"
+            raise ValueError(msg)
+
         # Extract frontmatter
-        frontmatter_text = '\n'.join(lines[1:frontmatter_end])
+        frontmatter_text = "\n".join(lines[1:frontmatter_end])
         frontmatter_data = yaml.safe_load(frontmatter_text)
-        
+
         # Extract content
-        content_lines = lines[frontmatter_end + 1:]
-        content = '\n'.join(content_lines)
-        
+        content_lines = lines[frontmatter_end + 1 :]
+        content = "\n".join(content_lines)
+
         # Create frontmatter object
         frontmatter = MDCFrontmatter(
-            description=frontmatter_data.get('description', ''),
-            globs=frontmatter_data.get('globs', []),
-            always_apply=frontmatter_data.get('alwaysApply', True)
+            description=frontmatter_data.get("description", ""),
+            globs=frontmatter_data.get("globs", []),
+            always_apply=frontmatter_data.get("alwaysApply", True),
         )
-        
+
         return cls(
             frontmatter=frontmatter,
             content=content,
-            file_path=file_path
+            file_path=file_path,
         )
 
     @classmethod
-    def create_rule(cls, 
-                   description: str,
-                   globs: List[str],
-                   content: str,
-                   file_path: Optional[Path] = None,
-                   always_apply: bool = True) -> 'MDCFile':
+    def create_rule(
+        cls,
+        description: str,
+        globs: list[str],
+        content: str,
+        file_path: Optional[Path] = None,
+        always_apply: bool = True,
+    ) -> "MDCFile":
         """Create a new MDC rule file"""
         frontmatter = MDCFrontmatter(
             description=description,
             globs=globs,
-            always_apply=always_apply
+            always_apply=always_apply,
         )
-        
+
         return cls(
             frontmatter=frontmatter,
             content=content,
-            file_path=file_path
+            file_path=file_path,
         )
 
 
 class MDCGenerator:
     """Generator for MDC files"""
-    
+
     def __init__(self, base_dir: Path) -> None:
         self.base_dir = base_dir
         self.rules_dir = base_dir / ".cursor" / "rules"
-    
+
     def generate_all_rules(self) -> None:
         """Generate all standard .mdc rules"""
         rules = self._get_standard_rules()
@@ -128,17 +136,29 @@ class MDCGenerator:
                 globs=rule_data["globs"],
                 content=rule_data["content"],
                 file_path=file_path,
-                always_apply=rule_data.get("always_apply", True)
+                always_apply=rule_data.get("always_apply", True),
             )
             mdc_file.save()
             print(f"Generated: {file_path}")
 
-    def _get_standard_rules(self) -> Dict[str, Dict[str, Any]]:
+    def _get_standard_rules(self) -> dict[str, dict[str, Any]]:
         """Get standard rule definitions"""
         return {
             "deterministic-editing": {
                 "description": "Use deterministic tools for file editing",
-                "globs": ["**/*.yaml", "**/*.yml", "**/*.json", "**/*.toml", "**/*.ini", "**/*.cfg", "**/*.mdc", "**/*.py", "**/*.xml", "**/*.properties", "**/*.env"],
+                "globs": [
+                    "**/*.yaml",
+                    "**/*.yml",
+                    "**/*.json",
+                    "**/*.toml",
+                    "**/*.ini",
+                    "**/*.cfg",
+                    "**/*.mdc",
+                    "**/*.py",
+                    "**/*.xml",
+                    "**/*.properties",
+                    "**/*.env",
+                ],
                 "always_apply": True,
                 "content": """# Deterministic File Editing
 
@@ -183,11 +203,18 @@ class MDCGenerator:
 
 ## Remember:
 If you don't have a deterministic tool for a format, acknowledge the limitation and use the best available approach.
-Always validate file structure after editing."""
+Always validate file structure after editing.""",
             },
             "security": {
                 "description": "Security-first development practices",
-                "globs": ["**/*.py", "**/*.yaml", "**/*.yml", "**/*.json", "**/*.sh", "**/*.md"],
+                "globs": [
+                    "**/*.py",
+                    "**/*.yaml",
+                    "**/*.yml",
+                    "**/*.json",
+                    "**/*.sh",
+                    "**/*.md",
+                ],
                 "always_apply": True,
                 "content": """# Security Guidelines
 
@@ -224,8 +251,8 @@ Always validate file structure after editing."""
 ## Remember:
 If you see hardcoded credentials, FIX THEM IMMEDIATELY.
 If you're not sure, DON'T HARDCODE IT.
-Treat every codebase as if it will be shared publicly."""
-            }
+Treat every codebase as if it will be shared publicly.""",
+            },
         }
 
     def validate_mdc_file(self, file_path: Path) -> bool:
@@ -237,7 +264,7 @@ Treat every codebase as if it will be shared publicly."""
             print(f"Validation failed for {file_path}: {e}")
             return False
 
-    def validate_all_mdc_files(self) -> Dict[Path, bool]:
+    def validate_all_mdc_files(self) -> dict[Path, bool]:
         """Validate all .mdc files in the project"""
         results = {}
         for mdc_file in self.base_dir.rglob("*.mdc"):
@@ -248,27 +275,35 @@ Treat every codebase as if it will be shared publicly."""
 def main() -> None:
     """Main function for command-line usage"""
     import argparse
-    
+
     parser = argparse.ArgumentParser(description="MDC File Generator and Validator")
-    parser.add_argument("--generate", action="store_true", help="Generate standard rules")
-    parser.add_argument("--validate", action="store_true", help="Validate all .mdc files")
-    parser.add_argument("--base-dir", type=Path, default=Path("."), help="Base directory")
-    
+    parser.add_argument(
+        "--generate",
+        action="store_true",
+        help="Generate standard rules",
+    )
+    parser.add_argument(
+        "--validate",
+        action="store_true",
+        help="Validate all .mdc files",
+    )
+    parser.add_argument("--base-dir", type=Path, default=Path(), help="Base directory")
+
     args = parser.parse_args()
-    
+
     generator = MDCGenerator(args.base_dir)
     if args.generate:
         print("Generating standard .mdc rules...")
         generator.generate_all_rules()
         print("Generation complete!")
-    
+
     if args.validate:
         print("Validating all .mdc files...")
         results = generator.validate_all_mdc_files()
-        
+
         valid_files = [f for f, valid in results.items() if valid]
         invalid_files = [f for f, valid in results.items() if not valid]
-        
+
         print(f"Valid files: {len(valid_files)}")
         print(f"Invalid files: {len(invalid_files)}")
         if invalid_files:

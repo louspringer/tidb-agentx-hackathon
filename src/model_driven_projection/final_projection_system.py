@@ -12,8 +12,8 @@ This system fixes the remaining issues:
 
 import ast
 import logging
-from typing import Dict, List, Set, Tuple
 from pathlib import Path
+
 from .level1_granular_nodes import CodeNode
 
 # Configure logging
@@ -25,10 +25,10 @@ class FinalProjectionSystem:
     """Final projection system with all issues fixed."""
 
     def __init__(self) -> None:
-        self.extracted_nodes: Dict[str, CodeNode] = {}
+        self.extracted_nodes: dict[str, CodeNode] = {}
         self.position_counter = 0
-        self.seen_definitions: Set[
-            Tuple[str, str, int]
+        self.seen_definitions: set[
+            tuple[str, str, int]
         ] = set()  # (type, name, line_number)
 
     def extract_and_project_file(self, file_path: str) -> str:
@@ -36,7 +36,7 @@ class FinalProjectionSystem:
         logger.info(f"🔍 Final extraction: {file_path}")
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
         except (FileNotFoundError, UnicodeDecodeError) as e:
             logger.error(f"❌ Error reading {file_path}: {e}")
@@ -59,11 +59,9 @@ class FinalProjectionSystem:
         ordered_nodes = sorted(nodes, key=lambda n: n.metadata.get("order", 0))
 
         # Project with all fixes
-        projected_content = self._project_with_all_fixes(ordered_nodes, file_path)
+        return self._project_with_all_fixes(ordered_nodes, file_path)
 
-        return projected_content
-
-    def _extract_with_all_fixes(self, tree: ast.AST, file_path: str) -> List[CodeNode]:
+    def _extract_with_all_fixes(self, tree: ast.AST, file_path: str) -> list[CodeNode]:
         """Extract with all fixes applied."""
         nodes = []
         context = self._determine_context(file_path)
@@ -82,7 +80,9 @@ class FinalProjectionSystem:
 
         # Extract standalone functions (not class methods)
         function_nodes = self._extract_standalone_functions_fixed(
-            tree, file_path, context
+            tree,
+            file_path,
+            context,
         )
         nodes.extend(function_nodes)
 
@@ -90,8 +90,11 @@ class FinalProjectionSystem:
         return nodes
 
     def _extract_imports_fixed(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract imports with all fixes applied."""
         nodes = []
         seen_imports = set()
@@ -147,8 +150,11 @@ class FinalProjectionSystem:
         return nodes
 
     def _extract_constants_fixed(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract constants with fixes applied."""
         nodes = []
         seen_constants = set()
@@ -191,8 +197,11 @@ class FinalProjectionSystem:
         return nodes
 
     def _extract_classes_with_methods_fixed(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract class definitions with their methods (fixed)."""
         nodes = []
 
@@ -240,8 +249,11 @@ class FinalProjectionSystem:
         return nodes
 
     def _extract_standalone_functions_fixed(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract standalone functions (not class methods) with fixes."""
         nodes = []
 
@@ -317,7 +329,7 @@ class FinalProjectionSystem:
                 if "assert timeout_minutes is not None" in line:
                     fixed_lines.append("        if timeout_minutes is None:")
                     fixed_lines.append(
-                        "            raise ValueError('session_timeout_minutes should be set')"
+                        "            raise ValueError('session_timeout_minutes should be set')",
                     )
                 else:
                     # Keep other assert statements for now (they might be in tests)
@@ -336,9 +348,7 @@ class FinalProjectionSystem:
         code = code.replace("=10", " = 10")
         code = code.replace("=15", " = 15")
         code = code.replace("=12", " = 12")
-        code = code.replace("=3", " = 3")
-
-        return code
+        return code.replace("=3", " = 3")
 
     def _get_parent_node(self, tree: ast.AST, target_node: ast.AST) -> ast.AST:
         """Get the parent node of a target node."""
@@ -348,7 +358,7 @@ class FinalProjectionSystem:
                     return parent
         return None
 
-    def _project_with_all_fixes(self, nodes: List[CodeNode], file_path: str) -> str:
+    def _project_with_all_fixes(self, nodes: list[CodeNode], file_path: str) -> str:
         """Project nodes with all fixes applied."""
         content_parts = []
 
@@ -417,24 +427,23 @@ class FinalProjectionSystem:
 
         if "streamlit" in path_str:
             return "streamlit"
-        elif "security_first" in path_str:
+        if "security_first" in path_str:
             return "security"
-        elif "multi_agent_testing" in path_str:
+        if "multi_agent_testing" in path_str:
             return "multi_agent"
-        elif "tests" in path_str:
+        if "tests" in path_str:
             return "testing"
-        elif "config" in path_str or "config" in path.name:
+        if "config" in path_str or "config" in path.name:
             return "configuration"
-        elif "docs" in path_str or path.suffix == ".md":
+        if "docs" in path_str or path.suffix == ".md":
             return "documentation"
-        elif "scripts" in path_str or path.suffix == ".sh":
+        if "scripts" in path_str or path.suffix == ".sh":
             return "automation"
-        elif path.suffix == ".yaml" or path.suffix == ".yml":
+        if path.suffix == ".yaml" or path.suffix == ".yml":
             return "infrastructure"
-        elif path.suffix == ".json":
+        if path.suffix == ".json":
             return "data"
-        else:
-            return "general"
+        return "general"
 
 
 def main() -> None:

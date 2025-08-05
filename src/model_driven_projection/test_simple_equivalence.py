@@ -13,28 +13,28 @@ def test_syntax_equivalence() -> None:
     try:
         # Parse both files with AST
         # Parse original
-        with open("../../src/streamlit/openflow_quickstart_app.py", "r") as f:
+        with open("../../src/streamlit/openflow_quickstart_app.py") as f:
             original_content = f.read()
         original_tree = ast.parse(original_content)
 
         # Parse projected
-        with open("final_projection.py", "r") as f:
+        with open("final_projection.py") as f:
             projected_content = f.read()
         projected_tree = ast.parse(projected_content)
 
         # Count elements
         original_functions = len(
-            [n for n in ast.walk(original_tree) if isinstance(n, ast.FunctionDef)]
+            [n for n in ast.walk(original_tree) if isinstance(n, ast.FunctionDef)],
         )
         projected_functions = len(
-            [n for n in ast.walk(projected_tree) if isinstance(n, ast.FunctionDef)]
+            [n for n in ast.walk(projected_tree) if isinstance(n, ast.FunctionDef)],
         )
 
         original_classes = len(
-            [n for n in ast.walk(original_tree) if isinstance(n, ast.ClassDef)]
+            [n for n in ast.walk(original_tree) if isinstance(n, ast.ClassDef)],
         )
         projected_classes = len(
-            [n for n in ast.walk(projected_tree) if isinstance(n, ast.ClassDef)]
+            [n for n in ast.walk(projected_tree) if isinstance(n, ast.ClassDef)],
         )
 
         original_imports = len(
@@ -42,24 +42,24 @@ def test_syntax_equivalence() -> None:
                 n
                 for n in ast.walk(original_tree)
                 if isinstance(n, (ast.Import, ast.ImportFrom))
-            ]
+            ],
         )
         projected_imports = len(
             [
                 n
                 for n in ast.walk(projected_tree)
                 if isinstance(n, (ast.Import, ast.ImportFrom))
-            ]
+            ],
         )
 
         print(
-            f"📊 Function count: Original {original_functions} vs Projected {projected_functions}"
+            f"📊 Function count: Original {original_functions} vs Projected {projected_functions}",
         )
         print(
-            f"📊 Class count: Original {original_classes} vs Projected {projected_classes}"
+            f"📊 Class count: Original {original_classes} vs Projected {projected_classes}",
         )
         print(
-            f"📊 Import count: Original {original_imports} vs Projected {projected_imports}"
+            f"📊 Import count: Original {original_imports} vs Projected {projected_imports}",
         )
 
         if (
@@ -84,10 +84,10 @@ def test_content_equivalence() -> None:
 
     try:
         # Read both files
-        with open("../../src/streamlit/openflow_quickstart_app.py", "r") as f:
+        with open("../../src/streamlit/openflow_quickstart_app.py") as f:
             f.read()
 
-        with open("final_projection.py", "r") as f:
+        with open("final_projection.py") as f:
             projected_content = f.read()
 
         # Check for key classes
@@ -155,11 +155,11 @@ def test_structure_equivalence() -> None:
 
     try:
         # Parse both files
-        with open("../../src/streamlit/openflow_quickstart_app.py", "r") as f:
+        with open("../../src/streamlit/openflow_quickstart_app.py") as f:
             original_content = f.read()
         original_tree = ast.parse(original_content)
 
-        with open("final_projection.py", "r") as f:
+        with open("final_projection.py") as f:
             projected_content = f.read()
         projected_tree = ast.parse(projected_content)
 

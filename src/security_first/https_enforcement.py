@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """HTTPS enforcement and SSL/TLS configuration for security-first architecture"""
 
-import os
-import ssl
-import socket
-import logging
 import hashlib
+import logging
+import os
+import socket
+import ssl
 import time
+from typing import Any, Optional
 from urllib.parse import urlparse
-from typing import Dict, Any, Optional
 
 import certifi  # type: ignore
 import requests
@@ -46,13 +46,16 @@ class HTTPSEnforcement:
         return url
 
     def validate_ssl_certificate(
-        self, hostname: str, port: int = 443
-    ) -> Dict[str, Any]:
+        self,
+        hostname: str,
+        port: int = 443,
+    ) -> dict[str, Any]:
         """Validate SSL certificate for given hostname."""
         try:
             with socket.create_connection((hostname, port), timeout=10) as sock:
                 with self.ssl_context.wrap_socket(
-                    sock, server_hostname=hostname
+                    sock,
+                    server_hostname=hostname,
                 ) as ssock:
                     cert = ssock.getpeercert()
                     if cert is None:
@@ -157,7 +160,7 @@ class SecurityManager:
         url: str,
         csrf_token: Optional[str] = None,
         session_id: Optional[str] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Comprehensive request validation."""
         results = {
             "https_valid": self.https_enforcement.validate_https_url(url),
@@ -168,7 +171,8 @@ class SecurityManager:
         # Validate CSRF token if provided
         if csrf_token and session_id:
             results["csrf_valid"] = self.csrf_protection.validate_csrf_token(
-                csrf_token, session_id
+                csrf_token,
+                session_id,
             )
 
         # Log security validation results
@@ -176,11 +180,11 @@ class SecurityManager:
 
         return results
 
-    def get_security_headers(self) -> Dict[str, str]:
+    def get_security_headers(self) -> dict[str, str]:
         """Get security headers for responses."""
         return {
             "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
-            "X-Content-Type-Options": "nosnif",
+            "X-Content-Type-Options": "nosni",
             "X-Frame-Options": "DENY",
             "X-XSS-Protection": "1; mode=block",
             "Referrer-Policy": "strict-origin-when-cross-origin",

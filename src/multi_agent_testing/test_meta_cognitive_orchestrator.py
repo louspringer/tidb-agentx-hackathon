@@ -4,4 +4,3 @@
 
 class SmokeTest:
     """Basic smoke test class"""
-    
