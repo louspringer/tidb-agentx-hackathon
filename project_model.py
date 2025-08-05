@@ -211,10 +211,7 @@ class ProjectModel:
         for command in analysis.validation_commands:
             try:
                 result = subprocess.run(
-                    command.split(),
-                    capture_output=True,
-                    text=True,
-                    cwd=self.project_root,
+
                 )
                 results["tools_used"].append(command.split()[0])
 
