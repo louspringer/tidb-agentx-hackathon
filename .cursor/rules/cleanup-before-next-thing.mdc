@@ -11,6 +11,7 @@
 3. **Choose cleanup strategy** - Fix or reset?
 4. **Execute cleanup** - Complete the cleanup
 5. **Verify clean state** - Confirm everything is working
+6. **Check branch status** - Ensure using appropriate branch for new work
 
 ### Mess Assessment Criteria:
 - **Small mess** (< 10 files): Fix manually
@@ -89,15 +90,83 @@ uv run python src/ghostbusters/enhanced_ghostbusters.py
 2. **Use branches** - Isolate experimental work
 3. **Test regularly** - Catch issues early
 4. **Monitor state** - Keep track of changes
+5. **Check branch history** - Verify branch hasn't been merged already
+6. **Create new branches** - Use descriptive branch names for new features
 
 ### Warning Signs:
 - **Many modified files** - > 20 files changed
 - **Linter errors** - > 50 errors
 - **Syntax errors** - Any syntax errors
 - **Broken functionality** - Core features not working
+- **Wrong branch usage** - Using branch with merged PRs
+- **Branch name mismatch** - Branch name doesn't match work being done
+
+## 🌿 Branch Management
+
+### Before Using Any Branch:
+1. **Check branch status** - `git branch -a`
+2. **Check PR history** - `gh pr list --state all | grep <branch-name>`
+3. **Verify branch state** - Ensure branch hasn't been merged already
+4. **Check remote sync** - `git status` to see if up to date
+
+### Branch Selection Rules:
+- **Never reuse merged branches** - If PR exists and is merged, create new branch
+- **Use descriptive names** - `feature/ide-performance-optimization` not `feature/old-branch`
+- **Check branch purpose** - Ensure branch name matches intended work
+- **Verify clean state** - Branch should be clean before adding new work
+
+### New Branch Creation:
+```bash
+# Check current branch status
+git status
+git branch -a
+
+# Check if branch has existing PRs
+gh pr list --state all | grep <branch-name>
+
+# If branch is clean and appropriate, use it
+# If branch has merged PRs or wrong purpose, create new branch
+git checkout -b feature/new-descriptive-name
+
+# Verify new branch
+git status
+git branch
+```
+
+### Branch Cleanup:
+```bash
+# If accidentally used wrong branch, fix immediately
+git checkout -b feature/correct-branch-name
+git push -u origin feature/correct-branch-name
+
+# Clean up old branch
+git checkout <old-branch>
+git reset --hard HEAD~1  # Remove last commit
+git push --force-with-lease origin <old-branch>
+
+# Switch back to correct branch
+git checkout feature/correct-branch-name
+```
+
+### Common Mistakes to Avoid:
+- **Using merged branches** - Always check PR history before using existing branches
+- **Reusing old branch names** - Create new descriptive branches for new work
+- **Not checking branch purpose** - Ensure branch name matches the work being done
+- **Forgetting to clean up** - Always fix branch mistakes immediately
+
+### Example Mistake (What NOT to do):
+```bash
+# WRONG: Using a branch that already has a merged PR
+git checkout feature/diversity-hypothesis-validation  # This branch already merged!
+git add -A && git commit -m "New feature"  # Adding to wrong branch
+
+# RIGHT: Check first, then create new branch
+gh pr list --state all | grep diversity-hypothesis-validation  # Check if merged
+git checkout -b feature/ide-performance-optimization  # Create new branch
+git add -A && git commit -m "New feature"  # Add to correct branch
+```
 
 ## 🎯 Implementation
-
 ### Before Each New Task:
 ```python
 def check_clean_state():
