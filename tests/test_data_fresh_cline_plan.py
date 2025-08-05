@@ -4,14 +4,14 @@ Test data for fresh Cline's healthcare CDC plan
 Extracted from test to improve maintainability
 """
 
-FRESH_CLINE_PLAN = """
+
 # Healthcare CDC Domain Validation Implementation Plan
 
 ## 1. Tool Selection Analysis
 
 ### YAML Files
 - **Editing Tool**: `ruamel.yaml` for parsing and serializing, in compliance with your `.cursor/rules/deterministic-editing.mdc`
-- **Validation Strategy**: 
+
   - For infrastructure YAML (`healthcare-cdc/models/*.yaml`): Use `cfn-lint` as specified in the `yaml_infrastructure` domain
   - For config YAML: Use `yamllint` with `jsonschema` as specified in the `yaml_config` domain
 
@@ -20,8 +20,7 @@ FRESH_CLINE_PLAN = """
 - **Validation Strategy**: Use `jsonschema` with healthcare CDC-specific schemas to validate structure and ensure HIPAA compliance
 
 ### Python Files
-- **Development Tools**: 
-  - `flake8` for linting (as specified in the `healthcare_cdc` domain)
+
   - `black` for formatting (as specified in the `healthcare_cdc` domain)
   - `pytest` for validation (as specified in the `healthcare_cdc` domain)
   - `bandit` for security scanning (from `security_first` domain)
@@ -61,7 +60,7 @@ FRESH_CLINE_PLAN = """
 ### Healthcare CDC File Placement
 - Maintain existing structure in `healthcare-cdc/` directory
 - Add new subdirectories following established patterns:
-  - `healthcare-cdc/validators/` for custom validation code
+
   - `healthcare-cdc/schemas/` for JSON schemas
   - `healthcare-cdc/rules/` for domain-specific MDC rules
 
@@ -128,4 +127,4 @@ FRESH_CLINE_PLAN = """
 - Integration with existing systems
 - Production deployment
 - Documentation and training
-""" 
+

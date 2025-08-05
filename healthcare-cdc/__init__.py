@@ -17,7 +17,7 @@ from healthcare_cdc_domain_model import (
     CDCEvent,
     EventType,
     ClaimStatus,
-    PaymentStatus
+    PaymentStatus,
 )
 
 __version__ = "1.0.0"
@@ -26,12 +26,12 @@ __description__ = "Healthcare CDC Implementation based on Snowflake Quickstart"
 
 __all__ = [
     "HealthcareCDCDomainModel",
-    "HealthcareClaim", 
+    "HealthcareClaim",
     "PatientInfo",
     "ProviderInfo",
     "PayerInfo",
     "CDCEvent",
     "EventType",
     "ClaimStatus",
-    "PaymentStatus"
-] 
+    "PaymentStatus",
+]

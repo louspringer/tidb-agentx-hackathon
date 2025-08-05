@@ -288,12 +288,7 @@ def main():
     
     for test in tests:
         try:
-            result = test()  # Tests should use assertions, not return values
-            if isinstance(result, bool):
-                print(f"❌ {test.__name__}: Test function returned a boolean value (should use assertions only)")
-            else:
-                passed += 1
-                print(f"✅ {test.__name__}: PASSED")
+
         except AssertionError as e:
             print(f"❌ {test.__name__}: ASSERTION FAILED - {e}")
         except Exception as e:

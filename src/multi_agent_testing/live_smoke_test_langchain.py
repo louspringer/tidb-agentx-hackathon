@@ -17,42 +17,19 @@ from meta_cognitive_orchestrator import MetaCognitiveOrchestrator
 class LiveLLMOrchestrator:
     """Clean LangChain-based LLM integration"""
     
-    # Provider configuration mapping
-    PROVIDERS = {
-        "openai": {
-            "class": ChatOpenAI,
-            "default_model": "gpt-4-turbo",
-            "temperature": 0.7,
-        },
-        "anthropic": {
-            "class": ChatAnthropic,
-            "default_model": "claude-3-5-sonnet-20241022",
-            "temperature": 0.7,
-        },
-        # Add new providers here as needed
-    }
 
     def __init__(self, api_key: Optional[str] = None, provider: str = "openai"):
         self.provider = provider
         self.api_key = api_key or os.getenv(f"{provider.upper()}_API_KEY")
         
-        # Validate provider using configuration mapping
-        if provider not in self.PROVIDERS:
+
             raise ValueError(f"Unsupported provider: {provider}")
         
         # Initialize LangChain models (only if API key is available)
         self.llm = None
         if self.api_key:
             try:
-                provider_config = self.PROVIDERS[provider]
-                llm_class = provider_config["class"]
-                model = provider_config["default_model"]
-                temperature = provider_config.get("temperature", 0.7)
-                self.llm = llm_class(
-                    api_key=self.api_key,
-                    model=model,
-                    temperature=temperature
-                )
+
             except ImportError as e:
                 raise ValueError(f"Failed to import {provider} dependencies: {str(e)}. Install required packages.")
             except ValueError as e:

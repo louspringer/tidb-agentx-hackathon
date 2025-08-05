@@ -54,7 +54,7 @@ MERGE INTO {dest_table} tgt
 
     -- Insert new rows that don't exist in target_table
     WHEN NOT MATCHED AND src.eventName = 'INSERT' THEN
-        INSERT (
+INSERT (
             eventName, 
             eventCreationUnixTime, 
             claimId, 
