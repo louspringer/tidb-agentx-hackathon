@@ -130,4 +130,3 @@ class TestSecurityConfiguration:
         assert self.SECURITY_CONFIG["session_timeout_minutes"] == 15
         assert self.SECURITY_CONFIG["max_login_attempts"] == 3
         assert self.SECURITY_CONFIG["password_min_length"] == 12
-

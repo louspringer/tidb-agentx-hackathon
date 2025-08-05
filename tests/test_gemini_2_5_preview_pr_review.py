@@ -18,7 +18,7 @@ def test_security_manager_initialization():
     # Mock the SecurityManager class
     SecurityManager = Mock()
     security_manager = SecurityManager()
-    
+
     # Test that security manager can be initialized
     assert security_manager is not None
     print("✅ SecurityManager initialization test passed")
@@ -29,7 +29,7 @@ def test_input_validator_methods():
     # Mock the InputValidator class
     InputValidator = Mock()
     validator = InputValidator()
-    
+
     # Test that validator can be initialized
     assert validator is not None
     print("✅ InputValidator methods test passed")
@@ -40,7 +40,7 @@ def test_deployment_manager_initialization():
     # Mock the DeploymentManager class
     DeploymentManager = Mock()
     deployment_manager = DeploymentManager()
-    
+
     # Test that deployment manager can be initialized
     assert deployment_manager is not None
     print("✅ DeploymentManager initialization test passed")
@@ -52,7 +52,7 @@ def test_monitoring_dashboard_initialization():
     MonitoringDashboard = Mock()
     deployment_manager = Mock()
     monitoring_dashboard = MonitoringDashboard(deployment_manager)
-    
+
     # Test that monitoring dashboard can be initialized
     assert monitoring_dashboard is not None
     print("✅ MonitoringDashboard initialization test passed")
@@ -63,7 +63,7 @@ def test_openflow_app_initialization():
     # Mock the OpenFlowQuickstartApp class
     OpenFlowQuickstartApp = Mock()
     app = OpenFlowQuickstartApp()
-    
+
     # Test that Streamlit app can be initialized
     assert app is not None
     print("✅ OpenFlowQuickstartApp initialization test passed")
@@ -72,7 +72,7 @@ def test_openflow_app_initialization():
 def run_basic_tests():
     """Run all basic validation tests"""
     print("🚀 Running basic validation tests...")
-    
+
     tests = [
         test_security_manager_initialization,
         test_input_validator_methods,
@@ -80,17 +80,17 @@ def run_basic_tests():
         test_monitoring_dashboard_initialization,
         test_openflow_app_initialization,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         try:
             test()
             passed += 1
         except Exception as e:
             print(f"❌ Test {test.__name__} failed: {e}")
-    
+
     if passed == total:
         print("🎉 All basic validation tests passed!")
         return True

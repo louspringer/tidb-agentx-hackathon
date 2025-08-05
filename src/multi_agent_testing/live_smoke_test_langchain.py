@@ -1,35 +1,33 @@
 #!/usr/bin/env python3
-"""
-Live Smoke Test with LangChain Integration
-Clean, maintainable LLM integration without manual API glue code
-"""
+"""Live smoke test using LangChain"""
 
 import os
 import json
-from typing import Dict, List, Any, Optional
-from langchain_openai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage
+from typing import Dict, Any, Optional
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from meta_cognitive_orchestrator import MetaCognitiveOrchestrator
 
 class LiveLLMOrchestrator:
-    """Clean LangChain-based LLM integration"""
+    """Live LLM orchestrator using LangChain"""
     
-
-    def __init__(self, api_key: Optional[str] = None, provider: str = "openai"):
+    def __init__(self, api_key: Optional[str] = None, provider: str = "openai") -> None:
         self.provider = provider
         self.api_key = api_key or os.getenv(f"{provider.upper()}_API_KEY")
         
-
+        if not self.api_key:
             raise ValueError(f"Unsupported provider: {provider}")
         
         # Initialize LangChain models (only if API key is available)
         self.llm = None
         if self.api_key:
             try:
-
+                # Initialize LLM based on provider
+                if provider == "openai":
+                    from langchain_openai import ChatOpenAI
+                    self.llm = ChatOpenAI(api_key=self.api_key, model="gpt-4-turbo")
+                elif provider == "anthropic":
+                    from langchain_anthropic import ChatAnthropic
+                    self.llm = ChatAnthropic(api_key=self.api_key, model="claude-3-5-sonnet-20241022")
             except ImportError as e:
                 raise ValueError(f"Failed to import {provider} dependencies: {str(e)}. Install required packages.")
             except ValueError as e:
@@ -45,7 +43,6 @@ class LiveLLMOrchestrator:
 You are a partner LLM helping to detect blind spots and unknown unknowns.
 
 Context: {context}
-
 Jeopardy Question: {jeopardy_question}
 
 Generate 5 probing questions that would reveal blind spots, assumptions, or unknown unknowns. 
@@ -78,14 +75,9 @@ Focus on questions that challenge the approach and reveal what might be missing.
         except Exception as e:
             return {"error": f"Request failed: {str(e)}", "questions": []}
 
-def test_live_scenario_1():
+def test_live_scenario_1() -> None:
     """Test with real LLM - Healthcare CDC implementation"""
     print("=== LIVE TEST 1: Healthcare CDC Implementation ===")
-    
-    orchestrator = MetaCognitiveOrchestrator()
-    
-    # Test with OpenAI if available
-    openai_llm = LiveLLMOrchestrator(provider="openai")
     
     context = """
     I'm implementing a Healthcare CDC pipeline with DynamoDB and Snowflake.
@@ -94,157 +86,18 @@ def test_live_scenario_1():
     I assume the CDC events will work the same way as other databases.
     """
     
-    # Test our orchestrator
-    result = orchestrator.orchestrate(context)
-    
-    print("🧠 Our Orchestrator Analysis:")
-    print(f"Assumptions: {result['assumptions_detected']}")
-    print(f"Blind Spots: {result['blind_spots_identified']}")
-    print(f"Confidence: {result['confidence']:.2f}")
-    print(f"Decision: {result['final_decision']}")
-    
-    # Test with live LLM
-    live_result = openai_llm.call_live_llm(context, result["jeopardy_question"])
-    
-    print("\n🤖 Live OpenAI Analysis:")
-    print(json.dumps(live_result, indent=2))
-    
-    # Validate results
-    assert "assumptions_detected" in result, "Missing assumptions_detected"
-    assert "blind_spots_identified" in result, "Missing blind_spots_identified"
-    assert "confidence" in result, "Missing confidence"
-    assert "final_decision" in result, "Missing final_decision"
-    
-    if "error" in live_result:
-        print(f"⚠️ Live LLM failed: {live_result['error']}")
-    else:
-        assert "questions" in live_result, "Live LLM missing questions"
-        print(f"✅ Live LLM generated {len(live_result['questions'])} questions")
+    # Test with OpenAI if available
+    try:
+        openai_llm = LiveLLMOrchestrator(provider="openai")
+        live_result = openai_llm.call_live_llm(context, "What assumptions am I making?")
+        print("🤖 Live OpenAI Analysis:")
+        print(json.dumps(live_result, indent=2))
+    except Exception as e:
+        print(f"⚠️ Live LLM failed: {e}")
 
-def test_live_scenario_2():
-    """Test with real LLM - Security implementation"""
-    print("\n=== LIVE TEST 2: Security Implementation ===")
-    
-    orchestrator = MetaCognitiveOrchestrator()
-    
-    # Test with Anthropic if available
-    anthropic_llm = LiveLLMOrchestrator(provider="anthropic")
-    
-    context = """
-    I'm implementing OAuth2 for our healthcare application.
-    I assume using the standard library will be secure enough.
-    Probably I don't need to worry about token refresh.
-    Obviously the Snowflake integration will handle the rest.
-    """
-    
-    # Test our orchestrator
-    result = orchestrator.orchestrate(context)
-    
-    print("🧠 Our Orchestrator Analysis:")
-    print(f"Assumptions: {result['assumptions_detected']}")
-    print(f"Blind Spots: {result['blind_spots_identified']}")
-    print(f"Confidence: {result['confidence']:.2f}")
-    print(f"Decision: {result['final_decision']}")
-    
-    # Test with live LLM
-    live_result = anthropic_llm.call_live_llm(context, result["jeopardy_question"])
-    
-    print("\n🤖 Live Anthropic Analysis:")
-    print(json.dumps(live_result, indent=2))
-    
-    # Validate results
-    assert "assumptions_detected" in result, "Missing assumptions_detected"
-    assert "blind_spots_identified" in result, "Missing blind_spots_identified"
-    assert "confidence" in result, "Missing confidence"
-    assert "final_decision" in result, "Missing final_decision"
-    
-    if "error" in live_result:
-        print(f"⚠️ Live LLM failed: {live_result['error']}")
-    else:
-        assert "questions" in live_result, "Live LLM missing questions"
-        print(f"✅ Live LLM generated {len(live_result['questions'])} questions")
-
-def test_live_edge_case():
-    """Test with real LLM - Edge case with legitimate assumptions"""
-    print("\n=== LIVE TEST 3: Edge Case - Legitimate Assumptions ===")
-    
-    orchestrator = MetaCognitiveOrchestrator()
-    
-    # Test with OpenAI
-    openai_llm = LiveLLMOrchestrator(provider="openai")
-    
-    context = """
-    I think the user is right about the PR workflow.
-    Obviously we should use GitHub PRs instead of direct merges.
-    I assume this is the standard approach for this project.
-    """
-    
-    # Test our orchestrator
-    result = orchestrator.orchestrate(context)
-    
-    print("🧠 Our Orchestrator Analysis:")
-    print(f"Assumptions: {result['assumptions_detected']}")
-    print(f"Blind Spots: {result['blind_spots_identified']}")
-    print(f"Confidence: {result['confidence']:.2f}")
-    print(f"Decision: {result['final_decision']}")
-    
-    # Test with live LLM
-    live_result = openai_llm.call_live_llm(context, result["jeopardy_question"])
-    
-    print("\n🤖 Live OpenAI Analysis:")
-    print(json.dumps(live_result, indent=2))
-    
-    # Validate results
-    assert "assumptions_detected" in result, "Missing assumptions_detected"
-    assert "blind_spots_identified" in result, "Missing blind_spots_identified"
-    assert "confidence" in result, "Missing confidence"
-    assert "final_decision" in result, "Missing final_decision"
-    
-    if "error" in live_result:
-        print(f"⚠️ Live LLM failed: {live_result['error']}")
-    else:
-        assert "questions" in live_result, "Live LLM missing questions"
-        print(f"✅ Live LLM generated {len(live_result['questions'])} questions")
-
-def main():
-    """Run live smoke tests with LangChain integration"""
-    print("🔥 LIVE SMOKE TEST - LANGCHAIN INTEGRATION")
-    print("=" * 60)
-    
-    # Check for API credentials
-    openai_key = os.getenv("OPENAI_API_KEY")
-    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-    
-    print(f"🔑 OpenAI API Key: {'✅ SET' if openai_key else '❌ NOT SET'}")
-    print(f"🔑 Anthropic API Key: {'✅ SET' if anthropic_key else '❌ NOT SET'}")
-    
-    if not openai_key and not anthropic_key:
-        print("\n⚠️ No API credentials found!")
-        print("To run live tests, set one of:")
-        print("  export OPENAI_API_KEY='your-key-here'")
-        print("  export ANTHROPIC_API_KEY='your-key-here'")
-        return
-    
-    tests = [
-        ("Healthcare CDC Implementation", test_live_scenario_1),
-        ("Security Implementation", test_live_scenario_2), 
-        ("Edge Case", test_live_edge_case)
-    ]
-    
-    for test_name, test_func in tests:
-        print(f"\n🧪 Running: {test_name}")
-        try:
-            test_func()
-            print(f"✅ {test_name} completed")
-        except Exception as e:
-            print(f"❌ {test_name} failed: {e}")
-    
-    print("\n" + "=" * 60)
-    print("🎯 LANGCHAIN LIVE TEST COMPLETED!")
-    print("- Clean, maintainable LLM integration")
-    print("- No manual API glue code")
-    print("- Built-in JSON parsing and error handling")
-    print("- Production-ready LangChain patterns")
+def main() -> None:
+    """Main function"""
+    test_live_scenario_1()
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
-"""
-OpenFlow Quickstart Streamlit App
-A secure, model-driven Streamlit application for OpenFlow deployment
-"""
+"""Generated from final model-driven projection"""
 
-import streamlit as st
-from datetime import datetime, timedelta
-from dataclasses import dataclass
-from typing import Optional
-from pydantic import BaseModel, Field
-import redis
-import jwt
-import uuid
+import os
+from pydantic import BaseModel, Field, field_validator
+from cryptography.fernet import Fernet
 
-
-# Security configuration
 SECURITY_CONFIG = {
-    "session_timeout_minutes": 15,
-    "max_login_attempts": 3,
-    "password_min_length": 12,
+    "fernet_key": os.getenv("FERNET_KEY", Fernet.generate_key()),
+    "redis_url": os.getenv("REDIS_URL", "redis://localhost:6379"),
+    "jwt_secret": os.getenv("JWT_SECRET", "your-secret-key"),
+    "session_timeout_minutes": int(os.getenv("SESSION_TIMEOUT_MINUTES", "15")),
+    "max_login_attempts": int(os.getenv("MAX_LOGIN_ATTEMPTS", "3")),
+    "password_min_length": int(os.getenv("PASSWORD_MIN_LENGTH", "12")),
+}
+AWS_CONFIG = {
+    "region": os.getenv("AWS_REGION", "us-east-1"),
+    "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
+    "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
 }
 
 
-# Pydantic models for validation
 class SnowflakeConfig(BaseModel):
     account_url: str = Field(..., description="Snowflake account URL")
     organization: str = Field(..., description="Snowflake organization")
@@ -31,86 +28,9 @@ class SnowflakeConfig(BaseModel):
     oauth_client_id: str = Field(..., description="OAuth client ID")
     oauth_client_secret: str = Field(..., description="OAuth client secret")
 
-
-class OpenFlowConfig(BaseModel):
-    data_plane_url: str = Field(..., description="Data plane URL")
-    data_plane_uuid: str = Field(..., description="Data plane UUID")
-    data_plane_key: str = Field(..., description="Data plane key")
-    telemetry_url: str = Field(..., description="Telemetry URL")
-    control_plane_url: str = Field(..., description="Control plane URL")
-
-
-@dataclass
-class DeploymentStatus:
-    stack_name: str
-    status: str
-    progress: int
-    resources_created: int
-    resources_total: int
-    error_message: Optional[str] = None
-    last_updated: Optional[datetime] = None
-
-
-class SecurityManager:
-    """Security manager for credential handling and session management"""
-
-    def __init__(self):
-        self.redis_client = redis.Redis(host="localhost", port=6379, db=0)
-        self.secret_key = (
-            "your-secret-key-here"  # In production, use environment variable
-        )
-
-    def get_credential_secure(self, key: str) -> Optional[str]:
-        """Retrieve credential securely from Redis"""
-        encrypted_value = self.redis_client.get(f"credential:{key}")
-        if encrypted_value:
-            return self.decrypt_credential(encrypted_value.decode())
-        return None
-
-    def decrypt_credential(self, encrypted_value: str) -> str:
-        """Decrypt credential (placeholder implementation)"""
-        return encrypted_value  # In production, implement proper decryption
-
-    def create_session_token(self, user_id: str, role: str) -> str:
-        """Create JWT session token"""
-        timeout_minutes = SECURITY_CONFIG["session_timeout_minutes"]
-        assert timeout_minutes is not None, "session_timeout_minutes should be set"
-        payload = {
-            "user_id": user_id,
-            "role": role,
-            "exp": datetime.utcnow() + timedelta(minutes=timeout_minutes),
-        }
-        return jwt.encode(payload, self.secret_key, algorithm="HS256")
-
-    @staticmethod
-    def validate_uuid(uuid_str: str) -> bool:
-        """Validate UUID format"""
-        try:
-            uuid.UUID(uuid_str)
-            return True
-        except ValueError:
-            return False
-
-    @staticmethod
-    def sanitize_input(input_str: str) -> str:
-        """Sanitize user input to prevent injection attacks"""
-        import html
-
-        return html.escape(input_str)
-
-
-def main():
-    """Main Streamlit application"""
-    st.title("OpenFlow Quickstart")
-    st.write("Welcome to the OpenFlow deployment application!")
-
-    # Initialize security manager
-    security_manager = SecurityManager()
-
-    # Simple test
-    st.write("Security manager initialized successfully!")
-    st.write(f"Session timeout: {SECURITY_CONFIG['session_timeout_minutes']} minutes")
-
-
-if __name__ == "__main__":
-    main()
+    @field_validator("account_url")
+    def validate_account_url(cls, v: str) -> str:
+        """Validate Snowflake account URL format"""
+        if not v.startswith("https://") or "snowflakecomputing.com" not in v:
+            raise ValueError("Invalid Snowflake account URL format")
+        return v

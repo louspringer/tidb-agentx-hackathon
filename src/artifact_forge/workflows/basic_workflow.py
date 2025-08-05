@@ -4,7 +4,7 @@ ArtifactForge Basic Workflow
 LangGraph workflow for artifact processing
 """
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -34,7 +34,7 @@ class ArtifactForgeState:
 class ArtifactForgeWorkflow:
     """Basic ArtifactForge workflow"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.detector = ArtifactDetector()
         self.parser = ArtifactParser()
         self.correlator = ArtifactCorrelator()
@@ -80,7 +80,7 @@ class ArtifactForgeWorkflow:
             state.processing_time = (end_time - start_time).total_seconds()
             state.confidence_score = self._calculate_confidence(state)
 
-            print(f"✅ **WORKFLOW COMPLETED**")
+            print("✅ **WORKFLOW COMPLETED**")
             print(f"  Processing time: {state.processing_time:.2f} seconds")
             print(f"  Confidence score: {state.confidence_score:.2f}")
 
@@ -146,7 +146,7 @@ class ArtifactForgeWorkflow:
         return max(0.0, min(1.0, confidence))
 
 
-def main():
+def main() -> None:
     """Test ArtifactForge workflow"""
     workflow = ArtifactForgeWorkflow()
 
@@ -157,7 +157,7 @@ def main():
     state = workflow.run_workflow(".")
 
     # Print summary
-    print(f"\n📊 **WORKFLOW SUMMARY:**")
+    print("\n📊 **WORKFLOW SUMMARY:**")
     print(f"Artifacts discovered: {len(state.artifacts_discovered)}")
     print(f"Artifacts parsed: {len(state.artifacts_parsed)}")
     print(f"Relationships found: {len(state.relationships_found)}")
@@ -166,7 +166,7 @@ def main():
     print(f"Confidence score: {state.confidence_score:.2f}")
 
     if state.errors:
-        print(f"\n❌ **ERRORS:**")
+        print("\n❌ **ERRORS:**")
         for error in state.errors:
             print(f"  - {error}")
 

@@ -22,13 +22,12 @@ class DelusionResult:
 class BaseExpert(ABC):
     """Base class for all expert agents"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect delusions in the project"""
-        pass
 
 
 class SecurityExpert(BaseExpert):

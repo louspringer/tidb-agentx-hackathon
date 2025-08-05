@@ -14,7 +14,7 @@ from typing import Dict, Any
 
 def load_model_registry() -> Dict[str, Any]:
     """Load the project model registry"""
-    with open('project_model_registry.json', 'r') as f:
+    with open("project_model_registry.json", "r") as f:
         return json.load(f)
 
 
@@ -22,7 +22,7 @@ def get_test_patterns() -> Dict[str, str]:
     """Get test patterns from projected artifacts"""
     return {
         "basic_validation": "tests/test_basic_validation_simple.py",
-        "pytest_validation": "tests/test_basic_validation_pytest.py", 
+        "pytest_validation": "tests/test_basic_validation_pytest.py",
         "code_quality": "tests/test_code_quality.py",
         "security": "tests/test_security_enhancements.py",
         "healthcare": "tests/test_healthcare_cdc_requirements.py",
@@ -30,7 +30,7 @@ def get_test_patterns() -> Dict[str, str]:
         "rule_compliance": "tests/test_rule_compliance.py",
         "mdc_generator": "tests/test_mdc_generator.py",
         "file_organization": "tests/test_file_organization.py",
-        "core_concepts": "tests/test_core_concepts.py"
+        "core_concepts": "tests/test_core_concepts.py",
     }
 
 
@@ -615,7 +615,7 @@ if __name__ == "__main__":
 def recover_test_file(file_path: str, test_type: str) -> None:
     """Recover a test file using model-driven patterns"""
     print(f"🔧 Recovering {file_path} using {test_type} pattern...")
-    
+
     # Create the appropriate test content based on type
     if test_type == "basic_validation":
         content = create_basic_validation_test()
@@ -630,25 +630,25 @@ def recover_test_file(file_path: str, test_type: str) -> None:
     else:
         # Default to basic validation pattern
         content = create_basic_validation_test()
-    
+
     # Write the recovered content
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         f.write(content)
-    
+
     print(f"✅ Recovered {file_path}")
 
 
 def main() -> None:
     """Main function to recover all broken test files"""
     print("🚀 Starting model-driven test recovery...")
-    
+
     # Load model registry
     model_registry = load_model_registry()
     print("✅ Loaded project model registry")
-    
+
     # Get test patterns
     test_patterns = get_test_patterns()
-    
+
     # List of broken test files to recover
     broken_tests = [
         ("tests/test_basic_validation_simple.py", "basic_validation"),
@@ -669,14 +669,14 @@ def main() -> None:
         ("tests/test_makefile_integration.py", "basic_validation"),
         ("tests/test_rule_compliance_enforcement.py", "basic_validation"),
     ]
-    
+
     # Recover each broken test file
     for file_path, test_type in broken_tests:
         if os.path.exists(file_path):
             recover_test_file(file_path, test_type)
-    
+
     print("✅ Model-driven test recovery completed!")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

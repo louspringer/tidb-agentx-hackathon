@@ -24,13 +24,12 @@ class RecoveryResult:
 class BaseRecoveryEngine(ABC):
     """Base class for all recovery engines"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
     async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute recovery action"""
-        pass
 
 
 class SyntaxRecoveryEngine(BaseRecoveryEngine):

@@ -1,4 +1,3 @@
-
 """
 MDC Generator Package
 Python-based model and generator for .mdc files

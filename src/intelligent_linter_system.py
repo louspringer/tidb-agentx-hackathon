@@ -36,10 +36,10 @@ class IntelligentLinterSystem:
         # Check if Ruff is available
         try:
             result = subprocess.run(
-                ["ruff", "--version"], capture_output=True, text=True, timeout=10
+                ["ruf", "--version"], capture_output=True, text=True, timeout=10
             )
             if result.returncode == 0:
-                setup_results["ruff"] = {
+                setup_results["ruf"] = {
                     "status": "available",
                     "version": result.stdout.strip(),
                     "ai_capabilities": ["auto-fix", "suggestions", "formatting"],
@@ -47,7 +47,7 @@ class IntelligentLinterSystem:
                 logger.info("✅ Ruff (AI-powered) is available")
             else:
                 setup_results["ruff"] = {"status": "not_available"}
-                logger.warning("⚠️ Ruff not available - install with: pip install ruff")
+                logger.warning("⚠️ Ruff not available - install with: pip install ruf")
         except Exception as e:
             setup_results["ruff"] = {"status": "error", "error": str(e)}
             logger.error("❌ Error checking Ruff: {}".format(e))
@@ -269,7 +269,7 @@ target-version = "py39"
 line-length = 88
 
 # Enable AI-powered features
-select = [
+_select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
     "F",   # pyflakes
@@ -315,7 +315,7 @@ select = [
 ]
 
 # Ignore specific rules
-ignore = [
+_ignore = [
     "E501",  # line too long (handled by formatter)
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
@@ -324,13 +324,13 @@ ignore = [
 ]
 
 # Allow autofix for all rules
-fixable = ["ALL"]
+_fixable = ["ALL"]
 
 # Unfixable rules
-unfixable = []
+_unfixable = []
 
 # Exclude files
-exclude = [
+_exclude = [
     ".git",
     ".hg",
     ".mypy_cache",

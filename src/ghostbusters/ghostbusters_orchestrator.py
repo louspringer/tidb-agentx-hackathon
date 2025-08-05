@@ -57,7 +57,7 @@ class GhostbustersState:
 class GhostbustersOrchestrator:
     """Multi-agent orchestrator for delusion detection and recovery"""
 
-    def __init__(self, project_path: str = "."):
+    def __init__(self, project_path: str = ".") -> None:
         self.project_path = Path(project_path)
         self.logger = logging.getLogger(__name__)
 

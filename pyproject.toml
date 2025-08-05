@@ -10,31 +10,28 @@ requires-python = ">=3.10"
 dependencies = [
     # Core Framework
     "streamlit>=1.28.0",
-    
     # Security Dependencies
     "bcrypt>=4.0.0",
     "cryptography>=41.0.0",
     "PyJWT>=2.8.0",
-    
     # Data Processing
     "pandas>=2.0.0",
     "numpy>=1.24.0",
-    
     # Visualization
     "plotly>=5.15.0",
-    
     # AWS Integration
     "boto3>=1.28.0",
     "botocore>=1.31.0",
-    
     # Database and Caching
     "redis>=4.6.0",
-    
     # HTTP Requests
     "requests>=2.31.0",
-    
     # Data Validation
-"pydantic>=2.0.0",
+    "pydantic>=2.0.0",
+    "autoflake8>=0.4.1",
+    # Multi-Agent Framework
+    "langgraph>=0.2.0",
+    "langchain>=0.2.0",
 ]
 
 [project.optional-dependencies]

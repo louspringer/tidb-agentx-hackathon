@@ -6,7 +6,7 @@ Finds relationships between artifacts
 
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -30,7 +30,7 @@ class ArtifactRelationship:
 class ArtifactCorrelator:
     """Finds relationships between artifacts"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.relationship_types = {
             "imports": self._find_import_relationships,
             "references": self._find_reference_relationships,
@@ -271,7 +271,7 @@ class ArtifactCorrelator:
         return ratio
 
 
-def main():
+def main() -> None:
     """Test ArtifactCorrelator"""
     logger.info("Starting ArtifactCorrelator test")
 
@@ -302,7 +302,7 @@ def main():
     logger.info("Running correlation on sample artifacts")
     relationships = correlator.correlate_artifacts(sample_artifacts)
 
-    print(f"🔍 **ARTIFACT CORRELATION RESULTS:**")
+    print("🔍 **ARTIFACT CORRELATION RESULTS:**")
     print(f"Total relationships found: {len(relationships)}")
 
     for rel in relationships:
