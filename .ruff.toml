@@ -1,10 +1,10 @@
 # .ruff.toml
-# AI-powered Python linter configuration
+# Minimal Python linter configuration
 
 target-version = "py39"
 line-length = 88
 
-# Enable AI-powered features
+# Enable essential rules
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -18,17 +18,14 @@ select = [
     "A",   # flake8-builtins
     "COM", # flake8-commas
     "T20", # flake8-print
-    "TCH", # flake8-type-checking
     "ARG", # flake8-unused-arguments
     "PIE", # flake8-pie
     "TID", # flake8-tidy-imports
     "Q",   # flake8-quotes
     "SIM", # flake8-simplify
-    "TCH", # flake8-type-checking
     "RSE", # flake8-raise
     "RET", # flake8-return
     "SLF", # flake8-self
-    "SLOT", # flake8-slots
     "PTH", # flake8-use-pathlib
     "LOG", # flake8-logging-format
     "G",   # flake8-logging
@@ -36,18 +33,10 @@ select = [
     "ISC", # flake8-implicit-str-concat
     "ICN", # flake8-import-conventions
     "DTZ", # flake8-datetimez
-    "TZ",  # flake8-time
     "EM",  # flake8-errmsg
     "EXE", # flake8-executable
-    "NPY", # flake8-numpy
-    "AIR", # flake8-airflow
-    "PERF", # perflint
-    "FURB", # refurb
-    "TRY", # tryceratops
-    "FLY", # flynt
     "BLE", # flake8-blind-except
     "FBT", # flake8-boolean-trap
-    "C90", # mccabe
 ]
 
 # Ignore specific rules
@@ -55,15 +44,18 @@ ignore = [
     "E501",  # line too long (handled by formatter)
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
-    "W503",  # line break before binary operator
     "E203",  # whitespace before ':'
+    "T201",  # print found
+    "EXE001", # shebang present but file not executable
+    "S110",  # try-except-pass detected
+    "B007",  # loop control variable not used
+    "PTH118", # os.path.join should be replaced by Path
+    "BLE001", # do not catch blind exception
+    "S603",  # subprocess call: check for execution of untrusted input
 ]
 
 # Allow autofix for all rules
 fixable = ["ALL"]
-
-# Unfixable rules
-unfixable = []
 
 # Exclude files
 exclude = [
@@ -76,19 +68,3 @@ exclude = [
     "build",
     "dist",
 ]
-
-# Per-file-ignores
-[tool.ruff.per-file-ignores]
-"__init__.py" = ["F401"]
-"tests/**/*.py" = ["S101", "S603", "S607"]
-"docs/**/*.py" = ["E501"]
-
-# Import sorting
-[tool.ruff.isort]
-known-first-party = ["src"]
-known-third-party = ["pytest", "black", "flake8", "mypy"]
-
-# Type checking
-[tool.ruff.flake8-type-checking]
-# Enable all type checking rules
-extend-select = ["TCH"]

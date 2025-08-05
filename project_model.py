@@ -4,13 +4,12 @@ Model-Driven Tool Glue Layer
 Intelligent tool selection and orchestration across domains
 """
 
-import os
-import re
 import json
+import os
 import subprocess
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-from dataclasses import dataclass, asdict, field
+from typing import Optional
 
 
 @dataclass
@@ -21,9 +20,9 @@ class DomainConfig:
     linter: str
     validator: Optional[str] = None
     formatter: Optional[str] = None
-    patterns: List[str] = field(default_factory=list)
-    exclude_patterns: List[str] = field(default_factory=list)
-    content_indicators: List[str] = field(default_factory=list)
+    patterns: list[str] = field(default_factory=list)
+    exclude_patterns: list[str] = field(default_factory=list)
+    content_indicators: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -33,8 +32,8 @@ class FileAnalysis:
     filepath: str
     detected_domain: str
     confidence: float
-    recommended_tools: List[str]
-    validation_commands: List[str]
+    recommended_tools: list[str]
+    validation_commands: list[str]
 
 
 class ProjectModel:
@@ -43,9 +42,9 @@ class ProjectModel:
     def __init__(self, project_root: str = "."):
         self.project_root = Path(project_root)
         self.domains = self._initialize_domains()
-        self.file_cache: Dict[str, FileAnalysis] = {}
+        self.file_cache: dict[str, FileAnalysis] = {}
 
-    def _initialize_domains(self) -> Dict[str, DomainConfig]:
+    def _initialize_domains(self) -> dict[str, DomainConfig]:
         """Initialize domain configurations"""
         return {
             "cloudformation": DomainConfig(
@@ -157,7 +156,7 @@ class ProjectModel:
                         if indicator in content:
                             score += 0.3
                             break
-                except:
+                except Exception:
                     pass
 
             # Exclusion check
@@ -196,7 +195,7 @@ class ProjectModel:
             validation_commands=commands,
         )
 
-    def validate_file(self, filepath: str) -> Dict:
+    def validate_file(self, filepath: str) -> dict:
         """Validate a file using the appropriate tools"""
         analysis = self.analyze_file(filepath)
         results = {
@@ -210,18 +209,16 @@ class ProjectModel:
 
         for command in analysis.validation_commands:
             try:
-                result = subprocess.run(
-
-                )
+                result = subprocess.run(command.split(), capture_output=True, text=True)
                 results["tools_used"].append(command.split()[0])
 
                 if result.returncode != 0:
                     results["errors"].append(
-                        {"tool": command.split()[0], "output": result.stderr}
+                        {"tool": command.split()[0], "output": result.stderr},
                     )
                 elif result.stdout.strip():
                     results["warnings"].append(
-                        {"tool": command.split()[0], "output": result.stdout}
+                        {"tool": command.split()[0], "output": result.stdout},
                     )
 
             except FileNotFoundError:
@@ -229,12 +226,12 @@ class ProjectModel:
                     {
                         "tool": command.split()[0],
                         "output": f"Tool not found: {command.split()[0]}",
-                    }
+                    },
                 )
 
         return results
 
-    def validate_project(self) -> Dict:
+    def validate_project(self) -> dict:
         """Validate entire project using model-driven tool selection"""
         all_files = []
         for root, dirs, files in os.walk(self.project_root):
@@ -256,7 +253,7 @@ class ProjectModel:
         results["domains_found"] = list(results["domains_found"])
         return results
 
-    def generate_tool_config(self) -> Dict:
+    def generate_tool_config(self) -> dict:
         """Generate tool configurations based on project model"""
         config = {
             "yamllint": {"extends": "default", "ignore": []},
@@ -271,7 +268,7 @@ class ProjectModel:
         return config
 
 
-def main():
+def main() -> None:
     """Test the model-driven tool orchestration"""
     model = ProjectModel()
 
