@@ -6,7 +6,11 @@ pydantic==2.9.2
 # GCP Services
 google-cloud-firestore==2.11.1
 google-cloud-logging==3.8.0
+google-cloud-pubsub==2.18.4
 functions-framework==3.4.0
+
+# Firebase Authentication
+firebase-admin==6.2.0
 
 # Security & Validation
 cryptography==41.0.7
