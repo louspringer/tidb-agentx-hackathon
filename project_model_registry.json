@@ -100,6 +100,37 @@
         "Integrate with CI/CD for healthcare compliance"
       ]
     },
+    "mcp_integration": {
+      "patterns": [
+        "src/mcp_integration/*.py",
+        "mcp-git-ingest/**/*",
+        "*.mcp"
+      ],
+      "content_indicators": [
+        "GitHubMCPClient",
+        "mcp-git-ingest",
+        "Model Context Protocol",
+        "repository analysis",
+        "intelligent file discovery"
+      ],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "ast-parse",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc",
+        "mcp-git-ingest/.git/**/*"
+      ],
+      "requirements": [
+        "Use GitHub MCP for intelligent repository analysis",
+        "Integrate mcp-git-ingest for repository structure understanding",
+        "Provide intelligent file discovery and prioritization",
+        "Enable structured repository context for AI tools",
+        "Support fallback methods when MCP server unavailable",
+        "Ensure secure repository analysis with proper cleanup"
+      ]
+      ]
+    },
     "go": {
       "patterns": [
         "*.go",

@@ -18,6 +18,7 @@ from .agents import (
     ArchitectureExpert,
     BuildExpert,
     CodeQualityExpert,
+    MCPExpert,
     ModelExpert,
     SecurityExpert,
     TestExpert,
@@ -69,6 +70,7 @@ class GhostbustersOrchestrator:
             "build": BuildExpert(),
             "architecture": ArchitectureExpert(),
             "model": ModelExpert(),
+            "mcp": MCPExpert(),
         }
 
         # Initialize validators
