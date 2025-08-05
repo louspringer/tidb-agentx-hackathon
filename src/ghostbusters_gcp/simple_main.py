@@ -6,7 +6,7 @@ A working version that doesn't depend on external source code
 
 import logging
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 import functions_framework
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 db = firestore.Client()
 
 
-def mock_ghostbusters_analysis(_project_path: str) -> dict[str, Any]:
+def mock_ghostbusters_analysis(project_path: str) -> dict[str, Any]:
     """
     Mock Ghostbusters analysis for demonstration
     In a real implementation, this would call the actual Ghostbusters orchestrator
@@ -50,7 +50,7 @@ def mock_ghostbusters_analysis(_project_path: str) -> dict[str, Any]:
             },
         ],
         "errors": [],
-        "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+        "timestamp": datetime.utcnow().isoformat(),
     }
 
 
@@ -176,7 +176,7 @@ def ghostbusters_status(request):
 
 
 @functions_framework.http
-def ghostbusters_history(_request):
+def ghostbusters_history(request):
     """
     HTTP Cloud Function to get analysis history
 
