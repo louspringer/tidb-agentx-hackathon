@@ -423,7 +423,8 @@ deploy-secure-shell: ## Deploy secure shell service
 	@echo "$(BLUE)🛡️ Deploying secure shell service...$(NC)"
 	@cd src/secure_shell_service && go build -o secure-shell-service .
 	@cd src/secure_shell_service && ./secure-shell-service &
-	@echo "$(GREEN)✅ Secure shell service deployed$(NC)"
+	@echo "$(GREEN)✅ Secure shell service deployed at port 50051$(NC)"
+	@echo "$(YELLOW)💡 To test: cd src/secure_shell_service && python client.py$(NC)"
 
 # =============================================================================
 # SECURITY TARGETS
