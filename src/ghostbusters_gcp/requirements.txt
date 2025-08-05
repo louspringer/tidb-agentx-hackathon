@@ -12,6 +12,9 @@ functions-framework==3.4.0
 # Firebase Authentication
 firebase-admin==6.2.0
 
+# Vertex AI for ML Integration
+google-cloud-aiplatform==1.38.1
+
 # Security & Validation
 cryptography==41.0.7
 pydantic[email]==2.9.2
