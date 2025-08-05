@@ -47,10 +47,22 @@ class SecurityExpert(BaseExpert):
             r"gho_[a-zA-Z0-9]{36}",
         ]
 
+        # Check for subprocess security vulnerabilities
+        subprocess_patterns = [
+            r"import subprocess",
+            r"subprocess\.run",
+            r"subprocess\.Popen",
+            r"subprocess\.call",
+            r"os\.system",
+            r"os\.popen",
+        ]
+
         # Check for security issues
         for py_file in project_path.rglob("*.py"):
             try:
                 content = py_file.read_text()
+
+                # Check for hardcoded credentials
                 for pattern in credential_patterns:
                     if pattern in content:
                         delusions.append(
@@ -62,6 +74,20 @@ class SecurityExpert(BaseExpert):
                                 "description": f"Potential hardcoded credential found: {pattern}",
                             },
                         )
+
+                # Check for subprocess vulnerabilities
+                for pattern in subprocess_patterns:
+                    if pattern in content:
+                        delusions.append(
+                            {
+                                "type": "subprocess_vulnerability",
+                                "file": str(py_file),
+                                "pattern": pattern,
+                                "priority": "critical",
+                                "description": f"Subprocess usage detected: {pattern} - Security risk for command injection",
+                            },
+                        )
+
             except Exception as e:
                 self.logger.warning(f"Could not read {py_file}: {e}")
 
@@ -69,6 +95,10 @@ class SecurityExpert(BaseExpert):
         recommendations = [
             "Use environment variables for credentials",
             "Implement secret management",
+            "Replace subprocess calls with native Python operations",
+            "Use Go/Rust for performance-critical shell operations",
+            "Implement gRPC shell service for secure command execution",
+            "Add timeouts and resource limits to all subprocess calls",
         ]
 
         return DelusionResult(

@@ -25,6 +25,21 @@ class WebToolDiscovery:
             "syntax_error": ["python syntax fix", "ast parser fix"],
             "unused_imports": ["remove unused imports", "python import cleaner"],
             "f_strings": ["f-string fix", "python string formatting"],
+            "subprocess_vulnerability": [
+                "python subprocess security",
+                "command injection prevention",
+                "secure shell execution",
+            ],
+            "shell_security": [
+                "gRPC shell service",
+                "secure command execution",
+                "Go shell operations",
+            ],
+            "performance_hanging": [
+                "python subprocess timeout",
+                "hanging process detection",
+                "resource monitoring",
+            ],
         }
 
         tools_found = []
@@ -71,6 +86,13 @@ class WebToolDiscovery:
             "syntax_error": ["ast", "syntax", "parser"],
             "unused_imports": ["import", "cleaner", "unused"],
             "f_strings": ["string", "format", "f-string"],
+            "subprocess_vulnerability": ["subprocess", "security", "command-execution"],
+            "shell_security": ["grpc", "shell", "secure-execution"],
+            "performance_hanging": [
+                "timeout",
+                "resource-monitoring",
+                "process-management",
+            ],
         }
 
         tools_found = []
@@ -107,6 +129,14 @@ class WebToolDiscovery:
         mypy_errors = analysis_results.get("mypy", {}).get("total_errors", 0)
         flake8_errors = analysis_results.get("flake8", {}).get("total_errors", 0)
         ast_errors = analysis_results.get("ast", {}).get("total_errors", 0)
+        subprocess_vulnerabilities = analysis_results.get(
+            "subprocess_vulnerability",
+            {},
+        ).get("total_errors", 0)
+        shell_security_issues = analysis_results.get("shell_security", {}).get(
+            "total_errors",
+            0,
+        )
 
         # Search for tools based on issues
         if mypy_errors > 0:
@@ -142,6 +172,33 @@ class WebToolDiscovery:
         if ast_errors > 0:
             github_tools = self.search_github_tools("syntax_error")
             pypi_tools = self.search_pypi_tools("syntax_error")
+
+            if github_tools:
+                top_tool = github_tools[0]
+                recommendations.append(
+                    f"Found GitHub tool: {top_tool['name']} ({top_tool['stars']} stars) - {top_tool['description']}",
+                )
+
+        # Check for subprocess security vulnerabilities
+        if subprocess_vulnerabilities > 0:
+            github_tools = self.search_github_tools("subprocess_vulnerability")
+            pypi_tools = self.search_pypi_tools("subprocess_vulnerability")
+
+            if github_tools:
+                top_tool = github_tools[0]
+                recommendations.append(
+                    f"Found GitHub tool: {top_tool['name']} ({top_tool['stars']} stars) - {top_tool['description']}",
+                )
+
+            if pypi_tools:
+                recommendations.append(
+                    f"Found PyPI package: {pypi_tools[0]['name']} for subprocess security",
+                )
+
+        # Check for shell security issues
+        if shell_security_issues > 0:
+            github_tools = self.search_github_tools("shell_security")
+            pypi_tools = self.search_pypi_tools("shell_security")
 
             if github_tools:
                 top_tool = github_tools[0]
