@@ -18,6 +18,45 @@ PYTHON := python3
 UV := uv
 MAKE := make
 
+# Platform detection
+UNAME_S := $(shell uname -s)
+UNAME_M := $(shell uname -m)
+PLATFORM := $(shell echo $(UNAME_S) | tr '[:upper:]' '[:lower:]')
+ARCH := $(shell echo $(UNAME_M) | tr '[:upper:]' '[:lower:]')
+
+# Platform-specific variables
+ifeq ($(PLATFORM),darwin)
+	# macOS
+	PACKAGE_MANAGER := brew
+	GO_OS := darwin
+	GO_ARCH := amd64
+	ifeq ($(ARCH),arm64)
+		GO_ARCH := arm64
+	endif
+else ifeq ($(PLATFORM),linux)
+	# Linux
+	PACKAGE_MANAGER := apt-get
+	GO_OS := linux
+	GO_ARCH := amd64
+	ifeq ($(ARCH),aarch64)
+		GO_ARCH := arm64
+	endif
+else ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
+	# Windows (Git Bash)
+	PACKAGE_MANAGER := chocolatey
+	GO_OS := windows
+	GO_ARCH := amd64
+else ifeq ($(findstring MSYS,$(UNAME_S)),MSYS)
+	# Windows (MSYS2)
+	PACKAGE_MANAGER := pacman
+	GO_OS := windows
+	GO_ARCH := amd64
+else
+	# Default to Linux
+	PACKAGE_MANAGER := apt-get
+	GO_OS := linux
+	GO_ARCH := amd64
+endif
 
 # Colors for output
 RED := \033[0;31m
@@ -33,6 +72,8 @@ NC := \033[0m # No Color
 
 help: ## Show this help message
 	@echo "$(CYAN)OpenFlow Playground - Model-Driven Makefile$(NC)"
+	@echo "$(YELLOW)Platform: $(PLATFORM)-$(ARCH)$(NC)"
+	@echo "$(YELLOW)Package Manager: $(PACKAGE_MANAGER)$(NC)"
 	@echo "$(YELLOW)Available targets:$(NC)"
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "$(GREEN)%-20s$(NC) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
@@ -67,17 +108,38 @@ install-python: ## Install Python dependencies with UV
 
 install-bash: ## Install bash script dependencies
 	@echo "$(BLUE)🐚 Installing bash script dependencies...$(NC)"
-	@command -v shellcheck >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  shellcheck not found, installing...$(NC)"; sudo apt-get install -y shellcheck; }
+	@command -v shellcheck >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  shellcheck not found, installing...$(NC)"; \
+		case "$(PACKAGE_MANAGER)" in \
+			brew) brew install shellcheck ;; \
+			apt-get) sudo apt-get install -y shellcheck ;; \
+			chocolatey) choco install shellcheck ;; \
+			pacman) pacman -S shellcheck ;; \
+			*) echo "$(RED)❌ Unsupported package manager: $(PACKAGE_MANAGER)$(NC)"; exit 1 ;; \
+		esac; }
 	@echo "$(GREEN)✅ Bash dependencies installed$(NC)"
 
 install-cloudformation: ## Install CloudFormation dependencies
 	@echo "$(BLUE)☁️  Installing CloudFormation dependencies...$(NC)"
-	@command -v cfn-lint >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  cfn-lint not found, installing...$(NC)"; pip install cfn-lint; }
+	@command -v cfn-lint >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  cfn-lint not found, installing...$(NC)"; \
+		case "$(PACKAGE_MANAGER)" in \
+			brew) brew install cfn-lint ;; \
+			apt-get) pip install cfn-lint ;; \
+			chocolatey) choco install cfn-lint ;; \
+			pacman) pip install cfn-lint ;; \
+			*) pip install cfn-lint ;; \
+		esac; }
 	@echo "$(GREEN)✅ CloudFormation dependencies installed$(NC)"
 
 install-docs: ## Install documentation dependencies
 	@echo "$(BLUE)📚 Installing documentation dependencies...$(NC)"
-	@command -v markdownlint >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  markdownlint not found, installing...$(NC)"; npm install -g markdownlint-cli; }
+	@command -v markdownlint >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  markdownlint not found, installing...$(NC)"; \
+		case "$(PACKAGE_MANAGER)" in \
+			brew) npm install -g markdownlint-cli ;; \
+			apt-get) npm install -g markdownlint-cli ;; \
+			chocolatey) npm install -g markdownlint-cli ;; \
+			pacman) npm install -g markdownlint-cli ;; \
+			*) npm install -g markdownlint-cli ;; \
+		esac; }
 	@echo "$(GREEN)✅ Documentation dependencies installed$(NC)"
 
 install-security: ## Install security tooling dependencies
@@ -98,15 +160,29 @@ install-healthcare: ## Install healthcare CDC dependencies
 install-go: ## Install Go language and tools
 	@echo "$(BLUE)🐹 Installing Go language and tools...$(NC)"
 	@command -v go >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  Go not found, installing...$(NC)"; \
-		curl -OL https://go.dev/dl/go1.21.6.linux-amd64.tar.gz; \
-		sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz; \
-		echo 'export PATH=$$PATH:/usr/local/go/bin' >> ~/.bashrc; \
-		rm go1.21.6.linux-amd64.tar.gz; }
+		case "$(PACKAGE_MANAGER)" in \
+			brew) brew install go ;; \
+			apt-get) \
+				curl -OL https://go.dev/dl/go1.21.6.$(GO_OS)-$(GO_ARCH).tar.gz; \
+				sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.6.$(GO_OS)-$(GO_ARCH).tar.gz; \
+				echo 'export PATH=$$PATH:/usr/local/go/bin' >> ~/.bashrc; \
+				rm go1.21.6.$(GO_OS)-$(GO_ARCH).tar.gz ;; \
+			chocolatey) choco install golang ;; \
+			pacman) pacman -S go ;; \
+			*) echo "$(RED)❌ Unsupported package manager: $(PACKAGE_MANAGER)$(NC)"; exit 1 ;; \
+		esac; }
 	@echo "$(GREEN)✅ Go language and tools installed$(NC)"
 
 install-secure-shell: ## Install secure shell service dependencies
 	@echo "$(BLUE)🛡️ Installing secure shell service dependencies...$(NC)"
-	@command -v protoc >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  protobuf-compiler not found, installing...$(NC)"; sudo apt-get install -y protobuf-compiler; }
+	@command -v protoc >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  protobuf-compiler not found, installing...$(NC)"; \
+		case "$(PACKAGE_MANAGER)" in \
+			brew) brew install protobuf ;; \
+			apt-get) sudo apt-get install -y protobuf-compiler ;; \
+			chocolatey) choco install protobuf ;; \
+			pacman) pacman -S protobuf ;; \
+			*) echo "$(RED)❌ Unsupported package manager: $(PACKAGE_MANAGER)$(NC)"; exit 1 ;; \
+		esac; }
 	@go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	@$(UV) add grpcio grpcio-tools
