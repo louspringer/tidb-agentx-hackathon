@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package secure_shell;
 
-option go_package = "src/secure_shell_service";
+option go_package = "github.com/louspringer/OpenFlow-Playground/src/secure_shell_service";
 
 // Secure Shell Service - Replaces subprocess calls with secure gRPC interface
 service SecureShellService {
