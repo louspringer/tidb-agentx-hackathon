@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package secure_shell;
+
+option go_package = "src/secure_shell_service";
+
+// Secure Shell Service - Replaces subprocess calls with secure gRPC interface
+service SecureShellService {
+  // ExecuteCommand - Secure command execution with timeout and validation
+  rpc ExecuteCommand(CommandRequest) returns (CommandResponse);
+  
+  // HealthCheck - Service health monitoring
+  rpc HealthCheck(HealthRequest) returns (HealthResponse);
+}
+
+// CommandRequest - Request for command execution
+message CommandRequest {
+  string command = 1;           // Command to execute
+  int32 timeout_seconds = 2;    // Timeout in seconds (default: 30)
+  bool validate_input = 3;      // Whether to validate command input
+}
+
+// CommandResponse - Response from command execution
+message CommandResponse {
+  bool success = 1;             // Whether command succeeded
+  string output = 2;            // Command output
+  string error = 3;             // Error message if failed
+  int32 exit_code = 4;          // Exit code
+  double execution_time = 5;     // Execution time in seconds
+}
+
+// HealthRequest - Health check request
+message HealthRequest {
+  // Empty for now
+}
+
+// HealthResponse - Health check response
+message HealthResponse {
+  string status = 1;            // Service status
+  int64 uptime = 2;             // Service uptime
+  string version = 3;            // Service version
+} 
