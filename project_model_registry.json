@@ -129,7 +129,56 @@
         "Enforce UV lock file usage",
         "Validate dependencies with UV check",
         "Sync dependencies with UV sync"
-
+      ]
+    },
+    "ghostbusters": {
+      "patterns": [
+        "src/ghostbusters/*.py",
+        "src/ghostbusters/**/*.py",
+        "tests/test_ghostbusters*.py",
+        "**/*.py"
+      ],
+      "content_indicators": [
+        "GhostbustersOrchestrator",
+        "BaseExpert",
+        "SecurityExpert",
+        "CodeQualityExpert",
+        "TestExpert",
+        "BuildExpert",
+        "ArchitectureExpert",
+        "ModelExpert",
+        "detect_delusions",
+        "execute_recovery",
+        "delusion",
+        "recovery",
+        "agent",
+        "validator",
+        "orchestrator",
+        "ghostbusters",
+        "syntax_error",
+        "indentation_error",
+        "import_error",
+        "type_error"
+      ],
+      "linter": "ghostbusters-orchestrator",
+      "formatter": "ghostbusters-recovery",
+      "validator": "ghostbusters-validator",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
+      "requirements": [
+        "Use Ghostbusters for delusion detection and recovery",
+        "Run Ghostbusters before linting to fix syntax issues",
+        "Apply Ghostbusters recovery engines for automated fixes",
+        "Integrate Ghostbusters with LangGraph/LangChain",
+        "All Ghostbusters agents must pass AST parsing",
+        "All recovery engines must achieve functional equivalence",
+        "Zero false positives in delusion detection",
+        "Perfect recovery success rate",
+        "Complete test compatibility with original artifacts",
+        "All Ghostbusters components must pass same lints as original",
+        "Multi-agent orchestration must be deterministic"
       ]
     }
   },
@@ -211,7 +260,7 @@
       "scripts/.cursor/rules/bash-scripting.mdc": "Bash scripting guidelines",
       "docs/.cursor/rules/documentation.mdc": "Documentation guidelines",
       "config/.cursor/rules/configuration.mdc": "Configuration management guidelines",
-
+      ".cursor/rules/ghostbusters.mdc": "Ghostbusters multi-agent delusion detection and recovery guidelines"
     }
   },
   "requirements_traceability": [
@@ -448,7 +497,84 @@
       "domain": "package_management",
       "implementation": "pytest, flake8, black, mypy managed via UV",
       "test": "test_requirement_39_dev_dependencies_uv"
-
+    },
+    {
+      "requirement": "Use Ghostbusters for delusion detection and recovery",
+      "domain": "ghostbusters",
+      "implementation": "Multi-agent system for detecting and recovering from delusions",
+      "test": "test_requirement_40_ghostbusters_detection"
+    },
+    {
+      "requirement": "Ghostbusters agent orchestration",
+      "domain": "ghostbusters",
+      "implementation": "SecurityExpert, CodeQualityExpert, TestExpert, BuildExpert orchestration",
+      "test": "test_requirement_41_ghostbusters_orchestration"
+    },
+    {
+      "requirement": "Ghostbusters recovery engines",
+      "domain": "ghostbusters",
+      "implementation": "SyntaxRecoveryEngine, IndentationFixer, ImportResolver, TypeAnnotationFixer",
+      "test": "test_requirement_42_ghostbusters_recovery"
+    },
+    {
+      "requirement": "Ghostbusters functional equivalence",
+      "domain": "ghostbusters",
+      "implementation": "All recovery engines must achieve functional equivalence with original",
+      "test": "test_requirement_43_ghostbusters_equivalence"
+    },
+    {
+      "requirement": "Ghostbusters zero false positives",
+      "domain": "ghostbusters",
+      "implementation": "Delusion detection must have zero false positives",
+      "test": "test_requirement_44_ghostbusters_accuracy"
+    },
+    {
+      "requirement": "Ghostbusters deterministic recovery",
+      "domain": "ghostbusters",
+      "implementation": "All recovery actions must be deterministic and reproducible",
+      "test": "test_requirement_45_ghostbusters_deterministic"
+    },
+    {
+      "requirement": "Ghostbusters multi-agent testing",
+      "domain": "ghostbusters",
+      "implementation": "Comprehensive testing of all Ghostbusters agents and recovery engines",
+      "test": "test_requirement_46_ghostbusters_testing"
+    },
+    {
+      "requirement": "Run Ghostbusters before linting to fix syntax issues",
+      "domain": "ghostbusters",
+      "implementation": "Use Ghostbusters to fix syntax errors before running linters",
+      "test": "test_requirement_47_ghostbusters_pre_lint"
+    },
+    {
+      "requirement": "Use Ghostbusters agents for domain-specific analysis",
+      "domain": "ghostbusters",
+      "implementation": "Deploy specialized agents for different domain analysis",
+      "test": "test_requirement_48_ghostbusters_agents"
+    },
+    {
+      "requirement": "Apply Ghostbusters recovery engines for automated fixes",
+      "domain": "ghostbusters",
+      "implementation": "Use recovery engines to automatically fix detected issues",
+      "test": "test_requirement_49_ghostbusters_recovery_engines"
+    },
+    {
+      "requirement": "Integrate Ghostbusters with LangGraph/LangChain",
+      "domain": "ghostbusters",
+      "implementation": "Use LangGraph/LangChain for multi-agent orchestration",
+      "test": "test_requirement_50_ghostbusters_langgraph"
+    },
+    {
+      "requirement": "Use Ghostbusters for multi-agent orchestration",
+      "domain": "ghostbusters",
+      "implementation": "Orchestrate multiple expert agents for comprehensive delusion detection and recovery",
+      "test": "test_requirement_51_ghostbusters_multi_agent_orchestration"
+    },
+    {
+      "requirement": "Apply Ghostbusters for confidence scoring and validation",
+      "domain": "ghostbusters",
+      "implementation": "Use Ghostbusters to score confidence and validate recovery actions",
+      "test": "test_requirement_52_ghostbusters_confidence_scoring"
     }
   ],
   "implementation_plan": {
@@ -648,8 +774,7 @@
       "src/multi_agent_testing/.cursor/rules/multi-agent-testing.mdc",
       "scripts/.cursor/rules/bash-scripting.mdc",
       "docs/.cursor/rules/documentation.mdc",
-      "config/.cursor/rules/configuration.mdc",
-
+      "config/.cursor/rules/configuration.mdc"
     ]
   },
   "violations": [
