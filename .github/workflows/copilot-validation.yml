@@ -40,7 +40,8 @@ jobs:
               print(f'📊 Confidence Score: {state.confidence_score:.2%}')
               print(f'🔍 Issues Found: {len(state.errors)}')
               print(f'⚠️  Warnings: {len(state.warnings)}')
-              print(f'📋 Recommendations: {len(state.metadata.get("recommendations", []))}')
+              recommendations = state.metadata.get("recommendations", [])
+              print(f'📋 Recommendations: {len(recommendations)}')
               
               # Validate diversity hypothesis
               if state.confidence_score > 0.95:
@@ -51,7 +52,7 @@ jobs:
                   print('❌ Diversity Hypothesis NEEDS WORK: Low confidence')
                   
               # Check multi-agent effectiveness
-              if len(state.metadata.get("recommendations", [])) > 5:
+              if len(recommendations) > 5:
                   print('✅ Multi-Agent System EFFECTIVE: Found diverse recommendations')
               else:
                   print('⚠️  Multi-Agent System NEEDS IMPROVEMENT: Limited recommendations')
