@@ -37,7 +37,7 @@ A comprehensive, model-driven development environment with security-first archit
 ### **Installation**
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/louspringer/OpenFlow-Playground.git
 cd OpenFlow-Playground
 
 # Install dependencies with UV
