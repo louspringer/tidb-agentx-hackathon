@@ -29,6 +29,9 @@ dependencies = [
     # Data Validation
     "pydantic>=2.0.0",
     "autoflake8>=0.4.1",
+    # Multi-Agent Framework
+    "langgraph>=0.2.0",
+    "langchain>=0.2.0",
 ]
 
 [project.optional-dependencies]
