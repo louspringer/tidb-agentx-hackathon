@@ -1,0 +1,128 @@
+{
+  "timestamp": "2025-08-03T11:57:07.393565",
+  "total_files_processed": 13,
+  "successful_fixes": 0,
+  "failed_fixes": 13,
+  "success_rate": 0.0,
+  "total_blocks_fixed": 0,
+  "total_lines_fixed": 0,
+  "fix_results": [
+    {
+      "file_path": "ast_to_neo4j_converter.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "scripts/mdc-linter.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": ".cursor/plugins/rule-compliance-checker.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/security_first/rate_limiting.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/security_first/test_streamlit_security_first.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/security_first/test_security_model.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/test_anthropic_simple.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/test_diversity_hypothesis.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/test_live_smoke_test.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/test_model_traceability.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/multi_dimensional_smoke_test.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/test_meta_cognitive_orchestrator.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    },
+    {
+      "file_path": "src/multi_agent_testing/live_smoke_test_langchain.py",
+      "success": false,
+      "error_message": "Still has syntax errors after fix attempt",
+      "blocks_fixed": 0,
+      "lines_fixed": 0,
+      "original_ast_parse": false,
+      "final_ast_parse": false
+    }
+  ]
+}

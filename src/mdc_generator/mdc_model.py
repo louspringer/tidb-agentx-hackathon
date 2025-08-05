@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 """
 MDC File Model and Generator
@@ -13,16 +14,15 @@ import re
 @dataclass
 class MDCFrontmatter:
     """Model for MDC file YAML frontmatter"""
-    description: str
+description: str
     globs: List[str]
     always_apply: bool = True
-    
     def to_yaml(self) -> str:
         """Convert to YAML string"""
         data = {
             "description": self.description,
             "globs": self.globs,
-            "alwaysApply": self.always_apply
+"alwaysApply": self.always_apply
         }
         return yaml.dump(data, default_flow_style=False, sort_keys=False)
 
@@ -32,19 +32,17 @@ class MDCFile:
     frontmatter: MDCFrontmatter
     content: str
     file_path: Optional[Path] = None
-    
     def to_mdc_content(self) -> str:
         """Generate complete .mdc file content"""
         yaml_content = self.frontmatter.to_yaml()
         return f"---\n{yaml_content}---\n\n{self.content}"
-    
+
     def save(self, file_path: Optional[Path] = None) -> None:
         """Save .mdc file"""
         target_path = file_path or self.file_path
         if not target_path:
             raise ValueError("No file path specified")
-            
-        target_path.parent.mkdir(parents=True, exist_ok=True)
+target_path.parent.mkdir(parents=True, exist_ok=True)
         with open(target_path, 'w') as f:
             f.write(self.to_mdc_content())
     
@@ -120,7 +118,6 @@ class MDCGenerator:
     def generate_all_rules(self) -> None:
         """Generate all standard .mdc rules"""
         rules = self._get_standard_rules()
-        
         for rule_name, rule_data in rules.items():
             file_path = self.rules_dir / f"{rule_name}.mdc"
             mdc_file = MDCFile.create_rule(
@@ -128,17 +125,16 @@ class MDCGenerator:
                 globs=rule_data["globs"],
                 content=rule_data["content"],
                 file_path=file_path,
-                always_apply=rule_data.get("always_apply", True)
+always_apply=rule_data.get("always_apply", True)
             )
             mdc_file.save()
             print(f"Generated: {file_path}")
-    
     def _get_standard_rules(self) -> Dict[str, Dict[str, Any]]:
         """Get standard rule definitions"""
         return {
             "deterministic-editing": {
                 "description": "Use deterministic tools for file editing",
-                "globs": ["**/*.yaml", "**/*.yml", "**/*.json", "**/*.toml", "**/*.ini", "**/*.cfg", "**/*.mdc", "**/*.py", "**/*.xml", "**/*.properties", "**/*.env"],
+"globs": ["**/*.yaml", "**/*.yml", "**/*.json", "**/*.toml", "**/*.ini", "**/*.cfg", "**/*.mdc", "**/*.py", "**/*.xml", "**/*.properties", "**/*.env"],
                 "always_apply": True,
                 "content": """# Deterministic File Editing
 
@@ -154,7 +150,7 @@ class MDCGenerator:
 - Use `PyYAML` with schema validation
 - Use `search_replace` with exact string matching
 
-### JSON Files  
+### JSON Files
 - Use `json` library with proper formatting
 - Use `orjson` for performance
 - Use `pydantic` for validation
@@ -193,7 +189,7 @@ Always validate file structure after editing."""
 
 ## NEVER Hardcode These:
 - API keys, tokens, secrets, passwords
-- AWS access keys, private keys, certificates  
+- AWS access keys, private keys, certificates
 - OAuth client IDs, client secrets, access tokens
 - Database connection strings with real credentials
 - Account-specific URLs, UUIDs, or identifiers
@@ -342,7 +338,7 @@ jsonschema -i schema.json *.yaml   # Schema validation
         except Exception as e:
             print(f"Validation failed for {file_path}: {e}")
             return False
-    
+
     def validate_all_mdc_files(self) -> Dict[Path, bool]:
         """Validate all .mdc files in the project"""
         results = {}
@@ -362,13 +358,11 @@ def main():
     args = parser.parse_args()
     
     generator = MDCGenerator(args.base_dir)
-    
     if args.generate:
         print("Generating standard .mdc rules...")
         generator.generate_all_rules()
         print("Generation complete!")
-    
-    if args.validate:
+if args.validate:
         print("Validating all .mdc files...")
         results = generator.validate_all_mdc_files()
         
@@ -377,14 +371,12 @@ def main():
         
         print(f"Valid files: {len(valid_files)}")
         print(f"Invalid files: {len(invalid_files)}")
-        
         if invalid_files:
             print("\nInvalid files:")
             for file in invalid_files:
                 print(f"  - {file}")
-        
-        if not invalid_files:
+if not invalid_files:
             print("All .mdc files are valid!")
 
 if __name__ == "__main__":
-    main() 
+    main()

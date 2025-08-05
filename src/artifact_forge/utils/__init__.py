@@ -1,0 +1,1 @@
+"""ArtifactForge Component"""

@@ -33,7 +33,7 @@ for item_name in "${allowed_anthropic_items[@]}"; do
     echo "  Trying: $item_name"
     # Try different field names
     for field_name in "credential" "api key" "password" "key" "secret"; do
-        # Use field_name directly since it's from a hardcoded whitelist
+# Use field_name directly since it's from a hardcoded whitelist
         if credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null) && [ -n "$credential" ]; then
             echo "  ✅ Found Anthropic API key in '$item_name' field '$field_name'"
             ANTHROPIC_API_KEY="$credential"

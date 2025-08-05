@@ -1,0 +1,287 @@
+{
+  "current_models": {
+    "syntax_patterns": {
+      "description": "Pattern-based syntax error detection",
+      "capabilities": [
+        "unindented_variable_assignments",
+        "missing_colons",
+        "malformed_subprocess_calls",
+        "indentation_errors",
+        "basic_structure_issues"
+      ],
+      "data_sources": [
+        "regex_patterns",
+        "line_by_line_analysis",
+        "context_aware_indentation"
+      ]
+    },
+    "file_structure": {
+      "description": "File organization and structure analysis",
+      "capabilities": [
+        "file_hierarchy_analysis",
+        "import_structure_detection",
+        "basic_dependency_tracking",
+        "module_organization"
+      ],
+      "data_sources": [
+        "file_path_analysis",
+        "import_statement_parsing",
+        "directory_structure"
+      ]
+    },
+    "code_patterns": {
+      "description": "Basic code pattern recognition",
+      "capabilities": [
+        "function_definitions",
+        "class_definitions",
+        "import_statements",
+        "variable_assignments",
+        "basic_control_flow"
+      ],
+      "data_sources": [
+        "regex_patterns",
+        "line_analysis",
+        "context_awareness"
+      ]
+    },
+    "project_metadata": {
+      "description": "Project-level metadata and configuration",
+      "capabilities": [
+        "pyproject_toml_analysis",
+        "requirements_tracking",
+        "dependency_management",
+        "project_structure"
+      ],
+      "data_sources": [
+        "configuration_files",
+        "dependency_files",
+        "project_structure"
+      ]
+    }
+  },
+  "requirements_analysis": {
+    "capabilities": {
+      "functional_requirements": {
+        "capabilities": {
+          "function_analysis": {
+            "can_determine": [
+              "Function names and basic signatures",
+              "Basic parameter patterns",
+              "Function call patterns"
+            ],
+            "cannot_determine": [
+              "Complete type signatures",
+              "Return type requirements",
+              "Exception handling requirements",
+              "Side effect requirements"
+            ],
+            "sufficiency": "PARTIAL - Basic function requirements only"
+          },
+          "class_analysis": {
+            "can_determine": [
+              "Class names and basic structure",
+              "Basic inheritance patterns",
+              "Method definitions"
+            ],
+            "cannot_determine": [
+              "Complete inheritance hierarchies",
+              "Interface requirements",
+              "Method resolution order",
+              "Metaclass requirements"
+            ],
+            "sufficiency": "PARTIAL - Basic class requirements only"
+          },
+          "import_analysis": {
+            "can_determine": [
+              "Basic dependency requirements",
+              "Module import patterns",
+              "External library usage"
+            ],
+            "cannot_determine": [
+              "Version requirements",
+              "Optional dependencies",
+              "Conditional imports",
+              "Dynamic imports"
+            ],
+            "sufficiency": "PARTIAL - Basic dependency requirements only"
+          }
+        },
+        "overall_assessment": "PARTIAL - Can determine basic functional requirements but missing semantic details"
+      },
+      "non_functional_requirements": {
+        "capabilities": {
+          "performance_requirements": {
+            "can_determine": [
+              "Basic complexity patterns",
+              "Loop structures",
+              "Function call frequency"
+            ],
+            "cannot_determine": [
+              "Time complexity analysis",
+              "Space complexity analysis",
+              "Performance bottlenecks",
+              "Optimization requirements"
+            ],
+            "sufficiency": "MINIMAL - Very limited performance analysis"
+          },
+          "security_requirements": {
+            "can_determine": [
+              "Basic input patterns",
+              "File operation patterns",
+              "Network call patterns"
+            ],
+            "cannot_determine": [
+              "Input validation requirements",
+              "Authentication patterns",
+              "Authorization requirements",
+              "Data protection requirements"
+            ],
+            "sufficiency": "MINIMAL - Very limited security analysis"
+          },
+          "maintainability_requirements": {
+            "can_determine": [
+              "Basic code organization",
+              "File structure patterns",
+              "Naming conventions"
+            ],
+            "cannot_determine": [
+              "Code complexity metrics",
+              "Coupling analysis",
+              "Cohesion analysis",
+              "Documentation requirements"
+            ],
+            "sufficiency": "PARTIAL - Basic maintainability analysis"
+          }
+        },
+        "overall_assessment": "MINIMAL - Limited non-functional requirements analysis"
+      }
+    },
+    "overall_score": 0.44999999999999996,
+    "assessment": "LIMITED - Can determine some requirements"
+  },
+  "recreation_analysis": {
+    "capabilities": {
+      "syntax_recreation": {
+        "capabilities": {
+          "function_recreation": {
+            "can_recreate": [
+              "Basic function signatures",
+              "Simple parameter lists",
+              "Basic return statements"
+            ],
+            "cannot_recreate": [
+              "Complex type annotations",
+              "Default parameter values",
+              "Keyword-only parameters",
+              "Complex decorators"
+            ],
+            "sufficiency": "PARTIAL - Basic function recreation only"
+          },
+          "class_recreation": {
+            "can_recreate": [
+              "Basic class definitions",
+              "Simple inheritance",
+              "Basic method definitions"
+            ],
+            "cannot_recreate": [
+              "Complex inheritance hierarchies",
+              "Metaclass usage",
+              "Property decorators",
+              "Complex class decorators"
+            ],
+            "sufficiency": "PARTIAL - Basic class recreation only"
+          },
+          "import_recreation": {
+            "can_recreate": [
+              "Basic import statements",
+              "Simple from imports",
+              "Basic aliases"
+            ],
+            "cannot_recreate": [
+              "Conditional imports",
+              "Dynamic imports",
+              "Complex relative imports",
+              "Import hooks"
+            ],
+            "sufficiency": "PARTIAL - Basic import recreation only"
+          }
+        },
+        "overall_assessment": "PARTIAL - Can recreate basic syntax but missing complex patterns"
+      },
+      "semantic_recreation": {
+        "capabilities": {
+          "logic_recreation": {
+            "can_recreate": [
+              "Basic control flow",
+              "Simple variable assignments",
+              "Basic function calls"
+            ],
+            "cannot_recreate": [
+              "Complex algorithms",
+              "State management",
+              "Error handling logic",
+              "Business logic patterns"
+            ],
+            "sufficiency": "MINIMAL - Very limited logic recreation"
+          },
+          "type_recreation": {
+            "can_recreate": [
+              "Basic type hints",
+              "Simple generic types"
+            ],
+            "cannot_recreate": [
+              "Complex generic types",
+              "Union types",
+              "Protocol types",
+              "Type variables"
+            ],
+            "sufficiency": "MINIMAL - Very limited type recreation"
+          },
+          "pattern_recreation": {
+            "can_recreate": [
+              "Basic patterns",
+              "Simple list comprehensions",
+              "Basic decorators"
+            ],
+            "cannot_recreate": [
+              "Design patterns",
+              "Complex comprehensions",
+              "Metaclass patterns",
+              "Context manager patterns"
+            ],
+            "sufficiency": "MINIMAL - Very limited pattern recreation"
+          }
+        },
+        "overall_assessment": "MINIMAL - Very limited semantic recreation capabilities"
+      }
+    },
+    "overall_score": 0.44999999999999996,
+    "assessment": "LIMITED - Can recreate some code"
+  },
+  "recommendations": [
+    "Add AST-based semantic analysis for better requirements understanding",
+    "Implement type inference for complete type signature recreation",
+    "Add control flow analysis for logic recreation",
+    "Include pattern recognition for complex code pattern recreation",
+    "Add dependency analysis for complete import recreation"
+  ],
+  "mdc_parsing_implications": {
+    "current_capabilities": [
+      "Can parse basic .mdc structure",
+      "Can extract YAML frontmatter",
+      "Can identify markdown content"
+    ],
+    "missing_capabilities": [
+      "Cannot understand semantic content",
+      "Cannot validate content structure",
+      "Cannot infer missing content",
+      "Cannot project complete documents"
+    ],
+    "potential_benefits": [
+      "Could use AST-like parsing for .mdc content",
+      "Could implement semantic validation",
+      "Could project missing documentation",
+      "Could recreate broken .mdc files"
+    ]
+  }
+}

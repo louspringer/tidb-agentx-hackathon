@@ -37,7 +37,7 @@ class RuleComplianceChecker:
                 "success": result.returncode == 0,
                 "stdout": result.stdout,
                 "stderr": result.stderr,
-                "return_code": result.returncode
+"return_code": result.returncode
             }
             
         except Exception as e:
@@ -170,4 +170,4 @@ def main():
     print(json.dumps(result, indent=2))
 
 if __name__ == "__main__":
-    main() 
+    main()

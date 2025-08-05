@@ -18,6 +18,7 @@ PYTHON := python3
 UV := uv
 MAKE := make
 
+
 # Colors for output
 RED := \033[0;31m
 GREEN := \033[0;32m
@@ -108,6 +109,7 @@ test-python: ## Run Python tests
 	@$(UV) run pytest tests/ -v
 	@echo "$(GREEN)✅ Python tests completed$(NC)"
 
+
 test-bash: ## Run bash script tests
 	@echo "$(BLUE)🐚 Running bash script tests...$(NC)"
 	@find scripts/ -name "*.sh" -exec shellcheck {} \;
@@ -125,7 +127,7 @@ test-docs: ## Run documentation tests
 
 test-security: ## Run security tests and scans
 	@echo "$(BLUE)🔒 Running security tests...$(NC)"
-	@$(UV) run bandit -r src/
+@$(UV) run bandit -r src/
 	@$(UV) run safety check
 	@$(UV) run detect-secrets scan
 	@echo "$(GREEN)✅ Security tests completed$(NC)"
@@ -141,6 +143,10 @@ test-healthcare: ## Run healthcare CDC tests
 	@$(UV) run pytest tests/test_healthcare_cdc_requirements.py -v
 	@echo "$(GREEN)✅ Healthcare CDC tests completed$(NC)"
 
+==========================="
+	@python scripts/pre_test_model_check.py
+
+=======
 # =============================================================================
 # LINTING TARGETS
 # =============================================================================
@@ -152,7 +158,7 @@ lint-all: lint-python lint-bash lint-cloudformation lint-docs lint-security lint
 
 lint-python: ## Lint Python code
 	@echo "$(BLUE)🐍 Linting Python code...$(NC)"
-	@$(UV) run flake8 src/ tests/
+@$(UV) run flake8 src/ tests/
 	@$(UV) run mypy src/
 	@echo "$(GREEN)✅ Python linting completed$(NC)"
 
@@ -168,7 +174,7 @@ lint-cloudformation: ## Lint CloudFormation templates
 
 lint-docs: ## Lint documentation
 	@echo "$(BLUE)📚 Linting documentation...$(NC)"
-	@find docs/ -name "*.md" -exec markdownlint {} \;
+@find docs/ -name "*.md" -exec markdownlint {} \;
 	@echo "$(GREEN)✅ Documentation linting completed$(NC)"
 
 lint-security: ## Lint security code
@@ -199,9 +205,8 @@ format-all: format-python format-bash format-docs ## Format all domains
 
 format-python: ## Format Python code
 	@echo "$(BLUE)🐍 Formatting Python code...$(NC)"
-	@$(UV) run black src/ tests/
+@$(UV) run black src/ tests/
 	@echo "$(GREEN)✅ Python formatting completed$(NC)"
-
 format-bash: ## Format bash scripts
 	@echo "$(BLUE)🐚 Formatting bash scripts...$(NC)"
 	@find scripts/ -name "*.sh" -exec shfmt -w {} \;
@@ -365,4 +370,4 @@ status: ## Show project status
 	@echo ""
 	@echo "$(BLUE)🔧 Available make targets:$(NC)"
 	@make help | grep -E "^[a-zA-Z_-]+:" | head -10
-	@echo "$(YELLOW)... and more (run 'make help' for full list)$(NC)" 
+@echo "$(YELLOW)... and more (run 'make help' for full list)$(NC)"

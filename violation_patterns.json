@@ -1,0 +1,34 @@
+[
+  {
+    "rule_code": "F401",
+    "file_path": "test_file.py",
+    "line_number": 5,
+    "message": "import json imported but unused",
+    "timestamp": "2025-08-03T12:53:09.458847",
+    "frequency": 1
+  },
+  {
+    "rule_code": "F541",
+    "file_path": "test_file.py",
+    "line_number": 10,
+    "message": "f-string is missing placeholders",
+    "timestamp": "2025-08-03T12:53:09.465577",
+    "frequency": 1
+  },
+  {
+    "rule_code": "E302",
+    "file_path": "test_file.py",
+    "line_number": 15,
+    "message": "expected 2 blank lines, found 1",
+    "timestamp": "2025-08-03T12:53:09.467345",
+    "frequency": 1
+  },
+  {
+    "rule_code": "BLACK001",
+    "file_path": "tests/test_python_quality_enforcement.py",
+    "line_number": 1,
+    "message": "Code needs formatting",
+    "timestamp": "2025-08-03T12:54:48.193260",
+    "frequency": 1
+  }
+]

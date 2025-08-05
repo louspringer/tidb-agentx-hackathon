@@ -1,0 +1,1042 @@
+{
+  "version": "2.4",
+  "analyzed_at": "2025-08-04T15:34:37.152096",
+  "function_definitions": [
+    "main_dashboard",
+    "validate_oauth_credentials",
+    "new_deployment",
+    "retrieve_credential",
+    "delete_stack",
+    "monitoring_section",
+    "get_stack_events",
+    "__init__",
+    "store_credential_secure",
+    "viewer_dashboard",
+    "update_deployment",
+    "get_stack_status",
+    "login_page",
+    "admin_dashboard",
+    "user_management_section",
+    "validate_session_token",
+    "sanitize_input",
+    "deploy_stack",
+    "update_stack",
+    "get_credential_secure",
+    "configuration_section",
+    "encrypt_credential",
+    "validate_uuid",
+    "rollback_deployment",
+    "create_stack",
+    "security_section",
+    "main",
+    "create_deployment_timeline",
+    "deployment_section",
+    "rollback_stack",
+    "operator_dashboard",
+    "decrypt_credential",
+    "validate_session",
+    "validate_snowflake_url",
+    "setup_page_config",
+    "run",
+    "validate_account_url",
+    "validate_credentials",
+    "create_resource_status_matrix",
+    "create_session_token",
+    "store_credential"
+  ],
+  "function_calls": [],
+  "function_dependencies": {},
+  "nodes": {
+    "function_main_636": {
+      "id": "function_main_636",
+      "type": "function_definition",
+      "content": "def main() -> None:\n    \"\"\"Main function\"\"\"\n    app = OpenFlowQuickstartApp()\n    app.run()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "main",
+        "line_number": 636,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 636,
+        "order": 0,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 0
+      }
+    },
+    "function_validate_account_url_46": {
+      "id": "function_validate_account_url_46",
+      "type": "function_definition",
+      "content": "@field_validator('account_url')\ndef validate_account_url(cls, v):\n    if not v.startswith('https://') or 'snowflakecomputing.com' not in v:\n        raise ValueError('Invalid Snowflake account URL format')\n    return v",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_account_url",
+        "line_number": 46,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 46,
+        "order": 1,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 1
+      }
+    },
+    "function_validate_uuid_60": {
+      "id": "function_validate_uuid_60",
+      "type": "function_definition",
+      "content": "@field_validator('data_plane_uuid')\ndef validate_uuid(cls, v):\n    import re\n    uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n    if not re.match(uuid_pattern, v):\n        raise ValueError('Invalid UUID format')\n    return v",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_uuid",
+        "line_number": 60,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 60,
+        "order": 2,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 2
+      }
+    },
+    "function___init___83": {
+      "id": "function___init___83",
+      "type": "function_definition",
+      "content": "def __init__(self) -> None:\n    self.fernet = Fernet(SECURITY_CONFIG['fernet_key'])\n    self.redis_client = redis.from_url(SECURITY_CONFIG['redis_url'])",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "__init__",
+        "line_number": 83,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 83,
+        "order": 3,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 3
+      }
+    },
+    "function_encrypt_credential_87": {
+      "id": "function_encrypt_credential_87",
+      "type": "function_definition",
+      "content": "def encrypt_credential(self, credential: str) -> str:\n    \"\"\"Encrypt sensitive credentials\"\"\"\n    return self.fernet.encrypt(credential.encode()).decode()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "encrypt_credential",
+        "line_number": 87,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 87,
+        "order": 4,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 4
+      }
+    },
+    "function_decrypt_credential_91": {
+      "id": "function_decrypt_credential_91",
+      "type": "function_definition",
+      "content": "def decrypt_credential(self, encrypted_credential: str) -> str:\n    \"\"\"Decrypt sensitive credentials\"\"\"\n    return self.fernet.decrypt(encrypted_credential.encode()).decode()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "decrypt_credential",
+        "line_number": 91,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 91,
+        "order": 5,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 5
+      }
+    },
+    "function_store_credential_secure_95": {
+      "id": "function_store_credential_secure_95",
+      "type": "function_definition",
+      "content": "def store_credential_secure(self, key: str, value: str) -> None:\n    \"\"\"Store credential securely in Redis with encryption\"\"\"\n    encrypted_value = self.encrypt_credential(value)\n    self.redis_client.setex(f'credential:{key}', 3600, encrypted_value)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "store_credential_secure",
+        "line_number": 95,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 95,
+        "order": 6,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 6
+      }
+    },
+    "function_store_credential_102": {
+      "id": "function_store_credential_102",
+      "type": "function_definition",
+      "content": "def store_credential(self, key: str, value: str) -> None:\n    \"\"\"Store credential securely in Redis with encryption (alias for store_credential_secure)\"\"\"\n    self.store_credential_secure(key, value)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "store_credential",
+        "line_number": 102,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 102,
+        "order": 7,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 7
+      }
+    },
+    "function_get_credential_secure_106": {
+      "id": "function_get_credential_secure_106",
+      "type": "function_definition",
+      "content": "def get_credential_secure(self, key: str) -> Optional[str]:\n    \"\"\"Retrieve credential securely from Redis\"\"\"\n    encrypted_value = self.redis_client.get(f'credential:{key}')\n    if encrypted_value:\n        return self.decrypt_credential(encrypted_value.decode())\n    return None",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "get_credential_secure",
+        "line_number": 106,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 106,
+        "order": 8,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 8
+      }
+    },
+    "function_retrieve_credential_113": {
+      "id": "function_retrieve_credential_113",
+      "type": "function_definition",
+      "content": "def retrieve_credential(self, key: str) -> Optional[str]:\n    \"\"\"Retrieve credential securely from Redis (alias for get_credential_secure)\"\"\"\n    return self.get_credential_secure(key)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "retrieve_credential",
+        "line_number": 113,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 113,
+        "order": 9,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 9
+      }
+    },
+    "function_validate_session_token_117": {
+      "id": "function_validate_session_token_117",
+      "type": "function_definition",
+      "content": "def validate_session_token(self, session_token: str) -> bool:\n    \"\"\"Validate JWT session token (alias for validate_session)\"\"\"\n    return self.validate_session(session_token)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_session_token",
+        "line_number": 117,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 117,
+        "order": 10,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 10
+      }
+    },
+    "function_validate_session_121": {
+      "id": "function_validate_session_121",
+      "type": "function_definition",
+      "content": "def validate_session(self, session_token: str) -> bool:\n    \"\"\"Validate JWT session token\"\"\"\n    try:\n        payload = jwt.decode(session_token, str(SECURITY_CONFIG['jwt_secret']), algorithms=['HS256'])\n        return payload.get('exp', 0) > time.time()\n    except jwt.InvalidTokenError:\n        return False",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_session",
+        "line_number": 121,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 121,
+        "order": 11,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 11
+      }
+    },
+    "function_create_session_token_131": {
+      "id": "function_create_session_token_131",
+      "type": "function_definition",
+      "content": "def create_session_token(self, user_id: str, role: str) -> str:\n    \"\"\"Create JWT session token\"\"\"\n    timeout_minutes = SECURITY_CONFIG['session_timeout_minutes']\n    assert timeout_minutes is not None, 'session_timeout_minutes should be set'\n    payload = {'user_id': user_id, 'role': role, 'exp': datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes))}\n    return jwt.encode(payload, str(SECURITY_CONFIG['jwt_secret']), algorithm='HS256')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "create_session_token",
+        "line_number": 131,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 131,
+        "order": 12,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 12
+      }
+    },
+    "function_validate_snowflake_url_149": {
+      "id": "function_validate_snowflake_url_149",
+      "type": "function_definition",
+      "content": "@staticmethod\ndef validate_snowflake_url(url: str) -> bool:\n    \"\"\"Validate Snowflake account URL format\"\"\"\n    return url.startswith('https://') and 'snowflakecomputing.com' in url",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_snowflake_url",
+        "line_number": 149,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 149,
+        "order": 13,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 13
+      }
+    },
+    "function_validate_uuid_154": {
+      "id": "function_validate_uuid_154",
+      "type": "function_definition",
+      "content": "@staticmethod\ndef validate_uuid(uuid_str: str) -> bool:\n    \"\"\"Validate UUID format\"\"\"\n    import re\n    uuid_pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'\n    return bool(re.match(uuid_pattern, uuid_str))",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_uuid",
+        "line_number": 154,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 154,
+        "order": 14,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 14
+      }
+    },
+    "function_sanitize_input_162": {
+      "id": "function_sanitize_input_162",
+      "type": "function_definition",
+      "content": "@staticmethod\ndef sanitize_input(input_str: str) -> str:\n    \"\"\"Sanitize user input to prevent injection attacks\"\"\"\n    import html\n    return html.escape(input_str.strip())",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "sanitize_input",
+        "line_number": 162,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 162,
+        "order": 15,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 15
+      }
+    },
+    "function_validate_oauth_credentials_169": {
+      "id": "function_validate_oauth_credentials_169",
+      "type": "function_definition",
+      "content": "@staticmethod\ndef validate_oauth_credentials(credentials: Dict[str, str]) -> bool:\n    \"\"\"Validate OAuth credentials format from a dictionary\"\"\"\n    client_id = credentials.get('client_id', '')\n    client_secret = credentials.get('client_secret', '')\n    if client_id == 'test_id' and client_secret == os.getenv('TEST_SECRET', os.getenv('TEST_SECRET', 'test_secret')):\n        return True\n    return len(client_id) >= 8 and len(client_secret) >= 8",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_oauth_credentials",
+        "line_number": 169,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 169,
+        "order": 16,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 16
+      }
+    },
+    "function___init___183": {
+      "id": "function___init___183",
+      "type": "function_definition",
+      "content": "def __init__(self, region: str='us-east-1') -> None:\n    self.cf_client = boto3.client('cloudformation', region_name=region, aws_access_key_id=AWS_CONFIG['access_key'], aws_secret_access_key=AWS_CONFIG['secret_key'])",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "__init__",
+        "line_number": 183,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 183,
+        "order": 17,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 17
+      }
+    },
+    "function_create_stack_191": {
+      "id": "function_create_stack_191",
+      "type": "function_definition",
+      "content": "def create_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n    \"\"\"Create CloudFormation stack\"\"\"\n    try:\n        response = self.cf_client.create_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n        return {'success': True, 'stack_id': response['StackId']}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "create_stack",
+        "line_number": 191,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 191,
+        "order": 18,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 18
+      }
+    },
+    "function_deploy_stack_206": {
+      "id": "function_deploy_stack_206",
+      "type": "function_definition",
+      "content": "def deploy_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n    \"\"\"Deploy CloudFormation stack (alias for create_stack)\"\"\"\n    return self.create_stack(stack_name, template_body, parameters)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "deploy_stack",
+        "line_number": 206,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 206,
+        "order": 19,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 19
+      }
+    },
+    "function_update_stack_212": {
+      "id": "function_update_stack_212",
+      "type": "function_definition",
+      "content": "def update_stack(self, stack_name: str, template_body: str, parameters: List[Dict]) -> Dict:\n    \"\"\"Update CloudFormation stack\"\"\"\n    try:\n        response = self.cf_client.update_stack(StackName=stack_name, TemplateBody=template_body, Parameters=parameters, Capabilities=['CAPABILITY_IAM'])\n        return {'success': True, 'stack_id': response['StackId']}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "update_stack",
+        "line_number": 212,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 212,
+        "order": 20,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 20
+      }
+    },
+    "function_delete_stack_227": {
+      "id": "function_delete_stack_227",
+      "type": "function_definition",
+      "content": "def delete_stack(self, stack_name: str) -> Dict:\n    \"\"\"Delete CloudFormation stack\"\"\"\n    try:\n        self.cf_client.delete_stack(StackName=stack_name)\n        return {'success': True}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "delete_stack",
+        "line_number": 227,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 227,
+        "order": 21,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 21
+      }
+    },
+    "function_get_stack_status_235": {
+      "id": "function_get_stack_status_235",
+      "type": "function_definition",
+      "content": "def get_stack_status(self, stack_name: str) -> Dict:\n    \"\"\"Get stack status\"\"\"\n    try:\n        response = self.cf_client.describe_stacks(StackName=stack_name)\n        stack = response['Stacks'][0]\n        return {'status': stack['StackStatus'], 'resources': len(stack.get('Outputs', [])), 'creation_time': stack['CreationTime'].isoformat()}\n    except ClientError as e:\n        return {'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "get_stack_status",
+        "line_number": 235,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 235,
+        "order": 22,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 22
+      }
+    },
+    "function_get_stack_events_248": {
+      "id": "function_get_stack_events_248",
+      "type": "function_definition",
+      "content": "def get_stack_events(self, stack_name: str) -> List[Dict]:\n    \"\"\"Get stack events for monitoring\"\"\"\n    try:\n        response = self.cf_client.describe_stack_events(StackName=stack_name)\n        return response['StackEvents']\n    except ClientError:\n        return []",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "get_stack_events",
+        "line_number": 248,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 248,
+        "order": 23,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 23
+      }
+    },
+    "function_rollback_stack_256": {
+      "id": "function_rollback_stack_256",
+      "type": "function_definition",
+      "content": "def rollback_stack(self, stack_name: str) -> Dict:\n    \"\"\"Rollback stack to previous state\"\"\"\n    try:\n        self.cf_client.rollback_stack(StackName=stack_name)\n        return {'success': True}\n    except ClientError as e:\n        return {'success': False, 'error': str(e)}",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "rollback_stack",
+        "line_number": 256,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 256,
+        "order": 24,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 24
+      }
+    },
+    "function___init___268": {
+      "id": "function___init___268",
+      "type": "function_definition",
+      "content": "def __init__(self, deployment_manager: DeploymentManager) -> None:\n    self.deployment_manager = deployment_manager",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "__init__",
+        "line_number": 268,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 268,
+        "order": 25,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 25
+      }
+    },
+    "function_create_deployment_timeline_271": {
+      "id": "function_create_deployment_timeline_271",
+      "type": "function_definition",
+      "content": "def create_deployment_timeline(self, stack_name: str) -> go.Figure:\n    \"\"\"Create deployment timeline visualization\"\"\"\n    events = self.deployment_manager.get_stack_events(stack_name)\n    fig = go.Figure()\n    if events:\n        timestamps = [event['Timestamp'] for event in events]\n        statuses = [event['ResourceStatus'] for event in events]\n        resources = [event['LogicalResourceId'] for event in events]\n        fig.add_trace(go.Scatter(x=timestamps, y=statuses, mode='markers+lines', text=resources, name='Deployment Progress'))\n    fig.update_layout(title='Deployment Timeline', xaxis_title='Time', yaxis_title='Status', height=400)\n    return fig",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "create_deployment_timeline",
+        "line_number": 271,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 271,
+        "order": 26,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 26
+      }
+    },
+    "function_create_resource_status_matrix_300": {
+      "id": "function_create_resource_status_matrix_300",
+      "type": "function_definition",
+      "content": "def create_resource_status_matrix(self, stack_name: str) -> go.Figure:\n    \"\"\"Create resource status matrix visualization\"\"\"\n    events = self.deployment_manager.get_stack_events(stack_name)\n    if not events:\n        fig = go.Figure()\n        fig.add_annotation(text='No deployment data available', xref='paper', yref='paper', x=0.5, y=0.5, showarrow=False)\n        return fig\n    resource_status = {}\n    for event in events:\n        resource = event['LogicalResourceId']\n        status = event['ResourceStatus']\n        timestamp = event['Timestamp']\n        if resource not in resource_status:\n            resource_status[resource] = []\n        resource_status[resource].append({'status': status, 'timestamp': timestamp})\n    resources = list(resource_status.keys())\n    statuses = ['CREATE_COMPLETE', 'UPDATE_COMPLETE', 'DELETE_COMPLETE', 'CREATE_FAILED', 'UPDATE_FAILED']\n    status_matrix = []\n    for resource in resources:\n        latest_status = resource_status[resource][-1]['status'] if resource_status[resource] else 'UNKNOWN'\n        row = [1 if latest_status == status else 0 for status in statuses]\n        status_matrix.append(row)\n    fig = go.Figure(data=go.Heatmap(z=status_matrix, x=statuses, y=resources, colorscale='RdYlGn'))\n    fig.update_layout(title='Resource Status Matrix', xaxis_title='Status', yaxis_title='Resource', height=500)\n    return fig",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "create_resource_status_matrix",
+        "line_number": 300,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 300,
+        "order": 27,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 27
+      }
+    },
+    "function___init___368": {
+      "id": "function___init___368",
+      "type": "function_definition",
+      "content": "def __init__(self) -> None:\n    self.security_manager = SecurityManager()\n    self.deployment_manager = DeploymentManager()\n    self.monitoring_dashboard = MonitoringDashboard(self.deployment_manager)\n    self.input_validator = InputValidator()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "__init__",
+        "line_number": 368,
+        "has_docstring": false,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 368,
+        "order": 28,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 28
+      }
+    },
+    "function_setup_page_config_374": {
+      "id": "function_setup_page_config_374",
+      "type": "function_definition",
+      "content": "def setup_page_config(self) -> None:\n    \"\"\"Setup Streamlit page configuration\"\"\"\n    st.set_page_config(page_title='OpenFlow Quickstart', page_icon='\ud83d\ude80', layout='wide', initial_sidebar_state='expanded')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "setup_page_config",
+        "line_number": 374,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 374,
+        "order": 29,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 29
+      }
+    },
+    "function_login_page_383": {
+      "id": "function_login_page_383",
+      "type": "function_definition",
+      "content": "def login_page(self) -> None:\n    \"\"\"Login page with security validation\"\"\"\n    st.title('\ud83d\udd10 OpenFlow Quickstart Login')\n    with st.form('login_form'):\n        username = st.text_input('Username')\n        password = st.text_input('Password', type='password')\n        submit_button = st.form_submit_button('Login')\n        if submit_button:\n            if self.validate_credentials(username, password):\n                session_token = self.security_manager.create_session_token(username, 'admin')\n                st.session_state['authenticated'] = True\n                st.session_state['session_token'] = session_token\n                st.session_state['user_id'] = username\n                st.success('Login successful!')\n                st.rerun()\n            else:\n                st.error('Invalid credentials')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "login_page",
+        "line_number": 383,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 383,
+        "order": 30,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 30
+      }
+    },
+    "function_validate_credentials_405": {
+      "id": "function_validate_credentials_405",
+      "type": "function_definition",
+      "content": "def validate_credentials(self, username: str, password: str) -> bool:\n    \"\"\"Validate user credentials with enhanced security\"\"\"\n    password_checks = self.input_validator.validate_password_strength(password)\n    if not password_checks['strong']:\n        return False\n    if len(password) < SECURITY_CONFIG['password_min_length']:\n        return False\n    valid_users = {'admin': 'AdminSecure123!', 'operator': 'OperatorSecure456!', 'viewer': 'ViewerSecure789!'}\n    return username in valid_users and valid_users[username] == password",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "validate_credentials",
+        "line_number": 405,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 405,
+        "order": 31,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 31
+      }
+    },
+    "function_main_dashboard_425": {
+      "id": "function_main_dashboard_425",
+      "type": "function_definition",
+      "content": "def main_dashboard(self) -> None:\n    \"\"\"Main dashboard with role-based access\"\"\"\n    user_role = st.session_state.get('user_role', 'viewer')\n    if user_role == 'viewer':\n        self.viewer_dashboard()\n    elif user_role == 'operator':\n        self.operator_dashboard()\n    elif user_role == 'admin':\n        self.admin_dashboard()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "main_dashboard",
+        "line_number": 425,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 425,
+        "order": 32,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 32
+      }
+    },
+    "function_viewer_dashboard_436": {
+      "id": "function_viewer_dashboard_436",
+      "type": "function_definition",
+      "content": "def viewer_dashboard(self) -> None:\n    \"\"\"Viewer dashboard with read-only access\"\"\"\n    st.title('\ud83d\udcca OpenFlow Quickstart - Viewer Dashboard')\n    st.info('You have read-only access to deployment information.')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "viewer_dashboard",
+        "line_number": 436,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 436,
+        "order": 33,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 33
+      }
+    },
+    "function_operator_dashboard_441": {
+      "id": "function_operator_dashboard_441",
+      "type": "function_definition",
+      "content": "def operator_dashboard(self) -> None:\n    \"\"\"Operator dashboard with deployment management\"\"\"\n    st.title('\u2699\ufe0f OpenFlow Quickstart - Operator Dashboard')\n    st.warning('You have deployment management access.')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "operator_dashboard",
+        "line_number": 441,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 441,
+        "order": 34,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 34
+      }
+    },
+    "function_admin_dashboard_446": {
+      "id": "function_admin_dashboard_446",
+      "type": "function_definition",
+      "content": "def admin_dashboard(self) -> None:\n    \"\"\"Admin dashboard with full access\"\"\"\n    st.title('\ud83d\udd27 OpenFlow Quickstart - Admin Dashboard')\n    page = st.sidebar.selectbox('Navigation', ['Configuration', 'Deployment', 'Monitoring', 'Security', 'User Management'])\n    if page == 'Configuration':\n        self.configuration_section()\n    elif page == 'Deployment':\n        self.deployment_section()\n    elif page == 'Monitoring':\n        self.monitoring_section()\n    elif page == 'Security':\n        self.security_section()\n    elif page == 'User Management':\n        self.user_management_section()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "admin_dashboard",
+        "line_number": 446,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 446,
+        "order": 35,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 35
+      }
+    },
+    "function_configuration_section_473": {
+      "id": "function_configuration_section_473",
+      "type": "function_definition",
+      "content": "def configuration_section(self) -> None:\n    \"\"\"Configuration management section\"\"\"\n    st.header('\u2699\ufe0f Configuration Management')\n    tab1, tab2 = st.tabs(['Snowflake Configuration', 'OpenFlow Configuration'])\n    with tab1:\n        st.subheader('Snowflake Configuration')\n        with st.form('snowflake_config'):\n            account_url = st.text_input('Account URL', placeholder='https://your-account.snowflakecomputing.com')\n            st.text_input('Organization')\n            st.text_input('Account Identifier')\n            st.text_input('OAuth Integration Name')\n            oauth_client_id = st.text_input('OAuth Client ID', type='password')\n            oauth_client_secret = st.text_input('OAuth Client Secret', type='password')\n            if st.form_submit_button('Save Snowflake Config'):\n                if self.input_validator.validate_snowflake_url(account_url):\n                    self.security_manager.store_credential_secure('snowflake_account_url', account_url)\n                    self.security_manager.store_credential_secure('snowflake_oauth_client_id', oauth_client_id)\n                    self.security_manager.store_credential_secure('snowflake_oauth_client_secret', oauth_client_secret)\n                    st.success('Snowflake configuration saved securely!')\n                else:\n                    st.error('Invalid Snowflake account URL format')\n    with tab2:\n        st.subheader('OpenFlow Configuration')\n        with st.form('openflow_config'):\n            st.text_input('Data Plane URL')\n            data_plane_uuid = st.text_input('Data Plane UUID')\n            data_plane_key = st.text_input('Data Plane Key', type='password')\n            st.text_input('Telemetry URL')\n            st.text_input('Control Plane URL')\n            if st.form_submit_button('Save OpenFlow Config'):\n                if self.input_validator.validate_uuid(data_plane_uuid):\n                    self.security_manager.store_credential_secure('openflow_data_plane_key', data_plane_key)\n                    st.success('OpenFlow configuration saved securely!')\n                else:\n                    st.error('Invalid UUID format')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "configuration_section",
+        "line_number": 473,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 473,
+        "order": 36,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 36
+      }
+    },
+    "function_deployment_section_529": {
+      "id": "function_deployment_section_529",
+      "type": "function_definition",
+      "content": "def deployment_section(self) -> None:\n    \"\"\"Deployment management section\"\"\"\n    st.header('\ud83d\ude80 Deployment Management')\n    col1, col2, col3 = st.columns(3)\n    with col1:\n        if st.button('New Deployment'):\n            self.new_deployment()\n    with col2:\n        if st.button('Update Deployment'):\n            self.update_deployment()\n    with col3:\n        if st.button('Rollback Deployment'):\n            self.rollback_deployment()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "deployment_section",
+        "line_number": 529,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 529,
+        "order": 37,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 37
+      }
+    },
+    "function_new_deployment_547": {
+      "id": "function_new_deployment_547",
+      "type": "function_definition",
+      "content": "def new_deployment(self) -> None:\n    \"\"\"Create new deployment\"\"\"\n    st.subheader('Create New Deployment')\n    with st.form('new_deployment'):\n        stack_name = st.text_input('Stack Name')\n        template_body = st.text_area('CloudFormation Template')\n        if st.form_submit_button('Deploy'):\n            if stack_name and template_body:\n                result = self.deployment_manager.create_stack(stack_name, template_body, [])\n                if result['success']:\n                    st.success(f\"Deployment started: {result['stack_id']}\")\n                else:\n                    st.error(f\"Deployment failed: {result['error']}\")",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "new_deployment",
+        "line_number": 547,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 547,
+        "order": 38,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 38
+      }
+    },
+    "function_update_deployment_565": {
+      "id": "function_update_deployment_565",
+      "type": "function_definition",
+      "content": "def update_deployment(self) -> None:\n    \"\"\"Update existing deployment\"\"\"\n    st.subheader('Update Deployment')\n    st.info('Update functionality would be implemented here')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "update_deployment",
+        "line_number": 565,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 565,
+        "order": 39,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 39
+      }
+    },
+    "function_rollback_deployment_570": {
+      "id": "function_rollback_deployment_570",
+      "type": "function_definition",
+      "content": "def rollback_deployment(self) -> None:\n    \"\"\"Rollback deployment\"\"\"\n    st.subheader('Rollback Deployment')\n    st.info('Rollback functionality would be implemented here')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "rollback_deployment",
+        "line_number": 570,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 570,
+        "order": 40,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 40
+      }
+    },
+    "function_monitoring_section_575": {
+      "id": "function_monitoring_section_575",
+      "type": "function_definition",
+      "content": "def monitoring_section(self) -> None:\n    \"\"\"Monitoring and visualization section\"\"\"\n    st.header('\ud83d\udcca Monitoring Dashboard')\n    stack_name = st.text_input('Enter Stack Name for Monitoring')\n    if stack_name:\n        col1, col2 = st.columns(2)\n        with col1:\n            st.subheader('Deployment Timeline')\n            timeline_fig = self.monitoring_dashboard.create_deployment_timeline(stack_name)\n            st.plotly_chart(timeline_fig, use_container_width=True)\n        with col2:\n            st.subheader('Resource Status Matrix')\n            matrix_fig = self.monitoring_dashboard.create_resource_status_matrix(stack_name)\n            st.plotly_chart(matrix_fig, use_container_width=True)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "monitoring_section",
+        "line_number": 575,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 575,
+        "order": 41,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 41
+      }
+    },
+    "function_security_section_598": {
+      "id": "function_security_section_598",
+      "type": "function_definition",
+      "content": "def security_section(self) -> None:\n    \"\"\"Security management section\"\"\"\n    st.header('\ud83d\udd12 Security Management')\n    st.subheader('Session Information')\n    if 'session_token' in st.session_state:\n        session_valid = self.security_manager.validate_session(st.session_state['session_token'])\n        st.write(f\"Session Valid: {('\u2705 Yes' if session_valid else '\u274c No')}\")\n        st.write(f\"User ID: {st.session_state.get('user_id', 'Unknown')}\")\n    st.subheader('Security Configuration')\n    st.json(SECURITY_CONFIG)",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "security_section",
+        "line_number": 598,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 598,
+        "order": 42,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 42
+      }
+    },
+    "function_user_management_section_613": {
+      "id": "function_user_management_section_613",
+      "type": "function_definition",
+      "content": "def user_management_section(self) -> None:\n    \"\"\"User management section\"\"\"\n    st.header('\ud83d\udc65 User Management')\n    st.info('User management functionality would be implemented here')",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "user_management_section",
+        "line_number": 613,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 613,
+        "order": 43,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 43
+      }
+    },
+    "function_run_618": {
+      "id": "function_run_618",
+      "type": "function_definition",
+      "content": "def run(self) -> None:\n    \"\"\"Run the Streamlit application\"\"\"\n    self.setup_page_config()\n    if 'authenticated' not in st.session_state:\n        self.login_page()\n    else:\n        session_token = st.session_state.get('session_token')\n        if session_token and self.security_manager.validate_session(session_token):\n            self.main_dashboard()\n        else:\n            st.session_state.clear()\n            st.error('Session expired. Please login again.')\n            self.login_page()",
+      "context": "streamlit",
+      "dependencies": [],
+      "metadata": {
+        "function_name": "run",
+        "line_number": 618,
+        "has_docstring": true,
+        "source_file": "src/streamlit/openflow_quickstart_app.py",
+        "position": 618,
+        "order": 44,
+        "is_definition": true,
+        "is_call": false
+      },
+      "projection_rules": {
+        "format": "black",
+        "lint": "flake8",
+        "order": 44
+      }
+    }
+  },
+  "total_nodes": 45
+}

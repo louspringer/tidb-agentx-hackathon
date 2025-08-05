@@ -306,13 +306,7 @@ class HealthcareCDCDomainModel:
             sql_file_path = Path(self.sql_template_path)
         else:
             sql_file_path = Path(__file__).parent / "sql" / "merge_cdc_operations.sql"
-try:
-            with open(sql_file_path, 'r') as f:
-                sql_template = f.read()
-            
-            return sql_template.format(
-                cdc_table=self.infrastructure.cdc_table,
-                dest_table=self.infrastructure.destination_table
+
             )
         except FileNotFoundError:
             raise FileNotFoundError(
@@ -337,14 +331,12 @@ try:
                     "Description": "VPC ID for the infrastructure",
                 },
                 "SubnetId": {
-"Type": "AWS::EC2::Subnet::Id", 
-                    "Description": "Subnet ID for the EC2 instance"
+
                 },
                 "EC2InstanceType": {
                     "Type": "String",
                     "Default": self.infrastructure.ec2_instance_type,
-"Description": "EC2 instance type for data processing"
-                }
+
             },
             "Resources": {
                 "InsuranceClaimsTable": {
@@ -460,7 +452,7 @@ try:
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
                         "InstanceType": {"Ref": "EC2InstanceType"},
-"ImageId": {"Fn::Sub": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"},
+
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
                         "IamInstanceProfile": {"Ref": "EC2InstanceProfile"},
@@ -476,7 +468,7 @@ try:
                                     "pip install boto3\n",
                                     "echo 'Setting up Kinesis stream...' >> /var/log/user-data.log\n",
                                     "aws kinesis put-record --stream-name ${StreamName} --partition-key test --data test >> /var/log/user-data.log 2>&1\n",
-"echo 'Setup complete.' >> /var/log/user-data.log\n"
+
                                 ],
                                 "StreamName": {"Ref": "InsuranceClaimsStream"},
                             }

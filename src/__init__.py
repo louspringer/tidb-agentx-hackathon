@@ -8,4 +8,4 @@ This package contains the main application components organized by domain:
 """
 
 __version__ = "1.0.0"
-__author__ = "OpenFlow Playground Team" 
+__author__ = "OpenFlow Playground Team"
