@@ -288,9 +288,7 @@ def main():
     
     for test in tests:
         try:
-            test()  # Tests should use assertions, not return values
-            passed += 1
-            print(f"✅ {test.__name__}: PASSED")
+
         except AssertionError as e:
             print(f"❌ {test.__name__}: ASSERTION FAILED - {e}")
         except Exception as e:

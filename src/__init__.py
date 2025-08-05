@@ -7,5 +7,5 @@ This package contains the main application components organized by domain:
 - multi_agent_testing: Multi-agent testing framework components
 """
 
-__version__: str = "1.0.0"
-__author__: str = "OpenFlow Playground Team"
+__version__ = "1.0.0"
+__author__ = "OpenFlow Playground Team"

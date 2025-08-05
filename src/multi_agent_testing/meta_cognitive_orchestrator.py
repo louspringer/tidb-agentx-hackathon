@@ -7,7 +7,6 @@ from typing import List, Dict, Any
 class MetaCognitiveOrchestrator:
     """Orchestrates meta-cognitive awareness through partner LLM questioning"""
 
-    def __init__(self, confidence_threshold: float = 0.7) -> None:
         self.confidence_threshold = confidence_threshold
         self.uncertainty_indicators = [
             "I think",
@@ -96,6 +95,7 @@ class MetaCognitiveOrchestrator:
 
     def make_decision(self, confidence: float, blind_spots: List[str]) -> str:
         """Make final decision based on confidence and blind spots"""
+
         if confidence < self.confidence_threshold or blind_spots:
             return "ASK_HUMAN"
         elif blind_spots:

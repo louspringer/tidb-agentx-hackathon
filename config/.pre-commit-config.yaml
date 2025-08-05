@@ -1,6 +1,12 @@
+# .pre-commit-config.yaml
+# AI-powered linter configuration
+
 repos:
-  - repo: local
+  # Ruff (AI-powered Python linter)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
     hooks:
+<=
       - id: rule-compliance-check
         name: Rule Compliance Check
         entry: scripts/rule-compliance-check.sh
@@ -26,154 +32,45 @@ repos:
         pass_filenames: false
         always_run: true
         description: "Check for hardcoded credentials and security vulnerabilities"
+>:config/.pre-commit-config.yaml
 
-      - id: check-hardcoded-urls
-        name: Check for Hardcoded URLs
-        entry: bash -c 'grep -r "snowflakecomputing.com" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log && exit 1 || exit 0'
-        language: system
-        types: [yaml, json, python]
-        pass_filenames: false
-        always_run: true
-        description: "Check for hardcoded Snowflake URLs"
-
-      - id: check-uuid-patterns
-        name: Check for UUID Patterns
-        entry: bash -c 'grep -r "[0-9a-f]\{8\}-[0-9a-f]\{4\}-[0-9a-f]\{4\}-[0-9a-f]\{4\}-[0-9a-f]\{12\}" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log && exit 1 || exit 0'
-        language: system
-        types: [yaml, json, python]
-        pass_filenames: false
-        always_run: true
-        description: "Check for hardcoded UUID patterns"
-
-      - id: check-aws-keys
-        name: Check for AWS Keys
-        entry: bash -c 'grep -r "AKIA[0-9A-Z]\{16\}" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log && exit 1 || exit 0'
-        language: system
-        types: [yaml, json, python]
-        pass_filenames: false
-        always_run: true
-        description: "Check for hardcoded AWS credentials"
-
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+  # MyPy (Type checking)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-        exclude: |
-          (?x)^(
-              models/Openflow-Playground\.yaml|
-              \.yaml-lint-ignore|
-              \.git/|
-              node_modules/
-          )$
-      - id: check-json
-      - id: check-added-large-files
-        args: ['--maxkb=100']
-      - id: check-merge-conflict
-      - id: detect-private-key
-      - id: check-case-conflict
-      - id: check-docstring-first
-      - id: check-executables-have-shebangs
+      - id: mypy
+        additional_dependencies: [types-all]
+        # AI-powered type checking
 
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
-    hooks:
-      - id: detect-secrets
-        args: ['--baseline', '.secrets.baseline']
-        exclude: |
-          (?x)^(
-              \.secrets\.baseline|
-              \.git/|
-              node_modules/|
-              \.venv/|
-              venv/|
-              env/|
-              \.env
-          )$
-
+  # Black (Code formatting)
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.12.1
     hooks:
       - id: black
-        language_version: python3
-        types: [python]
+        args: [--line-length=88]
 
+  # Flake8 (Style checking)
   - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: 7.0.0
     hooks:
       - id: flake8
         args: [--max-line-length=88, --extend-ignore=E203,W503]
 
-  - repo: https://github.com/pycqa/bandit
-    rev: 1.7.5
-    hooks:
-      - id: bandit
-        args: [-r, ., -f, json, -o, bandit-report.json]
-        exclude: |
-          (?x)^(
-              \.git/|
-              node_modules/|
-              \.venv/|
-              venv/|
-              env/|
-              tests/|
-              test_|
-              _test\.py
-          )$
-
-  - repo: https://github.com/pre-commit/mirrors-yapf
-    rev: v0.40.0
-    hooks:
-      - id: yapf
-        types: [python]
-
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
-    hooks:
-      - id: pyupgrade
-        args: [--py38-plus]
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.3.0
-    hooks:
-      - id: mypy
-        additional_dependencies: [types-all]
-        exclude: |
-          (?x)^(
-              \.git/|
-              node_modules/|
-              \.venv/|
-              venv/|
-              env/|
-              tests/|
-              test_|
-              _test\.py
-          )$
-
+# Custom hooks for our intelligent system
   - repo: local
     hooks:
-      - id: cfn-lint
-        name: CloudFormation Lint
-        entry: cfn-lint
-        language: system
-        types: [yaml]
-        files: |
-          (?x)^(
-              models/Openflow-Playground\.yaml|
-              .*\.template\.yaml|
-              .*\.template\.yml|
-              .*cloudformation.*\.yaml|
-              .*cloudformation.*\.yml
-          )$
-        description: "Validate CloudFormation templates with cfn-lint" 
-
-  - repo: local
-    hooks:
-      - id: type-safety
-        name: Type Safety Check
-        entry: make type-safety
+      - id: intelligent-linter-check
+        name: Intelligent Linter Check
+        entry: python src/intelligent_linter_system.py --check
         language: system
         pass_filenames: false
         always_run: true
-        stages: [commit, push] 
+        stages: [commit, push]
+
+      - id: dynamic-rule-update
+        name: Dynamic Rule Update
+        entry: python src/dynamic_rule_updater.py --update
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [commit]

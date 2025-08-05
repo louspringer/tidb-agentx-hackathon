@@ -82,23 +82,12 @@
       ]
     },
     "streamlit": {
-      "patterns": [
-        "src/streamlit/*.py",
-        "app.py",
-        "pages/*.py"
-      ],
-      "content_indicators": [
-        "import streamlit",
-        "st.",
-        "streamlit run"
-      ],
+"patterns": ["src/streamlit/*.py", "app.py", "pages/*.py"],
+      "content_indicators": ["import streamlit", "st.", "streamlit run"],
       "linter": "flake8",
       "formatter": "black",
       "validator": "streamlit-validate",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
+      "exclusions": ["__pycache__/*", "*.pyc"],
       "requirements": [
         "Use flake8 for Streamlit Python linting",
         "Format Streamlit code with black",
@@ -106,78 +95,28 @@
       ]
     },
     "security_first": {
-      "patterns": [
-        "src/security_first/*.py",
-        "src/security_first/*.sh",
-        "src/security_first/*.json",
-        "**/*",
-        "**/*.py",
-        "**/*.yaml",
-        "**/*.yml"
-      ],
-      "content_indicators": [
-        "credential",
-        "password",
-        "secret",
-        "token",
-        "key",
-        "jwt",
-        "encrypt",
-        "hash",
-        "https",
-        "ssl",
-        "csrf",
-        "rate_limit"
-      ],
+"patterns": ["src/security_first/*.py", "src/security_first/*.sh", "src/security_first/*.json", "**/*"],
+      "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash", "https", "ssl", "csrf", "rate_limit"],
       "linter": "bandit",
       "validator": "detect-secrets",
       "formatter": "safety",
-      "exclusions": [
-        "tests",
-        "src/multi_agent_testing",
-        "src/security_first"
-      ],
+      "exclusions": [],
       "requirements": [
         "Scan for hardcoded credentials and secrets",
         "Enforce security policy via detect-secrets and bandit",
         "Check for known vulnerabilities with safety",
         "Enforce HTTPS for all connections",
         "Implement rate limiting to prevent abuse",
-        "Validate CSRF tokens for session security",
-        "Implement CSRF protection for all forms"
-      ],
-      "skips": [
-        "B101",
-        "B105",
-        "B112"
-      ],
-      "current_state": {
-        "bandit_warnings": 0,
-        "bandit_errors": 0,
-        "last_security_scan": "2025-08-04T12:32:52.708803"
-      }
+        "Validate CSRF tokens for session security"
+      ]
     },
     "multi_agent_testing": {
-      "patterns": [
-        "src/multi_agent_testing/*.py",
-        "*diversity*.py",
-        "*agent*.py",
-        "*orchestrator*.py"
-      ],
-      "content_indicators": [
-        "DiversityAgent",
-        "BlindSpotFinding",
-        "multi_threaded",
-        "orchestrator"
-      ],
+      "patterns": ["src/multi_agent_testing/*.py", "*diversity*.py", "*agent*.py", "*orchestrator*.py"],
+      "content_indicators": ["DiversityAgent", "BlindSpotFinding", "multi_threaded", "orchestrator"],
       "linter": "flake8",
       "formatter": "black",
       "validator": "pytest",
-      "type_checker": "mypy",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
+      "exclusions": ["__pycache__/*", "*.pyc"],
       "requirements": [
         "Use flake8 for multi-agent Python linting",
         "Format multi-agent code with black",
@@ -185,63 +124,28 @@
       ]
     },
     "bash": {
-      "patterns": [
-        "scripts/*.sh",
-        "*.sh",
-        "*.bash"
-      ],
-      "content_indicators": [
-        "#!/bin/bash",
-        "#!/bin/sh",
-        "export ",
-        "source "
-      ],
+      "patterns": ["scripts/*.sh", "*.sh", "*.bash"],
+      "content_indicators": ["#!/bin/bash", "#!/bin/sh", "export ", "source "],
       "linter": "shellcheck",
       "exclusions": [],
       "requirements": [
-        "Lint shell scripts with shellcheck",
-        "shellcheck is installed and working"
-      ],
-      "status": "available"
+        "Lint shell scripts with shellcheck"
+      ]
     },
     "documentation": {
-      "patterns": [
-        "docs/*.md",
-        "*.md"
-      ],
-      "content_indicators": [
-        "# ",
-        "## ",
-        "### ",
-        "**",
-        "*"
-      ],
+      "patterns": ["docs/*.md", "*.md"],
+      "content_indicators": ["# ", "## ", "### ", "**", "*"],
       "linter": "markdownlint",
       "formatter": "prettier",
-      "exclusions": [
-        "node_modules/*"
-      ],
+      "exclusions": ["node_modules/*"],
       "requirements": [
         "Use markdownlint for documentation linting",
-        "Format documentation with prettier",
-        "Graceful handling when markdownlint not available"
-      ],
-      "status": "graceful_fallback"
+        "Format documentation with prettier"
+      ]
     },
     "configuration": {
-      "patterns": [
-        "config/*.yaml",
-        "config/*.yml",
-        "config/*.json",
-        "config/*.env",
-        "*.config.*"
-      ],
-      "content_indicators": [
-        "config:",
-        "settings:",
-        "environment:",
-        "features:"
-      ],
+      "patterns": ["config/*.yaml", "config/*.yml", "config/*.json", "config/*.env", "*.config.*"],
+      "content_indicators": ["config:", "settings:", "environment:", "features:"],
       "linter": "yamllint",
       "validator": "jsonschema",
       "exclusions": [],
@@ -251,23 +155,12 @@
       ]
     },
     "mdc_generator": {
-      "patterns": [
-        "src/mdc_generator/*.py",
-        "scripts/regenerate_mdc_files.py"
-      ],
-      "content_indicators": [
-        "MDCFile",
-        "MDCFrontmatter",
-        "mdc_generator",
-        "regenerate_mdc"
-      ],
+"patterns": ["src/mdc_generator/*.py", "scripts/regenerate_mdc_files.py"],
+      "content_indicators": ["MDCFile", "MDCFrontmatter", "mdc_generator", "regenerate_mdc"],
       "linter": "flake8",
       "formatter": "black",
       "validator": "pytest",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
+      "exclusions": ["__pycache__/*", "*.pyc"],
       "requirements": [
         "Use flake8 for MDC generator Python linting",
         "Format MDC generator code with black",
@@ -275,34 +168,12 @@
       ]
     },
     "healthcare_cdc": {
-      "patterns": [
-        "healthcare-cdc/*.py",
-        "healthcare-cdc/*.md",
-        "healthcare-cdc/*.sql",
-        "healthcare-cdc/*.yaml",
-        "healthcare-cdc/*.json",
-        "*healthcare*",
-        "*cdc*",
-        "*hipaa*",
-        "*phi*"
-      ],
-      "content_indicators": [
-        "healthcare",
-        "cdc",
-        "phi",
-        "hipaa",
-        "patient",
-        "medical",
-        "audit",
-        "compliance"
-      ],
+"patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql", "healthcare-cdc/*.yaml", "healthcare-cdc/*.json"],
+      "content_indicators": ["healthcare", "cdc", "phi", "hipaa", "patient", "medical", "audit", "compliance"],
       "linter": "flake8",
       "formatter": "black",
       "validator": "pytest",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
+      "exclusions": ["__pycache__/*", "*.pyc"],
       "requirements": [
         "Enforce HIPAA compliance validation",
         "Implement PHI detection and validation",
@@ -313,17 +184,8 @@
       ]
     },
     "rule_compliance": {
-      "patterns": [
-        "scripts/rule-compliance-check.sh",
-        "scripts/mdc-linter.py",
-        ".cursor/plugins/rule-compliance-checker.py"
-      ],
-      "content_indicators": [
-        "rule-compliance",
-        "mdc-linter",
-        "deterministic-editing",
-        "cursor-plugin"
-      ],
+"patterns": ["scripts/rule-compliance-check.sh", "scripts/mdc-linter.py", ".cursor/plugins/rule-compliance-checker.py"],
+      "content_indicators": ["rule-compliance", "mdc-linter", "deterministic-editing", "cursor-plugin"],
       "linter": "shellcheck",
       "formatter": "black",
       "validator": "pytest",
@@ -335,18 +197,8 @@
       ]
     },
     "package_management": {
-      "patterns": [
-        "pyproject.toml",
-        "requirements*.txt",
-        "uv.lock",
-        "*.py"
-      ],
-      "content_indicators": [
-        "uv",
-        "dependencies",
-        "dev-dependencies",
-        "pyproject"
-      ],
+"patterns": ["pyproject.toml", "requirements*.txt", "uv.lock", "*.py"],
+      "content_indicators": ["uv", "dependencies", "dev-dependencies", "pyproject"],
       "linter": "uv check",
       "validator": "uv sync",
       "formatter": "uv format",
@@ -356,139 +208,7 @@
         "Enforce UV lock file usage",
         "Validate dependencies with UV check",
         "Sync dependencies with UV sync"
-      ]
-    },
-    "type_safety": {
-      "patterns": [
-        "*.py"
-      ],
-      "content_indicators": [
-        "typing",
-        "mypy",
-        "type annotations"
-      ],
-      "linter": "mypy",
-      "validator": "pytest test_type_safety.py",
-      "formatter": null,
-      "requirements": [
-        "All Python functions must have type annotations",
-        "All function parameters must have type annotations",
-        "All return values must have type annotations",
-        "External library stubs must be installed",
-        "Mypy configuration must be properly set up",
-        "Achieve minimum 50% type annotation coverage",
-        "Enforce type annotations in CI/CD pipeline"
-      ]
-    },
-    "ghostbusters": {
-      "patterns": [
-        "src/ghostbusters/**/*.py",
-        "tests/test_ghostbusters*.py",
-        "**/*.py"
-      ],
-      "content_indicators": [
-        "delusion",
-        "recovery",
-        "agent",
-        "validator",
-        "orchestrator",
-        "ghostbusters",
-        "syntax_error",
-        "indentation_error",
-        "import_error",
-        "type_error",
-        "SecurityExpert",
-        "CodeQualityExpert",
-        "TestExpert",
-        "BuildExpert",
-        "ArchitectureExpert",
-        "ModelExpert"
-      ],
-      "linter": "ghostbusters-orchestrator",
-      "validator": "ghostbusters-validator",
-      "formatter": "ghostbusters-recovery",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
-      "requirements": [
-        "Use Ghostbusters for delusion detection and recovery",
-        "Run Ghostbusters before linting to fix syntax issues",
-        "Use Ghostbusters agents for domain-specific analysis",
-        "Apply Ghostbusters recovery engines for automated fixes",
-        "Integrate Ghostbusters with LangGraph/LangChain",
-        "Use Ghostbusters for multi-agent orchestration",
-        "Apply Ghostbusters for confidence scoring and validation"
-      ]
-    },
-    "meta_failure_prevention": {
-      "patterns": [
-        "**/*.mdc"
-      ],
-      "content_indicators": [
-        "meta-failure",
-        "broken tool",
-        "fixer"
-      ],
-      "linter": "mdc-linter",
-      "validator": "meta-failure-validator",
-      "formatter": "mdc-formatter"
-    },
-    "testing": {
-      "patterns": [
-        "tests/*.py",
-        "test_*.py",
-        "*_test.py"
-      ],
-      "content_indicators": [
-        "pytest",
-        "test_",
-        "assert",
-        "unittest"
-      ],
-      "linter": "make lint",
-      "formatter": "make format",
-      "validator": "make test",
-      "type_checker": "make type-check",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
-      "requirements": [
-        "ALWAYS use Make targets instead of direct commands",
-        "Use make test for test validation",
-        "Use make lint for test file linting",
-        "Use make format for test code formatting",
-        "Use make type-check for type checking",
-        "Maintain minimum 80% test coverage",
-        "Fix all indentation errors in test files",
-        "Resolve all import errors in test files",
-        "Never run pytest, flake8, black, or mypy directly"
-      ]
-    },
-    "code_quality_model": {
-      "patterns": [
-        "src/code_quality_system/*.py",
-        "*quality*.py"
-      ],
-      "content_indicators": [
-        "CodeQualityModel",
-        "quality_model",
-        "code_quality"
-      ],
-      "linter": "flake8",
-      "formatter": "black",
-      "validator": "pytest",
-      "exclusions": [
-        "__pycache__/*",
-        "*.pyc"
-      ],
-      "requirements": [
-        "Implement CodeQualityModel class",
-        "Use flake8 for code quality model linting",
-        "Format code quality model with black",
-        "Validate code quality model with pytest",
-        "Ensure code quality model follows best practices"
+
       ]
     }
   },
@@ -570,8 +290,7 @@
       "scripts/.cursor/rules/bash-scripting.mdc": "Bash scripting guidelines",
       "docs/.cursor/rules/documentation.mdc": "Documentation guidelines",
       "config/.cursor/rules/configuration.mdc": "Configuration management guidelines",
-      "data/.cursor/rules/data-management.mdc": "Data management guidelines",
-      ".cursor/rules/ghostbusters.mdc": "Ghostbusters multi-agent delusion detection and recovery guidelines"
+"data/.cursor/rules/data-management.mdc": "Data management guidelines"
     }
   },
   "requirements_traceability": [
@@ -808,114 +527,7 @@
       "domain": "package_management",
       "implementation": "pytest, flake8, black, mypy managed via UV",
       "test": "test_requirement_39_dev_dependencies_uv"
-    },
-    {
-      "requirement": "Fix indentation errors in test files",
-      "domain": "testing",
-      "implementation": "Use black formatter and flake8 linter to fix indentation",
-      "test": "test_indentation_fixes"
-    },
-    {
-      "requirement": "Implement CodeQualityModel",
-      "domain": "code_quality_model",
-      "implementation": "Create CodeQualityModel class with proper structure",
-      "test": "test_code_quality_model_implementation"
-    },
-    {
-      "requirement": "Achieve 50% type annotation coverage",
-      "domain": "type_safety",
-      "implementation": "Add type annotations to all functions and enforce with mypy",
-      "test": "test_type_annotation_coverage"
-    },
-    {
-      "requirement": "Fix UV/hatchling compatibility",
-      "domain": "package_management",
-      "implementation": "Update pyproject.toml and UV configuration",
-      "test": "test_uv_compatibility"
-    },
-    {
-      "requirement": "Add global Python pattern to security",
-      "domain": "security_first",
-      "implementation": "Add **/*.py pattern to security domain patterns",
-      "test": "test_security_pattern_coverage"
-    },
-    {
-      "requirement": "Use Ghostbusters for delusion detection and recovery",
-      "domain": "ghostbusters",
-      "implementation": "GhostbustersOrchestrator with multi-agent workflow for automated issue detection and recovery",
-      "test": "test_ghostbusters_orchestrator"
-    },
-    {
-      "requirement": "Run Ghostbusters before linting to fix syntax issues",
-      "domain": "ghostbusters",
-      "implementation": "SyntaxRecoveryEngine and IndentationFixer for automated syntax and indentation fixes",
-      "test": "test_ghostbusters_syntax_recovery"
-    },
-    {
-      "requirement": "Use Ghostbusters agents for domain-specific analysis",
-      "domain": "ghostbusters",
-      "implementation": "SecurityExpert, CodeQualityExpert, TestExpert, BuildExpert, ArchitectureExpert, ModelExpert for comprehensive analysis",
-      "test": "test_ghostbusters_agents"
-    },
-    {
-      "requirement": "Apply Ghostbusters recovery engines for automated fixes",
-      "domain": "ghostbusters",
-      "implementation": "ImportResolver and TypeAnnotationFixer for automated import and type annotation fixes",
-      "test": "test_ghostbusters_recovery_engines"
-    },
-    {
-      "requirement": "Integrate Ghostbusters with LangGraph/LangChain",
-      "domain": "ghostbusters",
-      "implementation": "LangGraph StateGraph workflow with async nodes for multi-agent orchestration",
-      "test": "test_ghostbusters_langgraph_integration"
-    },
-    {
-      "requirement": "Use Ghostbusters for multi-agent orchestration",
-      "domain": "ghostbusters",
-      "implementation": "Multi-agent workflow with detection, validation, planning, execution, and reporting phases",
-      "test": "test_ghostbusters_multi_agent_orchestration"
-    },
-    {
-      "requirement": "Apply Ghostbusters for confidence scoring and validation",
-      "domain": "ghostbusters",
-      "implementation": "Comprehensive validation system with confidence scoring and actionable recommendations",
-      "test": "test_ghostbusters_confidence_scoring"
-    },
-    {
-      "requirement": "Enforce Python quality standards for all created files",
-      "domain": "python_quality",
-      "implementation": "Python Quality Enforcement Rule with mandatory linter compliance and ArtifactForge compatibility",
-      "test": "test_python_quality_enforcement"
-    },
-    {
-      "requirement": "Ensure all Python files pass AST parsing",
-      "domain": "python_quality",
-      "implementation": "AST parsing validation for all Python files before considering them complete",
-      "test": "test_ast_parsing_compliance"
-    },
-    {
-      "requirement": "Ensure all Python files pass ArtifactForge detection and parsing",
-      "domain": "python_quality",
-      "implementation": "ArtifactForge compatibility validation for all Python files",
-      "test": "test_artifact_forge_compatibility"
-    },
-    {
-      "requirement": "Zero linter errors in any Python file",
-      "domain": "python_quality",
-      "implementation": "Mandatory flake8, black, and mypy compliance for all Python files",
-      "test": "test_zero_linter_errors"
-    },
-    {
-      "requirement": "Graceful handling of missing tools",
-      "domain": "bash",
-      "implementation": "Makefile checks for tool availability before running",
-      "test": "test_graceful_tool_handling"
-    },
-    {
-      "requirement": "Use bandit configuration file",
-      "domain": "security_first",
-      "implementation": "Makefile uses -c .bandit flag for bandit",
-      "test": "test_bandit_config_usage"
+
     }
   ],
   "implementation_plan": {
@@ -1116,8 +728,7 @@
       "scripts/.cursor/rules/bash-scripting.mdc",
       "docs/.cursor/rules/documentation.mdc",
       "config/.cursor/rules/configuration.mdc",
-      "data/.cursor/rules/data-management.mdc",
-      ".cursor/rules/python-quality-enforcement.mdc"
+"data/.cursor/rules/data-management.mdc"
     ]
   },
   "violations": [

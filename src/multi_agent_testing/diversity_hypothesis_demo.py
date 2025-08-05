@@ -1,4 +1,3 @@
-from typing import List, Dict, Tuple, Optional, Union, Any
 
 #!/usr/bin/env python3
 """
@@ -9,9 +8,6 @@ in the same GitHub PR, proving that "diversity is the only free lunch."
 """
 
 import json
-from typing import Dict, Any
-from dataclasses import dataclass
-
 
 @dataclass
 class AIReviewer:
@@ -21,41 +17,24 @@ class AIReviewer:
     perspective: str
 
 
-class DiversityHypothesisDemo:
-    def __init__(self: Any) -> None:
         # Simulated AI reviewers with different perspectives
         self.reviewers = [
             AIReviewer(
                 name="Security Expert",
                 role="Security-focused reviewer",
                 focus="Credential exposure, authentication, authorization",
-                perspective="What security vulnerabilities exist?",
-            ),
-            AIReviewer(
-                name="DevOps Engineer",
-                role="Infrastructure and deployment expert",
-                focus="CI/CD, deployment, monitoring, scalability",
-                perspective="What infrastructure issues could arise?",
-            ),
-            AIReviewer(
-                name="Code Quality Expert",
-                role="Code quality and maintainability specialist",
-                focus="Code structure, testing, documentation, maintainability",
-                perspective="What code quality issues exist?",
+
             ),
             AIReviewer(
                 name="User Experience Advocate",
                 role="Human-centered design expert",
                 focus="User experience, accessibility, usability",
-                perspective="What UX issues could impact users?",
+
             ),
             AIReviewer(
                 name="Performance Engineer",
                 role="Performance and scalability expert",
                 focus="Performance, efficiency, resource usage",
-                perspective="What performance issues could occur?",
-            ),
-        ]
 
         # Real GitHub PR context from our analysis
         self.pr_context = {
@@ -66,9 +45,7 @@ class DiversityHypothesisDemo:
             "description": "Healthcare CDC Implementation with real-time synchronization between DynamoDB and Snowflake",
             "github_copilot_findings": [
                 "Missing package installation instructions",
-                "Potential credential exposure via subprocess",
-                "Unnecessary input sanitization",
-            ],
+
         }
 
     def simulate_ai_review(self, reviewer: AIReviewer) -> Dict[str, Any]:
@@ -80,36 +57,34 @@ class DiversityHypothesisDemo:
                 "Potential credential exposure via subprocess calls",
                 "Missing input validation for API keys",
                 "Hardcoded credentials in configuration files",
-                "Insufficient error handling for authentication failures",
+
             ]
         elif reviewer.name == "DevOps Engineer":
             findings = [
                 "Missing package installation instructions",
                 "No deployment automation scripts",
                 "Lack of monitoring and alerting setup",
-                "Missing infrastructure as code templates",
+
             ]
         elif reviewer.name == "Code Quality Expert":
             findings = [
                 "Unnecessary input sanitization",
                 "Missing unit tests for critical functions",
                 "Inconsistent code formatting",
-                "Poor error handling patterns",
+
             ]
         elif reviewer.name == "User Experience Advocate":
             findings = [
                 "Complex configuration requirements",
                 "Poor error messages for users",
                 "Missing user documentation",
-                "Inaccessible UI components",
+
             ]
         elif reviewer.name == "Performance Engineer":
             findings = [
                 "Inefficient database queries",
                 "Memory leaks in data processing",
                 "No caching strategy implemented",
-                "Scalability bottlenecks in CDC pipeline",
-            ]
 
         return {
             "reviewer": reviewer.name,
@@ -122,52 +97,12 @@ class DiversityHypothesisDemo:
                 f"Address {len(findings)} critical issues identified",
                 "Implement proper validation and error handling",
                 "Add comprehensive testing coverage",
-                "Improve documentation and user experience",
-            ],
-        }
-
-    def analyze_diversity_impact(self: Any) -> Dict[str, Any]:
-        """Analyze how diversity improves blind spot detection"""
-
-        all_reviews: List[Any] = []
-        all_findings: Any = set()
-
-        # Simulate reviews from all AI perspectives
-        for reviewer in self.reviewers:
-            review: Any = self.simulate_ai_review(reviewer)
-            all_reviews.append(review)
-            all_findings.update(review["findings"])
-
-        # Calculate diversity metrics
-        total_findings: Any = len(all_findings)
-        unique_findings_per_reviewer: Any = len(all_findings) / len(self.reviewers)
-        overlap_rate: Any = 1 - (unique_findings_per_reviewer / total_findings)
 
         return {
             "total_reviewers": len(self.reviewers),
             "total_unique_findings": total_findings,
             "findings_per_reviewer": unique_findings_per_reviewer,
             "diversity_score": 1 - overlap_rate,
-            "blind_spot_coverage": total_findings
-            / 20,  # Assume 20 total possible issues
-            "reviews": all_reviews,
-            "all_findings": list(all_findings),
-        }
-
-    def compare_with_github_copilot(self: Any) -> Dict[str, Any]:
-        """Compare our diverse AI reviewers with GitHub Copilot findings"""
-
-        github_copilot_findings: Any = set(self.pr_context["github_copilot_findings"])
-        our_findings: Any = set()
-
-        for reviewer in self.reviewers:
-            review: Any = self.simulate_ai_review(reviewer)
-            our_findings.update(review["findings"])
-
-        # Calculate overlap and unique findings
-        overlap: Any = github_copilot_findings.intersection(our_findings)
-        copilot_unique: Any = github_copilot_findings - our_findings
-        our_unique: Any = our_findings - github_copilot_findings
 
         return {
             "github_copilot_findings": list(github_copilot_findings),
@@ -176,27 +111,11 @@ class DiversityHypothesisDemo:
             "copilot_unique_findings": list(copilot_unique),
             "our_unique_findings": list(our_unique),
             "total_coverage": len(github_copilot_findings.union(our_findings)),
-            "diversity_advantage": (
-                len(our_unique) / len(our_findings) if our_findings else 0
-            ),
-        }
-
-    def run_demo(self: Any) -> None:
-        """Run the complete diversity hypothesis demonstration"""
-
-        print("🎯 DIVERSITY HYPOTHESIS DEMONSTRATION")
-        print("=" * 60)
-        print()
 
         # Show PR context
         print("📋 GITHUB PR CONTEXT:")
         print(f"   Title: {self.pr_context['title']}")
         print(f"   Commits: {self.pr_context['commits']}")
-        print(
-            f"   Changes: +{self.pr_context['additions']} -{self.pr_context['deletions']}"
-        )
-        print(f"   Description: {self.pr_context['description']}")
-        print()
 
         # Show GitHub Copilot findings
         print("🤖 GITHUB COPILOT FINDINGS:")
@@ -204,38 +123,12 @@ class DiversityHypothesisDemo:
             print(f"   {i}. {finding}")
         print()
 
-        # Run diversity analysis
-        diversity_analysis: Any = self.analyze_diversity_impact()
-
         print("🧠 DIVERSE AI REVIEWERS:")
         for review in diversity_analysis["reviews"]:
             print(f"\n   👤 {review['reviewer']} ({review['role']})")
             print(f"      Focus: {review['focus']}")
             print(f"      Findings: {len(review['findings'])} issues")
-            for finding in review["findings"][:3]:  # Show first 3
-                print(f"        • {finding}")
-            if len(review["findings"]) > 3:
-                print(f"        • ... and {len(review['findings']) - 3} more")
 
-        print()
-        print("📊 DIVERSITY ANALYSIS:")
-        print(f"   Total Reviewers: {diversity_analysis['total_reviewers']}")
-        print(
-            f"   Total Unique Findings: {diversity_analysis['total_unique_findings']}"
-        )
-        print(f"   Diversity Score: {diversity_analysis['diversity_score']:.2f}")
-        print(
-            f"   Blind Spot Coverage: {diversity_analysis['blind_spot_coverage']:.1%}"
-        )
-        print()
-
-        # Compare with GitHub Copilot
-        comparison: Any = self.compare_with_github_copilot()
-
-        print("🔍 COMPARISON WITH GITHUB COPILOT:")
-        print(
-            f"   GitHub Copilot Findings: {len(comparison['github_copilot_findings'])}"
-        )
         print(f"   Our Diverse Findings: {len(comparison['our_diverse_findings'])}")
         print(f"   Overlap: {len(comparison['overlap_findings'])}")
         print(f"   Our Unique Findings: {len(comparison['our_unique_findings'])}")
@@ -255,19 +148,3 @@ class DiversityHypothesisDemo:
         print("   provide comprehensive blind spot detection without additional cost!")
         print()
 
-        return {"diversity_analysis": diversity_analysis, "comparison": comparison}
-
-
-def main() -> None:
-    demo: Any = DiversityHypothesisDemo()
-    results: Any = demo.run_demo()
-
-    # Save results for further analysis
-    with open("diversity_hypothesis_results.json", "w") as f:
-        json.dump(results, f, indent=2)
-
-    print("📄 Results saved to: diversity_hypothesis_results.json")
-
-
-if __name__ == "__main__":
-    main()

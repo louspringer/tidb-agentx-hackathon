@@ -20,20 +20,18 @@ def estimate_tokens(text: str) -> int:
     """Rough estimate of tokens (4 characters per token)"""
     return len(text) // 4
 
-
 def analyze_multi_dimensional_costs():
     """Analyze costs from multi-dimensional smoke test"""
-
+    
     print("🔍 Analyzing multi-dimensional smoke test costs...")
-
+    
     # Load results
     with open("multi_dimensional_results.json", "r") as f:
         data = json.load(f)
-
+    
     total_input_tokens = 0
     total_output_tokens = 0
     successful_calls = 0
-
     # Analyze each test
     for result in data["results"]:
         if "real_llm_result" in result and "raw_response" in result["real_llm_result"]:
@@ -57,11 +55,9 @@ Return your analysis as a JSON array of questions, each with:
 
 Focus on identifying what might be missing or overlooked.
 """
-
-            input_text = system_message + "\n\n" + user_message
+input_text = system_message + "\n\n" + user_message
             input_tokens = estimate_tokens(input_text)
             total_input_tokens += input_tokens
-
             # Estimate output tokens (response)
             output_text = result["real_llm_result"]["raw_response"]
             output_tokens = estimate_tokens(output_text)
@@ -88,28 +84,24 @@ Focus on identifying what might be missing or overlooked.
         "total_tokens": total_input_tokens + total_output_tokens,
         "input_cost": input_cost,
         "output_cost": output_cost,
-        "total_cost": total_cost,
+"total_cost": total_cost
     }
-
 
 def analyze_langgraph_costs():
     """Analyze costs from LangGraph diversity orchestrator"""
-
+    
     print("\n🔍 Analyzing LangGraph diversity orchestrator costs...")
-
     # Load analysis data
     analysis_file = "diversity_analysis_output/analysis_data.json"
     if not os.path.exists(analysis_file):
         print("❌ Analysis file not found")
         return {}
-
-    with open(analysis_file, "r") as f:
+with open(analysis_file, "r") as f:
         data = json.load(f)
-
+    
     total_input_tokens = 0
     total_output_tokens = 0
     successful_calls = 0
-
     # Each agent made one call
     for analysis in data["analyses"]:
         if analysis["findings"]:  # Successful call
@@ -134,11 +126,9 @@ Return your analysis as a JSON array of findings, each with:
 
 Focus on your area of expertise and provide unique insights that other perspectives might miss.
 """
-
-            input_text = system_message + "\n\n" + user_message
+input_text = system_message + "\n\n" + user_message
             input_tokens = estimate_tokens(input_text)
             total_input_tokens += input_tokens
-
             # Estimate output tokens (response with 5 findings)
             # Each finding has question, confidence, blind_spots, recommendation, category
             output_text = json.dumps(analysis["findings"], indent=2)
@@ -166,27 +156,23 @@ Focus on your area of expertise and provide unique insights that other perspecti
         "total_tokens": total_input_tokens + total_output_tokens,
         "input_cost": input_cost,
         "output_cost": output_cost,
-        "total_cost": total_cost,
+"total_cost": total_cost
     }
-
 
 def analyze_synthesis_costs():
     """Analyze costs from synthesis orchestrator"""
-
+    
     print("\n🔍 Analyzing synthesis orchestrator costs...")
-
     # Load synthesis data
     synthesis_file = "synthesis_output/synthesis_data.json"
     if not os.path.exists(synthesis_file):
         print("❌ Synthesis file not found")
         return {}
-
-    with open(synthesis_file, "r") as f:
+with open(synthesis_file, "r") as f:
         data = json.load(f)
-
+    
     # One synthesis call that processed all findings
     system_message = "You are an expert technical architect specializing in synthesizing diverse technical findings into actionable, prioritized solutions."
-
     # Estimate the synthesis prompt (includes all findings)
     findings_text = ""
     for analysis in data.get("analyses", []):
@@ -197,7 +183,7 @@ def analyze_synthesis_costs():
 You are a senior technical architect tasked with synthesizing diverse findings into prioritized, actionable fixes.
 
 CONTEXT:
-    We have analyzed a GitHub PR for a Healthcare CDC implementation and found {len(findings_text.split('•')) - 1} diverse issues from multiple AI perspectives.
+We have analyzed a GitHub PR for a Healthcare CDC implementation and found {len(findings_text.split('•')) - 1} diverse issues from multiple AI perspectives.
 
 STAKEHOLDERS (in priority order):
 1. Security Team (Security and compliance) - Priority: 1, Decision Power: High
@@ -210,7 +196,7 @@ FINDINGS TO SYNTHESIZE:
 {findings_text}
 
 TASK:
-    Synthesize these findings into 5-8 prioritized fixes that:
+Synthesize these findings into 5-8 prioritized fixes that:
 1. Address multiple stakeholder concerns where possible
 2. Prioritize by stakeholder ranking (Security Team = highest priority)
 3. Consider implementation effort vs. impact
@@ -230,14 +216,12 @@ For each fix, provide:
 
 Return as a JSON array of fixes, prioritizing fixes that address multiple high-priority stakeholder concerns.
 """
-
-    input_text = system_message + "\n\n" + user_message
+input_text = system_message + "\n\n" + user_message
     input_tokens = estimate_tokens(input_text)
-
+    
     # Estimate output tokens (synthesis response with 6 fixes)
     output_text = json.dumps(data.get("fixes", []), indent=2)
     output_tokens = estimate_tokens(output_text)
-
     # Calculate costs
     input_cost = (input_tokens / 1_000_000) * INPUT_COST_PER_1M_TOKENS
     output_cost = (output_tokens / 1_000_000) * OUTPUT_COST_PER_1M_TOKENS
@@ -259,43 +243,23 @@ Return as a JSON array of fixes, prioritizing fixes that address multiple high-p
         "total_tokens": input_tokens + output_tokens,
         "input_cost": input_cost,
         "output_cost": output_cost,
-        "total_cost": total_cost,
+"total_cost": total_cost
     }
-
 
 def main():
     """Calculate total costs for diversity hypothesis testing"""
-
+    
     print("💰 DIVERSITY HYPOTHESIS COST ANALYSIS")
     print("=" * 50)
-
     # Analyze each component
     multi_dimensional = analyze_multi_dimensional_costs()
     langgraph = analyze_langgraph_costs()
     synthesis = analyze_synthesis_costs()
-
-    # Calculate totals
-    total_calls = (
-        multi_dimensional.get("calls", 0)
-        + langgraph.get("calls", 0)
-        + synthesis.get("calls", 0)
-    )
-    total_input_tokens = (
-        multi_dimensional.get("input_tokens", 0)
-        + langgraph.get("input_tokens", 0)
-        + synthesis.get("input_tokens", 0)
-    )
-    total_output_tokens = (
-        multi_dimensional.get("output_tokens", 0)
-        + langgraph.get("output_tokens", 0)
-        + synthesis.get("output_tokens", 0)
-    )
-    total_cost = (
-        multi_dimensional.get("total_cost", 0)
-        + langgraph.get("total_cost", 0)
-        + synthesis.get("total_cost", 0)
-    )
-
+# Calculate totals
+    total_calls = multi_dimensional.get("calls", 0) + langgraph.get("calls", 0) + synthesis.get("calls", 0)
+    total_input_tokens = multi_dimensional.get("input_tokens", 0) + langgraph.get("input_tokens", 0) + synthesis.get("input_tokens", 0)
+    total_output_tokens = multi_dimensional.get("output_tokens", 0) + langgraph.get("output_tokens", 0) + synthesis.get("output_tokens", 0)
+    total_cost = multi_dimensional.get("total_cost", 0) + langgraph.get("total_cost", 0) + synthesis.get("total_cost", 0)
     print("\n" + "=" * 50)
     print("💰 TOTAL COST SUMMARY")
     print("=" * 50)
@@ -304,18 +268,14 @@ def main():
     print(f"📊 Total Output Tokens: {total_output_tokens:,}")
     print(f"📊 Total Tokens: {total_input_tokens + total_output_tokens:,}")
     print(f"💰 Total Cost: ${total_cost:.4f}")
-
-    # Cost per finding
+# Cost per finding
     total_findings = 25  # From our diversity analysis
     cost_per_finding = total_cost / total_findings if total_findings > 0 else 0
-
+    
     print(f"\n📈 COST EFFICIENCY:")
     print(f"   Cost per finding: ${cost_per_finding:.4f}")
     print(f"   Cost per API call: ${total_cost/total_calls:.4f}")
-    print(
-        f"   Cost per 1K tokens: ${(total_cost/(total_input_tokens + total_output_tokens)*1000):.4f}"
-    )
-
+    print(f"   Cost per 1K tokens: ${(total_cost/(total_input_tokens + total_output_tokens)*1000):.4f}")
     # ROI analysis
     print(f"\n🎯 ROI ANALYSIS:")
     print(f"   We discovered 25 unique blind spots")
@@ -329,7 +289,6 @@ def main():
     print(f"   Our AI diversity review: ${total_cost:.4f} total")
     print(f"   Time saved: ~8-16 hours of human review")
     print(f"   Cost savings: ~$4000-16000")
-
 
 if __name__ == "__main__":
     main()

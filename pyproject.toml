@@ -34,12 +34,7 @@ dependencies = [
     "requests>=2.31.0",
     
     # Data Validation
-    "pydantic>=2.10.0",
-    
-    # LangChain and LangGraph
-    "langchain>=0.1.0",
-    "langgraph>=0.1.0",
-    "langchain-core>=0.1.0",
+"pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -60,7 +55,7 @@ dev = [
     # Type Stubs
     "types-requests>=2.31.0",
     "pandas-stubs>=2.0.0",
-    "types-pyyaml>=6.0.12.20250516",
+
 ]
 
 security = [
@@ -99,13 +94,12 @@ dev-dependencies = [
     "safety>=2.3.0",
     "types-requests>=2.31.0",
     "pandas-stubs>=2.0.0",
-    "types-pyyaml>=6.0.12.20250516",
-    "autoflake>=2.3.1",
+
 ]
 
 [tool.black]
 line-length = 88
-target-version = ['py311']
+target-version = ['py310']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -121,22 +115,8 @@ extend-exclude = '''
 )/
 '''
 
-[tool.flake8]
-max-line-length = 88
-extend-ignore = ["E203", "W503", "E501", "F541", "F401", "E265", "F811", "E402", "F841", "F821", "W293"]
-exclude = [
-    ".git",
-    "__pycache__",
-    "build",
-    "dist",
-    ".venv",
-    "venv",
-    ".mypy_cache",
-    ".tox"
-]
-
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -149,73 +129,7 @@ warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
-show_error_codes = true
-show_column_numbers = true
 
-# Ignore missing stubs for external libraries
-[[tool.mypy.overrides]]
-module = [
-    "plotly.*",
-    "botocore.*",
-    "streamlit.*",
-    "redis.*",
-    "boto3.*",
-    "jwt.*",
-    "cryptography.*",
-    "bcrypt.*",
-    "pandas.*",
-    "numpy.*",
-    "requests.*",
-    "langchain.*",
-    "matplotlib.*",
-    "seaborn.*",
-    "networkx.*",
-    "reportlab.*",
-    "markdown.*",
-    "meta_cognitive_orchestrator.*",
-    "multi_dimensional_smoke_test.*",
-    "diversity_hypothesis.*",
-    "cost_analysis.*",
-    "live_smoke_test_langchain.*",
-    "openflow_quickstart_app.*",
-    "https_enforcement.*",
-    "langchain_core.*",
-    "langchain_openai.*",
-    "langchain_anthropic.*",
-    "langgraph_diversity_orchestrator.*",
-    "diversity_synthesis_orchestrator.*",
-    "yaml.*",
-    "neo4j.*"
-]
-ignore_missing_imports = true
-
-# Exclude problematic files
-[[tool.mypy.overrides]]
-module = [
-    "src.multi_agent_testing.*",
-    "tests.test_data_fresh_cline_plan"
-]
-ignore_errors = true
-
-# Strict checking for our core code
-[[tool.mypy.overrides]]
-module = [
-    "src.streamlit.*",
-    "src.security_first.*",
-    "src.mdc_generator.*",
-    "tests.test_basic_validation.*",
-    "tests.test_core_concepts.*",
-    "tests.test_healthcare_cdc_requirements.*",
-    "tests.test_rule_compliance.*",
-    "tests.test_uv_package_management.*",
-    "tests.test_makefile_integration.*",
-    "tests.test_type_safety.*",
-    "scripts.*",
-    ".cursor.*"
-]
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
