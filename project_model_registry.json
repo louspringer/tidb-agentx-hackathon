@@ -1,7 +1,6 @@
 {
   "description": "Model-driven tool orchestration registry for OpenFlow Playground. This is the single source of truth for domain detection, tool selection, and requirements traceability.",
-  "version": "1.10",
-  "last_updated": "2025-08-04T22:05:00.000000",
+
   "author": "LLM + Lou (OpenFlow-Playground)",
   "domains": {
     "model_driven_projection": {
@@ -36,18 +35,7 @@
       ]
     },
     "cloudformation": {
-      "patterns": [
-        "*.template.yaml",
-        "config/*.yaml",
-        "*cloudformation*.yaml"
-      ],
-      "content_indicators": [
-        "!Sub",
-        "!Ref",
-        "!GetAtt",
-        "AWS::",
-        "Type: 'AWS::"
-      ],
+
       "linter": "cfn-lint",
       "validator": "aws-cloudformation",
       "exclusions": [],
@@ -82,12 +70,7 @@
       ]
     },
     "streamlit": {
-"patterns": ["src/streamlit/*.py", "app.py", "pages/*.py"],
-      "content_indicators": ["import streamlit", "st.", "streamlit run"],
-      "linter": "flake8",
-      "formatter": "black",
-      "validator": "streamlit-validate",
-      "exclusions": ["__pycache__/*", "*.pyc"],
+
       "requirements": [
         "Use flake8 for Streamlit Python linting",
         "Format Streamlit code with black",
@@ -95,57 +78,7 @@
       ]
     },
     "security_first": {
-"patterns": ["src/security_first/*.py", "src/security_first/*.sh", "src/security_first/*.json", "**/*"],
-      "content_indicators": ["credential", "password", "secret", "token", "key", "jwt", "encrypt", "hash", "https", "ssl", "csrf", "rate_limit"],
-      "linter": "bandit",
-      "validator": "detect-secrets",
-      "formatter": "safety",
-      "exclusions": [],
-      "requirements": [
-        "Scan for hardcoded credentials and secrets",
-        "Enforce security policy via detect-secrets and bandit",
-        "Check for known vulnerabilities with safety",
-        "Enforce HTTPS for all connections",
-        "Implement rate limiting to prevent abuse",
-        "Validate CSRF tokens for session security"
-      ]
-    },
-    "multi_agent_testing": {
-      "patterns": ["src/multi_agent_testing/*.py", "*diversity*.py", "*agent*.py", "*orchestrator*.py"],
-      "content_indicators": ["DiversityAgent", "BlindSpotFinding", "multi_threaded", "orchestrator"],
-      "linter": "flake8",
-      "formatter": "black",
-      "validator": "pytest",
-      "exclusions": ["__pycache__/*", "*.pyc"],
-      "requirements": [
-        "Use flake8 for multi-agent Python linting",
-        "Format multi-agent code with black",
-        "Validate multi-agent testing with pytest"
-      ]
-    },
-    "bash": {
-      "patterns": ["scripts/*.sh", "*.sh", "*.bash"],
-      "content_indicators": ["#!/bin/bash", "#!/bin/sh", "export ", "source "],
-      "linter": "shellcheck",
-      "exclusions": [],
-      "requirements": [
-        "Lint shell scripts with shellcheck"
-      ]
-    },
-    "documentation": {
-      "patterns": ["docs/*.md", "*.md"],
-      "content_indicators": ["# ", "## ", "### ", "**", "*"],
-      "linter": "markdownlint",
-      "formatter": "prettier",
-      "exclusions": ["node_modules/*"],
-      "requirements": [
-        "Use markdownlint for documentation linting",
-        "Format documentation with prettier"
-      ]
-    },
-    "configuration": {
-      "patterns": ["config/*.yaml", "config/*.yml", "config/*.json", "config/*.env", "*.config.*"],
-      "content_indicators": ["config:", "settings:", "environment:", "features:"],
+
       "linter": "yamllint",
       "validator": "jsonschema",
       "exclusions": [],
@@ -155,12 +88,7 @@
       ]
     },
     "mdc_generator": {
-"patterns": ["src/mdc_generator/*.py", "scripts/regenerate_mdc_files.py"],
-      "content_indicators": ["MDCFile", "MDCFrontmatter", "mdc_generator", "regenerate_mdc"],
-      "linter": "flake8",
-      "formatter": "black",
-      "validator": "pytest",
-      "exclusions": ["__pycache__/*", "*.pyc"],
+
       "requirements": [
         "Use flake8 for MDC generator Python linting",
         "Format MDC generator code with black",
@@ -168,12 +96,7 @@
       ]
     },
     "healthcare_cdc": {
-"patterns": ["healthcare-cdc/*.py", "healthcare-cdc/*.md", "healthcare-cdc/*.sql", "healthcare-cdc/*.yaml", "healthcare-cdc/*.json"],
-      "content_indicators": ["healthcare", "cdc", "phi", "hipaa", "patient", "medical", "audit", "compliance"],
-      "linter": "flake8",
-      "formatter": "black",
-      "validator": "pytest",
-      "exclusions": ["__pycache__/*", "*.pyc"],
+
       "requirements": [
         "Enforce HIPAA compliance validation",
         "Implement PHI detection and validation",
@@ -184,8 +107,7 @@
       ]
     },
     "rule_compliance": {
-"patterns": ["scripts/rule-compliance-check.sh", "scripts/mdc-linter.py", ".cursor/plugins/rule-compliance-checker.py"],
-      "content_indicators": ["rule-compliance", "mdc-linter", "deterministic-editing", "cursor-plugin"],
+
       "linter": "shellcheck",
       "formatter": "black",
       "validator": "pytest",
@@ -197,8 +119,7 @@
       ]
     },
     "package_management": {
-"patterns": ["pyproject.toml", "requirements*.txt", "uv.lock", "*.py"],
-      "content_indicators": ["uv", "dependencies", "dev-dependencies", "pyproject"],
+
       "linter": "uv check",
       "validator": "uv sync",
       "formatter": "uv format",
@@ -290,7 +211,7 @@
       "scripts/.cursor/rules/bash-scripting.mdc": "Bash scripting guidelines",
       "docs/.cursor/rules/documentation.mdc": "Documentation guidelines",
       "config/.cursor/rules/configuration.mdc": "Configuration management guidelines",
-"data/.cursor/rules/data-management.mdc": "Data management guidelines"
+
     }
   },
   "requirements_traceability": [
@@ -728,7 +649,7 @@
       "scripts/.cursor/rules/bash-scripting.mdc",
       "docs/.cursor/rules/documentation.mdc",
       "config/.cursor/rules/configuration.mdc",
-"data/.cursor/rules/data-management.mdc"
+
     ]
   },
   "violations": [
