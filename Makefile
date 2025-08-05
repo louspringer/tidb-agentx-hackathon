@@ -1,13 +1,13 @@
 # OpenFlow Playground - Model-Driven Makefile
 # This Makefile leverages the project_model_registry.json for domain-specific operations
 
-.PHONY: help install install-python install-bash install-cloudformation install-docs install-security install-streamlit install-healthcare install-all
-.PHONY: test test-python test-bash test-cloudformation test-docs test-security test-streamlit test-healthcare test-all
-.PHONY: lint lint-python lint-bash lint-cloudformation lint-docs lint-security lint-streamlit lint-healthcare lint-all
-.PHONY: format format-python format-bash format-docs format-all
+.PHONY: help install install-python install-bash install-cloudformation install-docs install-security install-streamlit install-healthcare install-go install-secure-shell install-all
+.PHONY: test test-python test-bash test-cloudformation test-docs test-security test-streamlit test-healthcare test-go test-secure-shell test-all
+.PHONY: lint lint-python lint-bash lint-cloudformation lint-docs lint-security lint-streamlit lint-healthcare lint-go lint-secure-shell lint-all
+.PHONY: format format-python format-bash format-docs format-go format-secure-shell format-all
 .PHONY: validate validate-model validate-requirements validate-all
-.PHONY: clean clean-python clean-cache clean-all
-.PHONY: deploy deploy-streamlit deploy-security deploy-healthcare
+.PHONY: clean clean-python clean-cache clean-go clean-secure-shell clean-all
+.PHONY: deploy deploy-streamlit deploy-security deploy-healthcare deploy-secure-shell
 .PHONY: security security-scan security-check security-audit
 .PHONY: docs docs-build docs-serve docs-index
 
@@ -43,7 +43,7 @@ help: ## Show this help message
 	@echo "  format-{domain}     - Format code for specific domain"
 	@echo ""
 	@echo "$(PURPLE)Available domains:$(NC)"
-	@echo "  python, bash, cloudformation, docs, security, streamlit, healthcare"
+	@echo "  python, bash, cloudformation, docs, security, streamlit, healthcare, go, secure-shell"
 	@echo ""
 	@echo "$(PURPLE)Examples:$(NC)"
 	@echo "  make install-python     - Install Python dependencies with UV"
@@ -57,7 +57,7 @@ help: ## Show this help message
 
 install: install-all ## Install all dependencies (default: install-all)
 
-install-all: install-python install-bash install-cloudformation install-docs install-security install-streamlit install-healthcare ## Install dependencies for all domains
+install-all: install-python install-bash install-cloudformation install-docs install-security install-streamlit install-healthcare install-go install-secure-shell ## Install dependencies for all domains
 	@echo "$(GREEN)✅ All dependencies installed$(NC)"
 
 install-python: ## Install Python dependencies with UV
@@ -95,13 +95,30 @@ install-healthcare: ## Install healthcare CDC dependencies
 	@$(UV) sync
 	@echo "$(GREEN)✅ Healthcare CDC dependencies installed$(NC)"
 
+install-go: ## Install Go language and tools
+	@echo "$(BLUE)🐹 Installing Go language and tools...$(NC)"
+	@command -v go >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  Go not found, installing...$(NC)"; \
+		curl -OL https://go.dev/dl/go1.21.6.linux-amd64.tar.gz; \
+		sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz; \
+		echo 'export PATH=$$PATH:/usr/local/go/bin' >> ~/.bashrc; \
+		rm go1.21.6.linux-amd64.tar.gz; }
+	@echo "$(GREEN)✅ Go language and tools installed$(NC)"
+
+install-secure-shell: ## Install secure shell service dependencies
+	@echo "$(BLUE)🛡️ Installing secure shell service dependencies...$(NC)"
+	@command -v protoc >/dev/null 2>&1 || { echo "$(YELLOW)⚠️  protobuf-compiler not found, installing...$(NC)"; sudo apt-get install -y protobuf-compiler; }
+	@go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	@$(UV) add grpcio grpcio-tools
+	@echo "$(GREEN)✅ Secure shell service dependencies installed$(NC)"
+
 # =============================================================================
 # TESTING TARGETS
 # =============================================================================
 
 test: test-all ## Run all tests (default: test-all)
 
-test-all: test-python test-bash test-cloudformation test-docs test-security test-streamlit test-healthcare ## Run tests for all domains
+test-all: test-python test-bash test-cloudformation test-docs test-security test-streamlit test-healthcare test-go test-secure-shell ## Run tests for all domains
 	@echo "$(GREEN)✅ All tests completed$(NC)"
 
 test-python: ## Run Python tests
@@ -143,6 +160,16 @@ test-healthcare: ## Run healthcare CDC tests
 	@$(UV) run pytest tests/test_healthcare_cdc_requirements.py -v
 	@echo "$(GREEN)✅ Healthcare CDC tests completed$(NC)"
 
+test-go: ## Run Go service tests
+	@echo "$(BLUE)🐹 Running Go service tests...$(NC)"
+	@cd src/secure_shell_service && go test ./...
+	@echo "$(GREEN)✅ Go service tests completed$(NC)"
+
+test-secure-shell: ## Run secure shell service tests
+	@echo "$(BLUE)🛡️ Running secure shell service tests...$(NC)"
+	@$(UV) run python test_secure_shell.py
+	@echo "$(GREEN)✅ Secure shell service tests completed$(NC)"
+
 test-model: ## Run model validation tests
 	@echo "$(BLUE)🔍 Running model validation tests...$(NC)"
 	@python scripts/pre_test_model_check.py
@@ -153,7 +180,7 @@ test-model: ## Run model validation tests
 
 lint: lint-all ## Lint all code (default: lint-all)
 
-lint-all: lint-python lint-bash lint-cloudformation lint-docs lint-security lint-streamlit lint-healthcare ## Lint all domains
+lint-all: lint-python lint-bash lint-cloudformation lint-docs lint-security lint-streamlit lint-healthcare lint-go lint-secure-shell ## Lint all domains
 	@echo "$(GREEN)✅ All linting completed$(NC)"
 
 lint-python: ## Lint Python code
@@ -194,13 +221,25 @@ lint-healthcare: ## Lint healthcare CDC code
 	@$(UV) run flake8 healthcare-cdc/
 	@echo "$(GREEN)✅ Healthcare CDC linting completed$(NC)"
 
+lint-go: ## Lint Go code
+	@echo "$(BLUE)🐹 Linting Go code...$(NC)"
+	@cd src/secure_shell_service && go vet ./...
+	@cd src/secure_shell_service && go fmt ./...
+	@echo "$(GREEN)✅ Go code linting completed$(NC)"
+
+lint-secure-shell: ## Lint secure shell service code
+	@echo "$(BLUE)🛡️ Linting secure shell service code...$(NC)"
+	@$(UV) run flake8 src/secure_shell_service/
+	@$(UV) run mypy src/secure_shell_service/
+	@echo "$(GREEN)✅ Secure shell service linting completed$(NC)"
+
 # =============================================================================
 # FORMATTING TARGETS
 # =============================================================================
 
 format: format-all ## Format all code (default: format-all)
 
-format-all: format-python format-bash format-docs ## Format all domains
+format-all: format-python format-bash format-docs format-go format-secure-shell ## Format all domains
 	@echo "$(GREEN)✅ All formatting completed$(NC)"
 
 format-python: ## Format Python code
@@ -216,6 +255,16 @@ format-docs: ## Format documentation
 	@echo "$(BLUE)📚 Formatting documentation...$(NC)"
 	@find docs/ -name "*.md" -exec prettier --write {} \;
 	@echo "$(GREEN)✅ Documentation formatting completed$(NC)"
+
+format-go: ## Format Go code
+	@echo "$(BLUE)🐹 Formatting Go code...$(NC)"
+	@cd src/secure_shell_service && go fmt ./...
+	@echo "$(GREEN)✅ Go code formatting completed$(NC)"
+
+format-secure-shell: ## Format secure shell service code
+	@echo "$(BLUE)🛡️ Formatting secure shell service code...$(NC)"
+	@$(UV) run black src/secure_shell_service/
+	@echo "$(GREEN)✅ Secure shell service formatting completed$(NC)"
 
 # =============================================================================
 # VALIDATION TARGETS
@@ -242,7 +291,7 @@ validate-requirements: ## Validate requirements traceability
 
 clean: clean-all ## Clean all artifacts (default: clean-all)
 
-clean-all: clean-python clean-cache ## Clean all artifacts
+clean-all: clean-python clean-cache clean-go clean-secure-shell ## Clean all artifacts
 	@echo "$(GREEN)✅ All cleanup completed$(NC)"
 
 clean-python: ## Clean Python artifacts
@@ -260,11 +309,24 @@ clean-cache: ## Clean all cache directories
 	@find . -name ".coverage" -delete 2>/dev/null || true
 	@echo "$(GREEN)✅ Cache directories cleaned$(NC)"
 
+clean-go: ## Clean Go artifacts
+	@echo "$(BLUE)🧹 Cleaning Go artifacts...$(NC)"
+	@cd src/secure_shell_service && go clean
+	@rm -f src/secure_shell_service/secure-shell-service
+	@rm -f src/secure_shell_service/*.pb.go
+	@echo "$(GREEN)✅ Go artifacts cleaned$(NC)"
+
+clean-secure-shell: ## Clean secure shell service artifacts
+	@echo "$(BLUE)🧹 Cleaning secure shell service artifacts...$(NC)"
+	@rm -f src/secure_shell_service/secure-shell-service
+	@rm -f src/secure_shell_service/*.pb.go
+	@echo "$(GREEN)✅ Secure shell service artifacts cleaned$(NC)"
+
 # =============================================================================
 # DEPLOYMENT TARGETS
 # =============================================================================
 
-deploy: deploy-streamlit ## Deploy applications (default: deploy-streamlit)
+deploy: deploy-streamlit deploy-secure-shell ## Deploy applications (default: deploy-streamlit)
 
 deploy-streamlit: ## Deploy Streamlit app
 	@echo "$(BLUE)📊 Deploying Streamlit app...$(NC)"
@@ -280,6 +342,12 @@ deploy-healthcare: ## Deploy healthcare CDC components
 	@echo "$(BLUE)🏥 Deploying healthcare CDC components...$(NC)"
 	@$(UV) run python healthcare-cdc/models/healthcare_cdc_domain_model.py
 	@echo "$(GREEN)✅ Healthcare CDC components deployed$(NC)"
+
+deploy-secure-shell: ## Deploy secure shell service
+	@echo "$(BLUE)🛡️ Deploying secure shell service...$(NC)"
+	@cd src/secure_shell_service && go build -o secure-shell-service .
+	@cd src/secure_shell_service && ./secure-shell-service &
+	@echo "$(GREEN)✅ Secure shell service deployed$(NC)"
 
 # =============================================================================
 # SECURITY TARGETS
