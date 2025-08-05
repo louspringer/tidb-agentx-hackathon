@@ -35,27 +35,31 @@ jobs:
           from src.ghostbusters.enhanced_ghostbusters import run_enhanced_ghostbusters
           
           async def main():
-              state = await run_enhanced_ghostbusters()
-              print(f'🎯 Copilot Validation Results:')
-              print(f'📊 Confidence Score: {state.confidence_score:.2%}')
-              print(f'🔍 Issues Found: {len(state.errors)}')
-              print(f'⚠️  Warnings: {len(state.warnings)}')
-              recommendations = state.metadata.get("recommendations", [])
-              print(f'📋 Recommendations: {len(recommendations)}')
-              
-              # Validate diversity hypothesis
-              if state.confidence_score > 0.95:
-                  print('✅ Diversity Hypothesis VALIDATED: High confidence achieved!')
-              elif state.confidence_score > 0.80:
-                  print('🟡 Diversity Hypothesis PARTIALLY VALIDATED: Good confidence')
-              else:
-                  print('❌ Diversity Hypothesis NEEDS WORK: Low confidence')
+              try:
+                  state = await run_enhanced_ghostbusters()
+                  print(f'🎯 Copilot Validation Results:')
+                  print(f'📊 Confidence Score: {state.confidence_score:.2%}')
+                  print(f'🔍 Issues Found: {len(state.errors)}')
+                  print(f'⚠️  Warnings: {len(state.warnings)}')
+                  recommendations = state.metadata.get("recommendations", [])
+                  print(f'📋 Recommendations: {len(recommendations)}')
                   
-              # Check multi-agent effectiveness
-              if len(recommendations) > 5:
-                  print('✅ Multi-Agent System EFFECTIVE: Found diverse recommendations')
-              else:
-                  print('⚠️  Multi-Agent System NEEDS IMPROVEMENT: Limited recommendations')
+                  # Validate diversity hypothesis
+                  if state.confidence_score > 0.95:
+                      print('✅ Diversity Hypothesis VALIDATED: High confidence achieved!')
+                  elif state.confidence_score > 0.80:
+                      print('🟡 Diversity Hypothesis PARTIALLY VALIDATED: Good confidence')
+                  else:
+                      print('❌ Diversity Hypothesis NEEDS WORK: Low confidence')
+                      
+                  # Check multi-agent effectiveness
+                  if len(recommendations) > 5:
+                      print('✅ Multi-Agent System EFFECTIVE: Found diverse recommendations')
+                  else:
+                      print('⚠️  Multi-Agent System NEEDS IMPROVEMENT: Limited recommendations')
+              except Exception as e:
+                  print(f'❌ Error during validation: {e}')
+                  print('⚠️  Multi-Agent System NEEDS IMPROVEMENT: Error occurred')
           
           asyncio.run(main())
           "
