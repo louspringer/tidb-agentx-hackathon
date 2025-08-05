@@ -2,7 +2,7 @@ version = 1
 revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
-"python_full_version >= '3.13'",
+    "python_full_version >= '3.13'",
     "python_full_version == '3.12.*'",
     "python_full_version == '3.11.*'",
     "python_full_version < '3.11'",
@@ -79,7 +79,18 @@ wheels = [
 ]
 
 [[package]]
+name = "autoflake8"
+version = "0.4.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyflakes" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0b/7b/e591d2f15c0244d7dc95e7c7eca46c5c171e74b9c3284ba5bba9e438d0c3/autoflake8-0.4.1.tar.gz", hash = "sha256:c17da499bd2b71ba02fb11fe53ff1ad83d7dae6efb0f115fd1344f467797c679", size = 11804, upload-time = "2023-07-29T01:13:57.15Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/92/3e/01e49266a5fa0177cc2c39447e3abcf6e83d2ccd34c366befc626e751752/autoflake8-0.4.1-py3-none-any.whl", hash = "sha256:fdf663b627993ac38e5b55b7d742c388fb2a4f34798a052f43eecc5e8d629e9d", size = 14782, upload-time = "2023-07-29T01:13:56.159Z" },
+]
 
+[[package]]
 name = "backports-datetime-fromisoformat"
 version = "2.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -547,7 +558,6 @@ wheels = [
 ]
 
 [[package]]
-
 name = "h11"
 version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -660,7 +670,6 @@ wheels = [
 ]
 
 [[package]]
-
 name = "markdown-it-py"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -909,7 +918,7 @@ name = "numpy"
 version = "2.3.2"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-"python_full_version >= '3.13'",
+    "python_full_version >= '3.13'",
     "python_full_version == '3.12.*'",
     "python_full_version == '3.11.*'",
 ]
@@ -995,11 +1004,11 @@ name = "openflow-playground"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "autoflake8" },
     { name = "bcrypt" },
     { name = "boto3" },
     { name = "botocore" },
     { name = "cryptography" },
-
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pandas" },
@@ -1021,7 +1030,6 @@ dev = [
     { name = "pytest" },
     { name = "pytest-mock" },
     { name = "safety" },
-
     { name = "types-requests" },
 ]
 security = [
@@ -1032,7 +1040,6 @@ security = [
 
 [package.dev-dependencies]
 dev = [
-
     { name = "bandit" },
     { name = "black" },
     { name = "flake8" },
@@ -1041,12 +1048,12 @@ dev = [
     { name = "pytest" },
     { name = "pytest-mock" },
     { name = "safety" },
-
     { name = "types-requests" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "autoflake8", specifier = ">=0.4.1" },
     { name = "bandit", marker = "extra == 'dev'", specifier = ">=1.7.0" },
     { name = "bandit", marker = "extra == 'security'", specifier = ">=1.7.0" },
     { name = "bcrypt", specifier = ">=4.0.0" },
@@ -1056,13 +1063,12 @@ requires-dist = [
     { name = "cryptography", specifier = ">=41.0.0" },
     { name = "detect-secrets", marker = "extra == 'security'", specifier = ">=1.4.0" },
     { name = "flake8", marker = "extra == 'dev'", specifier = ">=6.0.0" },
-
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0.0" },
     { name = "numpy", specifier = ">=1.24.0" },
     { name = "pandas", specifier = ">=2.0.0" },
     { name = "pandas-stubs", marker = "extra == 'dev'", specifier = ">=2.0.0" },
     { name = "plotly", specifier = ">=5.15.0" },
-{ name = "pydantic", specifier = ">=2.0.0" },
+    { name = "pydantic", specifier = ">=2.0.0" },
     { name = "pyjwt", specifier = ">=2.8.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.4.0" },
     { name = "pytest-mock", marker = "extra == 'dev'", specifier = ">=3.11.0" },
@@ -1071,14 +1077,12 @@ requires-dist = [
     { name = "safety", marker = "extra == 'dev'", specifier = ">=2.3.0" },
     { name = "safety", marker = "extra == 'security'", specifier = ">=2.3.0" },
     { name = "streamlit", specifier = ">=1.28.0" },
-
     { name = "types-requests", marker = "extra == 'dev'", specifier = ">=2.31.0" },
 ]
 provides-extras = ["dev", "security"]
 
 [package.metadata.requires-dev]
 dev = [
-
     { name = "bandit", specifier = ">=1.7.0" },
     { name = "black", specifier = ">=23.0.0" },
     { name = "flake8", specifier = ">=6.0.0" },
@@ -1087,12 +1091,10 @@ dev = [
     { name = "pytest", specifier = ">=7.4.0" },
     { name = "pytest-mock", specifier = ">=3.11.0" },
     { name = "safety", specifier = ">=2.3.0" },
-
     { name = "types-requests", specifier = ">=2.31.0" },
 ]
 
 [[package]]
-
 name = "packaging"
 version = "25.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1746,7 +1748,6 @@ wheels = [
 ]
 
 [[package]]
-
 name = "rich"
 version = "14.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1962,7 +1963,7 @@ dependencies = [
     { name = "click" },
     { name = "dparse" },
     { name = "filelock" },
-{ name = "httpx" },
+    { name = "httpx" },
     { name = "jinja2" },
     { name = "marshmallow" },
     { name = "nltk" },
@@ -1970,7 +1971,7 @@ dependencies = [
     { name = "psutil" },
     { name = "pydantic" },
     { name = "requests" },
-{ name = "ruamel-yaml" },
+    { name = "ruamel-yaml" },
     { name = "safety-schemas" },
     { name = "setuptools" },
     { name = "tenacity" },
@@ -2046,7 +2047,6 @@ wheels = [
 ]
 
 [[package]]
-
 name = "stevedore"
 version = "5.4.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2210,7 +2210,6 @@ wheels = [
 ]
 
 [[package]]
-
 name = "types-requests"
 version = "2.32.4.20250611"
 source = { registry = "https://pypi.org/simple" }
@@ -2232,7 +2231,6 @@ wheels = [
 ]
 
 [[package]]
-
 name = "tzdata"
 version = "2025.2"
 source = { registry = "https://pypi.org/simple" }
@@ -2267,4 +2265,3 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/db/d9/c495884c6e548fce18a8f40568ff120bc3a4b7b99813081c8ac0c936fa64/watchdog-6.0.0-py3-none-win_amd64.whl", hash = "sha256:cbafb470cf848d93b5d013e2ecb245d4aa1c8fd0504e863ccefa32445359d680", size = 79070, upload-time = "2024-11-01T14:07:10.686Z" },
     { url = "https://files.pythonhosted.org/packages/33/e8/e40370e6d74ddba47f002a32919d91310d6074130fe4e17dabcafc15cbf1/watchdog-6.0.0-py3-none-win_ia64.whl", hash = "sha256:a1914259fa9e1454315171103c6a30961236f508b9b623eae470268bbcc6a22f", size = 79067, upload-time = "2024-11-01T14:07:11.845Z" },
 ]
-
