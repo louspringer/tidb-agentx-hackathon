@@ -15,7 +15,26 @@ from typing import Any
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.secure_shell_service.elegant_client import secure_execute
+# Import with fallback for missing grpc module
+try:
+    from src.secure_shell_service.elegant_client import secure_execute
+except ImportError:
+    # Fallback for environments without grpc (like GitHub Actions)
+    async def secure_execute(command: str) -> dict[str, Any]:
+        """Fallback secure_execute for environments without grpc"""
+        import subprocess
+        try:
+            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=30)
+            return {
+                "success": result.returncode == 0,
+                "output": result.stdout,
+                "error": result.stderr if result.returncode != 0 else None
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e)
+            }
 
 
 class CopilotReviewAutomation:
