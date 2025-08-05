@@ -49,7 +49,8 @@ def test_projected_artifacts() -> None:
         import shutil
 
         shutil.copy(
-            "final_projection.py", "src/streamlit/openflow_quickstart_app_projected.py"
+            "final_projection.py",
+            "src/streamlit/openflow_quickstart_app_projected.py",
         )
 
         try:
@@ -59,9 +60,9 @@ def test_projected_artifacts() -> None:
             # Test basic import
             try:
                 from src.streamlit.openflow_quickstart_app_projected import (
+                    DeploymentManager,
                     OpenFlowQuickstartApp,
                     SecurityManager,
-                    DeploymentManager,
                 )
 
                 print("✅ Projected artifacts: Import successful")
@@ -78,7 +79,7 @@ def test_projected_artifacts() -> None:
                 print("✅ Projected artifacts: OpenFlowQuickstartApp created")
             except Exception as e:
                 print(
-                    f"❌ Projected artifacts: OpenFlowQuickstartApp creation failed - {e}"
+                    f"❌ Projected artifacts: OpenFlowQuickstartApp creation failed - {e}",
                 )
                 # Removed return statement
 
@@ -93,7 +94,9 @@ def test_projected_artifacts() -> None:
                 DeploymentManager()
                 print("✅ Projected artifacts: DeploymentManager created")
             except Exception as e:
-                print(f"❌ Projected artifacts: DeploymentManager creation failed - {e}")
+                print(
+                    f"❌ Projected artifacts: DeploymentManager creation failed - {e}"
+                )
                 # Removed return statement
 
             # Removed return statement
@@ -155,35 +158,35 @@ def test_syntax_equivalence() -> None:
         import ast
 
         # Parse original
-        with open("src/streamlit/openflow_quickstart_app.py", "r") as f:
+        with open("src/streamlit/openflow_quickstart_app.py") as f:
             original_content = f.read()
         original_tree = ast.parse(original_content)
 
         # Parse projected
-        with open("final_projection.py", "r") as f:
+        with open("final_projection.py") as f:
             projected_content = f.read()
         projected_tree = ast.parse(projected_content)
 
         # Count elements
         original_functions = len(
-            [n for n in ast.walk(original_tree) if isinstance(n, ast.FunctionDef)]
+            [n for n in ast.walk(original_tree) if isinstance(n, ast.FunctionDef)],
         )
         projected_functions = len(
-            [n for n in ast.walk(projected_tree) if isinstance(n, ast.FunctionDef)]
+            [n for n in ast.walk(projected_tree) if isinstance(n, ast.FunctionDef)],
         )
 
         original_classes = len(
-            [n for n in ast.walk(original_tree) if isinstance(n, ast.ClassDef)]
+            [n for n in ast.walk(original_tree) if isinstance(n, ast.ClassDef)],
         )
         projected_classes = len(
-            [n for n in ast.walk(projected_tree) if isinstance(n, ast.ClassDef)]
+            [n for n in ast.walk(projected_tree) if isinstance(n, ast.ClassDef)],
         )
 
         print(
-            f"📊 Function count: Original {original_functions} vs Projected {projected_functions}"
+            f"📊 Function count: Original {original_functions} vs Projected {projected_functions}",
         )
         print(
-            f"📊 Class count: Original {original_classes} vs Projected {projected_classes}"
+            f"📊 Class count: Original {original_classes} vs Projected {projected_classes}",
         )
 
         if (

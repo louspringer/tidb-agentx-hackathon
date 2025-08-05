@@ -5,9 +5,9 @@ Updates Cursor rules automatically when linter violations are detected
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, Optional
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -32,10 +32,10 @@ class DynamicRuleUpdater:
 
     def __init__(self, rules_dir: str = ".cursor/rules") -> None:
         self.rules_dir = Path(rules_dir)
-        self.violation_patterns: Dict[str, ViolationPattern] = {}
+        self.violation_patterns: dict[str, ViolationPattern] = {}
         self.rule_templates = self._load_rule_templates()
 
-    def _load_rule_templates(self) -> Dict[str, Dict[str, str]]:
+    def _load_rule_templates(self) -> dict[str, dict[str, str]]:
         """Load rule templates for different violation types"""
         return {
             "F401": {
@@ -43,6 +43,6 @@ class DynamicRuleUpdater:
                 "description": "Prevent unused imports before they happen",
                 "pattern": "import.*unused",
                 "suggestion": "Only import modules that are actually used",
-                "prevention_code": ""
-            }
+                "prevention_code": "",
+            },
         }

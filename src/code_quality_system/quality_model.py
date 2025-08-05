@@ -1,15 +1,15 @@
-from typing import List, Dict, Any
+from typing import Any
 
 #!/usr/bin/env python3
 """
 Code Quality System - Model-Driven Linting and Fixing
 """
 
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Callable
-from pathlib import Path
 import re
 import subprocess
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Callable
 
 
 @dataclass
@@ -20,8 +20,8 @@ class LintingRule:
     description: str
     severity: str
     fix_function: Callable
-    patterns: List[str] = field(default_factory=list)
-    examples: List[str] = field(default_factory=list)
+    patterns: list[str] = field(default_factory=list)
+    examples: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -32,7 +32,7 @@ class CodeQualityModel:
         self.rules = self._define_rules()
         self.fixers = self._define_fixers()
 
-    def _define_rules(self) -> Dict[str, LintingRule]:
+    def _define_rules(self) -> dict[str, LintingRule]:
         """Define all linting rules with their fixes"""
         return {
             "F401": LintingRule(
@@ -77,7 +77,7 @@ class CodeQualityModel:
             ),
         }
 
-    def _define_fixers(self) -> Dict[str, Callable]:
+    def _define_fixers(self) -> dict[str, Callable]:
         """Define automated fixers for each rule type"""
         return {
             "autoflake": self._run_autoflake,
@@ -109,7 +109,9 @@ class CodeQualityModel:
         """Run black to format code"""
         try:
             result = subprocess.run(
-                ["uv", "run", "black", str(file_path)], capture_output=True, text=True
+                ["uv", "run", "black", str(file_path)],
+                capture_output=True,
+                text=True,
             )
             return result.returncode == 0
         except Exception:
@@ -118,7 +120,7 @@ class CodeQualityModel:
     def _apply_custom_fixes(self, file_path: Path) -> bool:
         """Apply custom fixes for specific issues"""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             # Fix f-strings without placeholders
@@ -146,7 +148,10 @@ class CodeQualityModel:
 
             # Fix bare except clauses
             content = re.sub(
-                r"except:\s*$", "except Exception:", content, flags=re.MULTILINE
+                r"except:\s*$",
+                "except Exception:",
+                content,
+                flags=re.MULTILINE,
             )
 
             with open(file_path, "w", encoding="utf-8") as f:
@@ -181,14 +186,16 @@ class CodeQualityModel:
         """Fix unused variables"""
         return self._run_autoflake(file_path)
 
-    def analyze_file(self, file_path: Path) -> Dict[str, Any]:
+    def analyze_file(self, file_path: Path) -> dict[str, Any]:
         """Analyze a single file for all linting issues"""
-        issues: List[Any] = []
+        issues: list[Any] = []
 
         # Run flake8
         try:
             result = subprocess.run(
-                ["uv", "run", "flake8", str(file_path)], capture_output=True, text=True
+                ["uv", "run", "flake8", str(file_path)],
+                capture_output=True,
+                text=True,
             )
 
             for line in result.stdout.split("\n"):
@@ -208,7 +215,7 @@ class CodeQualityModel:
 
         return {"file": str(file_path), "issues": issues, "total_issues": len(issues)}
 
-    def fix_file(self, file_path: Path) -> Dict[str, Any]:
+    def fix_file(self, file_path: Path) -> dict[str, Any]:
         """Fix all issues in a file"""
         results = {"file": str(file_path), "fixes_applied": [], "errors": []}
 
@@ -224,10 +231,10 @@ class CodeQualityModel:
 
         return results
 
-    def fix_all_files(self, directories: List[str] = None) -> Dict[str, Any]:
+    def fix_all_files(self, directories: list[str] = None) -> dict[str, Any]:
         """Fix all files in the project"""
         if directories is None:
-            directories: List[Any] = ["src", "tests", "scripts", ".cursor"]
+            directories: list[Any] = ["src", "tests", "scripts", ".cursor"]
 
         all_results: Any = {
             "total_files": 0,

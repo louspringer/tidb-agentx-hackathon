@@ -5,10 +5,10 @@ Finds relationships between artifacts
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +23,7 @@ class ArtifactRelationship:
     target_artifact: str
     relationship_type: str  # 'imports', 'references', 'depends_on', 'similar', etc.
     confidence: float  # 0.0 to 1.0
-    evidence: List[str]
+    evidence: list[str]
     created_at: datetime
 
 
@@ -42,15 +42,16 @@ class ArtifactCorrelator:
         self.max_relationships = 100  # Limit total relationships
 
     def correlate_artifacts(
-        self, artifacts: List[Dict[str, Any]]
-    ) -> List[ArtifactRelationship]:
+        self,
+        artifacts: list[dict[str, Any]],
+    ) -> list[ArtifactRelationship]:
         """Find relationships between artifacts"""
         logger.info(f"Starting correlation of {len(artifacts)} artifacts")
 
         # Limit artifacts for performance
         if len(artifacts) > self.max_artifacts:
             logger.warning(
-                f"Limiting artifacts from {len(artifacts)} to {self.max_artifacts} for performance"
+                f"Limiting artifacts from {len(artifacts)} to {self.max_artifacts} for performance",
             )
             artifacts = artifacts[: self.max_artifacts]
 
@@ -68,7 +69,7 @@ class ArtifactCorrelator:
                     # Log progress every 100 comparisons
                     if comparison_count % 100 == 0:
                         logger.info(
-                            f"Progress: {comparison_count}/{total_comparisons} comparisons"
+                            f"Progress: {comparison_count}/{total_comparisons} comparisons",
                         )
 
                     # Find all types of relationships
@@ -80,7 +81,7 @@ class ArtifactCorrelator:
                             # Limit total relationships
                             if len(relationships) >= self.max_relationships:
                                 logger.warning(
-                                    f"Reached maximum relationships limit ({self.max_relationships})"
+                                    f"Reached maximum relationships limit ({self.max_relationships})",
                                 )
                                 return relationships
 
@@ -92,8 +93,10 @@ class ArtifactCorrelator:
         return relationships
 
     def _find_import_relationships(
-        self, artifact1: Dict[str, Any], artifact2: Dict[str, Any]
-    ) -> List[ArtifactRelationship]:
+        self,
+        artifact1: dict[str, Any],
+        artifact2: dict[str, Any],
+    ) -> list[ArtifactRelationship]:
         """Find import relationships between artifacts"""
         relationships = []
 
@@ -115,14 +118,16 @@ class ArtifactCorrelator:
                             confidence=0.9,
                             evidence=[f"Import statement: {import_stmt}"],
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
 
         return relationships
 
     def _find_reference_relationships(
-        self, artifact1: Dict[str, Any], artifact2: Dict[str, Any]
-    ) -> List[ArtifactRelationship]:
+        self,
+        artifact1: dict[str, Any],
+        artifact2: dict[str, Any],
+    ) -> list[ArtifactRelationship]:
         """Find reference relationships between artifacts"""
         relationships = []
 
@@ -140,7 +145,7 @@ class ArtifactCorrelator:
                         confidence=0.7,
                         evidence=[f"References file: {target_name}"],
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
         except Exception as e:
             logger.debug(f"Error reading content for {artifact1['path']}: {e}")
@@ -148,8 +153,10 @@ class ArtifactCorrelator:
         return relationships
 
     def _find_dependency_relationships(
-        self, artifact1: Dict[str, Any], artifact2: Dict[str, Any]
-    ) -> List[ArtifactRelationship]:
+        self,
+        artifact1: dict[str, Any],
+        artifact2: dict[str, Any],
+    ) -> list[ArtifactRelationship]:
         """Find dependency relationships between artifacts"""
         relationships = []
 
@@ -167,14 +174,16 @@ class ArtifactCorrelator:
                     confidence=0.6,
                     evidence=["Configuration file likely configures Python module"],
                     created_at=datetime.now(),
-                )
+                ),
             )
 
         return relationships
 
     def _find_similarity_relationships(
-        self, artifact1: Dict[str, Any], artifact2: Dict[str, Any]
-    ) -> List[ArtifactRelationship]:
+        self,
+        artifact1: dict[str, Any],
+        artifact2: dict[str, Any],
+    ) -> list[ArtifactRelationship]:
         """Find similarity relationships between artifacts"""
         relationships = []
 
@@ -191,20 +200,22 @@ class ArtifactCorrelator:
                         confidence=similarity_score,
                         evidence=[f"Similar structure (score: {similarity_score:.2f})"],
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return relationships
 
     def _find_configuration_relationships(
-        self, artifact1: Dict[str, Any], artifact2: Dict[str, Any]
-    ) -> List[ArtifactRelationship]:
+        self,
+        artifact1: dict[str, Any],
+        artifact2: dict[str, Any],
+    ) -> list[ArtifactRelationship]:
         """Find configuration relationships between artifacts"""
         relationships = []
 
         # Check if one artifact configures another
         if artifact1.get("artifact_type") in ["yaml", "json"] and artifact2.get(
-            "artifact_type"
+            "artifact_type",
         ) in ["python", "mdc"]:
             try:
                 config_content = self._get_artifact_content(artifact1)
@@ -218,29 +229,31 @@ class ArtifactCorrelator:
                             relationship_type="configures",
                             confidence=0.8,
                             evidence=[
-                                f"Configuration file contains target name: {target_name}"
+                                f"Configuration file contains target name: {target_name}",
                             ],
                             created_at=datetime.now(),
-                        )
+                        ),
                     )
             except Exception as e:
                 logger.debug(
-                    f"Error reading config content for {artifact1['path']}: {e}"
+                    f"Error reading config content for {artifact1['path']}: {e}",
                 )
 
         return relationships
 
-    def _get_artifact_content(self, artifact: Dict[str, Any]) -> str:
+    def _get_artifact_content(self, artifact: dict[str, Any]) -> str:
         """Get content of an artifact"""
         try:
-            with open(artifact["path"], "r", encoding="utf-8") as f:
+            with open(artifact["path"], encoding="utf-8") as f:
                 return f.read()
         except Exception as e:
             logger.debug(f"Error reading {artifact['path']}: {e}")
             return ""
 
     def _calculate_similarity(
-        self, artifact1: Dict[str, Any], artifact2: Dict[str, Any]
+        self,
+        artifact1: dict[str, Any],
+        artifact2: dict[str, Any],
     ) -> float:
         """Calculate similarity between artifacts"""
         # Simple similarity based on structure
@@ -307,7 +320,7 @@ def main() -> None:
 
     for rel in relationships:
         print(
-            f"  {rel.source_artifact} -> {rel.target_artifact} ({rel.relationship_type}, confidence: {rel.confidence:.2f})"
+            f"  {rel.source_artifact} -> {rel.target_artifact} ({rel.relationship_type}, confidence: {rel.confidence:.2f})",
         )
 
 

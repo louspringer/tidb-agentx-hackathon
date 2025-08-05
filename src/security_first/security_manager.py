@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Security Manager - Comprehensive security implementation for OpenFlow Playground"""
 
-import os
-import time
 import hashlib
 import logging
-from typing import Dict, Optional, Any
-from datetime import datetime, timezone, timedelta
+import os
+import time
+from datetime import datetime, timedelta, timezone
+from typing import Any, Optional
 
 import jwt
 import redis
@@ -48,7 +48,9 @@ class SecurityManager:
         """Store credential securely in Redis with encryption"""
         encrypted_value = self.encrypt_credential(value)
         self.redis_client.setex(
-            f"credential:{key}", 3600, encrypted_value
+            f"credential:{key}",
+            3600,
+            encrypted_value,
         )  # 1 hour TTL
         logger.info(f"Stored encrypted credential for key: {key}")
 
@@ -63,7 +65,9 @@ class SecurityManager:
         """Validate JWT session token"""
         try:
             payload = jwt.decode(
-                session_token, str(SECURITY_CONFIG["jwt_secret"]), algorithms=["HS256"]
+                session_token,
+                str(SECURITY_CONFIG["jwt_secret"]),
+                algorithms=["HS256"],
             )
             return bool(payload.get("exp", 0) > time.time())
         except jwt.InvalidTokenError:
@@ -79,7 +83,9 @@ class SecurityManager:
             "exp": datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes)),
         }
         return jwt.encode(
-            payload, str(SECURITY_CONFIG["jwt_secret"]), algorithm="HS256"
+            payload,
+            str(SECURITY_CONFIG["jwt_secret"]),
+            algorithm="HS256",
         )
 
     def enforce_csrf_protection(self, token: str, session_id: str) -> bool:
@@ -92,25 +98,25 @@ class SecurityManager:
         data = f"{session_id}:{time.time()}:{SECURITY_CONFIG['jwt_secret']}"
         return hashlib.sha256(data.encode()).hexdigest()
 
-    def get_security_headers(self) -> Dict[str, str]:
+    def get_security_headers(self) -> dict[str, str]:
         """Get security headers for responses"""
         return {
             "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
-            "X-Content-Type-Options": "nosnif",
+            "X-Content-Type-Options": "nosni",
             "X-Frame-Options": "DENY",
             "X-XSS-Protection": "1; mode=block",
             "Referrer-Policy": "strict-origin-when-cross-origin",
             "Content-Security-Policy": "default-src 'sel'; script-src 'sel' 'unsafe-inline'; style-src 'sel' 'unsafe-inline'",
         }
 
-    def validate_security_config(self) -> Dict[str, Any]:
+    def validate_security_config(self) -> dict[str, Any]:
         """Validate security configuration and return status"""
         validation_results = {
             "fernet_key_configured": bool(SECURITY_CONFIG["fernet_key"]),
             "redis_url_configured": bool(SECURITY_CONFIG["redis_url"]),
             "jwt_secret_configured": bool(SECURITY_CONFIG["jwt_secret"]),
             "session_timeout_configured": bool(
-                SECURITY_CONFIG["session_timeout_minutes"]
+                SECURITY_CONFIG["session_timeout_minutes"],
             ),
             "all_required_fields_present": True,
         }
@@ -129,7 +135,7 @@ class SecurityManager:
 
         return validation_results
 
-    def enforce_security_policies(self, user_id: str, action: str) -> Dict[str, Any]:
+    def enforce_security_policies(self, user_id: str, action: str) -> dict[str, Any]:
         """Enforce security policies for user actions"""
         policies = {
             "max_login_attempts": 3,
@@ -161,7 +167,10 @@ class SecurityManager:
         }
 
     def audit_security_events(
-        self, user_id: str, event_type: str, details: Dict[str, Any]
+        self,
+        user_id: str,
+        event_type: str,
+        details: dict[str, Any],
     ) -> None:
         """Audit security events for compliance and monitoring"""
         audit_entry = {
@@ -184,7 +193,7 @@ class SecurityManager:
         recent_events = self.redis_client.keys(f"audit:{user_id}:*")
         if len(recent_events) > 100:  # More than 100 events in 30 days
             logger.warning(
-                f"High activity detected for user {user_id}: {len(recent_events)} events"
+                f"High activity detected for user {user_id}: {len(recent_events)} events",
             )
 
 

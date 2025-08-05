@@ -4,6 +4,7 @@ Test Model Traceability: Requirements → Implementation → Validation
 """
 
 import subprocess
+
 from project_model import ProjectModel
 
 
@@ -80,7 +81,7 @@ def test_requirement_4_content_analysis() -> None:
     model = ProjectModel()
 
     # Test file with CloudFormation indicators
-    with open("models/Openflow-Playground.yaml", "r") as f:
+    with open("models/Openflow-Playground.yaml") as f:
         content = f.read()
 
     # Check for CloudFormation indicators

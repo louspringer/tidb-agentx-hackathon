@@ -5,11 +5,11 @@ Direct integration with linter APIs for proactive violation prevention
 """
 
 import json
-import subprocess
 import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+import subprocess
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Optional
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -38,8 +38,8 @@ class LinterConfig:
     command: str
     output_format: str
     config_file: Optional[str] = None
-    enabled_rules: Optional[List[str]] = None
-    disabled_rules: Optional[List[str]] = None
+    enabled_rules: Optional[list[str]] = None
+    disabled_rules: Optional[list[str]] = None
 
 
 class LinterAPIIntegration:
@@ -58,7 +58,7 @@ class LinterAPIIntegration:
             "black": LinterConfig(
                 name="black",
                 command="black",
-                output_format="dif",
+                output_format="di",
                 config_file="pyproject.toml",
             ),
             "mypy": LinterConfig(
@@ -67,9 +67,9 @@ class LinterAPIIntegration:
                 output_format="json",
                 config_file="mypy.ini",
             ),
-            "ruf": LinterConfig(
-                name="ruf",
-                command="ruf",
+            "ru": LinterConfig(
+                name="ru",
+                command="ru",
                 output_format="json",
                 config_file=".ruff.toml",
                 enabled_rules=["E", "W", "F", "I", "B", "C4", "UP"],
@@ -78,8 +78,10 @@ class LinterAPIIntegration:
         }
 
     def query_linter_api(
-        self, linter_name: str, file_path: str
-    ) -> List[LinterViolation]:
+        self,
+        linter_name: str,
+        file_path: str,
+    ) -> list[LinterViolation]:
         """Query a specific linter API"""
         if linter_name not in self.linters:
             logger.error(f"Unknown linter: {linter_name}")
@@ -90,22 +92,23 @@ class LinterAPIIntegration:
         try:
             if linter_name == "flake8":
                 return self._query_flake8_api(file_path, linter_config)
-            elif linter_name == "black":
+            if linter_name == "black":
                 return self._query_black_api(file_path, linter_config)
-            elif linter_name == "mypy":
+            if linter_name == "mypy":
                 return self._query_mypy_api(file_path, linter_config)
-            elif linter_name == "ruf":
+            if linter_name == "ru":
                 return self._query_ruff_api(file_path, linter_config)
-            else:
-                logger.error(f"Unsupported linter: {linter_name}")
-                return []
+            logger.error(f"Unsupported linter: {linter_name}")
+            return []
         except Exception as e:
             logger.error(f"Error querying {linter_name} API: {e}")
             return []
 
     def _query_flake8_api(
-        self, file_path: str, config: LinterConfig
-    ) -> List[LinterViolation]:
+        self,
+        file_path: str,
+        config: LinterConfig,
+    ) -> list[LinterViolation]:
         """Query flake8 API"""
         try:
             cmd = [
@@ -137,7 +140,7 @@ class LinterAPIIntegration:
                                 column=violation["column_number"],
                                 file_path=violation["filename"],
                                 severity="error",
-                            )
+                            ),
                         )
                 except json.JSONDecodeError:
                     logger.error(f"Failed to parse flake8 JSON output: {result.stdout}")
@@ -152,11 +155,13 @@ class LinterAPIIntegration:
             return []
 
     def _query_black_api(
-        self, file_path: str, config: LinterConfig
-    ) -> List[LinterViolation]:
+        self,
+        file_path: str,
+        config: LinterConfig,
+    ) -> list[LinterViolation]:
         """Query black API"""
         try:
-            cmd = [config.command, "--check", "--dif", "--quiet"]
+            cmd = [config.command, "--check", "--di", "--quiet"]
 
             if config.config_file and Path(config.config_file).exists():
                 cmd.extend(["--config", config.config_file])
@@ -178,7 +183,7 @@ class LinterAPIIntegration:
                         severity="warning",
                         fix_available=True,
                         auto_fix=result.stdout,
-                    )
+                    ),
                 )
 
             return violations
@@ -191,8 +196,10 @@ class LinterAPIIntegration:
             return []
 
     def _query_mypy_api(
-        self, file_path: str, config: LinterConfig
-    ) -> List[LinterViolation]:
+        self,
+        file_path: str,
+        config: LinterConfig,
+    ) -> list[LinterViolation]:
         """Query mypy API"""
         try:
             cmd = [config.command, "--json"]
@@ -217,7 +224,7 @@ class LinterAPIIntegration:
                                 column=violation.get("column", 1),
                                 file_path=violation.get("file", file_path),
                                 severity="error",
-                            )
+                            ),
                         )
                 except json.JSONDecodeError:
                     logger.error(f"Failed to parse mypy JSON output: {result.stdout}")
@@ -232,8 +239,10 @@ class LinterAPIIntegration:
             return []
 
     def _query_ruff_api(
-        self, file_path: str, config: LinterConfig
-    ) -> List[LinterViolation]:
+        self,
+        file_path: str,
+        config: LinterConfig,
+    ) -> list[LinterViolation]:
         """Query Ruff API (AI-powered)"""
         try:
             cmd = [config.command, "check", "--output-format=json"]
@@ -259,10 +268,11 @@ class LinterAPIIntegration:
                                 file_path=violation.get("filename", file_path),
                                 severity="error",
                                 fix_available=violation.get("fix", {}).get(
-                                    "applicable", False
+                                    "applicable",
+                                    False,
                                 ),
                                 auto_fix=violation.get("fix", {}).get("message", ""),
-                            )
+                            ),
                         )
                 except json.JSONDecodeError:
                     logger.error(f"Failed to parse ruff JSON output: {result.stdout}")
@@ -276,10 +286,10 @@ class LinterAPIIntegration:
             logger.error(f"Error querying ruff API: {e}")
             return []
 
-    def get_ai_suggestions(self, file_path: str) -> List[Dict[str, Any]]:
-        """Get AI-powered suggestions from Ruf"""
+    def get_ai_suggestions(self, file_path: str) -> list[dict[str, Any]]:
+        """Get AI-powered suggestions from Ru"""
         try:
-            cmd = ["ruf", "check", "--fix", "--output-format=json", file_path]
+            cmd = ["ru", "check", "--fix", "--output-format=json", file_path]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
             suggestions = []
@@ -294,9 +304,10 @@ class LinterAPIIntegration:
                                     "message": suggestion.get("message"),
                                     "fix": suggestion.get("fix", {}).get("message", ""),
                                     "line": suggestion.get("location", {}).get(
-                                        "row", 1
+                                        "row",
+                                        1,
                                     ),
-                                }
+                                },
                             )
                 except json.JSONDecodeError:
                     logger.error(f"Failed to parse ruff suggestions: {result.stdout}")
@@ -308,8 +319,10 @@ class LinterAPIIntegration:
             return []
 
     def prevent_violations_before_writing(
-        self, file_path: str, code_block: str
-    ) -> Dict[str, Any]:
+        self,
+        file_path: str,
+        code_block: str,
+    ) -> dict[str, Any]:
         """Prevent violations before writing code"""
         logger.info(f"Analyzing code block for potential violations in {file_path}")
 
@@ -327,7 +340,7 @@ class LinterAPIIntegration:
 
         # Generate prevention suggestions
         prevention_suggestions = self._generate_prevention_suggestions(
-            potential_violations
+            potential_violations,
         )
 
         # Get auto-fixes
@@ -341,8 +354,10 @@ class LinterAPIIntegration:
         }
 
     def _analyze_code_block(
-        self, code_block: str, linter_results: Dict[str, List[LinterViolation]]
-    ) -> List[Dict[str, Any]]:
+        self,
+        code_block: str,
+        linter_results: dict[str, list[LinterViolation]],
+    ) -> list[dict[str, Any]]:
         """Analyze code block for potential violations"""
         potential_violations = []
 
@@ -358,7 +373,7 @@ class LinterAPIIntegration:
                         "line": i,
                         "code": "F401",
                         "suggestion": "Ensure import is actually used in the code",
-                    }
+                    },
                 )
 
             # Check for f-strings without placeholders
@@ -368,7 +383,7 @@ class LinterAPIIntegration:
                         "type": "f_string_no_placeholder",
                         "line": i,
                         "suggestion": "Use regular string instead of f-string",
-                    }
+                    },
                 )
 
             # Check for missing blank lines
@@ -380,7 +395,7 @@ class LinterAPIIntegration:
                             "line": i,
                             "code": "E302",
                             "suggestion": "Add two blank lines before definition",
-                        }
+                        },
                     )
 
             # Check for trailing whitespace
@@ -391,14 +406,15 @@ class LinterAPIIntegration:
                         "line": i,
                         "code": "W291",
                         "suggestion": "Remove trailing whitespace",
-                    }
+                    },
                 )
 
         return potential_violations
 
     def _generate_prevention_suggestions(
-        self, violations: List[Dict[str, Any]]
-    ) -> List[str]:
+        self,
+        violations: list[dict[str, Any]],
+    ) -> list[str]:
         """Generate prevention suggestions"""
         suggestions = []
 
@@ -409,7 +425,7 @@ class LinterAPIIntegration:
                 suggestions.append("Use regular strings when no variables are needed")
             elif violation["type"] == "missing_blank_lines":
                 suggestions.append(
-                    "Add two blank lines before class/function definitions"
+                    "Add two blank lines before class/function definitions",
                 )
             elif violation["type"] == "trailing_whitespace":
                 suggestions.append("Remove trailing whitespace from lines")
@@ -417,8 +433,10 @@ class LinterAPIIntegration:
         return suggestions
 
     def _get_auto_fixes(
-        self, violations: List[Dict[str, Any]], ai_suggestions: List[Dict[str, Any]]
-    ) -> List[Dict[str, Any]]:
+        self,
+        violations: list[dict[str, Any]],
+        ai_suggestions: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
         """Get automatic fixes for violations"""
         auto_fixes = []
 
@@ -429,7 +447,7 @@ class LinterAPIIntegration:
                         "type": "f_string_fix",
                         "line": violation["line"],
                         "fix": "Replace f-string with regular string",
-                    }
+                    },
                 )
             elif violation["type"] == "trailing_whitespace":
                 auto_fixes.append(
@@ -437,7 +455,7 @@ class LinterAPIIntegration:
                         "type": "whitespace_fix",
                         "line": violation["line"],
                         "fix": "Remove trailing whitespace",
-                    }
+                    },
                 )
 
         # Add AI suggestions as auto-fixes
@@ -448,7 +466,7 @@ class LinterAPIIntegration:
                     "line": suggestion["line"],
                     "fix": suggestion["fix"],
                     "code": suggestion["code"],
-                }
+                },
             )
 
         return auto_fixes
@@ -458,14 +476,13 @@ class LinterAPIIntegration:
         if violation.code == "F401":
             return "# noqa: F401  # Import needed for type checking"
 
-        elif violation.code == "E302":
+        if violation.code == "E302":
             return "# noqa: E302  # Compact module structure"
-        elif violation.code == "W291":
+        if violation.code == "W291":
             return "# noqa: W291  # Trailing whitespace acceptable"
-        elif violation.code == "W292":
+        if violation.code == "W292":
             return "# noqa: W292  # No newline acceptable"
-        else:
-            return f"# noqa: {violation.code}  # {violation.message}"
+        return f"# noqa: {violation.code}  # {violation.message}"
 
 
 def main() -> None:
@@ -479,20 +496,18 @@ def main() -> None:
     test_file = "tests/test_python_quality_enforcement.py"
 
     if Path(test_file).exists():
-        logger.info("Testing linter API integration with {}".format(test_file))
+        logger.info(f"Testing linter API integration with {test_file}")
 
         # Query all linters
         for linter_name in integration.linters:
-            logger.info("\n📝 Querying {} API...".format(linter_name))
+            logger.info(f"\n📝 Querying {linter_name} API...")
             violations = integration.query_linter_api(linter_name, test_file)
 
             if violations:
-                logger.info("Found {} violations:".format(len(violations)))
+                logger.info(f"Found {len(violations)} violations:")
                 for violation in violations[:3]:  # Show first 3
                     logger.info(
-                        "  - {}: {} (line {})".format(
-                            violation.code, violation.message, violation.line_number
-                        )
+                        f"  - {violation.code}: {violation.message} (line {violation.line_number})",
                     )
             else:
                 logger.info("No violations found")
@@ -502,10 +517,10 @@ def main() -> None:
         ai_suggestions = integration.get_ai_suggestions(test_file)
 
         if ai_suggestions:
-            logger.info("Found {} AI suggestions:".format(len(ai_suggestions)))
+            logger.info(f"Found {len(ai_suggestions)} AI suggestions:")
             for suggestion in ai_suggestions[:3]:  # Show first 3
                 logger.info(
-                    "  - {}: {}".format(suggestion["code"], suggestion["message"])
+                    "  - {}: {}".format(suggestion["code"], suggestion["message"]),
                 )
         else:
             logger.info("No AI suggestions found")

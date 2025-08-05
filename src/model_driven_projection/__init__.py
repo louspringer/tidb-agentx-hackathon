@@ -20,13 +20,13 @@ Components:
 - *_REPORT.md: Comprehensive analysis reports
 """
 
+from .final_projection_system import FinalProjectionSystem
 from .level1_granular_nodes import (
     CodeNode,
     DependencyResolver,
-    NodeProjector,
     ModelRegistry,
+    NodeProjector,
 )
-from .final_projection_system import FinalProjectionSystem
 
 __version__ = "1.0.0"
 __author__ = "OpenFlow Playground Team"

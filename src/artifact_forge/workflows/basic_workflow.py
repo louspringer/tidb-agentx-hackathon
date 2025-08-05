@@ -4,29 +4,29 @@ ArtifactForge Basic Workflow
 LangGraph workflow for artifact processing
 """
 
-from typing import Dict, List, Any
-from dataclasses import dataclass
-from datetime import datetime
+import os
 
 # Import our agents
 import sys
-import os
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
+from src.artifact_forge.agents.artifact_correlator import ArtifactCorrelator
 from src.artifact_forge.agents.artifact_detector import ArtifactDetector
 from src.artifact_forge.agents.artifact_parser import ArtifactParser
-from src.artifact_forge.agents.artifact_correlator import ArtifactCorrelator
 
 
 @dataclass
 class ArtifactForgeState:
     """State for ArtifactForge workflow"""
 
-    artifacts_discovered: List[Dict[str, Any]]
-    artifacts_parsed: List[Dict[str, Any]]
-    relationships_found: List[Dict[str, Any]]
-    errors: List[str]
+    artifacts_discovered: list[dict[str, Any]]
+    artifacts_parsed: list[dict[str, Any]]
+    relationships_found: list[dict[str, Any]]
+    errors: list[str]
     processing_time: float
     confidence_score: float
 
@@ -56,7 +56,8 @@ class ArtifactForgeWorkflow:
             parsed_artifacts = []
             for artifact in artifacts:
                 parsed = self.parser.parse_artifact(
-                    artifact.path, artifact.artifact_type
+                    artifact.path,
+                    artifact.artifact_type,
                 )
                 parsed_dict = self._parsed_artifact_to_dict(parsed)
                 parsed_artifacts.append(parsed_dict)
@@ -90,7 +91,7 @@ class ArtifactForgeWorkflow:
 
         return state
 
-    def _artifact_to_dict(self, artifact) -> Dict[str, Any]:
+    def _artifact_to_dict(self, artifact) -> dict[str, Any]:
         """Convert ArtifactInfo to dictionary"""
         return {
             "path": artifact.path,
@@ -103,7 +104,7 @@ class ArtifactForgeWorkflow:
             "metadata": artifact.metadata,
         }
 
-    def _parsed_artifact_to_dict(self, parsed_artifact) -> Dict[str, Any]:
+    def _parsed_artifact_to_dict(self, parsed_artifact) -> dict[str, Any]:
         """Convert ParsedArtifact to dictionary"""
         return {
             "path": parsed_artifact.path,
@@ -113,7 +114,7 @@ class ArtifactForgeWorkflow:
             "parsing_timestamp": parsed_artifact.parsing_timestamp.isoformat(),
         }
 
-    def _relationship_to_dict(self, relationship) -> Dict[str, Any]:
+    def _relationship_to_dict(self, relationship) -> dict[str, Any]:
         """Convert ArtifactRelationship to dictionary"""
         return {
             "source_artifact": relationship.source_artifact,

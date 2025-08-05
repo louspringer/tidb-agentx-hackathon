@@ -4,13 +4,13 @@ Enhanced ArtifactParser Agent
 Uses recursive descent to find enclosing blocks and handle indentation errors gracefully
 """
 
-import logging
 import ast
+import logging
 import re
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -35,10 +35,10 @@ class ParsedArtifact:
 
     path: str
     artifact_type: str
-    parsed_data: Dict[str, Any]
-    parsing_errors: List[str]
+    parsed_data: dict[str, Any]
+    parsing_errors: list[str]
     parsing_timestamp: datetime
-    block_analysis: Dict[str, Any] = None
+    block_analysis: dict[str, Any] = None
 
 
 class ArtifactParser:
@@ -78,10 +78,11 @@ class ArtifactParser:
         )
 
     def _parse_python_enhanced(
-        self, file_path: str
-    ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        self,
+        file_path: str,
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
         """Enhanced Python parsing with recursive descent block analysis"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         lines = content.splitlines()
@@ -111,7 +112,7 @@ class ArtifactParser:
 
         return parsed_data, block_analysis
 
-    def _analyze_blocks_recursive_descent(self, lines: List[str]) -> Dict[str, Any]:
+    def _analyze_blocks_recursive_descent(self, lines: list[str]) -> dict[str, Any]:
         """Use recursive descent to find block boundaries despite indentation errors"""
         logger.info("Starting recursive descent block analysis")
 
@@ -147,17 +148,15 @@ class ArtifactParser:
 
             # Check for block end
             elif current_block and self._is_block_end(
-                stripped, current_block.block_type
+                stripped,
+                current_block.block_type,
             ):
                 # End current block
                 current_block.end_line = line_num
                 current_block.content += "\n" + line
 
                 # Pop back to parent block
-                if block_stack:
-                    current_block = block_stack.pop()
-                else:
-                    current_block = None
+                current_block = block_stack.pop() if block_stack else None
 
             # Update current block content
             elif current_block:
@@ -225,13 +224,14 @@ class ArtifactParser:
         if block_type == "class" and re.match(r"^class\s+", line):
             return True  # New class starts
         if block_type in ["i", "eli", "else"] and re.match(
-            r"^(elif|else|if)\s+", line
+            r"^(elif|else|if)\s+",
+            line,
         ):
             return True  # New control flow starts
 
         return False
 
-    def _extract_from_blocks(self, block_analysis: Dict[str, Any]) -> Dict[str, Any]:
+    def _extract_from_blocks(self, block_analysis: dict[str, Any]) -> dict[str, Any]:
         """Extract structured data from block analysis"""
         blocks = block_analysis.get("blocks", [])
 
@@ -267,8 +267,9 @@ class ArtifactParser:
         }
 
     def _extract_function_from_block(
-        self, block: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+        self,
+        block: dict[str, Any],
+    ) -> Optional[dict[str, Any]]:
         """Extract function information from block content"""
         content = block["content"]
         lines = content.splitlines()
@@ -286,7 +287,7 @@ class ArtifactParser:
 
             # Count arguments (simplified)
             args_count = len(
-                [arg.strip() for arg in args_str.split(",") if arg.strip()]
+                [arg.strip() for arg in args_str.split(",") if arg.strip()],
             )
 
             return {
@@ -299,8 +300,9 @@ class ArtifactParser:
         return None
 
     def _extract_class_from_block(
-        self, block: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+        self,
+        block: dict[str, Any],
+    ) -> Optional[dict[str, Any]]:
         """Extract class information from block content"""
         content = block["content"]
         lines = content.splitlines()
@@ -330,7 +332,7 @@ class ArtifactParser:
 
         return None
 
-    def _extract_imports_from_content(self, content: str) -> List[str]:
+    def _extract_imports_from_content(self, content: str) -> list[str]:
         """Extract import statements from content"""
         imports = []
         lines = content.splitlines()
@@ -342,7 +344,7 @@ class ArtifactParser:
 
         return imports
 
-    def _detect_indentation_issues(self, lines: List[str]) -> List[Dict[str, Any]]:
+    def _detect_indentation_issues(self, lines: list[str]) -> list[dict[str, Any]]:
         """Detect indentation issues in the code"""
         issues = []
 
@@ -355,7 +357,7 @@ class ArtifactParser:
                             "line": i,
                             "type": "mixed_tabs_spaces",
                             "description": "Mixed tabs and spaces",
-                        }
+                        },
                     )
 
                 # Check for inconsistent indentation
@@ -367,12 +369,12 @@ class ArtifactParser:
                                 "line": i,
                                 "type": "inconsistent_indentation",
                                 "description": f"Indentation not multiple of 4: {indent_level} spaces",
-                            }
+                            },
                         )
 
         return issues
 
-    def _block_to_dict(self, block: BlockBoundary) -> Dict[str, Any]:
+    def _block_to_dict(self, block: BlockBoundary) -> dict[str, Any]:
         """Convert BlockBoundary to dictionary"""
         return {
             "start_line": block.start_line,
@@ -385,7 +387,7 @@ class ArtifactParser:
             ),
         }
 
-    def _count_block_types(self, blocks: List[BlockBoundary]) -> Dict[str, int]:
+    def _count_block_types(self, blocks: list[BlockBoundary]) -> dict[str, int]:
         """Count blocks by type"""
         counts = {}
         for block in blocks:
@@ -393,9 +395,9 @@ class ArtifactParser:
         return counts
 
     # Standard parsing methods (unchanged)
-    def _parse_mdc(self, file_path: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _parse_mdc(self, file_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
         """Parse MDC file (Markdown with YAML frontmatter)"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         # Split frontmatter and markdown
@@ -422,9 +424,9 @@ class ArtifactParser:
 
         return parsed_data, {}
 
-    def _parse_markdown(self, file_path: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _parse_markdown(self, file_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
         """Parse Markdown file"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         parsed_data = {
@@ -436,9 +438,9 @@ class ArtifactParser:
 
         return parsed_data, {}
 
-    def _parse_yaml(self, file_path: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _parse_yaml(self, file_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
         """Parse YAML file"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         try:
@@ -455,9 +457,9 @@ class ArtifactParser:
 
         return parsed_data, {}
 
-    def _parse_json(self, file_path: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _parse_json(self, file_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
         """Parse JSON file"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         try:
@@ -474,9 +476,9 @@ class ArtifactParser:
 
         return parsed_data, {}
 
-    def _parse_sql(self, file_path: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    def _parse_sql(self, file_path: str) -> tuple[dict[str, Any], dict[str, Any]]:
         """Parse SQL file"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         parsed_data = {
@@ -487,9 +489,9 @@ class ArtifactParser:
 
         return parsed_data, {}
 
-    def _parse_generic(self, file_path: str) -> Dict[str, Any]:
+    def _parse_generic(self, file_path: str) -> dict[str, Any]:
         """Parse generic file"""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
 
         return {
@@ -499,7 +501,7 @@ class ArtifactParser:
         }
 
     # Helper methods (unchanged from original)
-    def _extract_imports(self, tree: ast.AST) -> List[str]:
+    def _extract_imports(self, tree: ast.AST) -> list[str]:
         """Extract import statements"""
         imports = []
         for node in ast.walk(tree):
@@ -507,7 +509,7 @@ class ArtifactParser:
                 imports.append(ast.unparse(node))
         return imports
 
-    def _extract_functions(self, tree: ast.AST) -> List[Dict[str, Any]]:
+    def _extract_functions(self, tree: ast.AST) -> list[dict[str, Any]]:
         """Extract function definitions"""
         functions = []
         for node in ast.walk(tree):
@@ -517,11 +519,11 @@ class ArtifactParser:
                         "name": node.name,
                         "line_number": node.lineno,
                         "args": len(node.args.args),
-                    }
+                    },
                 )
         return functions
 
-    def _extract_classes(self, tree: ast.AST) -> List[Dict[str, Any]]:
+    def _extract_classes(self, tree: ast.AST) -> list[dict[str, Any]]:
         """Extract class definitions"""
         classes = []
         for node in ast.walk(tree):
@@ -531,13 +533,13 @@ class ArtifactParser:
                         "name": node.name,
                         "line_number": node.lineno,
                         "methods": len(
-                            [n for n in node.body if isinstance(n, ast.FunctionDef)]
+                            [n for n in node.body if isinstance(n, ast.FunctionDef)],
                         ),
-                    }
+                    },
                 )
         return classes
 
-    def _extract_variables(self, tree: ast.AST) -> List[str]:
+    def _extract_variables(self, tree: ast.AST) -> list[str]:
         """Extract variable assignments"""
         variables = []
         for node in ast.walk(tree):
@@ -555,7 +557,7 @@ class ArtifactParser:
                 complexity += 1
         return complexity
 
-    def _extract_headings(self, content: str) -> List[str]:
+    def _extract_headings(self, content: str) -> list[str]:
         """Extract markdown headings"""
         headings = []
         for line in content.splitlines():
@@ -563,12 +565,12 @@ class ArtifactParser:
                 headings.append(line.strip())
         return headings
 
-    def _extract_links(self, content: str) -> List[str]:
+    def _extract_links(self, content: str) -> list[str]:
         """Extract markdown links"""
         links = re.findall(r"\[([^\]]+)\]\(([^)]+)\)", content)
         return [f"{text} -> {url}" for text, url in links]
 
-    def _extract_sql_statements(self, content: str) -> List[str]:
+    def _extract_sql_statements(self, content: str) -> list[str]:
         """Extract SQL statements"""
         statements = []
         for line in content.splitlines():
@@ -577,7 +579,7 @@ class ArtifactParser:
                 statements.append(line)
         return statements
 
-    def _analyze_yaml_structure(self, data: Any) -> Dict[str, Any]:
+    def _analyze_yaml_structure(self, data: Any) -> dict[str, Any]:
         """Analyze YAML structure"""
         if isinstance(data, dict):
             return {
@@ -585,16 +587,15 @@ class ArtifactParser:
                 "keys": list(data.keys()),
                 "depth": self._calculate_depth(data),
             }
-        elif isinstance(data, list):
+        if isinstance(data, list):
             return {
                 "type": "array",
                 "length": len(data),
                 "depth": self._calculate_depth(data),
             }
-        else:
-            return {"type": "primitive"}
+        return {"type": "primitive"}
 
-    def _analyze_json_structure(self, data: Any) -> Dict[str, Any]:
+    def _analyze_json_structure(self, data: Any) -> dict[str, Any]:
         """Analyze JSON structure"""
         return self._analyze_yaml_structure(data)  # Same logic
 
@@ -605,13 +606,12 @@ class ArtifactParser:
                 current_depth,
                 max(self._calculate_depth(v, current_depth + 1) for v in obj.values()),
             )
-        elif isinstance(obj, list):
+        if isinstance(obj, list):
             return max(
                 current_depth,
                 max(self._calculate_depth(item, current_depth + 1) for item in obj),
             )
-        else:
-            return current_depth
+        return current_depth
 
 
 def main() -> None:
@@ -626,7 +626,7 @@ def main() -> None:
         print(f"Path: {parsed.path}")
         print(f"Type: {parsed.artifact_type}")
         print(
-            f"AST Parse Successful: {parsed.parsed_data.get('ast_parse_successful', False)}"
+            f"AST Parse Successful: {parsed.parsed_data.get('ast_parse_successful', False)}",
         )
         print(f"Functions: {len(parsed.parsed_data.get('functions', []))}")
         print(f"Classes: {len(parsed.parsed_data.get('classes', []))}")
@@ -636,7 +636,7 @@ def main() -> None:
             print(f"Blocks Found: {parsed.block_analysis.get('total_blocks', 0)}")
             print(f"Block Types: {parsed.block_analysis.get('block_types', {})}")
             print(
-                f"Indentation Issues: {len(parsed.block_analysis.get('indentation_issues', []))}"
+                f"Indentation Issues: {len(parsed.block_analysis.get('indentation_issues', []))}",
             )
 
         if parsed.parsing_errors:

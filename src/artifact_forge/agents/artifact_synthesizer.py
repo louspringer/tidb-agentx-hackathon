@@ -5,9 +5,9 @@ Creates unified artifact insights and recommendations
 """
 
 import logging
-from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -22,8 +22,8 @@ class ArtifactInsight:
     title: str
     description: str
     severity: str  # 'critical', 'high', 'medium', 'low'
-    affected_artifacts: List[str]
-    recommendations: List[str]
+    affected_artifacts: list[str]
+    recommendations: list[str]
     confidence: float
     created_at: datetime
 
@@ -42,10 +42,10 @@ class ArtifactSynthesizer:
 
     def synthesize_insights(
         self,
-        artifacts: List[Dict[str, Any]],
-        relationships: List[Dict[str, Any]],
-        opportunities: List[Dict[str, Any]],
-    ) -> List[ArtifactInsight]:
+        artifacts: list[dict[str, Any]],
+        relationships: list[dict[str, Any]],
+        opportunities: list[dict[str, Any]],
+    ) -> list[ArtifactInsight]:
         """Create unified insights from all artifact data"""
         logger.info("Starting insight synthesis")
 
@@ -62,7 +62,8 @@ class ArtifactSynthesizer:
 
         # Sort by severity and confidence
         insights.sort(
-            key=lambda x: (self._severity_score(x.severity), x.confidence), reverse=True
+            key=lambda x: (self._severity_score(x.severity), x.confidence),
+            reverse=True,
         )
 
         logger.info(f"Generated {len(insights)} insights")
@@ -70,10 +71,10 @@ class ArtifactSynthesizer:
 
     def _analyze_codebase_health(
         self,
-        artifacts: List[Dict[str, Any]],
-        relationships: List[Dict[str, Any]],
-        opportunities: List[Dict[str, Any]],
-    ) -> List[ArtifactInsight]:
+        artifacts: list[dict[str, Any]],
+        relationships: list[dict[str, Any]],
+        opportunities: list[dict[str, Any]],
+    ) -> list[ArtifactInsight]:
         """Analyze overall codebase health"""
         insights = []
 
@@ -110,7 +111,7 @@ class ArtifactSynthesizer:
                     ],
                     confidence=0.95,
                     created_at=datetime.now(),
-                )
+                ),
             )
 
         # Analyze artifact distribution
@@ -130,17 +131,17 @@ class ArtifactSynthesizer:
                     ],
                     confidence=0.8,
                     created_at=datetime.now(),
-                )
+                ),
             )
 
         return insights
 
     def _analyze_complexity_distribution(
         self,
-        artifacts: List[Dict[str, Any]],
-        relationships: List[Dict[str, Any]],
-        opportunities: List[Dict[str, Any]],
-    ) -> List[ArtifactInsight]:
+        artifacts: list[dict[str, Any]],
+        relationships: list[dict[str, Any]],
+        opportunities: list[dict[str, Any]],
+    ) -> list[ArtifactInsight]:
         """Analyze complexity distribution across artifacts"""
         insights = []
 
@@ -177,7 +178,7 @@ class ArtifactSynthesizer:
                         ],
                         confidence=0.85,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
             if high_complexity_count > 5:
@@ -199,17 +200,17 @@ class ArtifactSynthesizer:
                         ],
                         confidence=0.9,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return insights
 
     def _analyze_quality_metrics(
         self,
-        artifacts: List[Dict[str, Any]],
-        relationships: List[Dict[str, Any]],
-        opportunities: List[Dict[str, Any]],
-    ) -> List[ArtifactInsight]:
+        artifacts: list[dict[str, Any]],
+        relationships: list[dict[str, Any]],
+        opportunities: list[dict[str, Any]],
+    ) -> list[ArtifactInsight]:
         """Analyze code quality metrics"""
         insights = []
 
@@ -235,7 +236,7 @@ class ArtifactSynthesizer:
                     ],
                     confidence=0.75,
                     created_at=datetime.now(),
-                )
+                ),
             )
 
         # Analyze documentation coverage
@@ -263,17 +264,17 @@ class ArtifactSynthesizer:
                         ],
                         confidence=0.8,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return insights
 
     def _analyze_security_issues(
         self,
-        artifacts: List[Dict[str, Any]],
-        relationships: List[Dict[str, Any]],
-        opportunities: List[Dict[str, Any]],
-    ) -> List[ArtifactInsight]:
+        artifacts: list[dict[str, Any]],
+        relationships: list[dict[str, Any]],
+        opportunities: list[dict[str, Any]],
+    ) -> list[ArtifactInsight]:
         """Analyze security issues"""
         insights = []
 
@@ -306,17 +307,17 @@ class ArtifactSynthesizer:
                         ],
                         confidence=0.95,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return insights
 
     def _analyze_performance_patterns(
         self,
-        artifacts: List[Dict[str, Any]],
-        relationships: List[Dict[str, Any]],
-        opportunities: List[Dict[str, Any]],
-    ) -> List[ArtifactInsight]:
+        artifacts: list[dict[str, Any]],
+        relationships: list[dict[str, Any]],
+        opportunities: list[dict[str, Any]],
+    ) -> list[ArtifactInsight]:
         """Analyze performance patterns"""
         insights = []
 
@@ -343,7 +344,7 @@ class ArtifactSynthesizer:
                     ],
                     confidence=0.7,
                     created_at=datetime.now(),
-                )
+                ),
             )
 
         # Analyze relationship patterns
@@ -371,7 +372,7 @@ class ArtifactSynthesizer:
                         ],
                         confidence=0.6,
                         created_at=datetime.now(),
-                    )
+                    ),
                 )
 
         return insights
@@ -397,7 +398,7 @@ def main() -> None:
                 "complexity": 15,
                 "functions": [{"name": "test_func", "args": 5}],
             },
-        }
+        },
     ]
 
     sample_relationships = [
@@ -405,7 +406,7 @@ def main() -> None:
             "source_artifact": "file1.py",
             "target_artifact": "file2.py",
             "relationship_type": "imports",
-        }
+        },
     ]
 
     sample_opportunities = [
@@ -414,12 +415,14 @@ def main() -> None:
             "opportunity_type": "syntax_error",
             "severity": "critical",
             "description": "Syntax error detected",
-        }
+        },
     ]
 
     logger.info("Running insight synthesis on sample data")
     insights = synthesizer.synthesize_insights(
-        sample_artifacts, sample_relationships, sample_opportunities
+        sample_artifacts,
+        sample_relationships,
+        sample_opportunities,
     )
 
     print("🔍 **ARTIFACT INSIGHTS:**")
@@ -427,7 +430,7 @@ def main() -> None:
 
     for insight in insights[:3]:  # Show first 3
         print(
-            f"  {insight.title} ({insight.insight_type}, {insight.severity}): {insight.description}"
+            f"  {insight.title} ({insight.insight_type}, {insight.severity}): {insight.description}",
         )
 
 

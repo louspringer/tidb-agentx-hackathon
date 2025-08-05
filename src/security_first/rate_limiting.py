@@ -4,9 +4,9 @@ Rate Limiting Module
 Separate module for rate limiting functionality to avoid coupling with HTTPS enforcement.
 """
 
-import time
-from typing import Dict, Any
 import logging
+import time
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ class RateLimiting:
             logger.error(f"Failed to reset rate limit for {user_id}:{endpoint}: {e}")
             return False
 
-    def get_rate_limit_info(self, user_id: str, endpoint: str) -> Dict[str, Any]:
+    def get_rate_limit_info(self, user_id: str, endpoint: str) -> dict[str, Any]:
         """Get detailed rate limit information."""
         key = f"rate_limit:{user_id}:{endpoint}"
         current = self.redis.get(key)
@@ -94,6 +94,6 @@ if __name__ == "__main__":
 
     print(f"Rate limit check: {rate_limiter.check_rate_limit(user_id, endpoint)}")
     print(
-        f"Remaining requests: {rate_limiter.get_remaining_requests(user_id, endpoint)}"
+        f"Remaining requests: {rate_limiter.get_remaining_requests(user_id, endpoint)}",
     )
     print(f"Rate limit info: {rate_limiter.get_rate_limit_info(user_id, endpoint)}")

@@ -1,6 +1,5 @@
-from typing import Any
-from typing import Dict
 import re
+from typing import Any
 from urllib.parse import urlparse
 
 
@@ -23,10 +22,10 @@ def test_input_validator() -> None:
     assert validator.validate_uuid("123e4567-e89b-12d3-a456-426614174000")
     assert not validator.validate_uuid("not-a-uuid")
     assert validator.validate_oauth_credentials(
-        {"client_id": "test_id", "client_secret": "test_secret"}
+        {"client_id": "test_id", "client_secret": "test_secret"},
     )
     assert not validator.validate_oauth_credentials(
-        {"client_id": "", "client_secret": ""}
+        {"client_id": "", "client_secret": ""},
     )
     print("✅ Input Validator tests passed")
 
@@ -38,16 +37,15 @@ def validate_input(input_str: str, input_type: str = "text") -> bool:
         return False
     if input_type == "text":
         return len(input_str.strip()) > 0
-    elif input_type == "email":
+    if input_type == "email":
         return InputValidator.validate_email(input_str)
-    elif input_type == "url":
+    if input_type == "url":
         return InputValidator.validate_url(input_str)
-    elif input_type == "phone":
+    if input_type == "phone":
         return InputValidator.validate_phone_number(input_str)
-    elif input_type == "uuid":
+    if input_type == "uuid":
         return InputValidator.validate_uuid(input_str)
-    else:
-        return len(input_str.strip()) > 0
+    return len(input_str.strip()) > 0
 
 
 @staticmethod
@@ -58,7 +56,7 @@ def validate_email(email: str) -> bool:
 
 
 @staticmethod
-def validate_password_strength(password: str) -> Dict[str, Any]:
+def validate_password_strength(password: str) -> dict[str, Any]:
     """Validate password strength"""
     checks = {
         "length": len(password) >= 8,
@@ -94,7 +92,7 @@ def validate_credit_card(card_number: str) -> bool:
 
 
 @staticmethod
-def validate_json_schema(data: Dict[str, Any], schema: Dict[str, Any]) -> bool:
+def validate_json_schema(data: dict[str, Any], schema: dict[str, Any]) -> bool:
     """Validate data against JSON schema"""
     try:
         from jsonschema import validate
@@ -131,10 +129,7 @@ def validate_sql_injection_safe(sql: str) -> bool:
         "(\\b(xp_|sp_)\\b)",
     ]
     sql_lower = sql.lower()
-    for pattern in dangerous_patterns:
-        if re.search(pattern, sql_lower):
-            return False
-    return True
+    return all(not re.search(pattern, sql_lower) for pattern in dangerous_patterns)
 
 
 @staticmethod
@@ -149,22 +144,22 @@ def validate_xss_safe(text: str) -> bool:
         "<embed[^>]*>",
     ]
     text_lower = text.lower()
-    for pattern in dangerous_patterns:
-        if re.search(pattern, text_lower):
-            return False
-    return True
+    return all(not re.search(pattern, text_lower) for pattern in dangerous_patterns)
 
 
 @staticmethod
 def validate_file_upload(
-    filename: str, file_size: int, allowed_extensions: list[str], max_size_mb: int = 10
-) -> Dict[str, Any]:
+    filename: str,
+    file_size: int,
+    allowed_extensions: list[str],
+    max_size_mb: int = 10,
+) -> dict[str, Any]:
     """Validate file upload for security and size constraints"""
-    validation_result: Dict[str, Any] = {"valid": True, "errors": [], "warnings": []}
+    validation_result: dict[str, Any] = {"valid": True, "errors": [], "warnings": []}
     if not InputValidator.validate_file_extension(filename, allowed_extensions):
         validation_result["valid"] = False
         validation_result["errors"].append(
-            f"File extension not allowed. Allowed: {allowed_extensions}"
+            f"File extension not allowed. Allowed: {allowed_extensions}",
         )
     if not InputValidator.validate_file_size(file_size, max_size_mb):
         validation_result["valid"] = False
@@ -179,7 +174,7 @@ def validate_file_upload(
         if re.search(pattern, filename, re.IGNORECASE):
             validation_result["valid"] = False
             validation_result["errors"].append(
-                f"Suspicious filename pattern: {pattern}"
+                f"Suspicious filename pattern: {pattern}",
             )
             break
     return validation_result

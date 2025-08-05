@@ -4,19 +4,19 @@ Ghostbusters Agents - Expert agents for delusion detection
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, List, Any
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 
 @dataclass
 class DelusionResult:
     """Result from delusion detection"""
 
-    delusions: List[Dict[str, Any]]
+    delusions: list[dict[str, Any]]
     confidence: float
-    recommendations: List[str]
+    recommendations: list[str]
 
 
 class BaseExpert(ABC):
@@ -47,10 +47,22 @@ class SecurityExpert(BaseExpert):
             r"gho_[a-zA-Z0-9]{36}",
         ]
 
+        # Check for subprocess security vulnerabilities
+        subprocess_patterns = [
+            r"import subprocess",
+            r"subprocess\.run",
+            r"subprocess\.Popen",
+            r"subprocess\.call",
+            r"os\.system",
+            r"os\.popen",
+        ]
+
         # Check for security issues
         for py_file in project_path.rglob("*.py"):
             try:
                 content = py_file.read_text()
+
+                # Check for hardcoded credentials
                 for pattern in credential_patterns:
                     if pattern in content:
                         delusions.append(
@@ -60,8 +72,22 @@ class SecurityExpert(BaseExpert):
                                 "pattern": pattern,
                                 "priority": "high",
                                 "description": f"Potential hardcoded credential found: {pattern}",
-                            }
+                            },
                         )
+
+                # Check for subprocess vulnerabilities
+                for pattern in subprocess_patterns:
+                    if pattern in content:
+                        delusions.append(
+                            {
+                                "type": "subprocess_vulnerability",
+                                "file": str(py_file),
+                                "pattern": pattern,
+                                "priority": "critical",
+                                "description": f"Subprocess usage detected: {pattern} - Security risk for command injection",
+                            },
+                        )
+
             except Exception as e:
                 self.logger.warning(f"Could not read {py_file}: {e}")
 
@@ -69,10 +95,16 @@ class SecurityExpert(BaseExpert):
         recommendations = [
             "Use environment variables for credentials",
             "Implement secret management",
+            "Replace subprocess calls with native Python operations",
+            "Use Go/Rust for performance-critical shell operations",
+            "Implement gRPC shell service for secure command execution",
+            "Add timeouts and resource limits to all subprocess calls",
         ]
 
         return DelusionResult(
-            delusions=delusions, confidence=confidence, recommendations=recommendations
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
         )
 
 
@@ -96,7 +128,7 @@ class CodeQualityExpert(BaseExpert):
                         "error": str(e),
                         "priority": "high",
                         "description": f"Syntax error in {py_file.name}: {e}",
-                    }
+                    },
                 )
             except Exception as e:
                 self.logger.warning(f"Could not compile {py_file}: {e}")
@@ -117,7 +149,7 @@ class CodeQualityExpert(BaseExpert):
                                     "line": i,
                                     "priority": "medium",
                                     "description": f"Potential indentation error at line {i}",
-                                }
+                                },
                             )
             except Exception as e:
                 self.logger.warning(f"Could not check {py_file}: {e}")
@@ -130,7 +162,9 @@ class CodeQualityExpert(BaseExpert):
         ]
 
         return DelusionResult(
-            delusions=delusions, confidence=confidence, recommendations=recommendations
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
         )
 
 
@@ -153,7 +187,7 @@ class TestExpert(BaseExpert):
                     "type": "test_coverage_issue",
                     "priority": "medium",
                     "description": f"Low test coverage: {len(test_files)} test files vs {len(source_files)} source files",
-                }
+                },
             )
 
         # Check for failing tests
@@ -168,7 +202,7 @@ class TestExpert(BaseExpert):
                             "file": str(test_file),
                             "priority": "medium",
                             "description": f"Test file contains failing assertions: {test_file.name}",
-                        }
+                        },
                     )
             except Exception as e:
                 self.logger.warning(f"Could not check {test_file}: {e}")
@@ -181,7 +215,9 @@ class TestExpert(BaseExpert):
         ]
 
         return DelusionResult(
-            delusions=delusions, confidence=confidence, recommendations=recommendations
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
         )
 
 
@@ -207,7 +243,7 @@ class BuildExpert(BaseExpert):
                     "type": "build_configuration_issue",
                     "priority": "medium",
                     "description": f"Missing build files: {', '.join(missing_files)}",
-                }
+                },
             )
 
         # Check for dependency issues
@@ -223,7 +259,7 @@ class BuildExpert(BaseExpert):
                             "type": "dependency_issue",
                             "priority": "low",
                             "description": "Missing dependencies in pyproject.toml",
-                        }
+                        },
                     )
             except Exception as e:
                 self.logger.warning(f"Could not parse pyproject.toml: {e}")
@@ -232,7 +268,9 @@ class BuildExpert(BaseExpert):
         recommendations = ["Add missing build files", "Configure dependencies properly"]
 
         return DelusionResult(
-            delusions=delusions, confidence=confidence, recommendations=recommendations
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
         )
 
 
@@ -252,7 +290,7 @@ class ArchitectureExpert(BaseExpert):
                     "type": "architecture_issue",
                     "priority": "low",
                     "description": "No src directory found - consider organizing code",
-                }
+                },
             )
 
         # Check for __init__.py files
@@ -266,14 +304,16 @@ class ArchitectureExpert(BaseExpert):
                         "type": "module_structure_issue",
                         "priority": "low",
                         "description": f"Missing __init__.py in {py_dir.relative_to(project_path)}",
-                    }
+                    },
                 )
 
         confidence = 0.8 if delusions else 0.9
         recommendations = ["Organize code in src directory", "Add __init__.py files"]
 
         return DelusionResult(
-            delusions=delusions, confidence=confidence, recommendations=recommendations
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
         )
 
 
@@ -293,7 +333,7 @@ class ModelExpert(BaseExpert):
                     "type": "model_registry_issue",
                     "priority": "medium",
                     "description": "No model registry found - consider adding project_model_registry.json",
-                }
+                },
             )
 
         # Check for proper model structure
@@ -310,7 +350,7 @@ class ModelExpert(BaseExpert):
                             "file": str(model_file),
                             "priority": "medium",
                             "description": f"Model file {model_file.name} missing domains section",
-                        }
+                        },
                     )
             except Exception as e:
                 self.logger.warning(f"Could not parse {model_file}: {e}")
@@ -319,5 +359,7 @@ class ModelExpert(BaseExpert):
         recommendations = ["Add model registry", "Structure models properly"]
 
         return DelusionResult(
-            delusions=delusions, confidence=confidence, recommendations=recommendations
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
         )

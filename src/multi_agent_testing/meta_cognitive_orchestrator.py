@@ -4,4 +4,3 @@
 
 class MetaCognitiveOrchestrator:
     """Meta-cognitive orchestrator"""
-    

@@ -12,8 +12,8 @@ This system addresses the linting issues found in the projected artifacts:
 
 import ast
 import logging
-from typing import Dict, List, Set, Tuple
 from pathlib import Path
+
 from .level1_granular_nodes import CodeNode
 
 # Configure logging
@@ -25,10 +25,10 @@ class ImprovedProjectionSystem:
     """Improved projection system with better functional equivalence."""
 
     def __init__(self) -> None:
-        self.extracted_nodes: Dict[str, CodeNode] = {}
+        self.extracted_nodes: dict[str, CodeNode] = {}
         self.position_counter = 0
-        self.seen_definitions: Set[
-            Tuple[str, str, int]
+        self.seen_definitions: set[
+            tuple[str, str, int]
         ] = set()  # (type, name, line_number)
 
     def extract_and_project_file(self, file_path: str) -> str:
@@ -36,7 +36,7 @@ class ImprovedProjectionSystem:
         logger.info(f"🔍 Improved extraction: {file_path}")
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
         except (FileNotFoundError, UnicodeDecodeError) as e:
             logger.error(f"❌ Error reading {file_path}: {e}")
@@ -59,13 +59,13 @@ class ImprovedProjectionSystem:
         ordered_nodes = sorted(nodes, key=lambda n: n.metadata.get("order", 0))
 
         # Project with improvements
-        projected_content = self._project_with_improvements(ordered_nodes, file_path)
-
-        return projected_content
+        return self._project_with_improvements(ordered_nodes, file_path)
 
     def _extract_with_improvements(
-        self, tree: ast.AST, file_path: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+    ) -> list[CodeNode]:
         """Extract with improvements for functional equivalence."""
         nodes = []
         context = self._determine_context(file_path)
@@ -80,13 +80,17 @@ class ImprovedProjectionSystem:
 
         # Extract class definitions with their methods
         class_nodes = self._extract_classes_with_methods_improved(
-            tree, file_path, context
+            tree,
+            file_path,
+            context,
         )
         nodes.extend(class_nodes)
 
         # Extract standalone functions (not class methods)
         function_nodes = self._extract_standalone_functions_improved(
-            tree, file_path, context
+            tree,
+            file_path,
+            context,
         )
         nodes.extend(function_nodes)
 
@@ -94,8 +98,11 @@ class ImprovedProjectionSystem:
         return nodes
 
     def _extract_imports_improved(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract imports with better handling."""
         nodes = []
         seen_imports = set()
@@ -190,8 +197,11 @@ class ImprovedProjectionSystem:
         return nodes
 
     def _extract_constants_improved(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract constants with better handling."""
         nodes = []
         seen_constants = set()
@@ -272,8 +282,11 @@ class ImprovedProjectionSystem:
         return nodes
 
     def _extract_classes_with_methods_improved(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract class definitions with their methods (improved)."""
         nodes = []
 
@@ -321,8 +334,11 @@ class ImprovedProjectionSystem:
         return nodes
 
     def _extract_standalone_functions_improved(
-        self, tree: ast.AST, file_path: str, context: str
-    ) -> List[CodeNode]:
+        self,
+        tree: ast.AST,
+        file_path: str,
+        context: str,
+    ) -> list[CodeNode]:
         """Extract standalone functions (not class methods) with improvements."""
         nodes = []
 
@@ -388,7 +404,7 @@ class ImprovedProjectionSystem:
                     return parent
         return None
 
-    def _project_with_improvements(self, nodes: List[CodeNode], file_path: str) -> str:
+    def _project_with_improvements(self, nodes: list[CodeNode], file_path: str) -> str:
         """Project nodes with improvements for functional equivalence."""
         content_parts = []
 
@@ -457,24 +473,23 @@ class ImprovedProjectionSystem:
 
         if "streamlit" in path_str:
             return "streamlit"
-        elif "security_first" in path_str:
+        if "security_first" in path_str:
             return "security"
-        elif "multi_agent_testing" in path_str:
+        if "multi_agent_testing" in path_str:
             return "multi_agent"
-        elif "tests" in path_str:
+        if "tests" in path_str:
             return "testing"
-        elif "config" in path_str or "config" in path.name:
+        if "config" in path_str or "config" in path.name:
             return "configuration"
-        elif "docs" in path_str or path.suffix == ".md":
+        if "docs" in path_str or path.suffix == ".md":
             return "documentation"
-        elif "scripts" in path_str or path.suffix == ".sh":
+        if "scripts" in path_str or path.suffix == ".sh":
             return "automation"
-        elif path.suffix == ".yaml" or path.suffix == ".yml":
+        if path.suffix == ".yaml" or path.suffix == ".yml":
             return "infrastructure"
-        elif path.suffix == ".json":
+        if path.suffix == ".json":
             return "data"
-        else:
-            return "general"
+        return "general"
 
 
 def main() -> None:

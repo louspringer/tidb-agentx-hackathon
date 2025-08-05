@@ -4,10 +4,10 @@ Ghostbusters Recovery - Recovery engines for fixing issues
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, List, Any
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 
 @dataclass
@@ -15,10 +15,10 @@ class RecoveryResult:
     """Result from recovery action"""
 
     success: bool
-    files_fixed: List[str]
-    errors: List[str]
-    warnings: List[str]
-    metadata: Dict[str, Any]
+    files_fixed: list[str]
+    errors: list[str]
+    warnings: list[str]
+    metadata: dict[str, Any]
 
 
 class BaseRecoveryEngine(ABC):
@@ -28,14 +28,14 @@ class BaseRecoveryEngine(ABC):
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
-    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
         """Execute recovery action"""
 
 
 class SyntaxRecoveryEngine(BaseRecoveryEngine):
     """Syntax recovery engine for fixing syntax errors"""
 
-    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
         """Execute syntax recovery"""
         files_fixed = []
         errors = []
@@ -71,7 +71,7 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
 class IndentationFixer(BaseRecoveryEngine):
     """Indentation fixer for fixing indentation errors"""
 
-    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
         """Execute indentation fixing"""
         files_fixed = []
         errors = []
@@ -121,7 +121,7 @@ class IndentationFixer(BaseRecoveryEngine):
 class ImportResolver(BaseRecoveryEngine):
     """Import resolver for fixing import errors"""
 
-    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
         """Execute import resolution"""
         files_fixed = []
         errors = []
@@ -156,7 +156,7 @@ class ImportResolver(BaseRecoveryEngine):
 class TypeAnnotationFixer(BaseRecoveryEngine):
     """Type annotation fixer for adding missing type hints"""
 
-    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
         """Execute type annotation fixing"""
         files_fixed = []
         errors = []

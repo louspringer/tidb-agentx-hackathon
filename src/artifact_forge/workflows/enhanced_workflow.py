@@ -4,22 +4,22 @@ Enhanced ArtifactForge Workflow with LangGraph Orchestration
 Integrates enhanced parser with intelligent fixes and full codebase scaling
 """
 
-import sys
 import os
+import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import logging
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any, Optional
 
-from langgraph.graph import StateGraph, END
+from langgraph.graph import END, StateGraph
 
-from src.artifact_forge.agents.artifact_detector import ArtifactDetector
-from src.artifact_forge.agents.artifact_parser import ArtifactParser
 from src.artifact_forge.agents.artifact_correlator import ArtifactCorrelator
+from src.artifact_forge.agents.artifact_detector import ArtifactDetector
 from src.artifact_forge.agents.artifact_optimizer import ArtifactOptimizer
+from src.artifact_forge.agents.artifact_parser import ArtifactParser
 from src.artifact_forge.agents.artifact_synthesizer import ArtifactSynthesizer
 
 # Set up logging
@@ -32,16 +32,16 @@ class EnhancedArtifactForgeState:
     """Enhanced state for ArtifactForge workflow with intelligent fixes"""
 
     root_path: str
-    artifacts: List[Dict[str, Any]] = None
-    parsed_artifacts: List[Dict[str, Any]] = None
-    relationships: List[Dict[str, Any]] = None
-    optimization_opportunities: List[Dict[str, Any]] = None
-    insights: List[Dict[str, Any]] = None
-    fixes_applied: List[Dict[str, Any]] = None
+    artifacts: list[dict[str, Any]] = None
+    parsed_artifacts: list[dict[str, Any]] = None
+    relationships: list[dict[str, Any]] = None
+    optimization_opportunities: list[dict[str, Any]] = None
+    insights: list[dict[str, Any]] = None
+    fixes_applied: list[dict[str, Any]] = None
     confidence_score: float = 0.0
     processing_time: float = 0.0
-    errors: List[str] = None
-    block_analysis: Dict[str, Any] = None
+    errors: list[str] = None
+    block_analysis: dict[str, Any] = None
 
 
 class EnhancedArtifactForgeWorkflow:
@@ -83,7 +83,8 @@ class EnhancedArtifactForgeWorkflow:
         return workflow.compile()
 
     def _detect_artifacts_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Detect artifacts in the codebase"""
         logger.info("🔍 **STEP 1: DETECTING ARTIFACTS**")
@@ -100,7 +101,8 @@ class EnhancedArtifactForgeWorkflow:
         return state
 
     def _parse_artifacts_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Parse artifacts with enhanced error recovery"""
         logger.info("📝 **STEP 2: PARSING ARTIFACTS**")
@@ -115,10 +117,10 @@ class EnhancedArtifactForgeWorkflow:
         for artifact in state.artifacts[:50]:  # Limit for performance
             try:
                 # Convert ArtifactInfo to dict format for parser
-                artifact_dict = {"path": artifact.path, "type": artifact.artifact_type}
 
                 parsed = self.parser.parse_artifact(
-                    artifact.path, artifact.artifact_type
+                    artifact.path,
+                    artifact.artifact_type,
                 )
                 parsed_artifacts.append(
                     {
@@ -127,7 +129,7 @@ class EnhancedArtifactForgeWorkflow:
                         "data": parsed.parsed_data,
                         "errors": parsed.parsing_errors,
                         "block_analysis": parsed.block_analysis,
-                    }
+                    },
                 )
 
                 # Log enhanced parser results
@@ -136,7 +138,7 @@ class EnhancedArtifactForgeWorkflow:
                     issues = len(parsed.block_analysis.get("indentation_issues", []))
                     if blocks > 0 or issues > 0:
                         logger.info(
-                            f"  {parsed.path}: {blocks} blocks, {issues} indentation issues"
+                            f"  {parsed.path}: {blocks} blocks, {issues} indentation issues",
                         )
 
             except Exception as e:
@@ -151,7 +153,8 @@ class EnhancedArtifactForgeWorkflow:
         return state
 
     def _correlate_artifacts_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Correlate artifacts with performance limits"""
         logger.info("🔗 **STEP 3: CORRELATING ARTIFACTS**")
@@ -172,7 +175,8 @@ class EnhancedArtifactForgeWorkflow:
         return state
 
     def _optimize_artifacts_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Find optimization opportunities including syntax errors"""
         logger.info("🎯 **STEP 4: OPTIMIZING ARTIFACTS**")
@@ -193,7 +197,8 @@ class EnhancedArtifactForgeWorkflow:
         return state
 
     def _apply_intelligent_fixes_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Apply intelligent fixes based on block analysis"""
         logger.info("🔧 **STEP 5: APPLYING INTELLIGENT FIXES**")
@@ -212,8 +217,10 @@ class EnhancedArtifactForgeWorkflow:
         return state
 
     def _apply_syntax_fix(
-        self, opportunity: Dict[str, Any], state: EnhancedArtifactForgeState
-    ) -> Optional[Dict[str, Any]]:
+        self,
+        opportunity: dict[str, Any],
+        state: EnhancedArtifactForgeState,
+    ) -> Optional[dict[str, Any]]:
         """Apply intelligent syntax fix based on block analysis"""
         file_path = opportunity["file_path"]
         line_number = opportunity.get("line_number")
@@ -252,10 +259,10 @@ class EnhancedArtifactForgeWorkflow:
 
         return None
 
-    def _fix_block_indentation(self, file_path: str, block: Dict[str, Any]) -> bool:
+    def _fix_block_indentation(self, file_path: str, block: dict[str, Any]) -> bool:
         """Fix indentation within a specific block scope"""
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 lines = f.readlines()
 
             # Fix indentation within the block
@@ -288,7 +295,8 @@ class EnhancedArtifactForgeWorkflow:
             return False
 
     def _synthesize_insights_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Synthesize insights from all analysis"""
         logger.info("🧠 **STEP 6: SYNTHESIZING INSIGHTS**")
@@ -309,7 +317,8 @@ class EnhancedArtifactForgeWorkflow:
         return state
 
     def _validate_fixes_node(
-        self, state: EnhancedArtifactForgeState
+        self,
+        state: EnhancedArtifactForgeState,
     ) -> EnhancedArtifactForgeState:
         """Validate that fixes were successful"""
         logger.info("✅ **STEP 7: VALIDATING FIXES**")
@@ -323,7 +332,7 @@ class EnhancedArtifactForgeWorkflow:
                     try:
                         import ast
 
-                        with open(fix["file_path"], "r") as f:
+                        with open(fix["file_path"]) as f:
                             content = f.read()
                         ast.parse(content)
                         validation_results.append(
@@ -331,7 +340,7 @@ class EnhancedArtifactForgeWorkflow:
                                 "file": fix["file_path"],
                                 "status": "SUCCESS",
                                 "message": "File now parses correctly",
-                            }
+                            },
                         )
                     except SyntaxError as e:
                         validation_results.append(
@@ -339,14 +348,14 @@ class EnhancedArtifactForgeWorkflow:
                                 "file": fix["file_path"],
                                 "status": "PARTIAL",
                                 "message": f"Still has syntax errors: {e}",
-                            }
+                            },
                         )
 
         state.block_analysis = {
             "validation_results": validation_results,
             "fixes_applied": len(state.fixes_applied or []),
             "successful_fixes": len(
-                [f for f in state.fixes_applied or [] if f["success"]]
+                [f for f in state.fixes_applied or [] if f["success"]],
             ),
         }
 
@@ -380,16 +389,17 @@ class EnhancedArtifactForgeWorkflow:
             # Calculate confidence based on success rates
             total_artifacts = len(final_state.artifacts or [])
             successful_parses = len(
-                [a for a in final_state.parsed_artifacts or [] if not a.get("errors")]
+                [a for a in final_state.parsed_artifacts or [] if not a.get("errors")],
             )
             successful_fixes = len(
-                [f for f in final_state.fixes_applied or [] if f["success"]]
+                [f for f in final_state.fixes_applied or [] if f["success"]],
             )
 
             if total_artifacts > 0:
                 parse_rate = successful_parses / total_artifacts
                 fix_rate = successful_fixes / max(
-                    len(final_state.fixes_applied or []), 1
+                    len(final_state.fixes_applied or []),
+                    1,
                 )
                 final_state.confidence_score = (parse_rate + fix_rate) / 2
             else:

@@ -27,7 +27,7 @@ def test_no_hardcoded_credentials() -> None:
     ]
 
     violations = []
-    for file_path in Path(".").rglob("*"):
+    for file_path in Path().rglob("*"):
         if file_path.is_file() and file_path.name not in excludes:
             try:
                 content = file_path.read_text()

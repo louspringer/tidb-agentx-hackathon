@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import Any
 
 """
 Security-First Architecture Components
@@ -12,13 +12,13 @@ This package contains security-first architecture components including:
 
 # Import security components
 from .https_enforcement import (
+    CSRFProtection,
     HTTPSEnforcement,
     RateLimiting,
-    CSRFProtection,
     SecurityManager,
 )
 
-__all__: List[Any] = [
+__all__: list[Any] = [
     "HTTPSEnforcement",
     "RateLimiting",
     "CSRFProtection",

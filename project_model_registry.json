@@ -100,6 +100,33 @@
         "Integrate with CI/CD for healthcare compliance"
       ]
     },
+    "ide_performance": {
+      "patterns": [
+        "rules/ide_performance_optimization.md",
+        "rules/ide_performance_optimization.mdc"
+      ],
+      "content_indicators": [
+        "IDE performance",
+        "cursor sluggishness",
+        "keystroke lag",
+        "cache cleanup",
+        "performance optimization",
+        "fix_ide_performance"
+      ],
+      "linter": "markdownlint",
+      "validator": "markdown-validation",
+      "exclusions": [],
+      "requirements": [
+        "Apply immediate cache cleanup for performance issues",
+        "Optimize Cursor settings for large projects",
+        "Monitor IDE memory usage and processes",
+        "Implement prevention strategies for performance",
+        "Use systematic performance optimization procedure",
+        "Clear cache files before debugging complex issues",
+        "Create MDC files for performance optimization rules",
+        "Project performance rules to structured MDC format"
+      ]
+    },
     "rule_compliance": {
       "linter": "shellcheck",
       "formatter": "black",

@@ -5,36 +5,36 @@ Ghostbusters Orchestrator - Multi-Agent Delusion Detection & Recovery System
 
 import asyncio
 import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
 
 # LangGraph imports
-from langgraph.graph import StateGraph, END
+from langgraph.graph import END, StateGraph
 
 # Local imports
 from .agents import (
-    SecurityExpert,
-    CodeQualityExpert,
-    TestExpert,
-    BuildExpert,
     ArchitectureExpert,
+    BuildExpert,
+    CodeQualityExpert,
     ModelExpert,
-)
-from .validators import (
-    SecurityValidator,
-    CodeQualityValidator,
-    TestValidator,
-    BuildValidator,
-    ArchitectureValidator,
-    ModelValidator,
+    SecurityExpert,
+    TestExpert,
 )
 from .recovery import (
-    SyntaxRecoveryEngine,
-    IndentationFixer,
     ImportResolver,
+    IndentationFixer,
+    SyntaxRecoveryEngine,
     TypeAnnotationFixer,
+)
+from .validators import (
+    ArchitectureValidator,
+    BuildValidator,
+    CodeQualityValidator,
+    ModelValidator,
+    SecurityValidator,
+    TestValidator,
 )
 
 
@@ -43,15 +43,15 @@ class GhostbustersState:
     """State for Ghostbusters workflow"""
 
     project_path: str
-    delusions_detected: List[Dict[str, Any]]
-    recovery_actions: List[Dict[str, Any]]
+    delusions_detected: list[dict[str, Any]]
+    recovery_actions: list[dict[str, Any]]
     confidence_score: float
-    validation_results: Dict[str, Any]
-    recovery_results: Dict[str, Any]
+    validation_results: dict[str, Any]
+    recovery_results: dict[str, Any]
     current_phase: str
-    errors: List[str]
-    warnings: List[str]
-    metadata: Dict[str, Any]
+    errors: list[str]
+    warnings: list[str]
+    metadata: dict[str, Any]
 
 
 class GhostbustersOrchestrator:
@@ -118,7 +118,8 @@ class GhostbustersOrchestrator:
         return workflow
 
     async def _detect_delusions_node(
-        self, state: GhostbustersState
+        self,
+        state: GhostbustersState,
     ) -> GhostbustersState:
         """Detect delusions using agents"""
         self.logger.info("🔍 Detecting delusions...")
@@ -130,7 +131,7 @@ class GhostbustersOrchestrator:
                 # BRUTAL FIX: Extract delusions from DelusionResult
                 if result and hasattr(result, "delusions"):
                     delusions_detected.append(
-                        {"agent": name, "delusions": result.delusions}
+                        {"agent": name, "delusions": result.delusions},
                     )
                 self.logger.info(f"✅ {name} detection completed")
             except Exception as e:
@@ -143,7 +144,8 @@ class GhostbustersOrchestrator:
         return state
 
     async def _validate_findings_node(
-        self, state: GhostbustersState
+        self,
+        state: GhostbustersState,
     ) -> GhostbustersState:
         """Validate findings using validators - FIXED ITERATION BUG"""
         self.logger.info("🔍 Validating findings...")
@@ -184,7 +186,8 @@ class GhostbustersOrchestrator:
         return state
 
     async def _execute_recovery_node(
-        self, state: GhostbustersState
+        self,
+        state: GhostbustersState,
     ) -> GhostbustersState:
         """Execute recovery actions"""
         self.logger.info("🔧 Executing recovery actions...")
@@ -209,7 +212,8 @@ class GhostbustersOrchestrator:
         return state
 
     async def _validate_recovery_node(
-        self, state: GhostbustersState
+        self,
+        state: GhostbustersState,
     ) -> GhostbustersState:
         """Validate recovery results"""
         self.logger.info("🔍 Validating recovery results...")
@@ -235,7 +239,8 @@ class GhostbustersOrchestrator:
         return state
 
     async def _generate_report_node(
-        self, state: GhostbustersState
+        self,
+        state: GhostbustersState,
     ) -> GhostbustersState:
         """Generate comprehensive report"""
         self.logger.info("📊 Generating Ghostbusters report...")
@@ -257,24 +262,25 @@ class GhostbustersOrchestrator:
         return state
 
     async def _plan_recovery_action(
-        self, agent_name: str, delusion: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
+        self,
+        agent_name: str,
+        delusion: dict[str, Any],
+    ) -> Optional[dict[str, Any]]:
         """Plan recovery action for a specific delusion"""
         try:
             # Simple recovery action planning
-            action = {
+            return {
                 "id": f"recovery_{agent_name}_{hash(str(delusion))}",
                 "agent": agent_name,
                 "delusion": delusion,
                 "engine": "syntax",  # Default to syntax recovery
                 "description": f"Fix {delusion.get('type', 'unknown')} issue",
             }
-            return action
         except Exception as e:
             self.logger.error(f"Failed to plan recovery action: {e}")
             return None
 
-    def _calculate_confidence(self, validation_results: Dict[str, Any]) -> float:
+    def _calculate_confidence(self, validation_results: dict[str, Any]) -> float:
         """Calculate confidence score from validation results"""
         if not validation_results:
             return 0.0
@@ -312,9 +318,7 @@ class GhostbustersOrchestrator:
             state = await self._plan_recovery_node(state)
             state = await self._execute_recovery_node(state)
             state = await self._validate_recovery_node(state)
-            state = await self._generate_report_node(state)
-
-            return state
+            return await self._generate_report_node(state)
 
         except Exception as e:
             self.logger.error(f"Ghostbusters workflow failed: {e}")

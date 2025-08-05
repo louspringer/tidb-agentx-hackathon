@@ -4,10 +4,10 @@ ArtifactDetector Agent
 Discovers and classifies artifacts in the codebase
 """
 
-from pathlib import Path
-from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
 
 
 @dataclass
@@ -19,7 +19,7 @@ class ArtifactInfo:
     size: int
     complexity_score: Optional[float] = None
     last_modified: Optional[datetime] = None
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: Optional[dict[str, Any]] = None
 
 
 class ArtifactDetector:
@@ -53,7 +53,7 @@ class ArtifactDetector:
             ".DS_Store",
         ]
 
-    def detect_artifacts(self, root_path: str) -> List[ArtifactInfo]:
+    def detect_artifacts(self, root_path: str) -> list[ArtifactInfo]:
         """Detect all artifacts in the codebase"""
         artifacts = []
         root = Path(root_path)
@@ -63,7 +63,8 @@ class ArtifactDetector:
                 for file_path in root.rglob(pattern):
                     if self._should_include_file(file_path):
                         artifact_info = self._create_artifact_info(
-                            file_path, artifact_type
+                            file_path,
+                            artifact_type,
                         )
                         artifacts.append(artifact_info)
 
@@ -77,13 +78,12 @@ class ArtifactDetector:
                 return False
 
         # Check if file exists and is readable
-        if not file_path.is_file():
-            return False
-
-        return True
+        return file_path.is_file()
 
     def _create_artifact_info(
-        self, file_path: Path, artifact_type: str
+        self,
+        file_path: Path,
+        artifact_type: str,
     ) -> ArtifactInfo:
         """Create ArtifactInfo for a file"""
         stat = file_path.stat()
@@ -103,21 +103,19 @@ class ArtifactDetector:
     def _count_lines(self, file_path: Path) -> int:
         """Count lines in a file"""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 return sum(1 for _ in f)
         except Exception:
             return 0
 
-    def classify_artifact(self, artifact_info: ArtifactInfo) -> Dict[str, Any]:
+    def classify_artifact(self, artifact_info: ArtifactInfo) -> dict[str, Any]:
         """Classify artifact based on content and structure"""
-        classification = {
+        return {
             "type": artifact_info.artifact_type,
             "complexity": self._assess_complexity(artifact_info),
             "category": self._categorize_artifact(artifact_info),
             "priority": self._assess_priority(artifact_info),
         }
-
-        return classification
 
     def _assess_complexity(self, artifact_info: ArtifactInfo) -> str:
         """Assess complexity of artifact"""
@@ -126,10 +124,9 @@ class ArtifactDetector:
 
         if size > 100000 or lines > 1000:
             return "high"
-        elif size > 10000 or lines > 100:
+        if size > 10000 or lines > 100:
             return "medium"
-        else:
-            return "low"
+        return "low"
 
     def _categorize_artifact(self, artifact_info: ArtifactInfo) -> str:
         """Categorize artifact based on type and location"""
@@ -137,23 +134,21 @@ class ArtifactDetector:
 
         if "tests" in path_parts:
             return "test"
-        elif "docs" in path_parts or "documentation" in path_parts:
+        if "docs" in path_parts or "documentation" in path_parts:
             return "documentation"
-        elif "config" in path_parts or "settings" in path_parts:
+        if "config" in path_parts or "settings" in path_parts:
             return "configuration"
-        elif "src" in path_parts or "lib" in path_parts:
+        if "src" in path_parts or "lib" in path_parts:
             return "source"
-        else:
-            return "other"
+        return "other"
 
     def _assess_priority(self, artifact_info: ArtifactInfo) -> str:
         """Assess priority for processing"""
         if artifact_info.artifact_type in ["python", "mdc"]:
             return "high"
-        elif artifact_info.artifact_type in ["yaml", "json", "markdown"]:
+        if artifact_info.artifact_type in ["yaml", "json", "markdown"]:
             return "medium"
-        else:
-            return "low"
+        return "low"
 
 
 def main() -> None:
@@ -165,7 +160,7 @@ def main() -> None:
     print(f"Total artifacts found: {len(artifacts)}")
 
     # Group by type
-    by_type: Dict[str, List[ArtifactInfo]] = {}
+    by_type: dict[str, list[ArtifactInfo]] = {}
     for artifact in artifacts:
         artifact_type = artifact.artifact_type
         if artifact_type not in by_type:

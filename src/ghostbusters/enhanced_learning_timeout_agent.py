@@ -232,7 +232,7 @@ class EnhancedLearningTimeoutAgent:
         )
 
         # 10. Self-Testing
-        applied_techniques.append("Self-Testing - Create quizzes for yourself")
+        applied_techniques.append("Self-Testing - Create quizzes for yoursel")
 
         return applied_techniques
 

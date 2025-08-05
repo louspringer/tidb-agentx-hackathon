@@ -11,9 +11,9 @@ This implements the first level of model-driven projection:
 
 import json
 import logging
-from typing import Dict, List, Any
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from typing import Any
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -28,16 +28,16 @@ class CodeNode:
     type: str  # import, function, class, config, etc.
     content: str
     context: str
-    dependencies: List[str]
-    metadata: Dict[str, Any]
-    projection_rules: Dict[str, Any]
+    dependencies: list[str]
+    metadata: dict[str, Any]
+    projection_rules: dict[str, Any]
 
     def validate_granularity(self) -> bool:
         """Ensure node is paragraph-sized (≤50 lines)."""
         lines = self.content.split("\n")
         return len(lines) <= 50 and len(self.content) <= 2000
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return asdict(self)
 
@@ -46,15 +46,16 @@ class DependencyResolver:
     """Resolve dependencies between nodes."""
 
     def __init__(self) -> None:
-        self.nodes: Dict[str, CodeNode] = {}
+        self.nodes: dict[str, CodeNode] = {}
 
     def add_node(self, node: CodeNode) -> None:
         """Add a node to the resolver."""
         if not node.validate_granularity():
-            raise ValueError(f"Node {node.id} exceeds granularity constraints")
+            msg = f"Node {node.id} exceeds granularity constraints"
+            raise ValueError(msg)
         self.nodes[node.id] = node
 
-    def resolve_order(self, node_ids: List[str]) -> List[str]:
+    def resolve_order(self, node_ids: list[str]) -> list[str]:
         """Resolve node ordering based on dependencies."""
         logger.info(f"🔍 Resolving order for {len(node_ids)} nodes")
 
@@ -74,7 +75,8 @@ class DependencyResolver:
 
         def visit(node_id: str) -> None:
             if node_id in temp_visited:
-                raise ValueError(f"Circular dependency detected involving {node_id}")
+                msg = f"Circular dependency detected involving {node_id}"
+                raise ValueError(msg)
             if node_id in visited:
                 return
 
@@ -94,11 +96,11 @@ class DependencyResolver:
         logger.info(f"✅ Resolved order: {result}")
         return result
 
-    def detect_cycles(self, node_ids: List[str]) -> List[str]:
+    def detect_cycles(self, node_ids: list[str]) -> list[str]:
         """Detect circular dependencies."""
         cycles = []
 
-        def find_cycles(node_id: str, path: List[str]) -> None:
+        def find_cycles(node_id: str, path: list[str]) -> None:
             if node_id in path:
                 cycle = path[path.index(node_id) :] + [node_id]
                 cycles.append(cycle)
@@ -128,10 +130,11 @@ class NodeProjector:
         """Add a node to the projector."""
         self.resolver.add_node(node)
 
-    def project_node(self, node_id: str, context: Dict[str, Any]) -> str:
+    def project_node(self, node_id: str, context: dict[str, Any]) -> str:
         """Project a single node into code."""
         if node_id not in self.resolver.nodes:
-            raise ValueError(f"Node {node_id} not found")
+            msg = f"Node {node_id} not found"
+            raise ValueError(msg)
 
         node = self.resolver.nodes[node_id]
 
@@ -147,7 +150,7 @@ class NodeProjector:
 
         return content
 
-    def compose_nodes(self, node_ids: List[str], context: Dict[str, Any]) -> str:
+    def compose_nodes(self, node_ids: list[str], context: dict[str, Any]) -> str:
         """Compose multiple nodes into a file."""
         logger.info(f"🔧 Composing {len(node_ids)} nodes into file")
 
@@ -203,7 +206,7 @@ class NodeProjector:
             logger.error("❌ Composition has syntax errors")
             return False
 
-    def _generate_file_header(self, context: Dict[str, Any]) -> str:
+    def _generate_file_header(self, context: dict[str, Any]) -> str:
         """Generate file header."""
         header = [
             "#!/usr/bin/env python3",
@@ -216,7 +219,7 @@ class NodeProjector:
         ]
         return "\n".join(header)
 
-    def _generate_file_footer(self, context: Dict[str, Any]) -> str:
+    def _generate_file_footer(self, context: dict[str, Any]) -> str:
         """Generate file footer."""
         return ""
 
@@ -248,7 +251,7 @@ class ModelRegistry:
     """Registry for managing model nodes."""
 
     def __init__(self) -> None:
-        self.nodes: Dict[str, CodeNode] = {}
+        self.nodes: dict[str, CodeNode] = {}
         self.projector = NodeProjector()
 
     def add_node(self, node: CodeNode) -> None:
@@ -258,7 +261,10 @@ class ModelRegistry:
         logger.info(f"✅ Added node: {node.id}")
 
     def create_file(
-        self, file_name: str, node_ids: List[str], context: Dict[str, Any]
+        self,
+        file_name: str,
+        node_ids: list[str],
+        context: dict[str, Any],
     ) -> str:
         """Create a file from nodes."""
         logger.info(f"🔧 Creating file {file_name} from {len(node_ids)} nodes")
@@ -266,14 +272,16 @@ class ModelRegistry:
         # Validate all nodes exist
         missing_nodes = [nid for nid in node_ids if nid not in self.nodes]
         if missing_nodes:
-            raise ValueError(f"Missing nodes: {missing_nodes}")
+            msg = f"Missing nodes: {missing_nodes}"
+            raise ValueError(msg)
 
         # Compose file
         content = self.projector.compose_nodes(node_ids, context)
 
         # Validate composition
         if not self.projector.validate_composition(content):
-            raise ValueError(f"Invalid composition for {file_name}")
+            msg = f"Invalid composition for {file_name}"
+            raise ValueError(msg)
 
         return content
 
@@ -292,7 +300,7 @@ class ModelRegistry:
 
     def load_model(self, file_path: str) -> None:
         """Load the model from a file."""
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             model_data = json.load(f)
 
         self.nodes.clear()
@@ -303,9 +311,9 @@ class ModelRegistry:
         logger.info(f"✅ Loaded model from {file_path}")
 
 
-def create_sample_nodes() -> List[CodeNode]:
+def create_sample_nodes() -> list[CodeNode]:
     """Create sample nodes for demonstration."""
-    nodes = [
+    return [
         CodeNode(
             id="import_pandas",
             type="import",
@@ -351,8 +359,6 @@ def create_sample_nodes() -> List[CodeNode]:
             projection_rules={"format": "black", "lint": "flake8"},
         ),
     ]
-
-    return nodes
 
 
 def main() -> None:

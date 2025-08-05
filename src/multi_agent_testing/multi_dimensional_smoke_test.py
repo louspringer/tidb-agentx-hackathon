@@ -7,9 +7,10 @@ Updated with proven diversity hypothesis models and enhanced test scenarios.
 
 import json
 import os
-import requests
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Any
+
+import requests
 
 
 class MultiDimensionalSmokeTest:
@@ -133,16 +134,21 @@ class MultiDimensionalSmokeTest:
         }
 
     def call_llm(
-        self, model_name: str, prompt: str, temperature: float = 0.7
-    ) -> Dict[str, Any]:
+        self,
+        model_name: str,
+        prompt: str,
+        temperature: float = 0.7,
+    ) -> dict[str, Any]:
         """Call LLM with enhanced error handling and retry logic"""
         model_config = self.models.get(model_name)
         if not model_config:
-            raise ValueError(f"Unknown model: {model_name}")
+            msg = f"Unknown model: {model_name}"
+            raise ValueError(msg)
 
         api_key = os.getenv(model_config["api_key_env"])
         if not api_key:
-            raise ValueError(f"No API key for {model_config['api_key_env']}")
+            msg = f"No API key for {model_config['api_key_env']}"
+            raise ValueError(msg)
 
         headers = {
             "Content-Type": "application/json",
@@ -155,7 +161,7 @@ You are an expert analyst focused on identifying blind spots and potential issue
 
 {prompt}
 
-IMPORTANT: Focus on your specific perspective and provide unique insights that other perspectives might miss. 
+IMPORTANT: Focus on your specific perspective and provide unique insights that other perspectives might miss.
 This is part of a diversity hypothesis test - your unique viewpoint is valuable.
 
 Return your analysis in the requested format with high confidence in your findings.
@@ -176,7 +182,10 @@ Return your analysis in the requested format with high confidence in your findin
 
         try:
             response = requests.post(
-                model_config["endpoint"], headers=headers, json=payload, timeout=30
+                model_config["endpoint"],
+                headers=headers,
+                json=payload,
+                timeout=30,
             )
             response.raise_for_status()
             return response.json()
@@ -184,7 +193,7 @@ Return your analysis in the requested format with high confidence in your findin
             print(f"API error with {model_name}: {e}")
             return {"error": str(e)}
 
-    def run_test(self, config: Dict[str, Any], scenario: str) -> Dict[str, Any]:
+    def run_test(self, config: dict[str, Any], scenario: str) -> dict[str, Any]:
         """Run a single test with enhanced analysis"""
         model_name = config["model"]
         temperature = config["temperature"]
@@ -232,7 +241,8 @@ Focus on identifying what might be missing or overlooked from your unique perspe
                 # Calculate confidence and agreement
                 confidence = self.calculate_confidence(questions)
                 agreement = self.calculate_agreement(
-                    confidence, config.get("expected_confidence", 0.5)
+                    confidence,
+                    config.get("expected_confidence", 0.5),
                 )
 
                 return {
@@ -240,10 +250,10 @@ Focus on identifying what might be missing or overlooked from your unique perspe
                     "scenario": scenario,
                     "our_result": {
                         "assumptions": len(
-                            [q for q in questions if "assumption" in q.lower()]
+                            [q for q in questions if "assumption" in q.lower()],
                         ),
                         "blind_spots": len(
-                            [q for q in questions if "blind" in q.lower()]
+                            [q for q in questions if "blind" in q.lower()],
                         ),
                         "confidence": confidence,
                         "decision": "PROCEED_WITH_CAUTION"
@@ -257,14 +267,13 @@ Focus on identifying what might be missing or overlooked from your unique perspe
                     "agreement": agreement,
                     "insights": self.generate_insights(questions, confidence),
                 }
-            else:
-                return {
-                    "config": config,
-                    "scenario": scenario,
-                    "error": "No response content",
-                    "agreement": False,
-                    "insights": ["No response"],
-                }
+            return {
+                "config": config,
+                "scenario": scenario,
+                "error": "No response content",
+                "agreement": False,
+                "insights": ["No response"],
+            }
         except Exception as e:
             return {
                 "config": config,
@@ -274,7 +283,7 @@ Focus on identifying what might be missing or overlooked from your unique perspe
                 "insights": ["Parsing error"],
             }
 
-    def extract_questions(self, content: str) -> List[str]:
+    def extract_questions(self, content: str) -> list[str]:
         """Enhanced question extraction"""
         questions = []
 
@@ -304,7 +313,7 @@ Focus on identifying what might be missing or overlooked from your unique perspe
 
         return questions[:5]  # Limit to 5 questions
 
-    def calculate_confidence(self, questions: List[str]) -> float:
+    def calculate_confidence(self, questions: list[str]) -> float:
         """Enhanced confidence calculation"""
         if not questions:
             return 0.0
@@ -340,7 +349,7 @@ Focus on identifying what might be missing or overlooked from your unique perspe
         """Enhanced agreement calculation"""
         return abs(confidence - expected) < 0.3
 
-    def generate_insights(self, questions: List[str], confidence: float) -> List[str]:
+    def generate_insights(self, questions: list[str], confidence: float) -> list[str]:
         """Enhanced insight generation"""
         insights = []
 
@@ -361,8 +370,9 @@ Focus on identifying what might be missing or overlooked from your unique perspe
         return insights
 
     def run_comprehensive_test(
-        self, scenario: str = "healthcare_cdc_pr"
-    ) -> Dict[str, Any]:
+        self,
+        scenario: str = "healthcare_cdc_pr",
+    ) -> dict[str, Any]:
         """Run comprehensive test with all configurations"""
         print("🔥 MULTI-DIMENSIONAL SMOKE TEST")
         print("=" * 60)
@@ -544,7 +554,9 @@ Focus on identifying what might be missing or overlooked from your unique perspe
                 if result.get("agreement", False):
                     agreement_count += 1
 
-                status = "✅ AGREED" if result.get("agreement", False) else "❌ DISAGREED"
+                status = (
+                    "✅ AGREED" if result.get("agreement", False) else "❌ DISAGREED"
+                )
                 insights = result.get("insights", [])
 
                 print(f"🧪 Testing: {config['name']}")
