@@ -4,6 +4,11 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  pull-requests: write
+  contents: read
+  actions: read
+
 jobs:
   copilot-review:
     runs-on: ubuntu-latest
@@ -22,47 +27,10 @@ jobs:
           pip install uv
           uv sync
           
-      - name: Request Copilot Review
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data: reviews } = await github.rest.pulls.requestReviewers({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-              reviewers: ['github-actions[bot]']
-            });
-            
-            console.log('🤖 Copilot review requested for PR #' + context.issue.number);
-            
-      - name: Wait for Review
-        run: sleep 30
-        
-      - name: Check Review Status
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { data: reviews } = await github.rest.pulls.listReviews({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number
-            });
-            
-            const copilotReview = reviews.find(review => 
-              review.user.login === 'github-actions[bot]'
-            );
-            
-            if (copilotReview && copilotReview.state === 'APPROVED') {
-              console.log('✅ Copilot review approved');
-            } else if (copilotReview && copilotReview.state === 'CHANGES_REQUESTED') {
-              console.log('⚠️ Copilot review requested changes');
-            } else {
-              console.log('⏳ Copilot review pending');
-            }
-            
       - name: Run Security Analysis
         env:
           PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python scripts/github_integration/copilot_review_automation.py
           
@@ -89,7 +57,7 @@ jobs:
             - ✅ Requirements traceability checked
             
             ### Next Steps
-            1. Review Copilot suggestions
+            1. Review Copilot suggestions manually
             2. Address any security issues
             3. Verify model compliance
             4. Update documentation if needed
@@ -103,4 +71,12 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: summary
-            }); 
+            });
+            
+      - name: Request Manual Copilot Review
+        run: |
+          echo "🤖 Manual Copilot Review Instructions:"
+          echo "1. Open this PR in VS Code with GitHub Copilot extension"
+          echo "2. Use '@copilot review' to request a code review"
+          echo "3. Follow the security-first guidelines in .github/copilot-instructions.md"
+          echo "4. Address any issues identified by Copilot" 

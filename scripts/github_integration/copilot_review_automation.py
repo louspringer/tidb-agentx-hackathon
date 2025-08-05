@@ -29,21 +29,18 @@ class CopilotReviewAutomation:
     async def request_copilot_review(self, pr_number: int) -> dict[str, Any]:
         """Request Copilot review for a pull request"""
         try:
-            # Use GitHub API to request Copilot review
-            result = await secure_execute(
-                f"gh pr edit {pr_number} --add-reviewer github-actions[bot]",
-            )
-
-            if result["success"]:
-                return {
-                    "success": True,
-                    "message": f"Copilot review requested for PR #{pr_number}",
-                    "pr_number": pr_number,
-                }
+            # Note: Direct Copilot review requests require GitHub App permissions
+            # For now, we'll provide manual instructions
             return {
-                "success": False,
-                "error": result["error"],
+                "success": True,
+                "message": f"Manual Copilot review instructions for PR #{pr_number}",
                 "pr_number": pr_number,
+                "instructions": [
+                    "1. Open this PR in VS Code with GitHub Copilot extension",
+                    "2. Use '@copilot review' to request a code review",
+                    "3. Follow the security-first guidelines in .github/copilot-instructions.md",
+                    "4. Address any issues identified by Copilot"
+                ]
             }
 
         except Exception as e:
@@ -195,27 +192,29 @@ async def main():
 
     print(f"🔍 Analyzing PR #{pr_number}")
 
-    # Request Copilot review
+        # Request Copilot review (manual instructions)
     review_result = await automation.request_copilot_review(int(pr_number))
-    print(f"📝 Review Request: {review_result}")
-
-    # Check review status
-    status_result = await automation.check_review_status(int(pr_number))
-    print(f"📊 Review Status: {status_result}")
-
+    print(f"📝 Review Instructions: {review_result}")
+    
     # Analyze security issues
     security_result = await automation.analyze_security_issues(int(pr_number))
     print(f"🛡️ Security Analysis: {security_result}")
-
+    
     # Validate model compliance
     compliance_result = await automation.validate_model_compliance(int(pr_number))
     print(f"📋 Model Compliance: {compliance_result}")
-
+    
     # Summary
     print("\n🎯 Summary:")
     print(f"   Security Issues: {security_result.get('total_issues', 0)}")
     print(f"   Compliance Issues: {compliance_result.get('total_issues', 0)}")
-    print(f"   Review Status: {status_result.get('review_state', 'unknown')}")
+    print(f"   Review Method: Manual Copilot review")
+    
+    # Print manual instructions
+    if review_result.get("instructions"):
+        print("\n🤖 Manual Copilot Review Instructions:")
+        for instruction in review_result["instructions"]:
+            print(f"   • {instruction}")
 
 
 if __name__ == "__main__":
