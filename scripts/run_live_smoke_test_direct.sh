@@ -33,10 +33,9 @@ for item_name in "${allowed_anthropic_items[@]}"; do
     echo "  Trying: $item_name"
     # Try different field names
     for field_name in "credential" "api key" "password" "key" "secret"; do
-        # Use only whitelisted field names (hardcoded above)
-        credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null)
-        if [ $? -eq 0 ] && [ -n "$credential" ]; then
-            echo "  ✅ Found Anthropic API key in '$item_name' field '$sanitized_field_name'"
+        # Use field_name directly since it's from a hardcoded whitelist
+        if credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null) && [ -n "$credential" ]; then
+            echo "  ✅ Found Anthropic API key in '$item_name' field '$field_name'"
             ANTHROPIC_API_KEY="$credential"
             export ANTHROPIC_API_KEY
             break 2
@@ -59,11 +58,9 @@ for item_name in "${allowed_openai_items[@]}"; do
     echo "  Trying: $item_name"
     # Try different field names
     for field_name in "credential" "api key" "password" "key" "secret"; do
-        # Sanitize field_name to prevent command injection
-        sanitized_field_name=$(printf '%q' "$field_name")
-        credential=$(op item get "$item_name" --fields "$sanitized_field_name" --reveal 2>/dev/null)
-        if [ $? -eq 0 ] && [ -n "$credential" ]; then
-            echo "  ✅ Found OpenAI API key in '$item_name' field '$sanitized_field_name'"
+        # Use field_name directly since it's from a hardcoded whitelist
+        if credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null) && [ -n "$credential" ]; then
+            echo "  ✅ Found OpenAI API key in '$item_name' field '$field_name'"
             OPENAI_API_KEY="$credential"
             export OPENAI_API_KEY
             break 2
