@@ -1,0 +1,160 @@
+# Clean Up Your Mess Before Moving to Next Thing
+
+## 🎯 Core Principle
+**ALWAYS clean up your mess before moving to the next thing, unless you have to pee or something.**
+
+## 📋 Rule Requirements
+
+### Before Starting New Work:
+1. **Check current state** - What mess exists?
+2. **Assess mess size** - Is it manageable or nuclear?
+3. **Choose cleanup strategy** - Fix or reset?
+4. **Execute cleanup** - Complete the cleanup
+5. **Verify clean state** - Confirm everything is working
+
+### Mess Assessment Criteria:
+- **Small mess** (< 10 files): Fix manually
+- **Medium mess** (10-50 files): Use automated tools
+- **Large mess** (50+ files): Nuclear option (git reset --hard)
+- **Critical mess** (breaking functionality): Immediate nuclear option
+
+## 🧹 Cleanup Strategies
+
+### Strategy 1: Manual Fix (Small Mess)
+```bash
+# Fix specific issues
+uv run ruff check --fix
+uv run black src/
+git add -A && git commit -m "🔧 Fix specific issues"
+```
+
+### Strategy 2: Automated Tools (Medium Mess)
+```bash
+# Use existing fix scripts
+uv run python fix_flake8_issues.py
+uv run python fix_type_annotations.py
+git add -A && git commit -m "🔧 Apply automated fixes"
+```
+
+### Strategy 3: Nuclear Option (Large Mess)
+```bash
+# Reset everything to clean state
+git reset --hard HEAD
+git clean -fd
+# Verify clean state
+git status
+```
+
+### Strategy 4: Emergency Nuclear (Critical Mess)
+```bash
+# Immediate reset if functionality broken
+git reset --hard HEAD
+git clean -fd
+# Test core functionality
+uv run python src/ghostbusters/enhanced_ghostbusters.py
+```
+
+## 🎯 Success Criteria
+
+### Clean State Requirements:
+- **Working tree clean** - No uncommitted changes
+- **Core functionality working** - Ghostbusters runs successfully
+- **No critical errors** - Syntax errors fixed
+- **Ready for next thing** - Can proceed safely
+
+### Quality Gates:
+- **Git status clean** - No modified files
+- **Tests passing** - Core functionality verified
+- **Confidence high** - System working well
+- **No technical debt** - Issues resolved
+
+## 🚨 Exception Cases
+
+### Emergency Exceptions:
+- **Bathroom emergency** - Pee first, clean later
+- **Fire in building** - Evacuate immediately
+- **System down** - Fix critical issues first
+- **Security breach** - Address immediately
+
+### Temporary Exceptions:
+- **Research phase** - Exploring new approaches
+- **Prototype development** - Rapid iteration
+- **Debugging session** - Temporary mess allowed
+- **Learning experiment** - Controlled chaos
+
+## 📊 Mess Prevention
+
+### Best Practices:
+1. **Commit frequently** - Don't let mess accumulate
+2. **Use branches** - Isolate experimental work
+3. **Test regularly** - Catch issues early
+4. **Monitor state** - Keep track of changes
+
+### Warning Signs:
+- **Many modified files** - > 20 files changed
+- **Linter errors** - > 50 errors
+- **Syntax errors** - Any syntax errors
+- **Broken functionality** - Core features not working
+
+## 🎯 Implementation
+
+### Before Each New Task:
+```python
+def check_clean_state():
+    """Check if we're in a clean state before proceeding"""
+    git_status = run_git_status()
+    if git_status.modified_files > 10:
+        print("⚠️  Mess detected! Clean up first!")
+        return False
+    return True
+
+def cleanup_if_needed():
+    """Clean up mess if present"""
+    if not check_clean_state():
+        if mess_size > 50:
+            nuclear_cleanup()
+        else:
+            manual_cleanup()
+```
+
+### Integration Points:
+- **Before new features** - Check clean state
+- **Before major changes** - Verify no mess
+- **Before commits** - Ensure quality
+- **Before pushing** - Confirm clean
+
+## 🎯 Rule Enforcement
+
+### Automatic Checks:
+- **Pre-commit hooks** - Prevent messy commits
+- **CI/CD validation** - Catch issues early
+- **Regular audits** - Monitor code quality
+- **Automated testing** - Verify functionality
+
+### Manual Checks:
+- **Before starting work** - Assess current state
+- **During development** - Monitor mess accumulation
+- **Before switching tasks** - Clean up current work
+- **Before ending session** - Leave clean state
+
+## 📋 Rule Validation
+
+### Success Metrics:
+- **Clean git status** - No uncommitted changes
+- **High confidence** - > 95% system confidence
+- **No critical errors** - Zero syntax errors
+- **Ready for next thing** - Can proceed safely
+
+### Failure Indicators:
+- **Many modified files** - Mess accumulation
+- **Low confidence** - System issues
+- **Critical errors** - Broken functionality
+- **Unable to proceed** - Blocked by mess
+
+---
+
+**Remember: Clean up your mess before moving to the next thing, unless you have to pee or something! 🧹**
+description:
+globs:
+alwaysApply: false
+---
