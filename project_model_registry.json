@@ -252,7 +252,8 @@
       "scripts/.cursor/rules/bash-scripting.mdc": "Bash scripting guidelines",
       "docs/.cursor/rules/documentation.mdc": "Documentation guidelines",
       "config/.cursor/rules/configuration.mdc": "Configuration management guidelines",
-      ".cursor/rules/ghostbusters.mdc": "Ghostbusters multi-agent delusion detection and recovery guidelines"
+      ".cursor/rules/ghostbusters.mdc": "Ghostbusters multi-agent delusion detection and recovery guidelines",
+      ".cursor/rules/model-first-enforcement.mdc": "Model-first enforcement to prevent manual work when automated tools exist"
     }
   },
   "requirements_traceability": [
