@@ -4,8 +4,9 @@ Elegant Secure Shell Client - NO MORE CRINGING! 😄
 """
 
 import asyncio
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
-import subprocess  # 😱 TEMPORARY - we'll replace this!
+# import subprocess  # REMOVED - replaced with secure_execute
 from typing import Dict, Any
 
 import grpc
@@ -178,7 +179,7 @@ async def secure_execute(
     timeout: int = 30,
     validate_input: bool = True
 ) -> Dict[str, Any]:
-    """Elegant alternative to subprocess.run - NO MORE CRINGING! 😄"""
+    """Elegant alternative to secure_execute - NO MORE CRINGING! 😄"""
     client = ElegantSecureShellClient()
     try:
         return await client.execute_command(command, timeout, validate_input)

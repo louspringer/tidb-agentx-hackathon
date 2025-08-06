@@ -4,6 +4,7 @@ Regenerate corrupted source files using AST projection system
 """
 
 import os
+from src.secure_shell_service.secure_executor import secure_execute
 import shutil
 from pathlib import Path
 from src.model_driven_projection.final_projection_system import FinalProjectionSystem
@@ -62,7 +63,7 @@ def main():
     
     # Test MyPy on the regenerated files
     print("\n🧪 Testing MyPy on regenerated files...")
-    os.system("uv run mypy src/ --ignore-missing-imports")
+    secure_execute("uv run mypy src/ --ignore-missing-imports")
 
 if __name__ == "__main__":
     main() 

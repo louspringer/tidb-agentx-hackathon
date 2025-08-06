@@ -4,6 +4,7 @@ Real gRPC client for Secure Shell Service
 """
 
 import asyncio
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
 from typing import Dict, Any
 
@@ -165,13 +166,13 @@ class RealSecureShellClient:
             await self.channel.close()
 
 
-# Convenience function to replace subprocess.run
+# Convenience function to replace secure_execute
 async def secure_execute(
     command: str,
     timeout: int = 30,
     validate_input: bool = True
 ) -> Dict[str, Any]:
-    """Secure alternative to subprocess.run - NO MORE CRINGING! 😄"""
+    """Secure alternative to secure_execute - NO MORE CRINGING! 😄"""
     client = RealSecureShellClient()
     try:
         return await client.execute_command(command, timeout, validate_input)

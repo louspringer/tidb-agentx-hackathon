@@ -5,8 +5,9 @@ Intelligent tool selection and orchestration across domains
 """
 
 import json
+from src.secure_shell_service.secure_executor import secure_execute
 import os
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -209,7 +210,7 @@ class ProjectModel:
 
         for command in analysis.validation_commands:
             try:
-                result = subprocess.run(command.split(), capture_output=True, text=True)
+                result = secure_execute(command.split(), capture_output=True, text=True)
                 results["tools_used"].append(command.split()[0])
 
                 if result.returncode != 0:

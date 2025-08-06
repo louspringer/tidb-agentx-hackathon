@@ -4,25 +4,26 @@ Migration Example - From CRINGY subprocess to ELEGANT secure shell! 😄
 """
 
 import asyncio
+from src.secure_shell_service.secure_executor import secure_execute
 from elegant_client import secure_execute
 
 
 # 😱 BEFORE: CRINGY subprocess calls
 def cringy_old_way():
     """The old way - makes you cringe every time you see it 😱"""
-    import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
     
     # 😱 CRINGY: Direct subprocess call
-    result = subprocess.run(['ls', '-la'], capture_output=True, text=True)
+    result = secure_execute(['ls', '-la'], capture_output=True, text=True)
     print(f"CRINGY Output: {result.stdout}")
     
     # 😱 CRINGY: No timeout, can hang forever
-    result = subprocess.run(['sleep', '10'], capture_output=True, text=True)
+    result = secure_execute(['sleep', '10'], capture_output=True, text=True)
     print(f"CRINGY: This could hang forever!")
     
     # 😱 CRINGY: Command injection risk
     user_input = "rm -rf /"  # 😱 DANGEROUS!
-    result = subprocess.run(user_input, shell=True)  # 😱 CRINGY!
+    result = secure_execute(user_input, shell=True)  # 😱 CRINGY!
     print(f"CRINGY: Command injection risk!")
 
 
@@ -58,7 +59,7 @@ async def migration_examples():
     
     # Example 1: Simple command execution
     print("\n1️⃣ Simple Command Execution:")
-    print("😱 BEFORE: subprocess.run(['ls', '-la'], capture_output=True)")
+    print("😱 BEFORE: secure_execute(['ls', '-la'], capture_output=True)")
     print("🎉 AFTER: await secure_execute('ls -la', timeout=10)")
     
     result = await secure_execute('ls -la', timeout=10)
@@ -66,7 +67,7 @@ async def migration_examples():
     
     # Example 2: Command with timeout
     print("\n2️⃣ Command with Timeout:")
-    print("😱 BEFORE: subprocess.run(['sleep', '10'], timeout=5)")
+    print("😱 BEFORE: secure_execute(['sleep', '10'], timeout=5)")
     print("🎉 AFTER: await secure_execute('sleep 10', timeout=5)")
     
     result = await secure_execute('sleep 10', timeout=5)
@@ -74,7 +75,7 @@ async def migration_examples():
     
     # Example 3: Error handling
     print("\n3️⃣ Error Handling:")
-    print("😱 BEFORE: try: subprocess.run(['bad_command']) except: pass")
+    print("😱 BEFORE: try: secure_execute(['bad_command']) except: pass")
     print("🎉 AFTER: result = await secure_execute('bad_command')")
     
     result = await secure_execute('bad_command', timeout=10)
@@ -82,7 +83,7 @@ async def migration_examples():
     
     # Example 4: Complex command
     print("\n4️⃣ Complex Command:")
-    print("😱 BEFORE: subprocess.run(['find', '.', '-name', '*.py'])")
+    print("😱 BEFORE: secure_execute(['find', '.', '-name', '*.py'])")
     print("🎉 AFTER: await secure_execute('find . -name \"*.py\"')")
     
     result = await secure_execute('find . -name "*.py" | head -5', timeout=10)
@@ -101,14 +102,14 @@ async def migrate_file_example():
     # Simulate migrating a file that uses subprocess
     old_code = '''
 # 😱 OLD CODE (CRINGY!)
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
 def check_system_status():
-    result = subprocess.run(['ps', 'aux'], capture_output=True, text=True)
+    result = secure_execute(['ps', 'aux'], capture_output=True, text=True)
     return result.stdout
 
 def run_backup():
-    result = subprocess.run(['tar', '-czf', 'backup.tar.gz', '.'], 
+    result = secure_execute(['tar', '-czf', 'backup.tar.gz', '.'], 
                           capture_output=True, text=True)
     return result.returncode == 0
 '''

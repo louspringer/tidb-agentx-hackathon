@@ -4,6 +4,7 @@ Fix Return Value Issues - Targeted Fix for Most Common MyPy Pattern
 """
 
 import ast
+from src.secure_shell_service.secure_executor import secure_execute
 import re
 from pathlib import Path
 from typing import Any
@@ -168,9 +169,9 @@ def main():
 
     if total_fixed > 0:
         print("\n🚀 Running MyPy to check improvements...")
-        import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
-        result = subprocess.run(
+        result = secure_execute(
             ["uv", "run", "mypy", "src/", "--ignore-missing-imports"],
             capture_output=True,
             text=True,

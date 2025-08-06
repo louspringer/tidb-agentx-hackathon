@@ -3,10 +3,11 @@
 Tool Discovery System for Ghostbusters with Web Search
 """
 
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
 # Import web discovery
 import sys
+from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
 from typing import Any
 
@@ -74,7 +75,7 @@ class ToolDiscovery:
 
         for tool_name, tool_type in tools_to_check:
             try:
-                result = subprocess.run(
+                result = secure_execute(
                     [tool_name, "--version"],
                     capture_output=True,
                     text=True,

@@ -4,8 +4,9 @@ Enhanced Ghostbusters with Real Analysis and Smart Tool Discovery
 """
 
 import asyncio
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -113,7 +114,7 @@ class EnhancedGhostbustersOrchestrator:
     async def _run_mypy_analysis(self) -> dict[str, Any]:
         """Run real MyPy analysis"""
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "mypy", "src/", "--ignore-missing-imports"],
                 capture_output=True,
                 text=True,
@@ -140,7 +141,7 @@ class EnhancedGhostbustersOrchestrator:
     async def _run_flake8_analysis(self) -> dict[str, Any]:
         """Run real Flake8 analysis"""
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "flake8", "src/"],
                 capture_output=True,
                 text=True,

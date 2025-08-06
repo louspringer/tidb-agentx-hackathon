@@ -5,7 +5,8 @@ Validates that all Python files have proper type annotations
 """
 
 import ast
-import subprocess
+from src.secure_shell_service.secure_executor import secure_execute
+# import subprocess  # REMOVED - replaced with secure_execute
 import sys
 from pathlib import Path
 from typing import List, Dict, Any
@@ -74,7 +75,7 @@ class TypeSafetyValidator:
         """Run mypy on a single file (with timeout)"""
         errors: List[str] = []
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 [sys.executable, "-m", "mypy", str(file_path), "--no-error-summary"],
                 capture_output=True,
                 text=True,
@@ -169,7 +170,7 @@ def test_mypy_configuration() -> None:
 
     # Check that mypy is available
     try:
-        result = subprocess.run(
+        result = secure_execute(
             [sys.executable, "-m", "mypy", "--version"],
             capture_output=True,
             text=True,

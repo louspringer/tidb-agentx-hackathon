@@ -4,6 +4,7 @@ Fix Test Function Return Values - Remove returns from test functions
 """
 
 import re
+from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
 
 
@@ -123,9 +124,9 @@ def main() -> None:
 
     if total_fixed > 0:
         print("\n🚀 Running MyPy to check improvements...")
-        import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
-        result = subprocess.run(
+        result = secure_execute(
             ["uv", "run", "mypy", "src/", "--ignore-missing-imports"],
             capture_output=True,
             text=True,

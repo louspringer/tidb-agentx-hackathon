@@ -3,8 +3,9 @@
 Create GitHub PR for the code quality enforcement fixes
 """
 
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 import sys
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
 
 # Set up logging
@@ -23,7 +24,7 @@ def run_command(cmd, capture_output=True):
     """Run a command and return the result"""
     try:
         logger.info(f"Running command: {cmd}")
-        result = subprocess.run(
+        result = secure_execute(
             cmd, shell=True, capture_output=capture_output, text=True, check=True
         )
         if capture_output:

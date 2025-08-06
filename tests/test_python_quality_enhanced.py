@@ -10,7 +10,8 @@ This test extends the basic Python quality enforcement to include:
 """
 
 import ast
-import subprocess
+from src.secure_shell_service.secure_executor import secure_execute
+# import subprocess  # REMOVED - replaced with secure_execute
 import sys
 import json
 import logging
@@ -66,7 +67,7 @@ class EnhancedPythonQualityTester:
 
         # Test Black formatting
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "black", "--check", str(file_path)],
                 capture_output=True,
                 text=True,
@@ -82,7 +83,7 @@ class EnhancedPythonQualityTester:
 
         # Test Flake8 linting
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "flake8", str(file_path)],
                 capture_output=True,
                 text=True,
@@ -99,7 +100,7 @@ class EnhancedPythonQualityTester:
 
         # Test MyPy type checking
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "mypy", str(file_path)],
                 capture_output=True,
                 text=True,
@@ -256,7 +257,7 @@ class EnhancedPythonQualityTester:
     def _test_security(self, file_path: Path) -> bool:
         """Test for security issues using bandit."""
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "bandit", "-r", str(file_path)],
                 capture_output=True,
                 text=True,
@@ -303,7 +304,7 @@ class EnhancedPythonQualityTester:
         """Test functional equivalence for model-driven files."""
         try:
             # Run the simple equivalence test
-            result = subprocess.run(
+            result = secure_execute(
                 [
                     "python",
                     str(

@@ -4,6 +4,7 @@ Secure Shell Service Client - Replaces subprocess calls with secure gRPC interfa
 """
 
 import asyncio
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
 from typing import Any
 
@@ -135,13 +136,13 @@ class SecureShellClient:
             await self.channel.close()
 
 
-# Convenience function to replace subprocess.run
+# Convenience function to replace secure_execute
 async def secure_execute(
     command: str,
     timeout: int = 30,
     validate_input: bool = True,
 ) -> dict[str, Any]:
-    """Secure alternative to subprocess.run"""
+    """Secure alternative to secure_execute"""
     client = SecureShellClient()
     try:
         return await client.execute_command(command, timeout, validate_input)

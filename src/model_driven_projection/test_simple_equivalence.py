@@ -4,6 +4,7 @@ Simple functional equivalence test without external dependencies
 """
 
 import ast
+from src.secure_shell_service.secure_executor import secure_execute
 
 
 def test_syntax_equivalence() -> None:
@@ -211,10 +212,10 @@ def test_original_tests() -> None:
     print("\n🔍 Testing original tests...")
 
     try:
-        import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
         # Run a simple test that doesn't require external dependencies
-        result = subprocess.run(
+        result = secure_execute(
             [
                 "python",
                 "-m",

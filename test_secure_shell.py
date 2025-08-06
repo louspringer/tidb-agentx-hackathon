@@ -4,7 +4,8 @@ Test script for Secure Shell Service
 """
 
 import asyncio
-import subprocess
+from src.secure_shell_service.secure_executor import secure_execute
+# import subprocess  # REMOVED - replaced with secure_execute
 import time
 from pathlib import Path
 
@@ -16,7 +17,7 @@ def test_go_service():
     service_path = Path("src/secure_shell_service/secure-shell-service")
     if not service_path.exists():
         print("❌ Service not built. Building...")
-        subprocess.run(["cd src/secure_shell_service && go build -o secure-shell-service ."], shell=True)
+        secure_execute(["cd src/secure_shell_service && go build -o secure-shell-service ."], shell=True)
     
     # Start service
     print("🚀 Starting service...")
@@ -31,7 +32,7 @@ def test_go_service():
     
     # Check if service is running
     try:
-        result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
+        result = secure_execute(["ps", "aux"], capture_output=True, text=True)
         if "secure-shell-service" in result.stdout:
             print("✅ Service is running")
             return True

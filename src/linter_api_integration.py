@@ -5,8 +5,9 @@ Direct integration with linter APIs for proactive violation prevention
 """
 
 import json
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
@@ -122,7 +123,7 @@ class LinterAPIIntegration:
 
             cmd.append(file_path)
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
             if result.returncode == 0 and not result.stdout.strip():
                 return []  # No violations
@@ -168,7 +169,7 @@ class LinterAPIIntegration:
 
             cmd.append(file_path)
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
             violations = []
             if result.returncode != 0:
@@ -209,7 +210,7 @@ class LinterAPIIntegration:
 
             cmd.append(file_path)
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
             violations = []
             if result.stdout.strip():
@@ -252,7 +253,7 @@ class LinterAPIIntegration:
 
             cmd.append(file_path)
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
             violations = []
             if result.stdout.strip():
@@ -290,7 +291,7 @@ class LinterAPIIntegration:
         """Get AI-powered suggestions from Ru"""
         try:
             cmd = ["ru", "check", "--fix", "--output-format=json", file_path]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
             suggestions = []
             if result.stdout.strip():

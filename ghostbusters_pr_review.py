@@ -4,6 +4,7 @@ Ghostbusters PR Review and Service Management Analysis
 """
 
 import asyncio
+from src.secure_shell_service.secure_executor import secure_execute
 from typing import Any
 
 # Import Ghostbusters components
@@ -120,10 +121,10 @@ class GhostbustersPRReview:
         print("🔍 Analyzing service management...")
 
         # Check for running services
-        import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
         try:
-            result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
+            result = secure_execute(["ps", "aux"], capture_output=True, text=True)
             running_services = []
             for line in result.stdout.split("\n"):
                 if "python" in line and (

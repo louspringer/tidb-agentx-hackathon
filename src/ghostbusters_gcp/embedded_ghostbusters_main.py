@@ -5,6 +5,7 @@ Phase 2: Real Ghostbusters logic embedded in Cloud Function
 """
 
 import json
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
 import uuid
 from datetime import datetime, timezone
@@ -88,7 +89,7 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
         for file_path in Path(project_path).rglob("*.py"):
             try:
                 content = file_path.read_text()
-                if "subprocess.run" in content or "os.system" in content:
+                if "secure_execute" in content or "os.system" in content:
                     delusions_detected.append({
                         "type": "security",
                         "description": f"Potential subprocess usage detected in {file_path}",

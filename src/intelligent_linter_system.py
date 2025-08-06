@@ -5,7 +5,8 @@ Comprehensive integration of linter APIs, AI-powered linters, and dynamic rule u
 """
 
 import logging
-import subprocess
+from src.secure_shell_service.secure_executor import secure_execute
+# import subprocess  # REMOVED - replaced with secure_execute
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -35,7 +36,7 @@ class IntelligentLinterSystem:
 
         # Check if Ruff is available
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["ru", "--version"],
                 capture_output=True,
                 text=True,
@@ -57,7 +58,7 @@ class IntelligentLinterSystem:
 
         # Check if pre-commit is available
         try:
-            result = subprocess.run(
+            result = secure_execute(
                 ["pre-commit", "--version"],
                 capture_output=True,
                 text=True,

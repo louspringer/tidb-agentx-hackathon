@@ -5,8 +5,9 @@ Validate that Python files pass quality checks
 """
 
 import ast
+from src.secure_shell_service.secure_executor import secure_execute
 import logging
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 import sys
 from pathlib import Path
 from typing import List, Dict
@@ -27,7 +28,7 @@ def _test_black_formatting(file_path: str) -> bool:
     """Test if a file passes Black formatting"""
     try:
         logger.info(f"Testing Black formatting for {file_path}")
-        result = subprocess.run(
+        result = secure_execute(
             ["uv", "run", "black", "--check", "--quiet", file_path],
             capture_output=True,
             text=True,
@@ -50,7 +51,7 @@ def _test_flake8_linting(file_path: str) -> bool:
     """Test if a file passes Flake8 linting"""
     try:
         logger.info(f"Testing Flake8 linting for {file_path}")
-        result = subprocess.run(
+        result = secure_execute(
             ["uv", "run", "flake8", "--select=F401,E302,E305,W291,W292", file_path],
             capture_output=True,
             text=True,
@@ -198,7 +199,7 @@ def test_zero_linter_errors() -> None:
     for file_path in python_files:
         try:
             # Run flake8 with specific error codes using uv
-            result = subprocess.run(
+            result = secure_execute(
                 ["uv", "run", "flake8", "--select=F401,E302,E305,W291,W292", file_path],
                 capture_output=True,
                 text=True,

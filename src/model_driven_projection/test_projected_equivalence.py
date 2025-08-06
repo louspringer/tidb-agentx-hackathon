@@ -3,8 +3,9 @@
 Test functional equivalence between original and projected artifacts
 """
 
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 import sys
+from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
 
 
@@ -14,7 +15,7 @@ def test_original_artifacts() -> None:
 
     try:
         # Run basic validation tests
-        result = subprocess.run(
+        result = secure_execute(
             [
                 "python",
                 "-m",
