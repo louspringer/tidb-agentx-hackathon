@@ -147,7 +147,7 @@ class CDCEvent:
                 "procedureDetails": self.claim.procedure_details,
                 "createdTimeStamp": self.claim.created_timestamp,
                 "billSubmitDate": self.claim.bill_submit_date,
-            }
+            },
         )
 
 
@@ -213,7 +213,7 @@ class HealthcareCDCDomainModel:
 
         # Flat JSON (for nested structures)
         self.pipeline_config.add_processor(
-            "FlatJson", {"flattenArrays": True, "flattenObjects": True}
+            "FlatJson", {"flattenArrays": True, "flattenObjects": True},
         )
 
         # Jolt Transform (for data transformation)
@@ -257,8 +257,8 @@ class HealthcareCDCDomainModel:
                             "createdTimeStamp": "createdTimeStamp",
                             "billSubmitDate": "billSubmitDate",
                         },
-                    }
-                ]
+                    },
+                ],
             },
         )
 
@@ -297,7 +297,7 @@ class HealthcareCDCDomainModel:
 
         # Execute SQL for merging CDC events
         self.pipeline_config.add_processor(
-            "ExecuteSQLStatement", {"sqlStatement": self._get_merge_sql()}
+            "ExecuteSQLStatement", {"sqlStatement": self._get_merge_sql()},
         )
 
     def _get_merge_sql(self) -> str:
@@ -307,13 +307,15 @@ class HealthcareCDCDomainModel:
         else:
             sql_file_path = Path(__file__).parent / "sql" / "merge_cdc_operations.sql"
 
-            )
+        try:
+            with open(sql_file_path, "r") as f:
+                return f.read()
         except FileNotFoundError:
             raise FileNotFoundError(
                 f"SQL template file not found: {sql_file_path}\n"
                 f"Expected location: {os.path.join(os.getcwd(), 'healthcare-cdc', 'sql', 'merge_cdc_operations.sql')}\n"
                 f"To resolve: Ensure the SQL template file exists or specify a custom path using sql_template_path parameter\n"
-                f"Note: This is a demo environment - in production, use proper file management"
+                f"Note: This is a demo environment - in production, use proper file management",
             )
         except (OSError, IOError) as e:
             raise OSError(f"Error reading SQL template file: {e}")
@@ -331,12 +333,13 @@ class HealthcareCDCDomainModel:
                     "Description": "VPC ID for the infrastructure",
                 },
                 "SubnetId": {
-
+                    "Type": "AWS::EC2::Subnet::Id",
+                    "Description": "Subnet ID for the infrastructure",
                 },
                 "EC2InstanceType": {
                     "Type": "String",
                     "Default": self.infrastructure.ec2_instance_type,
-
+                },
             },
             "Resources": {
                 "InsuranceClaimsTable": {
@@ -344,7 +347,7 @@ class HealthcareCDCDomainModel:
                     "Properties": {
                         "TableName": self.infrastructure.dynamodb_table,
                         "AttributeDefinitions": [
-                            {"AttributeName": "claim_id", "AttributeType": "S"}
+                            {"AttributeName": "claim_id", "AttributeType": "S"},
                         ],
                         "KeySchema": [{"AttributeName": "claim_id", "KeyType": "HASH"}],
                         "BillingMode": "PAY_PER_REQUEST",
@@ -372,10 +375,10 @@ class HealthcareCDCDomainModel:
                                 "FromPort": "22",
                                 "ToPort": "22",
                                 "CidrIp": "0.0.0.0/0",
-                            }
+                            },
                         ],
                         "SecurityGroupEgress": [
-                            {"IpProtocol": "-1", "CidrIp": "0.0.0.0/0"}
+                            {"IpProtocol": "-1", "CidrIp": "0.0.0.0/0"},
                         ],
                     },
                 },
@@ -393,7 +396,7 @@ class HealthcareCDCDomainModel:
                                     "Effect": "Allow",
                                     "Principal": {"Service": "ec2.amazonaws.com"},
                                     "Action": "sts:AssumeRole",
-                                }
+                                },
                             ],
                         },
                         "ManagedPolicyArns": [
@@ -412,22 +415,22 @@ class HealthcareCDCDomainModel:
                                 "IpProtocol": "tcp",
                                 "FromPort": "22",
                                 "ToPort": "22",
-                                "CidrIp": "0.0.0.0/0"
-                            }
+                                "CidrIp": "0.0.0.0/0",
+                            },
                         ],
                         "SecurityGroupEgress": [
                             {
                                 "IpProtocol": "-1",
-                                "CidrIp": "0.0.0.0/0"
-                            }
-                        ]
-                    }
+                                "CidrIp": "0.0.0.0/0",
+                            },
+                        ],
+                    },
                 },
                 "EC2InstanceProfile": {
                     "Type": "AWS::IAM::InstanceProfile",
                     "Properties": {
-                        "Roles": [{"Ref": "EC2InstanceRole"}]
-                    }
+                        "Roles": [{"Ref": "EC2InstanceRole"}],
+                    },
                 },
                 "EC2InstanceRole": {
                     "Type": "AWS::IAM::Role",
@@ -438,15 +441,15 @@ class HealthcareCDCDomainModel:
                                 {
                                     "Effect": "Allow",
                                     "Principal": {"Service": "ec2.amazonaws.com"},
-                                    "Action": "sts:AssumeRole"
-                                }
-                            ]
+                                    "Action": "sts:AssumeRole",
+                                },
+                            ],
                         },
                         "ManagedPolicyArns": [
                             "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
-                            "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
-                        ]
-                    }
+                            "arn:aws:iam::aws:policy/AmazonKinesisFullAccess",
+                        ],
+                    },
                 },
                 "EC2Instance": {
                     "Type": "AWS::EC2::Instance",
@@ -471,7 +474,7 @@ class HealthcareCDCDomainModel:
 
                                 ],
                                 "StreamName": {"Ref": "InsuranceClaimsStream"},
-                            }
+                            },
                         },
                     },
                 },
@@ -503,13 +506,13 @@ class HealthcareCDCDomainModel:
         USE DATABASE {self.infrastructure.database};
         CREATE SCHEMA IF NOT EXISTS {self.infrastructure.schema};
         USE SCHEMA {self.infrastructure.schema};
-        
+
         -- Create warehouse
-        CREATE WAREHOUSE IF NOT EXISTS {self.infrastructure.warehouse} 
-        WAREHOUSE_SIZE = 'SMALL' 
-        AUTO_SUSPEND = 300 
+        CREATE WAREHOUSE IF NOT EXISTS {self.infrastructure.warehouse}
+        WAREHOUSE_SIZE = 'SMALL'
+        AUTO_SUSPEND = 300
         AUTO_RESUME = TRUE;
-        
+
         -- Create destination table
         CREATE OR REPLACE TABLE {self.infrastructure.destination_table} (
             eventName STRING,
@@ -545,7 +548,7 @@ class HealthcareCDCDomainModel:
             payerContactNumber STRING,
             paymentStatus STRING
         );
-        
+
         -- Create CDC table
         CREATE OR REPLACE TABLE {self.infrastructure.cdc_table} (
             eventName STRING,
@@ -581,7 +584,7 @@ class HealthcareCDCDomainModel:
             payerContactNumber STRING,
             paymentStatus STRING
         );
-        
+
         -- Create event history table
         CREATE OR REPLACE TABLE {self.infrastructure.event_history_table} (
             eventName STRING,
