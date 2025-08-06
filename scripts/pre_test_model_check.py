@@ -5,8 +5,9 @@ This script MUST be run before any testing to ensure model-driven approach.
 """
 
 import json
+from src.secure_shell_service.secure_executor import secure_execute
 import sys
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 from pathlib import Path
 from typing import Any, Dict
 
@@ -52,7 +53,7 @@ def run_model_driven_tests(model: Any, testing_domain: Any) -> None:
     # Step 1: Lint with flake8
     if testing_domain.get("linter") == "flake8":
         print("   Step 1: Running flake8 linting...")
-        result = subprocess.run(
+        result = secure_execute(
             [
                 "python",
                 "-m",
@@ -71,7 +72,7 @@ def run_model_driven_tests(model: Any, testing_domain: Any) -> None:
     # Step 2: Format with black
     if testing_domain.get("formatter") == "black":
         print("   Step 2: Running black formatting...")
-        result = subprocess.run(
+        result = secure_execute(
             ["python", "-m", "black", "tests/", "--check"],
             capture_output=True,
             text=True,
@@ -84,7 +85,7 @@ def run_model_driven_tests(model: Any, testing_domain: Any) -> None:
     # Step 3: Type check with mypy
     if testing_domain.get("type_checker") == "mypy":
         print("   Step 3: Running mypy type checking...")
-        result = subprocess.run(
+        result = secure_execute(
             ["python", "-m", "mypy", "tests/"], capture_output=True, text=True
         )
         if result.returncode != 0:
@@ -95,7 +96,7 @@ def run_model_driven_tests(model: Any, testing_domain: Any) -> None:
     # Step 4: Run pytest
     if testing_domain.get("validator") == "pytest":
         print("   Step 4: Running pytest validation...")
-        result = subprocess.run(
+        result = secure_execute(
             ["python", "-m", "pytest", "tests/", "-v", "--tb=short"],
             capture_output=True,
             text=True,

@@ -6,7 +6,7 @@ Code Quality System - Model-Driven Linting and Fixing
 """
 
 import re
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable

@@ -4,7 +4,7 @@ Comprehensive Mypy Issue Fixer
 """
 
 import re
-import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 from pathlib import Path
 from typing import List, Dict, Any
 

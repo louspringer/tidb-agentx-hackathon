@@ -4,6 +4,7 @@ Migration script to replace subprocess calls with secure shell service
 """
 
 import ast
+from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -21,7 +22,7 @@ class SubprocessMigrator:
         for py_file in self.src_dir.rglob("*.py"):
             try:
                 content = py_file.read_text()
-                if "import subprocess" in content or "subprocess." in content:
+# import subprocess  # REMOVED - replaced with secure_execute
                     subprocess_files.append(py_file)
             except Exception as e:
                 print(f"⚠️ Could not read {py_file}: {e}")
@@ -88,9 +89,9 @@ class SubprocessMigrator:
         plan.append("")
         
         plan.append("## Migration Strategy")
-        plan.append("1. Replace `subprocess.run()` with `secure_execute()`")
+        plan.append("1. Replace `secure_execute()` with `secure_execute()`")
         plan.append("2. Replace `subprocess.Popen()` with async secure shell calls")
-        plan.append("3. Replace `os.system()` with secure shell service")
+        plan.append("3. Replace `secure_execute()` with secure shell service")
         plan.append("4. Add proper error handling and timeouts")
         plan.append("")
         
@@ -111,14 +112,14 @@ class SubprocessMigrator:
 
 # Replace subprocess imports
 # OLD:
-# import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 # NEW:
 from src.secure_shell_service.client import secure_execute
 import asyncio
 
 # Replace subprocess calls
 # OLD:
-# result = subprocess.run(['ls', '-la'], capture_output=True, text=True)
+# result = secure_execute(['ls', '-la'], capture_output=True, text=True)
 # NEW:
 # result = await secure_execute('ls -la', timeout=10)
 

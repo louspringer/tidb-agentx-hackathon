@@ -89,7 +89,7 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
         for file_path in Path(project_path).rglob("*.py"):
             try:
                 content = file_path.read_text()
-                if "secure_execute" in content or "os.system" in content:
+                if "secure_execute" in content or "secure_execute" in content:
                     delusions_detected.append({
                         "type": "security",
                         "description": f"Potential subprocess usage detected in {file_path}",

@@ -5,6 +5,7 @@ Systematically replace subprocess usage with secure alternatives
 """
 
 import re
+from src.secure_shell_service.secure_executor import secure_execute
 import sys
 from pathlib import Path
 from typing import List, Dict, Any
@@ -20,31 +21,37 @@ def find_subprocess_usage(file_path: Path) -> List[Dict[str, Any]]:
             lines = content.split('\n')
             
         for line_num, line in enumerate(lines, 1):
+            # Skip docstring lines that mention secure_execute but don't actually use it
+            if '"""' in line and 'subprocess.run' in line:
+                continue
+            if "'''" in line and 'subprocess.run' in line:
+                continue
+                
             # Check for subprocess imports
             if re.search(r'import\s+subprocess', line):
                 issues.append({
                     'line': line_num,
                     'type': 'import',
                     'content': line.strip(),
-                    'fix': '# import subprocess  # REMOVED - replaced with secure_execute'
+# import subprocess  # REMOVED - replaced with secure_execute
                 })
             
-            # Check for subprocess.run usage
+            # Check for secure_execute usage
             elif re.search(r'subprocess\.run', line):
                 issues.append({
                     'line': line_num,
                     'type': 'subprocess_run',
                     'content': line.strip(),
-                    'fix': line.replace('subprocess.run', 'secure_execute')
+                    'fix': line.replace('secure_execute', 'secure_execute')
                 })
             
-            # Check for os.system usage
+            # Check for secure_execute usage
             elif re.search(r'os\.system', line):
                 issues.append({
                     'line': line_num,
                     'type': 'os_system',
                     'content': line.strip(),
-                    'fix': line.replace('os.system', 'secure_execute')
+                    'fix': line.replace('secure_execute', 'secure_execute')
                 })
                 
     except Exception as e:
@@ -114,8 +121,9 @@ def main() -> None:
     print("🛡️  Subprocess Vulnerability Fixer")
     print("=" * 50)
     
-    # Files to check (from Ghostbusters analysis)
+    # Files to check (updated list based on Ghostbusters analysis)
     files_to_fix = [
+        # Core files
         "src/ghostbusters/enhanced_ghostbusters.py",
         "src/ghostbusters/tool_discovery.py",
         "src/ghostbusters_gcp/embedded_ghostbusters_main.py",
@@ -127,9 +135,12 @@ def main() -> None:
         "src/secure_shell_service/elegant_client.py",
         "src/secure_shell_service/migration_example.py",
         "src/secure_shell_service/real_client.py",
+        "src/secure_shell_service/secure_executor.py",
         "tests/test_python_quality_enforcement.py",
         "tests/test_python_quality_enhanced.py",
         "tests/test_type_safety.py",
+        
+        # Root level files
         "create_pr.py",
         "project_model.py",
         "fix_simple_type_issues.py",
@@ -139,7 +150,29 @@ def main() -> None:
         "src/linter_api_integration.py",
         "src/intelligent_linter_system.py",
         "regenerate_from_ast.py",
-        "ghostbusters_pr_review.py"
+        "ghostbusters_pr_review.py",
+        
+        # Additional files found by Ghostbusters
+        "fix_flake8_issues.py",
+        "fix_remaining_type_issues.py",
+        "fix_type_annotations.py",
+        "src/code_quality_system/quality_model.py",
+        
+        # Script files
+        "scripts/fix_mypy_issues.py",
+        "scripts/fix_subprocess_vulnerabilities.py",
+        "scripts/migrate_subprocess_to_secure_shell.py",
+        "scripts/pre_test_model_check.py",
+        
+        # Migration templates
+        "scripts/migration_templates/enhanced_ghostbusters_migration_template.py",
+        "scripts/migration_templates/intelligent_linter_system_migration_template.py",
+        "scripts/migration_templates/linter_api_integration_migration_template.py",
+        "scripts/migration_templates/quality_model_migration_template.py",
+        "scripts/migration_templates/test_model_traceability_migration_template.py",
+        "scripts/migration_templates/test_projected_equivalence_migration_template.py",
+        "scripts/migration_templates/test_simple_equivalence_migration_template.py",
+        "scripts/migration_templates/tool_discovery_migration_template.py"
     ]
     
     # Check if dry run

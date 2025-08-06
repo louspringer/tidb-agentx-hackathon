@@ -2,14 +2,15 @@
 
 # Replace subprocess imports
 # OLD:
-# import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 # NEW:
 from src.secure_shell_service.client import secure_execute
+from src.secure_shell_service.secure_executor import secure_execute
 import asyncio
 
 # Replace subprocess calls
 # OLD:
-# result = subprocess.run(['ls', '-la'], capture_output=True, text=True)
+# result = secure_execute(['ls', '-la'], capture_output=True, text=True)
 # NEW:
 # result = await secure_execute('ls -la', timeout=10)
 

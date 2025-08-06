@@ -4,6 +4,7 @@ Fix Common Flake8 Issues - Systematic Style Fixes
 """
 
 import ast
+from src.secure_shell_service.secure_executor import secure_execute
 import re
 from pathlib import Path
 
@@ -234,9 +235,9 @@ def main() -> None:
 
     if total_fixed > 0:
         print("\n🚀 Running Flake8 to check improvements...")
-        import subprocess
+# import subprocess  # REMOVED - replaced with secure_execute
 
-        result = subprocess.run(
+        result = secure_execute(
             ["uv", "run", "flake8", "src/"],
             capture_output=True,
             text=True,
