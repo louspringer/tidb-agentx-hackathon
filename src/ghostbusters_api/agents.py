@@ -60,6 +60,9 @@ class SecurityExpert(BaseExpert):
 
         # Check for security issues
         for py_file in project_path.rglob("*.py"):
+            # Skip the agents.py file itself (contains detection patterns)
+            if py_file.name == "agents.py":
+                continue
             try:
                 content = py_file.read_text()
 
