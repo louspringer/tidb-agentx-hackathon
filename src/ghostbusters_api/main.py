@@ -145,31 +145,25 @@ async def run_analysis(
         }
 
         # Clone the repository to analyze
-        import subprocess
         import tempfile
         from pathlib import Path
+        from git import Repo
 
         # Create temporary directory for analysis
         with tempfile.TemporaryDirectory() as temp_dir:
-            logger.info(f"Cloning {repo_url} branch {branch} to {temp_dir}")
+            logger.info("Cloning %s branch %s to %s", repo_url, branch, temp_dir)
 
-            # Clone the repository
-            clone_cmd = [
-                "git",
-                "clone",
-                "--branch",
-                branch,
-                "--depth",
-                "1",
-                repo_url,
-                temp_dir,
-            ]
-            result = subprocess.run(clone_cmd, capture_output=True, text=True)
-
-            if result.returncode != 0:
-                raise Exception(f"Failed to clone repository: {result.stderr}")
-
-            logger.info(f"Successfully cloned repository to {temp_dir}")
+            try:
+                # Clone the repository using gitpython
+                Repo.clone_from(
+                    repo_url,
+                    temp_dir,
+                    branch=branch,
+                    depth=1
+                )
+                logger.info("Successfully cloned repository to %s", temp_dir)
+            except Exception as e:
+                raise Exception(f"Failed to clone repository: {str(e)}")
 
             # Convert to Path object for agents
             project_path = Path(temp_dir)
@@ -198,11 +192,11 @@ async def run_analysis(
                     )
 
                     logger.info(
-                        f"Agent {agent_name} completed with confidence {result.confidence}",
+                        "Agent %s completed with confidence %s", agent_name, result.confidence
                     )
 
                 except Exception as e:
-                    logger.error(f"Agent {agent_name} failed: {e}")
+                    logger.error("Agent %s failed: %s", agent_name, e)
                     results.append(
                         {
                             "agent": agent_name,
@@ -222,7 +216,7 @@ async def run_analysis(
             }
 
     except Exception as e:
-        logger.error(f"Analysis failed: {e}")
+        logger.error("Analysis failed: %s", e)
         raise
 
 
