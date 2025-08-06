@@ -12,5 +12,8 @@ functions-framework==3.4.0
 # HTTP client
 requests==2.31.0
 
+# Git operations (replaces subprocess)
+gitpython==3.1.40
+
 # Basic dependencies
 typing-extensions==4.8.0 
