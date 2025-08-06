@@ -284,25 +284,6 @@ class GhostbustersOrchestrator:
 
         return state
 
-    async def _plan_recovery_action(
-        self,
-        agent_name: str,
-        delusion: dict[str, Any],
-    ) -> Optional[dict[str, Any]]:
-        """Plan recovery action for a specific delusion"""
-        try:
-            # Simple recovery action planning
-            return {
-                "id": f"recovery_{agent_name}_{hash(str(delusion))}",
-                "agent": agent_name,
-                "delusion": delusion,
-                "engine": "syntax",  # Default to syntax recovery
-                "description": f"Fix {delusion.get('type', 'unknown')} issue",
-            }
-        except Exception as e:
-            self.logger.error(f"Failed to plan recovery action: {e}")
-            return None
-
     def _calculate_confidence(self, validation_results: dict[str, Any]) -> float:
         """Calculate confidence score from validation results"""
         if not validation_results:
@@ -319,45 +300,200 @@ class GhostbustersOrchestrator:
         return total_confidence / count if count > 0 else 0.0
 
     async def run_ghostbusters(self) -> GhostbustersState:
-        """Run the complete Ghostbusters workflow with extreme prejudice"""
-        try:
-            # Initialize state
-            state = GhostbustersState(
-                project_path=str(self.project_path),
-                delusions_detected=[],
-                recovery_actions=[],
-                confidence_score=0.0,
-                validation_results={},
-                recovery_results={},
-                current_phase="initialized",
-                errors=[],
-                warnings=[],
-                metadata={},
-            )
+        """Run the complete Ghostbusters workflow"""
 
-            # BRUTAL APPROACH: Skip LangGraph and run manually
-            state = await self._detect_delusions_node(state)
-            state = await self._validate_findings_node(state)
-            state = await self._plan_recovery_node(state)
-            state = await self._execute_recovery_node(state)
-            state = await self._validate_recovery_node(state)
-            return await self._generate_report_node(state)
+        # Initialize state
+        state = GhostbustersState(
+            project_path=str(self.project_path),
+            delusions_detected=[],
+            recovery_actions=[],
+            confidence_score=0.0,
+            validation_results={},
+            recovery_results={},
+            current_phase="detection",
+            errors=[],
+            warnings=[],
+            metadata={},
+        )
+
+        try:
+            # Phase 1: Detect delusions
+            self.logger.info("Phase 1: Detecting delusions...")
+            state = await self._detect_delusions(state)
+
+            # Phase 2: Validate findings
+            self.logger.info("Phase 2: Validating findings...")
+            state = await self._validate_findings(state)
+
+            # Phase 3: Plan recovery
+            self.logger.info("Phase 3: Planning recovery...")
+            state = await self._plan_recovery(state)
+
+            # Phase 4: Execute recovery
+            self.logger.info("Phase 4: Executing recovery...")
+            state = await self._execute_recovery(state)
+
+            # Phase 5: Validate recovery
+            self.logger.info("Phase 5: Validating recovery...")
+            state = await self._validate_recovery(state)
+
+            # Phase 6: Generate report
+            self.logger.info("Phase 6: Generating report...")
+            state = await self._generate_report(state)
 
         except Exception as e:
             self.logger.error(f"Ghostbusters workflow failed: {e}")
-            # Return error state
-            return GhostbustersState(
-                project_path=str(self.project_path),
-                delusions_detected=[],
-                recovery_actions=[],
-                confidence_score=0.0,
-                validation_results={},
-                recovery_results={},
-                current_phase="error",
-                errors=[f"Workflow error: {e}"],
-                warnings=[],
-                metadata={},
+            state.errors.append(str(e))
+            state.confidence_score = 0.0
+
+        return state
+
+    async def _detect_delusions(self, state: GhostbustersState) -> GhostbustersState:
+        """Detect delusions using all agents"""
+        all_delusions = []
+
+        # Limit number of files to prevent hanging
+        max_files = 50
+        file_count = 0
+
+        for agent_name, agent in self.agents.items():
+            try:
+                if file_count >= max_files:
+                    self.logger.warning(
+                        f"Reached file limit of {max_files}, stopping detection"
+                    )
+                    break
+
+                result = await agent.detect_delusions(self.project_path)
+                all_delusions.extend(result.delusions)
+                state.metadata[f"{agent_name}_confidence"] = result.confidence
+                state.metadata[f"{agent_name}_recommendations"] = result.recommendations
+                file_count += 1
+            except Exception as e:
+                self.logger.error(f"Agent {agent_name} failed: {e}")
+                state.errors.append(f"Agent {agent_name} failed: {e}")
+
+        state.delusions_detected = all_delusions
+        state.current_phase = "validation"
+        return state
+
+    async def _validate_findings(self, state: GhostbustersState) -> GhostbustersState:
+        """Validate findings using validators"""
+        validation_results = {}
+
+        for validator_name, validator in self.validators.items():
+            try:
+                result = await validator.validate_findings(state.delusions_detected)
+                validation_results[validator_name] = result
+            except Exception as e:
+                self.logger.error(f"Validator {validator_name} failed: {e}")
+                state.errors.append(f"Validator {validator_name} failed: {e}")
+
+        state.validation_results = validation_results
+        state.current_phase = "planning"
+        return state
+
+    async def _plan_recovery(self, state: GhostbustersState) -> GhostbustersState:
+        """Plan recovery actions for detected delusions"""
+        recovery_actions = []
+
+        for delusion in state.delusions_detected:
+            action = await self._plan_recovery_action(delusion)
+            if action:
+                recovery_actions.append(action)
+
+        state.recovery_actions = recovery_actions
+        state.current_phase = "execution"
+        return state
+
+    async def _execute_recovery(self, state: GhostbustersState) -> GhostbustersState:
+        """Execute recovery actions"""
+        recovery_results = {}
+
+        # Limit recovery actions to prevent infinite loops
+        max_recovery_actions = 10
+        actions_to_execute = state.recovery_actions[:max_recovery_actions]
+
+        for action in actions_to_execute:
+            engine_name = action.get("engine")
+            if engine_name in self.recovery_engines:
+                try:
+                    engine = self.recovery_engines[engine_name]
+                    result = await engine.execute_recovery(action)
+                    recovery_results[action.get("id", "unknown")] = result
+                except Exception as e:
+                    self.logger.error(f"Recovery engine {engine_name} failed: {e}")
+                    state.errors.append(f"Recovery engine {engine_name} failed: {e}")
+
+        if len(state.recovery_actions) > max_recovery_actions:
+            self.logger.warning(
+                f"Limited recovery actions to {max_recovery_actions} to prevent infinite loops"
             )
+
+        state.recovery_results = recovery_results
+        state.current_phase = "validation"
+        return state
+
+    async def _validate_recovery(self, state: GhostbustersState) -> GhostbustersState:
+        """Validate recovery results"""
+        # Re-run detection to see if issues were fixed
+        post_recovery_state = await self._detect_delusions(state)
+        remaining_delusions = len(post_recovery_state.delusions_detected)
+        original_delusions = len(state.delusions_detected)
+
+        if original_delusions > 0:
+            success_rate = (
+                original_delusions - remaining_delusions
+            ) / original_delusions
+        else:
+            success_rate = 1.0
+
+        state.metadata["recovery_success_rate"] = success_rate
+        state.metadata["remaining_delusions"] = remaining_delusions
+        state.current_phase = "reporting"
+        return state
+
+    async def _generate_report(self, state: GhostbustersState) -> GhostbustersState:
+        """Generate final report and calculate confidence"""
+        # Calculate confidence based on validation and recovery results
+        confidence = self._calculate_confidence(state.validation_results)
+
+        # Adjust confidence based on recovery success
+        recovery_success_rate = state.metadata.get("recovery_success_rate", 0.0)
+        confidence = (confidence + recovery_success_rate) / 2
+
+        state.confidence_score = confidence
+        state.current_phase = "complete"
+
+        self.logger.info(f"Ghostbusters completed with confidence: {confidence}")
+        return state
+
+    async def _plan_recovery_action(
+        self,
+        delusion: dict[str, Any],
+    ) -> Optional[dict[str, Any]]:
+        """Plan a recovery action for a delusion"""
+        delusion_type = delusion.get("type", "")
+
+        # Map delusion types to recovery engines
+        engine_mapping = {
+            "syntax_error": "syntax",
+            "indentation_error": "indentation",
+            "import_error": "imports",
+            "type_error": "types",
+            "subprocess_vulnerability": "security",
+        }
+
+        engine_name = engine_mapping.get(delusion_type)
+        if engine_name and engine_name in self.recovery_engines:
+            return {
+                "id": f"recovery_{len(self.recovery_actions) if hasattr(self, 'recovery_actions') else 0}",
+                "engine": engine_name,
+                "delusion": delusion,
+                "priority": delusion.get("priority", "medium"),
+            }
+
+        return None
 
 
 async def run_ghostbusters(project_path: str = ".") -> GhostbustersState:
