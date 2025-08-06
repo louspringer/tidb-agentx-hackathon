@@ -6,7 +6,7 @@ Ghostbusters Orchestrator - Multi-Agent Delusion Detection & Recovery System
 import asyncio
 import logging
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -133,9 +133,9 @@ class GhostbustersOrchestrator:
                     delusions_detected.append(
                         {"agent": name, "delusions": result.delusions},
                     )
-                self.logger.info(f"✅ {name} detection completed")
+                self.logger.info("✅ %s detection completed", name)
             except Exception as e:
-                self.logger.error(f"❌ {name} detection failed: {e}")
+                self.logger.error("❌ %s detection failed: %s", name, e)
                 state.errors.append(f"{name} detection error: {e}")
 
         state.delusions_detected = delusions_detected
@@ -156,9 +156,9 @@ class GhostbustersOrchestrator:
                 # FIXED: Don't iterate over ValidationResult, just store it
                 result = await validator.validate_findings(state.delusions_detected)
                 validation_results[name] = result
-                self.logger.info(f"✅ {name} validation completed")
+                self.logger.info("✅ %s validation completed", name)
             except Exception as e:
-                self.logger.error(f"❌ {name} validation failed: {e}")
+                self.logger.error("❌ %s validation failed: %s", name, e)
                 state.errors.append(f"{name} validation error: {e}")
 
         state.validation_results = validation_results
@@ -174,10 +174,9 @@ class GhostbustersOrchestrator:
 
         # Analyze delusions and plan recovery
         for agent_result in state.delusions_detected:
-            agent_name = agent_result["agent"]
             delusions = agent_result.get("delusions", [])
             for delusion_item in delusions:
-                action = await self._plan_recovery_action(agent_name, delusion_item)
+                action = await self._plan_recovery_action(delusion_item)
                 if action:
                     recovery_actions.append(action)
 
@@ -206,14 +205,19 @@ class GhostbustersOrchestrator:
                     engine = self.recovery_engines[engine_name]
                     result = await engine.execute_recovery(action)
                     recovery_results[action["id"]] = result
-                    self.logger.info(f"✅ Recovery action {action['id']} completed")
+                    self.logger.info("✅ Recovery action %s completed", action["id"])
                 except Exception as e:
-                    self.logger.error(f"❌ Recovery action {action['id']} failed: {e}")
+                    self.logger.error(
+                        "❌ Recovery action %s failed: %s",
+                        action["id"],
+                        e,
+                    )
                     state.errors.append(f"Recovery error: {e}")
 
         if len(state.recovery_actions) > max_recovery_actions:
             self.logger.warning(
-                f"⚠️ Limited recovery actions to {max_recovery_actions} to prevent infinite loops",
+                "⚠️ Limited recovery actions to %s to prevent infinite loops",
+                max_recovery_actions,
             )
 
         state.recovery_results = recovery_results
@@ -235,7 +239,7 @@ class GhostbustersOrchestrator:
                 result = await validator.validate_findings(state.delusions_detected)
                 post_recovery_validation[name] = result
             except Exception as e:
-                self.logger.error(f"❌ Post-recovery validation failed: {e}")
+                self.logger.error("❌ Post-recovery validation failed: %s", e)
 
         # Calculate confidence improvement
         pre_confidence = self._calculate_confidence(state.validation_results)
@@ -256,7 +260,7 @@ class GhostbustersOrchestrator:
         self.logger.info("📊 Generating Ghostbusters report...")
 
         report = {
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "project_path": str(self.project_path),
             "confidence_score": state.confidence_score,
             "delusions_detected": len(state.delusions_detected),
@@ -342,7 +346,7 @@ class GhostbustersOrchestrator:
             state = await self._generate_report(state)
 
         except Exception as e:
-            self.logger.error(f"Ghostbusters workflow failed: {e}")
+            self.logger.error("Ghostbusters workflow failed: %s", e)
             state.errors.append(str(e))
             state.confidence_score = 0.0
 
@@ -360,7 +364,8 @@ class GhostbustersOrchestrator:
             try:
                 if file_count >= max_files:
                     self.logger.warning(
-                        f"Reached file limit of {max_files}, stopping detection"
+                        "Reached file limit of %s, stopping detection",
+                        max_files,
                     )
                     break
 
@@ -370,7 +375,7 @@ class GhostbustersOrchestrator:
                 state.metadata[f"{agent_name}_recommendations"] = result.recommendations
                 file_count += 1
             except Exception as e:
-                self.logger.error(f"Agent {agent_name} failed: {e}")
+                self.logger.error("Agent %s failed: %s", agent_name, e)
                 state.errors.append(f"Agent {agent_name} failed: {e}")
 
         state.delusions_detected = all_delusions
@@ -386,7 +391,7 @@ class GhostbustersOrchestrator:
                 result = await validator.validate_findings(state.delusions_detected)
                 validation_results[validator_name] = result
             except Exception as e:
-                self.logger.error(f"Validator {validator_name} failed: {e}")
+                self.logger.error("Validator %s failed: %s", validator_name, e)
                 state.errors.append(f"Validator {validator_name} failed: {e}")
 
         state.validation_results = validation_results
@@ -422,12 +427,13 @@ class GhostbustersOrchestrator:
                     result = await engine.execute_recovery(action)
                     recovery_results[action.get("id", "unknown")] = result
                 except Exception as e:
-                    self.logger.error(f"Recovery engine {engine_name} failed: {e}")
+                    self.logger.error("Recovery engine %s failed: %s", engine_name, e)
                     state.errors.append(f"Recovery engine {engine_name} failed: {e}")
 
         if len(state.recovery_actions) > max_recovery_actions:
             self.logger.warning(
-                f"Limited recovery actions to {max_recovery_actions} to prevent infinite loops"
+                "Limited recovery actions to %s to prevent infinite loops",
+                max_recovery_actions,
             )
 
         state.recovery_results = recovery_results
@@ -465,7 +471,7 @@ class GhostbustersOrchestrator:
         state.confidence_score = confidence
         state.current_phase = "complete"
 
-        self.logger.info(f"Ghostbusters completed with confidence: {confidence}")
+        self.logger.info("Ghostbusters completed with confidence: %s", confidence)
         return state
 
     async def _plan_recovery_action(
