@@ -1,0 +1,13 @@
+name: "test-simple-trigger"
+description: "Simple test trigger"
+github:
+  name: "OpenFlow-Playground"
+  owner: "louspringer"
+  push:
+    branch: "^main$"
+build:
+  steps:
+    - name: "gcr.io/cloud-builders/docker"
+      args: ["build", "-t", "test-image", "."]
+  images:
+    - "test-image" 

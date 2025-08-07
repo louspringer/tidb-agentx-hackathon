@@ -1,0 +1,33 @@
+@prefix spore: <https://louspringer.com/spore#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+spore:cloudbuild-trigger-creation-blocked a spore:FailureTrace ;
+    dct:title "Cloud Build Trigger Creation Blocked - Diagnostic Summary" ;
+    spore:project "aardvark-linkedin-grepper" ;
+    spore:repository "https://github.com/louspringer/OpenFlow-Playground" ;
+    spore:regionTested "us-central1", "us-west1" ;
+    spore:auth [
+        spore:githubAppInstallationId 79526858 ;
+        spore:cloudBuildServiceAccount "service-1077539189076@gcp-sa-cloudbuild.iam.gserviceaccount.com" ;
+        spore:iamRolesGranted "roles/cloudbuild.builds.editor", "roles/secretmanager.secretAccessor"
+    ] ;
+    spore:connectionStatus "COMPLETE" ;
+    spore:manualBuildsWork true ;
+    spore:repositoryLinked true ;
+    spore:triggerAttempts [
+        spore:method "gcloud builds triggers create github" ;
+        spore:result "INVALID_ARGUMENT"
+    ], [
+        spore:method "REST API v1 + v2" ;
+        spore:result "INVALID_ARGUMENT"
+    ], [
+        spore:method "webhook trigger" ;
+        spore:result "INVALID_ARGUMENT"
+    ], [
+        spore:method "trigger config YAML" ;
+        spore:result "INVALID_ARGUMENT"
+    ] ;
+    spore:orgPoliciesChecked true ;
+    spore:regionIssueRuledOut true ;
+    spore:reproductionConfirmed true ;
+    spore:nextAction "Escalate to GCP or file public support request with this trace." .
