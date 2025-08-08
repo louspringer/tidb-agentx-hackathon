@@ -75,7 +75,7 @@ class IndentationFixer(BaseRecoveryEngine):
         """Execute indentation fixing"""
         files_fixed = []
         errors = []
-        warnings = []
+        warnings = []  # type: ignore
 
         target_files = action.get("target_files", [])
 
@@ -85,7 +85,7 @@ class IndentationFixer(BaseRecoveryEngine):
                 if path.exists():
                     content = path.read_text()
                     lines = content.split("\n")
-                    fixed_lines = []
+                    fixed_lines = []  # type: ignore
 
                     for line in lines:
                         # Basic indentation fix - in practice you'd use a proper formatter
@@ -125,7 +125,7 @@ class ImportResolver(BaseRecoveryEngine):
         """Execute import resolution"""
         files_fixed = []
         errors = []
-        warnings = []
+        warnings = []  # type: ignore
 
         target_files = action.get("target_files", [])
 
@@ -160,7 +160,7 @@ class TypeAnnotationFixer(BaseRecoveryEngine):
         """Execute type annotation fixing"""
         files_fixed = []
         errors = []
-        warnings = []
+        warnings = []  # type: ignore
 
         target_files = action.get("target_files", [])
 

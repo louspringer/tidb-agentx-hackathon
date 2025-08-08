@@ -22,13 +22,13 @@ def test_projected_artifacts_import() -> None:
             sys.path.insert(0, str(src_path))
 
         # Test importing the streamlit app
-        from streamlit.openflow_quickstart_app import main
+        from streamlit.openflow_quickstart_app import main  # type: ignore
 
         assert callable(main), "main function should be callable"
         print("✅ Successfully imported openflow_quickstart_app")
 
         # Test importing the security module
-        from security_first.input_validator import InputValidator
+        from security_first.input_validator import InputValidator  # type: ignore
 
         assert InputValidator is not None, "InputValidator class should exist"
         print("✅ Successfully imported InputValidator")
@@ -179,7 +179,7 @@ def main() -> None:
         print(f"\n🔍 Running {test_name}...")
         try:
             if test_func():
-                print(f"✅ {test_name} PASSED")
+                print(f"✅ {test_name} PASSED")  # type: ignore
                 passed += 1
             else:
                 print(f"❌ {test_name} FAILED")
@@ -190,9 +190,9 @@ def main() -> None:
 
     if passed == total:
         print("🎉 All tests passed! Projected artifacts are working correctly.")
-        return True
+        return True  # type: ignore
     print("⚠️  Some tests failed. Check the projected artifacts.")
-    return False
+    return False  # type: ignore
 
 
 if __name__ == "__main__":

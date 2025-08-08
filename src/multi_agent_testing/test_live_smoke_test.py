@@ -6,7 +6,7 @@ Pytest tests for live smoke test functionality
 import os
 
 import pytest
-from live_smoke_test_langchain import LiveLLMOrchestrator
+from live_smoke_test_langchain import LiveLLMOrchestrator  # type: ignore
 
 
 def test_live_llm_orchestrator_initialization() -> None:

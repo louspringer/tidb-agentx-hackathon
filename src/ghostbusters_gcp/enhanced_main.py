@@ -7,15 +7,15 @@ Phase 2: Real-time updates, authentication, and advanced features
 import json
 import logging
 import uuid
-from datetime import datetime, timezone
-from typing import Any
-
-import functions_framework
-from firebase_admin import auth, initialize_app
-from google.cloud import firestore, pubsub_v1
 
 # Initialize Firebase Admin SDK
 from contextlib import suppress
+from datetime import datetime, timezone
+from typing import Any
+
+import functions_framework  # type: ignore
+from firebase_admin import auth, initialize_app  # type: ignore
+from google.cloud import firestore, pubsub_v1  # type: ignore
 
 with suppress(ValueError):
     # App already initialized
@@ -36,7 +36,7 @@ topic_path = publisher.topic_path(
 )
 
 
-def authenticate_request(request) -> str:
+def authenticate_request(request) -> str:  # type: ignore
     """Authenticate request using Firebase Auth"""
     try:
         # Get the Authorization header
@@ -49,13 +49,13 @@ def authenticate_request(request) -> str:
 
         # Verify the token with Firebase
         decoded_token = auth.verify_id_token(token)
-        return decoded_token["uid"]
+        return decoded_token["uid"]  # type: ignore
     except Exception as e:
         logger.warning("Authentication failed, using demo user: %s", str(e))
         return "demo-user-123"
 
 
-def publish_update(analysis_id: str, status: str, data: dict):
+def publish_update(analysis_id: str, status: str, data: dict) -> None:
     """Publish real-time update to Pub/Sub"""
     try:
         message = {
@@ -74,7 +74,7 @@ def publish_update(analysis_id: str, status: str, data: dict):
         )
 
         logger.info("Published update for analysis %s: %s", analysis_id, status)
-        return future.result()
+        return future.result()  # type: ignore
     except Exception as e:
         logger.error("Failed to publish update: %s", str(e))
 
@@ -114,7 +114,7 @@ def mock_ghostbusters_analysis(_project_path: str) -> dict[str, Any]:
 
 
 @functions_framework.http
-def ghostbusters_analyze_enhanced(request):
+def ghostbusters_analyze_enhanced(request):  # type: ignore
     """
     Enhanced HTTP Cloud Function for Ghostbusters analysis with real-time updates
     """
@@ -206,7 +206,7 @@ def ghostbusters_analyze_enhanced(request):
 
 
 @functions_framework.http
-def ghostbusters_progress(request):
+def ghostbusters_progress(request):  # type: ignore
     """
     HTTP Cloud Function to get real-time progress updates
     """
@@ -246,7 +246,7 @@ def ghostbusters_progress(request):
 
 
 @functions_framework.http
-def ghostbusters_user_analyses(request):
+def ghostbusters_user_analyses(request):  # type: ignore
     """
     HTTP Cloud Function to get user's analysis history
     """

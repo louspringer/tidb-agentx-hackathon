@@ -8,7 +8,6 @@ import ast
 import sys
 from pathlib import Path
 
-
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
@@ -24,7 +23,7 @@ def test_python_syntax():
     for file_path in test_files:
         if Path(file_path).exists():
             try:
-                with open(file_path, "r") as f:
+                with open(file_path) as f:
                     content = f.read()
 
                 # Parse with AST to check syntax
@@ -48,7 +47,7 @@ def test_code_structure():
     # Test streamlit app structure
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
     if streamlit_file.exists():
-        with open(streamlit_file, "r") as f:
+        with open(streamlit_file) as f:
             content = f.read()
 
         tree = ast.parse(content)
@@ -66,7 +65,7 @@ def test_code_structure():
             elif isinstance(node, ast.ClassDef):
                 classes += 1
 
-        print(f"📊 Streamlit app structure:")
+        print("📊 Streamlit app structure:")
         print(f"  Imports: {imports}")
         print(f"  Functions: {functions}")
         print(f"  Classes: {classes}")

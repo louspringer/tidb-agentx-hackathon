@@ -5,12 +5,14 @@ Intelligent tool selection and orchestration across domains
 """
 
 import json
-from src.secure_shell_service.secure_executor import secure_execute
 import os
+
 # import subprocess  # REMOVED - replaced with secure_execute
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 
 @dataclass

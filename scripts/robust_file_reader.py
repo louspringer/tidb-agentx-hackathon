@@ -6,7 +6,7 @@ Handles multiple encodings with fallback strategy
 
 import logging
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Any, Optional
 
 
 class RobustFileReader:
@@ -26,7 +26,7 @@ class RobustFileReader:
             "euc-jp",  # Japanese
             "euc-kr",  # Korean
         ]
-        self.failed_files: Dict[str, List[str]] = {}
+        self.failed_files: dict[str, list[str]] = {}
 
     def read_file(self, file_path: Path) -> Optional[str]:
         """Read file with multiple encoding attempts"""
@@ -53,7 +53,7 @@ class RobustFileReader:
         """Check if file can be read with any encoding"""
         return self.read_file(file_path) is not None
 
-    def get_failed_files_report(self) -> Dict[str, Any]:
+    def get_failed_files_report(self) -> dict[str, Any]:
         """Get report of files that couldn't be read"""
         return {
             "total_failed": len(self.failed_files),
@@ -61,7 +61,7 @@ class RobustFileReader:
             "suggested_encodings": self._suggest_new_encodings(),
         }
 
-    def _suggest_new_encodings(self) -> List[str]:
+    def _suggest_new_encodings(self) -> list[str]:
         """Suggest new encodings based on failures"""
         # If we have many failures, suggest adding more encodings
         if len(self.failed_files) > 5:
@@ -75,7 +75,7 @@ def main() -> None:
 
     # Test with the problematic file
     test_file = Path(
-        ".venv/lib/python3.12/site-packages/joblib/test/test_func_inspect_special_encoding.py"
+        ".venv/lib/python3.12/site-packages/joblib/test/test_func_inspect_special_encoding.py",
     )
 
     if test_file.exists():

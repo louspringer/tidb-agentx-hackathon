@@ -5,12 +5,13 @@ Direct integration with linter APIs for proactive violation prevention
 """
 
 import json
-from src.secure_shell_service.secure_executor import secure_execute
 import logging
-# import subprocess  # REMOVED - replaced with secure_execute
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -125,7 +126,7 @@ class LinterAPIIntegration:
 
             result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
-            if result.returncode == 0 and not result.stdout.strip():
+            if result.return_code == 0 and not result.stdout.strip():
                 return []  # No violations
 
             violations = []
@@ -172,7 +173,7 @@ class LinterAPIIntegration:
             result = secure_execute(cmd, capture_output=True, text=True, timeout=30)
 
             violations = []
-            if result.returncode != 0:
+            if result.return_code != 0:
                 # Black needs formatting
                 violations.append(
                     LinterViolation(

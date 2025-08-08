@@ -35,6 +35,11 @@ dependencies = [
     "grpcio>=1.74.0",
     "grpcio-tools>=1.74.0",
     "gitpython>=3.1.45",
+    "mypy==1.16.0",
+    "functions-framework>=3.9.2",
+    "google-cloud-firestore>=2.21.0",
+    "google-cloud-pubsub>=2.31.1",
+    "pytest-asyncio>=1.1.0",
 ]
 
 [project.optional-dependencies]

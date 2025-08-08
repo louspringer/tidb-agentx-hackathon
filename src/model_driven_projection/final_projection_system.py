@@ -356,7 +356,7 @@ class FinalProjectionSystem:
             for child in ast.iter_child_nodes(parent):
                 if child is target_node:
                     return parent
-        return None
+        return None  # type: ignore
 
     def _project_with_all_fixes(self, nodes: list[CodeNode], file_path: str) -> str:
         """Project nodes with all fixes applied."""

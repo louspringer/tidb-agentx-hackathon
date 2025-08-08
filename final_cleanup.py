@@ -5,10 +5,9 @@ Final cleanup script to remove remaining temporary files and directories.
 
 import os
 import shutil
-from typing import List
 
 
-def get_files_to_remove() -> List[str]:
+def get_files_to_remove() -> list[str]:
     """Get list of files to remove."""
     return [
         # Log files

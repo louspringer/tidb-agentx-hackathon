@@ -5,7 +5,7 @@ Comprehensive integration of linter APIs, AI-powered linters, and dynamic rule u
 """
 
 import logging
-from src.secure_shell_service.secure_executor import secure_execute
+
 # import subprocess  # REMOVED - replaced with secure_execute
 from datetime import datetime
 from pathlib import Path
@@ -13,6 +13,7 @@ from typing import Any
 
 from src.dynamic_rule_updater import DynamicRuleUpdater
 from src.linter_api_integration import LinterAPIIntegration, LinterViolation
+from src.secure_shell_service.secure_executor import secure_execute
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -42,7 +43,7 @@ class IntelligentLinterSystem:
                 text=True,
                 timeout=10,
             )
-            if result.returncode == 0:
+            if result.returncode == 0:  # type: ignore
                 setup_results["ru"] = {
                     "status": "available",
                     "version": result.stdout.strip(),
@@ -64,7 +65,7 @@ class IntelligentLinterSystem:
                 text=True,
                 timeout=10,
             )
-            if result.returncode == 0:
+            if result.returncode == 0:  # type: ignore
                 setup_results["pre-commit"] = {
                     "status": "available",
                     "version": result.stdout.strip(),
@@ -110,7 +111,7 @@ class IntelligentLinterSystem:
         # Get AI suggestions if Ruff is available
         ai_suggestions = self.linter_api.get_ai_suggestions(file_path)
         if ai_suggestions:
-            results["ai_suggestions"] = ai_suggestions
+            results["ai_suggestions"] = ai_suggestions  # type: ignore
             logger.info(f"Found {len(ai_suggestions)} AI suggestions")
 
         return results
@@ -181,7 +182,7 @@ class IntelligentLinterSystem:
             logger.info("  - Line: {}".format(violation.get("line_number")))
 
             # Update rules for this violation
-            self.rule_updater.update_rules_on_violation(violation)
+            self.rule_updater.update_rules_on_violation(violation)  # type: ignore
             update_results["violations_processed"] += 1
             update_results["rules_updated"] += 1
 
@@ -195,7 +196,7 @@ class IntelligentLinterSystem:
             )
 
         # Learn from all violations
-        learning_report = self.rule_updater.learn_from_violations(violations)
+        learning_report = self.rule_updater.learn_from_violations(violations)  # type: ignore
         update_results["patterns_learned"] = len(learning_report.get("patterns", {}))
 
         logger.info("\n📊 **UPDATE RESULTS**")
@@ -528,7 +529,7 @@ extend-select = ["TCH"]
 
         if rule_frequencies:
             logger.info("  - Most common violations:")
-            for rule_code, count in summary["most_common_violations"]:
+            for rule_code, count in summary["most_common_violations"]:  # type: ignore
                 logger.info(f"    - {rule_code}: {count} occurrences")
 
         return summary

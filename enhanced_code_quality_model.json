@@ -1,0 +1,150 @@
+{
+  "name": "EnhancedCodeQualityOrchestrator",
+  "description": "Enhanced code quality orchestrator with proper dependency resolution",
+  "components": [
+    {
+      "name": "QualityRule",
+      "type": "class",
+      "description": "Represents a code quality rule with detection and fix strategies",
+      "requirements": [
+        "rule_id",
+        "description",
+        "severity",
+        "detection_pattern"
+      ],
+      "dependencies": [
+        "dataclasses",
+        "typing"
+      ],
+      "metadata": {
+        "methods": [
+          {
+            "name": "detect_violations",
+            "description": "Detect violations in code",
+            "return_type": "List[str]",
+            "parameters": [
+              {
+                "name": "code",
+                "type": "str"
+              }
+            ]
+          },
+          {
+            "name": "generate_fix",
+            "description": "Generate fix for violations",
+            "return_type": "str",
+            "parameters": [
+              {
+                "name": "code",
+                "type": "str"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "ASTAnalyzer",
+      "type": "class",
+      "description": "AST-based code analyzer with quality rule integration",
+      "requirements": [
+        "ast_parsing",
+        "rule_integration",
+        "violation_detection"
+      ],
+      "dependencies": [
+        "ast",
+        "typing",
+        "QualityRule"
+      ],
+      "metadata": {
+        "methods": [
+          {
+            "name": "analyze_file",
+            "description": "Analyze a Python file",
+            "return_type": "Dict[str, Any]",
+            "parameters": [
+              {
+                "name": "file_path",
+                "type": "str"
+              }
+            ]
+          },
+          {
+            "name": "detect_violations",
+            "description": "Detect violations using rules",
+            "return_type": "List[QualityRule]",
+            "parameters": [
+              {
+                "name": "rules",
+                "type": "List[QualityRule]"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "QualityOrchestrator",
+      "type": "class",
+      "description": "Main orchestrator for code quality operations",
+      "requirements": [
+        "rule_management",
+        "file_processing",
+        "report_generation"
+      ],
+      "dependencies": [
+        "typing",
+        "logging",
+        "QualityRule",
+        "ASTAnalyzer"
+      ],
+      "metadata": {
+        "methods": [
+          {
+            "name": "load_rules",
+            "description": "Load quality rules",
+            "return_type": "List[QualityRule]",
+            "parameters": []
+          },
+          {
+            "name": "process_files",
+            "description": "Process files with rules",
+            "return_type": "Dict[str, Any]",
+            "parameters": [
+              {
+                "name": "file_paths",
+                "type": "List[str]"
+              }
+            ]
+          },
+          {
+            "name": "apply_fixes",
+            "description": "Apply fixes to files",
+            "return_type": "bool",
+            "parameters": [
+              {
+                "name": "fixes",
+                "type": "Dict[str, str]"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "relationships": {
+    "QualityOrchestrator": [
+      "QualityRule",
+      "ASTAnalyzer"
+    ],
+    "ASTAnalyzer": [
+      "QualityRule"
+    ]
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "author": "Enhanced Round-Trip System",
+    "created": "2024-01-01"
+  }
+}

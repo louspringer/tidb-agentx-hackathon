@@ -1,0 +1,95 @@
+{
+  "name": "ASTGuidedCodeGenerator",
+  "description": "AST-guided code generator that respects syntactic boundaries",
+  "components": [
+    {
+      "name": "ASTNode",
+      "type": "class",
+      "description": "Represents an AST node with metadata",
+      "requirements": [
+        "dataclass",
+        "metadata support",
+        "parent-child relationships"
+      ],
+      "dependencies": [
+        "dataclasses",
+        "typing"
+      ],
+      "metadata": {
+        "methods": [
+          {
+            "name": "__post_init__",
+            "description": "Initialize default values",
+            "return_type": "None"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LintingRule",
+      "type": "class",
+      "description": "Represents a linting rule with AST-aware patterns",
+      "requirements": [
+        "rule code",
+        "description",
+        "severity",
+        "AST patterns",
+        "fix strategy"
+      ],
+      "dependencies": [
+        "dataclasses",
+        "typing"
+      ],
+      "metadata": {
+        "methods": [
+          {
+            "name": "__post_init__",
+            "description": "Initialize default values",
+            "return_type": "None"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ASTGuidedCodeGenerator",
+      "type": "class",
+      "description": "AST-guided code generator that respects syntactic boundaries",
+      "requirements": [
+        "AST parsing",
+        "linting rule integration",
+        "syntactic boundary detection",
+        "fix strategy generation"
+      ],
+      "dependencies": [
+        "ast",
+        "logging",
+        "dataclasses",
+        "typing",
+        "src.artifact_forge.agents.artifact_parser_enhanced"
+      ],
+      "metadata": {
+        "methods": [
+          {
+            "name": "analyze_file_ast",
+            "description": "Analyze file using AST with linting rule integration",
+            "return_type": "Dict[str, Any]"
+          },
+          {
+            "name": "generate_perfect_code",
+            "description": "Generate perfect code using AST-guided approach",
+            "return_type": "str"
+          }
+        ]
+      }
+    }
+  ],
+  "relationships": {
+    "ASTGuidedCodeGenerator": [
+      "ASTNode",
+      "LintingRule"
+    ],
+    "ASTNode": [],
+    "LintingRule": []
+  },
+  "metadata": {}
+}

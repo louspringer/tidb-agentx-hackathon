@@ -188,7 +188,7 @@ Return your analysis in the requested format with high confidence in your findin
                 timeout=30,
             )
             response.raise_for_status()
-            return response.json()
+            return response.json()  # type: ignore
         except requests.exceptions.RequestException as e:
             print(f"API error with {model_name}: {e}")
             return {"error": str(e)}

@@ -7,7 +7,7 @@ Access API keys securely from GCP Secret Manager
 import logging
 from typing import Optional
 
-from google.cloud import secretmanager
+from google.cloud import secretmanager  # type: ignore
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ def get_secret(secret_name: str) -> Optional[str]:
         secret_value = response.payload.data.decode("UTF-8")
 
         logger.info(f"Successfully retrieved secret: {secret_name}")
-        return secret_value
+        return secret_value  # type: ignore
 
     except Exception as e:
         logger.warning(f"Failed to retrieve secret {secret_name}: {e}")

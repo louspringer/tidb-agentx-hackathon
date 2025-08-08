@@ -95,7 +95,7 @@ class SecurityManager:
 
     def _generate_csrf_token(self, session_id: str) -> str:
         """Generate CSRF token for session"""
-        data = f"{session_id}:{time.time()}:{SECURITY_CONFIG['jwt_secret']}"
+        data = f"{session_id}:{time.time()}:{SECURITY_CONFIG['jwt_secret']}"  # type: ignore
         return hashlib.sha256(data.encode()).hexdigest()
 
     def get_security_headers(self) -> dict[str, str]:

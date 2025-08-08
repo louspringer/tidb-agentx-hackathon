@@ -9,15 +9,15 @@ Enhanced by: OpenFlow Playground Team
 """
 
 from healthcare_cdc_domain_model import (
+    CDCEvent,
+    ClaimStatus,
+    EventType,
     HealthcareCDCDomainModel,
     HealthcareClaim,
     PatientInfo,
-    ProviderInfo,
     PayerInfo,
-    CDCEvent,
-    EventType,
-    ClaimStatus,
     PaymentStatus,
+    ProviderInfo,
 )
 
 __version__ = "1.0.0"

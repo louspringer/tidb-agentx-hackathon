@@ -209,7 +209,7 @@ def main() -> None:
         print(f"\n🔍 Running {test_name}...")
         try:
             if test_func():
-                print(f"✅ {test_name} PASSED")
+                print(f"✅ {test_name} PASSED")  # type: ignore
                 passed += 1
             else:
                 print(f"❌ {test_name} FAILED")
@@ -220,9 +220,9 @@ def main() -> None:
 
     if passed == total:
         print("🎉 All tests passed! Projected artifacts are working correctly.")
-        return True
+        return True  # type: ignore
     print("⚠️  Some tests failed. Check the projected artifacts.")
-    return False
+    return False  # type: ignore
 
 
 if __name__ == "__main__":

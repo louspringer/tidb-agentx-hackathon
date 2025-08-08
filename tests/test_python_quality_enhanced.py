@@ -10,17 +10,20 @@ This test extends the basic Python quality enforcement to include:
 """
 
 import ast
-from src.secure_shell_service.secure_executor import secure_execute
-# import subprocess  # REMOVED - replaced with secure_execute
-import sys
 import json
 import logging
+
+# import subprocess  # REMOVED - replaced with secure_execute
+import sys
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
@@ -35,7 +38,7 @@ class EnhancedPythonQualityTester:
             self.project_root / "src" / "model_driven_projection"
         )
 
-    def test_python_file_quality(self, file_path: Path) -> Dict[str, Any]:
+    def test_python_file_quality(self, file_path: Path) -> dict[str, Any]:
         """Test a single Python file for quality compliance."""
         logger.info(f"🧪 Testing Python file quality: {file_path}")
 
@@ -56,7 +59,7 @@ class EnhancedPythonQualityTester:
 
         try:
             # Test AST parsing
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 content = f.read()
             ast.parse(content)
             results["ast_parse"] = True
@@ -134,7 +137,7 @@ class EnhancedPythonQualityTester:
         if self._is_model_driven_file(file_path):
             results["model_projection"] = self._test_model_projection(file_path)
             results["functional_equivalence"] = self._test_functional_equivalence(
-                file_path
+                file_path,
             )
 
         return results
@@ -190,13 +193,13 @@ class EnhancedPythonQualityTester:
 
             if total_functions == 0:
                 logger.info(
-                    f"✅ No functions to check for type annotations: {file_path}"
+                    f"✅ No functions to check for type annotations: {file_path}",
                 )
                 return True
 
             annotation_ratio = annotated_functions / total_functions
             logger.info(
-                f"✅ Type annotation ratio: {annotation_ratio:.2f} ({annotated_functions}/{total_functions})"
+                f"✅ Type annotation ratio: {annotation_ratio:.2f} ({annotated_functions}/{total_functions})",
             )
             return annotation_ratio > 0.3  # At least 30% should have annotations
         except Exception as e:
@@ -227,13 +230,13 @@ class EnhancedPythonQualityTester:
 
             if total_items == 0:
                 logger.info(
-                    f"✅ No functions/classes to check for docstrings: {file_path}"
+                    f"✅ No functions/classes to check for docstrings: {file_path}",
                 )
                 return True
 
             docstring_ratio = documented_items / total_items
             logger.info(
-                f"✅ Docstring ratio: {docstring_ratio:.2f} ({documented_items}/{total_items})"
+                f"✅ Docstring ratio: {docstring_ratio:.2f} ({documented_items}/{total_items})",
             )
             return docstring_ratio > 0.5  # At least 50% should have docstrings
         except Exception as e:
@@ -308,7 +311,8 @@ class EnhancedPythonQualityTester:
                 [
                     "python",
                     str(
-                        self.model_driven_projection_path / "test_simple_equivalence.py"
+                        self.model_driven_projection_path
+                        / "test_simple_equivalence.py",
                     ),
                 ],
                 capture_output=True,
@@ -328,11 +332,11 @@ class EnhancedPythonQualityTester:
             logger.error(f"❌ Functional equivalence test failed: {file_path} - {e}")
             return False
 
-    def update_model_registry(self, test_results: List[Dict[str, Any]]) -> bool:
+    def update_model_registry(self, test_results: list[dict[str, Any]]) -> bool:
         """Update the project model registry with test results."""
         try:
             # Load current model registry
-            with open(self.model_registry_path, "r") as f:
+            with open(self.model_registry_path) as f:
                 model_registry = json.load(f)
 
             # Update with test results
@@ -356,7 +360,7 @@ class EnhancedPythonQualityTester:
             logger.error(f"❌ Failed to update model registry: {e}")
             return False
 
-    def _generate_summary(self, test_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _generate_summary(self, test_results: list[dict[str, Any]]) -> dict[str, Any]:
         """Generate summary statistics from test results."""
         total_files = len(test_results)
         if total_files == 0:

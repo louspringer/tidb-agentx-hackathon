@@ -4,11 +4,9 @@ Pytest-compatible Basic Validation Tests
 Tests core functionality with proper mocking
 """
 
-import pytest
 import sys
 from pathlib import Path
-from unittest.mock import Mock, patch
-
+from unittest.mock import Mock
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))

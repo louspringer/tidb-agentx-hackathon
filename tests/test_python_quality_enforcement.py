@@ -5,12 +5,12 @@ Validate that Python files pass quality checks
 """
 
 import ast
-from src.secure_shell_service.secure_executor import secure_execute
 import logging
-# import subprocess  # REMOVED - replaced with secure_execute
+import subprocess
 import sys
 from pathlib import Path
-from typing import List, Dict
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 # Set up logging
 logging.basicConfig(
@@ -34,9 +34,9 @@ def _test_black_formatting(file_path: str) -> bool:
             text=True,
             timeout=30,
         )
-        success = result.returncode == 0
+        success = result.return_code == 0
         logger.info(
-            f"Black formatting for {file_path}: {'PASS' if success else 'FAIL'}"
+            f"Black formatting for {file_path}: {'PASS' if success else 'FAIL'}",
         )
         return success
     except subprocess.TimeoutExpired:
@@ -57,7 +57,7 @@ def _test_flake8_linting(file_path: str) -> bool:
             text=True,
             timeout=30,
         )
-        success = result.returncode == 0
+        success = result.return_code == 0
         logger.info(f"Flake8 linting for {file_path}: {'PASS' if success else 'FAIL'}")
         return success
     except subprocess.TimeoutExpired:
@@ -72,7 +72,7 @@ def _test_ast_parsing(file_path: str) -> bool:
     """Test if a file passes AST parsing"""
     try:
         logger.info(f"Testing AST parsing for {file_path}")
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             content = f.read()
         ast.parse(content)
         logger.info(f"AST parsing for {file_path}: PASS")
@@ -85,7 +85,7 @@ def _test_ast_parsing(file_path: str) -> bool:
         return False
 
 
-def find_reasonable_python_files() -> List[str]:
+def find_reasonable_python_files() -> list[str]:
     """Find reasonable Python files for testing - focus on core functionality"""
     # Define specific files that should be tested
     core_files = [
@@ -103,13 +103,13 @@ def find_reasonable_python_files() -> List[str]:
         if Path(file_path).exists():
             # Check file size - exclude massive files
             try:
-                with open(file_path, "r") as f:
+                with open(file_path) as f:
                     line_count = sum(1 for _ in f)
                 if line_count <= 500:  # Only test files with reasonable size
                     existing_files.append(file_path)
                 else:
                     logger.warning(
-                        f"Skipping {file_path} - too large ({line_count} lines)"
+                        f"Skipping {file_path} - too large ({line_count} lines)",
                     )
             except Exception as e:
                 logger.warning(f"Could not check {file_path}: {e}")
@@ -132,7 +132,7 @@ def test_python_quality_enforcement() -> None:
 
     logger.info(f"Testing {len(python_files)} core Python files")
 
-    results: Dict[str, List[str]] = {
+    results: dict[str, list[str]] = {
         "black": [],
         "flake8": [],
         "ast_parse": [],
@@ -206,7 +206,7 @@ def test_zero_linter_errors() -> None:
                 timeout=30,
             )
 
-            if result.returncode != 0:
+            if result.return_code != 0:
                 error_count = len(result.stdout.splitlines())
                 total_errors += error_count
                 logger.error(f"❌ {file_path}: {error_count} linter errors")
@@ -239,7 +239,7 @@ def test_ast_parsing_compliance() -> None:
     failed_files = []
     for file_path in python_files:
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 content = f.read()
             ast.parse(content)
             logger.info(f"✅ {file_path}: AST parsing successful")

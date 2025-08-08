@@ -3,11 +3,11 @@
 Tests for the Code Quality System
 """
 
-import pytest
-import tempfile
 import shutil
+import tempfile
 from pathlib import Path
 from typing import Any
+
 from src.code_quality_system.quality_model import CodeQualityModel, LintingRule
 
 
@@ -74,7 +74,7 @@ def test_function() -> None:
         assert result is True
 
         # Check result
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             fixed_content: Any = f.read()
 
         # Should remove unused imports
@@ -97,7 +97,7 @@ def test_function() -> None:
         assert result is True
 
         # Check result
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             fixed_content: Any = f.read()
 
         # Should convert f-strings without placeholders
@@ -120,7 +120,7 @@ def test_function() -> None:
         assert result is True
 
         # Check result
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             fixed_content: Any = f.read()
 
         # Should remove trailing whitespace
@@ -144,7 +144,7 @@ def test_function() -> None:
         assert result is True
 
         # Check result
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             fixed_content: Any = f.read()
 
         # Should convert bare except to specific exception
@@ -245,7 +245,7 @@ class TestLintingRule:
 
             def test_fix(file_path: str) -> bool:
                 # Simple fix that adds a comment
-                with open(file_path, "r") as f:
+                with open(file_path) as f:
                     content = f.read()
                 with open(file_path, "w") as f:
                     f.write("# Fixed\n" + content)
@@ -263,7 +263,7 @@ class TestLintingRule:
             assert result is True
 
             # Check result
-            with open(test_file, "r") as f:
+            with open(test_file) as f:
                 content = f.read()
             assert content.startswith("# Fixed\n")
 
@@ -287,7 +287,7 @@ import sys
 
 def test_function() -> None:
     print("Hello world")
-            """
+            """,
             )
 
         # Analyze file
@@ -321,7 +321,7 @@ import sys
 
 def test_function_{i}() -> None:
     print("Hello world {i}")
-                """
+                """,
                 )
 
         # Process all files

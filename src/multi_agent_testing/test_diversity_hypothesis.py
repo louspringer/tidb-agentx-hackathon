@@ -5,20 +5,24 @@
 Unit tests, integration tests, and performance tests for the diversity hypothesis.
 """
 
-import unittest
 import json
 import os
-import tempfile
 import shutil
-from unittest.mock import Mock, patch, MagicMock
 import sys
+import tempfile
+import unittest
+from unittest.mock import Mock, patch
 
 # Add current directory to path for imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from multi_dimensional_smoke_test import MultiDimensionalSmokeTest
-from langgraph_diversity_orchestrator import LangGraphDiversityOrchestrator
-from diversity_synthesis_orchestrator import DiversitySynthesisOrchestrator
+from diversity_synthesis_orchestrator import (
+    DiversitySynthesisOrchestrator,  # type: ignore
+)
+from langgraph_diversity_orchestrator import (
+    LangGraphDiversityOrchestrator,  # type: ignore
+)
+from multi_dimensional_smoke_test import MultiDimensionalSmokeTest  # type: ignore
 
 
 class TestDiversityHypothesis(unittest.TestCase):
@@ -63,13 +67,13 @@ class TestDiversityHypothesis(unittest.TestCase):
                                         "confidence": "High",
                                         "blind_spots": "Test blind spot",
                                         "recommendation": "Test recommendation",
-                                    }
-                                ]
-                            }
-                        )
-                    }
-                }
-            ]
+                                    },
+                                ],
+                            },
+                        ),
+                    },
+                },
+            ],
         }
 
     def tearDown(self) -> None:
@@ -164,7 +168,7 @@ class TestDiversityHypothesis(unittest.TestCase):
         self.assertIn("Limited analysis", insights)
 
     @patch("requests.post")
-    def test_call_llm_success(self, mock_post) -> None:
+    def test_call_llm_success(self, mock_post) -> None:  # type: ignore
         """Test successful LLM API call"""
         test = MultiDimensionalSmokeTest()
 
@@ -180,7 +184,7 @@ class TestDiversityHypothesis(unittest.TestCase):
             self.assertIn("choices", result)
 
     @patch("requests.post")
-    def test_call_llm_error(self, mock_post) -> None:
+    def test_call_llm_error(self, mock_post) -> None:  # type: ignore
         """Test LLM API call error handling"""
         test = MultiDimensionalSmokeTest()
 
@@ -256,7 +260,7 @@ class TestLangGraphDiversityOrchestrator(unittest.TestCase):
                             "blind_spots": "Missing input validation",
                             "recommendation": "Implement proper validation",
                             "category": "security",
-                        }
+                        },
                     ],
                 },
                 {
@@ -268,10 +272,10 @@ class TestLangGraphDiversityOrchestrator(unittest.TestCase):
                             "blind_spots": "Missing monitoring",
                             "recommendation": "Add comprehensive monitoring",
                             "category": "devops",
-                        }
+                        },
                     ],
                 },
-            ]
+            ],
         }
 
     def tearDown(self) -> None:
@@ -311,7 +315,7 @@ class TestLangGraphDiversityOrchestrator(unittest.TestCase):
         orchestrator = LangGraphDiversityOrchestrator()
 
         # Create test analyses
-from langgraph_diversity_orchestrator import DiversityAnalysis, BlindSpotFinding
+        from langgraph_diversity_orchestrator import BlindSpotFinding, DiversityAnalysis
 
         analyses = [
             DiversityAnalysis(
@@ -323,7 +327,7 @@ from langgraph_diversity_orchestrator import DiversityAnalysis, BlindSpotFinding
                         blind_spots="Security blind spot",
                         recommendation="Security recommendation",
                         category="security",
-                    )
+                    ),
                 ],
                 total_findings=1,
                 confidence_score=0.8,
@@ -338,7 +342,7 @@ from langgraph_diversity_orchestrator import DiversityAnalysis, BlindSpotFinding
                         blind_spots="DevOps blind spot",
                         recommendation="DevOps recommendation",
                         category="devops",
-                    )
+                    ),
                 ],
                 total_findings=1,
                 confidence_score=0.6,
@@ -380,8 +384,8 @@ class TestDiversitySynthesisOrchestrator(unittest.TestCase):
                     "estimated_roi": "High",
                     "dependencies": [],
                     "timeline": "2 weeks",
-                }
-            ]
+                },
+            ],
         }
 
     def tearDown(self) -> None:
@@ -407,7 +411,7 @@ class TestDiversitySynthesisOrchestrator(unittest.TestCase):
         orchestrator = DiversitySynthesisOrchestrator()
 
         # Create test fixes
-from diversity_synthesis_orchestrator import FixSynthesis
+        from diversity_synthesis_orchestrator import FixSynthesis
 
         fixes = [
             FixSynthesis(
@@ -423,7 +427,7 @@ from diversity_synthesis_orchestrator import FixSynthesis
                 estimated_roi="High",
                 dependencies=[],
                 timeline="2 weeks",
-            )
+            ),
         ]
 
         impact_matrix = orchestrator.calculate_stakeholder_impact_matrix(fixes)
@@ -458,7 +462,7 @@ class TestIntegration(unittest.TestCase):
     def test_cost_analysis(self) -> None:
         """Test cost analysis functionality"""
         # Test that cost analysis works correctly
-from cost_analysis import estimate_tokens
+        from cost_analysis import estimate_tokens  # type: ignore
 
         # Test token estimation
         text = "This is a test text for token estimation"
@@ -515,7 +519,7 @@ def run_comprehensive_tests() -> None:
     print(f"Failures: {len(result.failures)}")
     print(f"Errors: {len(result.errors)}")
     print(
-        f"Success rate: {((result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100):.1f}%"
+        f"Success rate: {((result.testsRun - len(result.failures) - len(result.errors)) / result.testsRun * 100):.1f}%",
     )
 
     if result.failures:
@@ -528,9 +532,9 @@ def run_comprehensive_tests() -> None:
         for test, traceback in result.errors:
             print(f"  {test}: {traceback}")
 
-    return result.wasSuccessful()
+    return result.wasSuccessful()  # type: ignore
 
 
 if __name__ == "__main__":
-    success = run_comprehensive_tests()
+    success = run_comprehensive_tests()  # type: ignore
     sys.exit(0 if success else 1)

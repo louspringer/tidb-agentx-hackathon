@@ -5,12 +5,11 @@ Phase 3: ML Insights, Custom Agents, and Enterprise Features
 """
 
 import logging
-from datetime import datetime, timedelta
 from typing import Any
 
 import streamlit as st
-from firebase_admin import initialize_app
-from google.cloud import firestore, pubsub_v1
+from firebase_admin import initialize_app  # type: ignore
+from google.cloud import firestore, pubsub_v1  # type: ignore
 
 # Initialize Firebase Admin SDK
 try:
@@ -87,7 +86,7 @@ def authenticate_user() -> str:
         return "enterprise-user-123"
     except Exception as e:
         logger.error("Authentication failed: %s", str(e))
-        return None
+        return None  # type: ignore
 
 
 def get_advanced_analyses(user_id: str, limit: int = 50) -> list[dict[str, Any]]:
@@ -104,22 +103,27 @@ def get_advanced_analyses(user_id: str, limit: int = 50) -> list[dict[str, Any]]
         analyses = []
         for doc in docs:
             data = doc.to_dict()
-            analyses.append({
-                "analysis_id": data.get("analysis_id"),
-                "project_path": data.get("project_path"),
-                "confidence_score": data.get("confidence_score", 0),
-                "delusions_detected": len(data.get("delusions_detected", [])),
-                "recovery_actions": len(data.get("recovery_actions", [])),
-                "errors": len(data.get("errors", [])),
-                "warnings": len(data.get("warnings", [])),
-                "processing_time": data.get("processing_time", 0),
-                "timestamp": data.get("timestamp"),
-                "status": data.get("status", "unknown"),
-                "agents_used": data.get("agents_used", []),
-                "ml_insights": data.get("ml_insights", {}),
-                "enterprise_features": data.get("enterprise_features", {}),
-                "custom_agents_used": data.get("metadata", {}).get("custom_agents_used", 0),
-            })
+            analyses.append(
+                {
+                    "analysis_id": data.get("analysis_id"),
+                    "project_path": data.get("project_path"),
+                    "confidence_score": data.get("confidence_score", 0),
+                    "delusions_detected": len(data.get("delusions_detected", [])),
+                    "recovery_actions": len(data.get("recovery_actions", [])),
+                    "errors": len(data.get("errors", [])),
+                    "warnings": len(data.get("warnings", [])),
+                    "processing_time": data.get("processing_time", 0),
+                    "timestamp": data.get("timestamp"),
+                    "status": data.get("status", "unknown"),
+                    "agents_used": data.get("agents_used", []),
+                    "ml_insights": data.get("ml_insights", {}),
+                    "enterprise_features": data.get("enterprise_features", {}),
+                    "custom_agents_used": data.get("metadata", {}).get(
+                        "custom_agents_used",
+                        0,
+                    ),
+                },
+            )
 
         return analyses
     except Exception as e:
@@ -134,16 +138,18 @@ def get_custom_agents(user_id: str) -> list[dict[str, Any]]:
         agents = []
         for doc in docs:
             data = doc.to_dict()
-            agents.append({
-                "agent_id": doc.id,
-                "name": data.get("name"),
-                "description": data.get("description"),
-                "type": data.get("type"),
-                "config": data.get("config", {}),
-                "enabled": data.get("enabled", True),
-                "created_at": data.get("created_at"),
-                "updated_at": data.get("updated_at"),
-            })
+            agents.append(
+                {
+                    "agent_id": doc.id,
+                    "name": data.get("name"),
+                    "description": data.get("description"),
+                    "type": data.get("type"),
+                    "config": data.get("config", {}),
+                    "enabled": data.get("enabled", True),
+                    "created_at": data.get("created_at"),
+                    "updated_at": data.get("updated_at"),
+                },
+            )
         return agents
     except Exception as e:
         logger.error("Failed to get custom agents: %s", str(e))
@@ -154,7 +160,9 @@ def get_enterprise_analytics() -> dict[str, Any]:
     """Get enterprise analytics"""
     try:
         # Get enterprise metrics
-        total_analyses = len(list(db.collection("advanced_ghostbusters_results").stream()))
+        total_analyses = len(
+            list(db.collection("advanced_ghostbusters_results").stream()),
+        )
         total_users = len(list(db.collection("enterprise_users").stream()))
         total_custom_agents = len(list(db.collection("custom_agents").stream()))
         total_audit_logs = len(list(db.collection("audit_logs").stream()))
@@ -164,7 +172,7 @@ def get_enterprise_analytics() -> dict[str, Any]:
             db.collection("advanced_ghostbusters_results")
             .order_by("timestamp", direction=firestore.Query.DESCENDING)
             .limit(10)
-            .stream()
+            .stream(),
         )
 
         ml_insights_summary = {
@@ -188,9 +196,11 @@ def get_enterprise_analytics() -> dict[str, Any]:
                 ml_insights_summary["anomaly_detections"] += 1
 
         if recent_analyses:
-            ml_insights_summary["avg_risk_score"] = (
-                ml_insights_summary["total_risk_scores"] / len(recent_analyses)
-            )
+            ml_insights_summary["avg_risk_score"] = ml_insights_summary[
+                "total_risk_scores"
+            ] / len(
+                recent_analyses,
+            )  # type: ignore
 
         return {
             "total_analyses": total_analyses,
@@ -204,7 +214,7 @@ def get_enterprise_analytics() -> dict[str, Any]:
         return {}
 
 
-def main():
+def main() -> None:
     """Main advanced dashboard application"""
 
     # Header
@@ -249,7 +259,7 @@ def main():
         show_advanced_settings()
 
 
-def show_ml_insights(user_id: str):
+def show_ml_insights(user_id: str) -> None:
     """Show ML-powered insights"""
     st.header("🧠 ML-Powered Insights")
 
@@ -269,14 +279,16 @@ def show_ml_insights(user_id: str):
 
         with col2:
             high_priority_count = sum(
-                1 for a in analyses
+                1
+                for a in analyses
                 if a.get("ml_insights", {}).get("priority_level") == "high"
             )
             st.metric("High Priority Issues", high_priority_count)
 
         with col3:
             anomaly_count = sum(
-                1 for a in analyses
+                1
+                for a in analyses
                 if a.get("ml_insights", {}).get("anomaly_detection", False)
             )
             st.metric("Anomalies Detected", anomaly_count)
@@ -287,7 +299,7 @@ def show_ml_insights(user_id: str):
             ml_insights = analysis.get("ml_insights", {})
             if ml_insights:
                 with st.expander(
-                    f"Analysis {analysis['analysis_id'][:8]}... - {analysis['project_path']}"
+                    f"Analysis {analysis['analysis_id'][:8]}... - {analysis['project_path']}",
                 ):
                     col1, col2 = st.columns(2)
 
@@ -339,7 +351,7 @@ def show_ml_insights(user_id: str):
             st.info("Redirecting to ML model dashboard...")
 
 
-def show_custom_agents(user_id: str):
+def show_custom_agents(user_id: str) -> None:
     """Show custom agents management"""
     st.header("🤖 Custom Agents")
 
@@ -398,7 +410,10 @@ def show_custom_agents(user_id: str):
         st.subheader("Create New Agent")
         with st.form("create_agent"):
             agent_name = st.text_input("Agent Name")
-            agent_type = st.selectbox("Agent Type", ["security", "quality", "performance", "custom"])
+            agent_type = st.selectbox(
+                "Agent Type",
+                ["security", "quality", "performance", "custom"],
+            )
             agent_description = st.text_area("Description")
             agent_config = st.text_area("Configuration (JSON)")
 
@@ -409,7 +424,7 @@ def show_custom_agents(user_id: str):
                     st.error("Please fill in all required fields")
 
 
-def show_enterprise_analytics():
+def show_enterprise_analytics() -> None:
     """Show enterprise analytics"""
     st.header("🏢 Enterprise Analytics")
 
@@ -439,10 +454,16 @@ def show_enterprise_analytics():
             col1, col2, col3 = st.columns(3)
 
             with col1:
-                st.metric("Average Risk Score", f"{ml_summary.get('avg_risk_score', 0):.2f}")
+                st.metric(
+                    "Average Risk Score",
+                    f"{ml_summary.get('avg_risk_score', 0):.2f}",
+                )
 
             with col2:
-                st.metric("High Priority Issues", ml_summary.get("high_priority_count", 0))
+                st.metric(
+                    "High Priority Issues",
+                    ml_summary.get("high_priority_count", 0),
+                )
 
             with col3:
                 st.metric("Anomalies Detected", ml_summary.get("anomaly_detections", 0))
@@ -462,7 +483,7 @@ def show_enterprise_analytics():
         st.info("No enterprise analytics available.")
 
 
-def show_advanced_results(user_id: str):
+def show_advanced_results(user_id: str) -> None:
     """Show advanced analysis results"""
     st.header("🔍 Advanced Analysis Results")
 
@@ -538,7 +559,7 @@ def show_advanced_results(user_id: str):
         st.info("Enter an Advanced Analysis ID to view details.")
 
 
-def show_audit_logs():
+def show_audit_logs() -> None:
     """Show audit logs"""
     st.header("📋 Audit Logs")
 
@@ -553,12 +574,14 @@ def show_audit_logs():
     logs = []
     for doc in docs:
         data = doc.to_dict()
-        logs.append({
-            "user_id": data.get("user_id"),
-            "action": data.get("action"),
-            "details": data.get("details"),
-            "timestamp": data.get("timestamp"),
-        })
+        logs.append(
+            {
+                "user_id": data.get("user_id"),
+                "action": data.get("action"),
+                "details": data.get("details"),
+                "timestamp": data.get("timestamp"),
+            },
+        )
 
     if logs:
         for log in logs:
@@ -582,7 +605,7 @@ def show_audit_logs():
         st.info("No audit logs found.")
 
 
-def show_advanced_settings():
+def show_advanced_settings() -> None:
     """Show advanced settings"""
     st.header("⚙️ Advanced Settings")
 
@@ -618,4 +641,4 @@ def show_advanced_settings():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

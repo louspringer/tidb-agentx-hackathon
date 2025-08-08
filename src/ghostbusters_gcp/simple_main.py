@@ -9,8 +9,8 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-import functions_framework
-from google.cloud import firestore
+import functions_framework  # type: ignore
+from google.cloud import firestore  # type: ignore
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +55,7 @@ def mock_ghostbusters_analysis(project_path: str) -> dict[str, Any]:
 
 
 @functions_framework.http
-def ghostbusters_analyze(request):
+def ghostbusters_analyze(request):  # type: ignore
     """
     HTTP Cloud Function for Ghostbusters analysis
 
@@ -131,7 +131,7 @@ def ghostbusters_analyze(request):
 
 
 @functions_framework.http
-def ghostbusters_status(request):
+def ghostbusters_status(request):  # type: ignore
     """
     HTTP Cloud Function to check analysis status
 
@@ -176,7 +176,7 @@ def ghostbusters_status(request):
 
 
 @functions_framework.http
-def ghostbusters_history(request):
+def ghostbusters_history(request):  # type: ignore
     """
     HTTP Cloud Function to get analysis history
 

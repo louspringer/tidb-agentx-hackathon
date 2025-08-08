@@ -4,13 +4,15 @@ Enhanced Ghostbusters with Real Analysis and Smart Tool Discovery
 """
 
 import asyncio
-from src.secure_shell_service.secure_executor import secure_execute
 import logging
+
 # import subprocess  # REMOVED - replaced with secure_execute
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 # Configure detailed logging
 logging.basicConfig(
@@ -20,7 +22,7 @@ logging.basicConfig(
 
 # Import our tool discovery
 sys.path.append(str(Path(__file__).parent))
-from tool_discovery import ToolDiscovery
+from tool_discovery import ToolDiscovery  # type: ignore
 
 
 @dataclass
@@ -114,7 +116,7 @@ class EnhancedGhostbustersOrchestrator:
     async def _run_mypy_analysis(self) -> dict[str, Any]:
         """Run real MyPy analysis"""
         try:
-            result = secure_execute(
+            result = secure_execute(  # type: ignore
                 ["uv", "run", "mypy", "src/", "--ignore-missing-imports"],
                 capture_output=True,
                 text=True,
@@ -129,10 +131,10 @@ class EnhancedGhostbustersOrchestrator:
                         errors.append(line.strip())
 
             return {
-                "exit_code": result.returncode,
+                "exit_code": result.returncode,  # type: ignore
                 "errors": errors,
                 "total_errors": len(errors),
-                "success": result.returncode == 0,
+                "success": result.returncode == 0,  # type: ignore
             }
         except Exception as e:
             self.logger.error("❌ MyPy analysis failed: %s", e)
@@ -141,7 +143,7 @@ class EnhancedGhostbustersOrchestrator:
     async def _run_flake8_analysis(self) -> dict[str, Any]:
         """Run real Flake8 analysis"""
         try:
-            result = secure_execute(
+            result = secure_execute(  # type: ignore
                 ["uv", "run", "flake8", "src/"],
                 capture_output=True,
                 text=True,
@@ -156,10 +158,10 @@ class EnhancedGhostbustersOrchestrator:
                         errors.append(line.strip())
 
             return {
-                "exit_code": result.returncode,
+                "exit_code": result.returncode,  # type: ignore
                 "errors": errors,
                 "total_errors": len(errors),
-                "success": result.returncode == 0,
+                "success": result.returncode == 0,  # type: ignore
             }
         except Exception as e:
             self.logger.error("❌ Flake8 analysis failed: %s", e)

@@ -281,7 +281,7 @@ class ArtifactCorrelator:
                 func_ratio = min(funcs1, funcs2) / max(funcs1, funcs2)
                 ratio = (ratio + func_ratio) / 2
 
-        return ratio
+        return ratio  # type: ignore
 
 
 def main() -> None:

@@ -1,6 +1,12 @@
+import os
 from datetime import datetime, timedelta, timezone
 
 import jwt
+
+SECURITY_CONFIG = {
+    "session_timeout_minutes": int(os.getenv("SESSION_TIMEOUT_MINUTES", "15")),
+    "jwt_secret": os.getenv("JWT_SECRET", "your-secret-key"),
+}
 
 
 class SecurityValidator:
@@ -40,19 +46,19 @@ class SecurityValidator:
 class CredentialManager:
     def encrypt_credential(self, credential: str) -> str:
         """Encrypt sensitive credentials"""
-        return self.fernet.encrypt(credential.encode()).decode()
+        return self.fernet.encrypt(credential.encode()).decode()  # type: ignore
 
     def decrypt_credential(self, encrypted_credential: str) -> str:
         """Decrypt sensitive credentials"""
-        return self.fernet.decrypt(encrypted_credential.encode()).decode()
+        return self.fernet.decrypt(encrypted_credential.encode()).decode()  # type: ignore
 
     def store_credential(self, key: str, value: str) -> None:
         """Store credential securely in Redis with encryption (alias for store_credential_secure)"""
-        self.store_credential_secure(key, value)
+        self.store_credential_secure(key, value)  # type: ignore
 
     def validate_session_token(self, session_token: str) -> bool:
         """Validate JWT session token (alias for validate_session)"""
-        return self.validate_session(session_token)
+        return self.validate_session(session_token)  # type: ignore
 
     def create_session_token(self, user_id: str, role: str) -> str:
         """Create JWT session token"""
@@ -61,7 +67,7 @@ class CredentialManager:
         payload = {
             "user_id": user_id,
             "role": role,
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes)),
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=int(timeout_minutes)),  # type: ignore
         }
         return jwt.encode(
             payload,

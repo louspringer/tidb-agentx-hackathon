@@ -5,11 +5,12 @@ Validates that all Python files have proper type annotations
 """
 
 import ast
-from src.secure_shell_service.secure_executor import secure_execute
-# import subprocess  # REMOVED - replaced with secure_execute
+import subprocess
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 
 class TypeSafetyValidator:
@@ -18,14 +19,14 @@ class TypeSafetyValidator:
     def __init__(self) -> None:
         """Initialize the validator"""
         self.project_root = Path(__file__).parent.parent
-        self.python_files: List[Path] = []
-        self.type_errors: List[str] = []
+        self.python_files: list[Path] = []
+        self.type_errors: list[str] = []
 
-    def find_python_files(self) -> List[Path]:
+    def find_python_files(self) -> list[Path]:
         """Find all Python files in the project (efficiently)"""
         # Only check source files, not test files or cache
         source_dirs = ["src", "healthcare-cdc"]
-        python_files: List[Path] = []
+        python_files: list[Path] = []
 
         for source_dir in source_dirs:
             source_path = self.project_root / source_dir
@@ -37,11 +38,11 @@ class TypeSafetyValidator:
 
         return python_files
 
-    def validate_file_type_annotations(self, file_path: Path) -> List[str]:
+    def validate_file_type_annotations(self, file_path: Path) -> list[str]:
         """Validate type annotations in a single file (efficiently)"""
-        errors: List[str] = []
+        errors: list[str] = []
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content: str = f.read()
                 tree: ast.AST = ast.parse(content)
 
@@ -57,32 +58,31 @@ class TypeSafetyValidator:
                         if arg.annotation is None and arg.arg != "self":
                             errors.append(
                                 f"Missing type annotation for parameter "
-                                f"'{arg.arg}' in {node.name}"
+                                f"'{arg.arg}' in {node.name}",
                             )
 
                     # Check return type
                     if node.returns is None:
                         errors.append(
                             f"Missing return type annotation for function "
-                            f"'{node.name}'"
+                            f"'{node.name}'",
                         )
 
         except Exception as e:
             errors.append(f"Error parsing {file_path}: {e}")
         return errors
 
-    def run_mypy_check(self, file_path: Path) -> List[str]:
+    def run_mypy_check(self, file_path: Path) -> list[str]:
         """Run mypy on a single file (with timeout)"""
-        errors: List[str] = []
+        errors: list[str] = []
         try:
             result = secure_execute(
                 [sys.executable, "-m", "mypy", str(file_path), "--no-error-summary"],
                 capture_output=True,
                 text=True,
-                cwd=self.project_root,
                 timeout=30,  # Add timeout
             )
-            if result.returncode != 0:
+            if result.return_code != 0:
                 errors.extend(result.stdout.split("\n"))
                 errors.extend(result.stderr.split("\n"))
         except subprocess.TimeoutExpired:
@@ -91,16 +91,16 @@ class TypeSafetyValidator:
             errors.append(f"Error running mypy on {file_path}: {e}")
         return [error for error in errors if error.strip()]
 
-    def validate_all_files(self) -> Dict[str, List[str]]:
+    def validate_all_files(self) -> dict[str, list[str]]:
         """Validate type safety across all Python files (efficiently)"""
         python_files = self.find_python_files()
-        all_errors: Dict[str, List[str]] = {}
+        all_errors: dict[str, list[str]] = {}
 
         # Only check a subset of files for performance
         files_to_check = python_files[:10]  # Limit to first 10 files
 
         for file_path in files_to_check:
-            file_errors: List[str] = []
+            file_errors: list[str] = []
 
             # Check type annotations (fast)
             annotation_errors = self.validate_file_type_annotations(file_path)
@@ -116,7 +116,7 @@ class TypeSafetyValidator:
 
         return all_errors
 
-    def generate_type_safety_report(self) -> Dict[str, Any]:
+    def generate_type_safety_report(self) -> dict[str, Any]:
         """Generate a comprehensive type safety report (efficiently)"""
         all_errors = self.validate_all_files()
 
@@ -176,7 +176,7 @@ def test_mypy_configuration() -> None:
             text=True,
             timeout=10,
         )
-        assert result.returncode == 0, "mypy should be available"
+        assert result.return_code == 0, "mypy should be available"
         print("✅ mypy is available")
 
         # Only test on a simple file

@@ -55,7 +55,7 @@ class WebToolDiscovery:
                     "per_page": 5,
                 }
 
-                response = requests.get(url, params=params, timeout=10)
+                response = requests.get(url, params=params, timeout=10)  # type: ignore
                 if response.status_code == 200:
                     data = response.json()
                     for repo in data.get("items", []):

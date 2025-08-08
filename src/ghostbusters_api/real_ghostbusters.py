@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 # Import base agents directly
-from agents import (
+from agents import (  # type: ignore
     ArchitectureExpert,
     BuildExpert,
     CodeQualityExpert,
