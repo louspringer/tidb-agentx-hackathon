@@ -160,13 +160,13 @@ class RecursiveCodeGenerator(CodeGenerator):
 
         if pattern.name == "import_statement":
             return self._decompose_import_statement(string)
-        elif pattern.name == "function_call":
+        if pattern.name == "function_call":
             return self._decompose_function_call(string)
-        elif pattern.name == "class_definition":
+        if pattern.name == "class_definition":
             return self._decompose_class_definition(string)
-        elif pattern.name == "variable_assignment":
+        if pattern.name == "variable_assignment":
             return self._decompose_variable_assignment(string)
-        elif pattern.name == "string_literal":
+        if pattern.name == "string_literal":
             return self._decompose_string_literal(string)
 
         return None
@@ -200,7 +200,7 @@ class RecursiveCodeGenerator(CodeGenerator):
         """Decompose function call using AST analysis"""
         try:
             # Parse with AST to validate
-            tree = ast.parse(string)
+            ast.parse(string)
 
             # Extract function name and arguments
             match = re.match(r"(\w+)\(([^)]*)\)", string)
@@ -228,7 +228,7 @@ class RecursiveCodeGenerator(CodeGenerator):
         """Decompose class definition using AST analysis"""
         try:
             # Parse with AST to validate
-            tree = ast.parse(string)
+            ast.parse(string)
 
             # Extract class name and inheritance
             match = re.match(r"class\s+(\w+)(?:\(([^)]*)\))?:", string)
@@ -408,7 +408,7 @@ class RecursiveCodeGenerator(CodeGenerator):
 def main() -> None:
     """Test the recursive code generator"""
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    logging.getLogger(__name__)
 
     print("🚀 Testing Recursive Code Generator...")
 

@@ -206,10 +206,7 @@ class ASTBasedCodeGenerator:
 
     def _has_return_statement(self, node: ast.FunctionDef) -> bool:
         """Check if function has return statements"""
-        for item in ast.walk(node):
-            if isinstance(item, ast.Return):
-                return True
-        return False
+        return any(isinstance(item, ast.Return) for item in ast.walk(node))
 
     def _generate_perfect_code_from_analysis(
         self,

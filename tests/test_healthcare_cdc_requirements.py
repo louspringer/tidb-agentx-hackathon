@@ -107,9 +107,8 @@ def run_healthcare_tests():
     if passed == total:
         print("🎉 All healthcare CDC requirements tests passed!")
         return True
-    else:
-        print(f"⚠️  {passed}/{total} tests passed")
-        return False
+    print(f"⚠️  {passed}/{total} tests passed")
+    return False
 
 
 if __name__ == "__main__":

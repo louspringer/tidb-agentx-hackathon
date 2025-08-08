@@ -414,8 +414,8 @@ def show_custom_agents(user_id: str) -> None:
                 "Agent Type",
                 ["security", "quality", "performance", "custom"],
             )
-            agent_description = st.text_area("Description")
-            agent_config = st.text_area("Configuration (JSON)")
+            st.text_area("Description")
+            st.text_area("Configuration (JSON)")
 
             if st.form_submit_button("Create Agent"):
                 if agent_name and agent_type:

@@ -227,7 +227,7 @@ class ComplexModel:
         mypy_issues = self._simulate_mypy_analysis(file_path)
 
         # Step 4: Combined Analysis
-        combined_analysis = {
+        return {
             "file_path": file_path,
             "ast_analysis": ast_result.parsed_data,
             "flake8_issues": flake8_issues,
@@ -235,8 +235,6 @@ class ComplexModel:
             "total_issues": len(flake8_issues) + len(mypy_issues),
             "fix_strategies": self._generate_fix_strategies(flake8_issues, mypy_issues),
         }
-
-        return combined_analysis
 
     def _simulate_flake8_analysis(self, file_path: str) -> list[dict[str, Any]]:
         """Simulate Flake8 analysis based on our model"""
@@ -368,9 +366,9 @@ class ComplexModel:
                 "line": issue["line"],
                 "description": issue["description"],
                 "fix_strategy": issue["fix_strategy"],
-                "priority": "high"
-                if "error" in issue.get("code", "").lower()
-                else "medium",
+                "priority": (
+                    "high" if "error" in issue.get("code", "").lower() else "medium"
+                ),
             }
             strategies.append(strategy)
 
@@ -427,10 +425,13 @@ class ComplexModel:
         # This is a simplified version - in practice, you'd need more sophisticated AST manipulation
         if issue["code"] == "no-return":
             # Add return type annotation
-            content = content.replace(
-                f"def {issue['description'].split("'")[1]}(",
-                f"def {issue['description'].split("'")[1]}(self) -> Any:",
-            )
+            description = issue["description"]
+            if "'" in description:
+                func_name = description.split("'")[1]
+                content = content.replace(
+                    f"def {func_name}(",
+                    f"def {func_name}(self) -> Any:",
+                )
 
         return content
 

@@ -493,7 +493,7 @@ class TestBlindSpotDetectionIntegration:
     def test_blind_spot_to_implementation_mapping(self) -> None:
         """Test that blind spots map to actual implementations"""
         detector = MultiAgentBlindSpotDetector()
-        app = OpenFlowQuickstartApp()
+        OpenFlowQuickstartApp()
 
         # Get blind spot analysis
         results = detector.run_complete_analysis()
@@ -518,7 +518,7 @@ class TestBlindSpotDetectionIntegration:
     def test_implementation_coverage_analysis(self) -> None:
         """Test that implementations cover identified blind spots"""
         detector = MultiAgentBlindSpotDetector()
-        app = OpenFlowQuickstartApp()
+        OpenFlowQuickstartApp()
 
         # Get blind spot analysis
         results = detector.run_complete_analysis()

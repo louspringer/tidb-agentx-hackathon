@@ -221,7 +221,7 @@ class ComplexModel:
         ast_result = self.enhanced_ast_parser.parse_artifact(file_path, "python")
         flake8_issues = self._simulate_flake8_analysis(file_path)
         mypy_issues = self._simulate_mypy_analysis(file_path)
-        combined_analysis = {
+        return {
             "file_path": file_path,
             "ast_analysis": ast_result.parsed_data,
             "flake8_issues": flake8_issues,
@@ -229,7 +229,6 @@ class ComplexModel:
             "total_issues": len(flake8_issues) + len(mypy_issues),
             "fix_strategies": self._generate_fix_strategies(flake8_issues, mypy_issues),
         }
-        return combined_analysis
 
     def _simulate_flake8_analysis(self, file_path: str) -> list[dict[str, Any]]:
         """Simulate Flake8 analysis based on our model"""

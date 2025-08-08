@@ -106,9 +106,8 @@ def run_uv_package_tests():
     if passed == total:
         print("🎉 All UV package management tests passed!")
         return True
-    else:
-        print(f"⚠️  {passed}/{total} tests passed")
-        return False
+    print(f"⚠️  {passed}/{total} tests passed")
+    return False
 
 
 if __name__ == "__main__":

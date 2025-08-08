@@ -16,7 +16,6 @@ def fix_unused_imports(filepath: str) -> bool:
         with open(filepath) as f:
             content = f.read()
 
-        original_content = content
         lines = content.split("\n")
         fixed_lines = []
         changes_made = False
@@ -81,8 +80,7 @@ def fix_unused_imports(filepath: str) -> bool:
                         changes_made = True
                         i += 1
                         continue
-                    else:
-                        fixed_lines.append(line)
+                    fixed_lines.append(line)
                 else:
                     fixed_lines.append(line)
             else:
@@ -96,8 +94,7 @@ def fix_unused_imports(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed unused imports: {filepath}")
             return True
-        else:
-            return False
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing imports in {filepath}: {e}")
@@ -110,7 +107,6 @@ def fix_f_strings(filepath: str) -> bool:
         with open(filepath) as f:
             content = f.read()
 
-        original_content = content
         lines = content.split("\n")
         fixed_lines = []
         changes_made = False
@@ -135,8 +131,7 @@ def fix_f_strings(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed f-strings: {filepath}")
             return True
-        else:
-            return False
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing f-strings in {filepath}: {e}")
@@ -149,7 +144,6 @@ def fix_unused_variables(filepath: str) -> bool:
         with open(filepath) as f:
             content = f.read()
 
-        original_content = content
         lines = content.split("\n")
         fixed_lines = []
         changes_made = False
@@ -170,7 +164,7 @@ def fix_unused_variables(filepath: str) -> bool:
             if " = " in line and not line.strip().startswith("#"):
                 match = re.match(r"^(\s*)(\w+)\s*=", line)
                 if match:
-                    indent = match.group(1)
+                    match.group(1)
                     var_name = match.group(2)
 
                     # Check if variable is used
@@ -192,8 +186,7 @@ def fix_unused_variables(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed unused variables: {filepath}")
             return True
-        else:
-            return False
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing unused variables in {filepath}: {e}")

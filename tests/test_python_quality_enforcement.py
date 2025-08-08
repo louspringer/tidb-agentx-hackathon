@@ -128,7 +128,8 @@ def test_python_quality_enforcement() -> None:
     python_files = find_reasonable_python_files()
     if not python_files:
         logger.error("❌ No core Python files found to test")
-        assert False, "No core Python files found to test"
+        msg = "No core Python files found to test"
+        raise AssertionError(msg)
 
     logger.info(f"Testing {len(python_files)} core Python files")
 
@@ -193,7 +194,8 @@ def test_zero_linter_errors() -> None:
     python_files = find_reasonable_python_files()
     if not python_files:
         logger.error("❌ No core Python files found to test")
-        assert False, "No core Python files found to test"
+        msg = "No core Python files found to test"
+        raise AssertionError(msg)
 
     total_errors = 0
     for file_path in python_files:
@@ -234,7 +236,8 @@ def test_ast_parsing_compliance() -> None:
     python_files = find_reasonable_python_files()
     if not python_files:
         logger.error("❌ No core Python files found to test")
-        assert False, "No core Python files found to test"
+        msg = "No core Python files found to test"
+        raise AssertionError(msg)
 
     failed_files = []
     for file_path in python_files:
@@ -288,9 +291,8 @@ def main() -> bool:
     if passed == total:
         logger.info("🎉 **ALL PYTHON QUALITY ENFORCEMENT TESTS PASSED!**")
         return True
-    else:
-        logger.error("❌ **SOME PYTHON QUALITY ENFORCEMENT TESTS FAILED**")
-        return False
+    logger.error("❌ **SOME PYTHON QUALITY ENFORCEMENT TESTS FAILED**")
+    return False
 
 
 if __name__ == "__main__":

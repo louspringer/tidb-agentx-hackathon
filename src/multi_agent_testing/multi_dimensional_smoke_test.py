@@ -256,9 +256,9 @@ Focus on identifying what might be missing or overlooked from your unique perspe
                             [q for q in questions if "blind" in q.lower()],
                         ),
                         "confidence": confidence,
-                        "decision": "PROCEED_WITH_CAUTION"
-                        if confidence > 0.7
-                        else "ASK_HUMAN",
+                        "decision": (
+                            "PROCEED_WITH_CAUTION" if confidence > 0.7 else "ASK_HUMAN"
+                        ),
                     },
                     "real_llm_result": {
                         "raw_response": content,

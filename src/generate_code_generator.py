@@ -317,7 +317,7 @@ def generate_code_generator() -> CodeFile:
 def main() -> None:
     """Generate the code generator using the code generator - META-RECURSIVE!"""
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    logging.getLogger(__name__)
 
     print("🚀 META-RECURSIVE BREAKTHROUGH!")
     print("🎯 Using Code Generator to MODEL AND CODE THE CODE GENERATOR ITSELF!")

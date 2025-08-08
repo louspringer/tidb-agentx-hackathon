@@ -34,9 +34,8 @@ def regenerate_test_projected():
         print("   ✅ Functional equivalence maintained")
 
         return True
-    else:
-        print("❌ Failed to regenerate file")
-        return False
+    print("❌ Failed to regenerate file")
+    return False
 
 
 if __name__ == "__main__":

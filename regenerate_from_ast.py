@@ -31,9 +31,8 @@ def regenerate_file(source_file: str, target_file: str) -> bool:
 
             print(f"✅ Regenerated: {target_file}")
             return True
-        else:
-            print(f"❌ Failed to regenerate: {target_file}")
-            return False
+        print(f"❌ Failed to regenerate: {target_file}")
+        return False
 
     except Exception as e:
         print(f"❌ Error regenerating {target_file}: {e}")

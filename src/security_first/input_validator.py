@@ -34,16 +34,15 @@ class InputValidator:
             return False
         if input_type == "text":
             return len(input_str.strip()) > 0
-        elif input_type == "email":
+        if input_type == "email":
             return InputValidator.validate_email(input_str)
-        elif input_type == "url":
+        if input_type == "url":
             return InputValidator.validate_url(input_str)
-        elif input_type == "phone":
+        if input_type == "phone":
             return InputValidator.validate_phone_number(input_str)
-        elif input_type == "uuid":
+        if input_type == "uuid":
             return InputValidator.validate_uuid(input_str)
-        else:
-            return len(input_str.strip()) > 0
+        return len(input_str.strip()) > 0
 
     @staticmethod
     def validate_snowflake_url(url: str) -> bool:
@@ -151,10 +150,7 @@ class InputValidator:
             "(\\b(xp_|sp_)\\b)",
         ]
         sql_lower = sql.lower()
-        for pattern in dangerous_patterns:
-            if re.search(pattern, sql_lower):
-                return False
-        return True
+        return all(not re.search(pattern, sql_lower) for pattern in dangerous_patterns)
 
     @staticmethod
     def validate_xss_safe(text: str) -> bool:
@@ -168,10 +164,7 @@ class InputValidator:
             "<embed[^>]*>",
         ]
         text_lower = text.lower()
-        for pattern in dangerous_patterns:
-            if re.search(pattern, text_lower):
-                return False
-        return True
+        return all(not re.search(pattern, text_lower) for pattern in dangerous_patterns)
 
     @staticmethod
     def validate_file_upload(

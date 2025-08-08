@@ -175,7 +175,7 @@ class ASTGuidedCodeGenerator:
                 "fix_strategy": rule.fix_strategy,
                 "priority": rule.priority,
             }
-        elif rule.code == "E302" and isinstance(node, (ast.FunctionDef, ast.ClassDef)):
+        if rule.code == "E302" and isinstance(node, (ast.FunctionDef, ast.ClassDef)):
             # Check for missing blank lines (simplified)
             return {
                 "code": rule.code,
@@ -184,7 +184,7 @@ class ASTGuidedCodeGenerator:
                 "fix_strategy": rule.fix_strategy,
                 "priority": rule.priority,
             }
-        elif rule.code == "no-untyped-def" and isinstance(node, ast.FunctionDef):
+        if rule.code == "no-untyped-def" and isinstance(node, ast.FunctionDef):
             # Check for missing type annotations
             if not node.returns and not any(arg.annotation for arg in node.args.args):
                 return {
@@ -299,7 +299,7 @@ def main():
     print(f"   ⚠️  Linting issues: {len(analysis.get('linting_issues', []))}")
     print(f"   🔧 Fix strategies: {len(analysis.get('fix_strategies', []))}")
     print(
-        f"   🎯 Syntactic boundaries: {len(analysis.get('syntactic_boundaries', []))}"
+        f"   🎯 Syntactic boundaries: {len(analysis.get('syntactic_boundaries', []))}",
     )
 
     # Generate perfect code

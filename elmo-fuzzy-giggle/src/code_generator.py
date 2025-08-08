@@ -24,13 +24,10 @@ class ImportStatement:
         if self.is_from:
             if self.items:
                 return f"from {self.module} import {', '.join(self.items)}"
-            else:
-                return f"from {self.module} import *"
-        else:
-            if self.alias:
-                return f"import {self.module} as {self.alias}"
-            else:
-                return f"import {self.module}"
+            return f"from {self.module} import *"
+        if self.alias:
+            return f"import {self.module} as {self.alias}"
+        return f"import {self.module}"
 
 
 @dataclass

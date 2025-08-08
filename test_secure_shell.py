@@ -42,9 +42,8 @@ def test_go_service():
         if "secure-shell-service" in result.stdout:
             print("✅ Service is running")
             return True
-        else:
-            print("❌ Service not found in process list")
-            return False
+        print("❌ Service not found in process list")
+        return False
     except Exception as e:
         print(f"❌ Error checking service: {e}")
         return False

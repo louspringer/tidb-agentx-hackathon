@@ -40,14 +40,13 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
                     changes_made=changes_made,
                     engine_name=self.name,
                 )
-            else:
-                return RecoveryResult(
-                    success=True,
-                    message="No syntax errors found to fix",
-                    confidence=0.8,
-                    changes_made=[],
-                    engine_name=self.name,
-                )
+            return RecoveryResult(
+                success=True,
+                message="No syntax errors found to fix",
+                confidence=0.8,
+                changes_made=[],
+                engine_name=self.name,
+            )
 
         except Exception as e:
             return RecoveryResult(

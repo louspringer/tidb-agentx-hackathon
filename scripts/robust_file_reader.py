@@ -36,8 +36,7 @@ class RobustFileReader:
         # Try each encoding
         for encoding in self.encodings:
             try:
-                content = file_path.read_text(encoding=encoding)
-                return content
+                return file_path.read_text(encoding=encoding)
             except UnicodeDecodeError:
                 continue
             except Exception as e:

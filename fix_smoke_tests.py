@@ -20,7 +20,6 @@ def fix_smoke_test_file(filepath: str) -> bool:
 
         in_class = False
         in_function = False
-        indent_level = 0
 
         for i, line in enumerate(lines):
             stripped = line.strip()
@@ -40,14 +39,12 @@ def fix_smoke_test_file(filepath: str) -> bool:
             # Fix class definition issues
             if "class" in stripped and ":" in stripped and not in_class:
                 in_class = True
-                indent_level = 0
                 fixed_lines.append(line)
                 continue
 
             # Fix function definition issues
             if "def " in stripped and ":" in stripped and not in_function:
                 in_function = True
-                indent_level = 2
                 fixed_lines.append(line)
                 continue
 
@@ -99,9 +96,8 @@ def fix_smoke_test_file(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed: {filepath}")
             return True
-        else:
-            print(f"⚠️  No changes needed: {filepath}")
-            return False
+        print(f"⚠️  No changes needed: {filepath}")
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing {filepath}: {e}")

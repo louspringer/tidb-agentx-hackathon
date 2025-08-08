@@ -15,7 +15,7 @@ from recursive_code_generator import RecursiveCodeGenerator
 def main():
     """Generate billing analyzer with recursive decomposition"""
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    logging.getLogger(__name__)
 
     print("🚀 Generating Enhanced Billing Analyzer with Recursive Decomposition...")
 
@@ -28,7 +28,7 @@ def main():
 
     # Generate with recursive decomposition
     print("🔍 Applying recursive decomposition...")
-    result = generator.generate_with_recursion(analyzer_file)
+    generator.generate_with_recursion(analyzer_file)
 
     # Write to file
     output_path = Path("gemini_billing_analyzer_enhanced.py")

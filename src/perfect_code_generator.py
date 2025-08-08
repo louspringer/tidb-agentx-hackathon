@@ -59,7 +59,8 @@ class PerfectCodeGenerator(CodeGenerator):
             code = self._fix_linting_issues(code)
 
         # If we can't fix it, raise an error
-        raise ValueError("❌ Could not generate perfect code after maximum attempts!")
+        msg = "❌ Could not generate perfect code after maximum attempts!"
+        raise ValueError(msg)
 
     def _is_perfect(self, code: str) -> bool:
         """Check if code passes all linting checks"""
@@ -125,9 +126,8 @@ class PerfectCodeGenerator(CodeGenerator):
             if result.returncode == 0:
                 self.logger.info("✅ Black formatting applied")
                 return result.stdout
-            else:
-                self.logger.warning(f"Black formatting failed: {result.stderr}")
-                return code
+            self.logger.warning(f"Black formatting failed: {result.stderr}")
+            return code
         except Exception as e:
             self.logger.warning(f"Black formatting error: {e}")
             return code
@@ -162,9 +162,7 @@ class PerfectCodeGenerator(CodeGenerator):
         code = self._fix_unused_variables(code)
         code = self._fix_f_strings(code)
         code = self._fix_return_statements(code)
-        code = self._fix_private_access(code)
-
-        return code
+        return self._fix_private_access(code)
 
     def _fix_imports(self, code: str) -> str:
         """Fix import-related issues"""

@@ -288,7 +288,7 @@ class ActualBillingAnalyzer:
         high_cost_indicators = []
 
         usage = self.get_actual_usage()
-        costs = self.get_cost_estimates()
+        self.get_cost_estimates()
 
         # Check for high resource counts
         for service, data in usage.items():

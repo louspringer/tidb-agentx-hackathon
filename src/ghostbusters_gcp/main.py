@@ -145,9 +145,11 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
         "warnings": warnings,
         "metadata": {
             "agents_used": agents,
-            "files_analyzed": len(list(Path(project_path).rglob("*.py")))
-            if Path(project_path).exists()
-            else 0,
+            "files_analyzed": (
+                len(list(Path(project_path).rglob("*.py")))
+                if Path(project_path).exists()
+                else 0
+            ),
         },
         "validation_results": {},
         "recovery_results": {},

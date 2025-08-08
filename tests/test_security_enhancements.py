@@ -94,9 +94,8 @@ def run_security_tests():
     if passed == total:
         print("🎉 All security enhancement tests passed!")
         return True
-    else:
-        print(f"⚠️  {passed}/{total} tests passed")
-        return False
+    print(f"⚠️  {passed}/{total} tests passed")
+    return False
 
 
 if __name__ == "__main__":

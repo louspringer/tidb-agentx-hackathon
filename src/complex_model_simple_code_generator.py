@@ -70,8 +70,7 @@ class MypyCompliantParameter:
         """Generate mypy-compliant parameter code"""
         if self.default_value:
             return f"{self.name}: {self.param_type} = {self.default_value}"
-        else:
-            return f"{self.name}: {self.param_type}"
+        return f"{self.name}: {self.param_type}"
 
 
 @dataclass
@@ -127,8 +126,7 @@ class MypyCompliantAttribute:
         """Generate mypy-compliant attribute code"""
         if self.default_value:
             return f"{self.name}: {self.attr_type} = {self.default_value}"
-        else:
-            return f"{self.name}: {self.attr_type}"
+        return f"{self.name}: {self.attr_type}"
 
 
 @dataclass
@@ -147,15 +145,11 @@ class MypyCompliantImport:
                 items_str = ", ".join(self.items)
                 if self.alias:
                     return f"from {self.module} import {items_str} as {self.alias}"
-                else:
-                    return f"from {self.module} import {items_str}"
-            else:
-                return f"from {self.module}"
-        else:
-            if self.alias:
-                return f"import {self.module} as {self.alias}"
-            else:
-                return f"import {self.module}"
+                return f"from {self.module} import {items_str}"
+            return f"from {self.module}"
+        if self.alias:
+            return f"import {self.module} as {self.alias}"
+        return f"import {self.module}"
 
 
 class ComplexModelSimpleCodeGenerator:

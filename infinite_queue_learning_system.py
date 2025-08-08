@@ -245,8 +245,7 @@ class ContinuousLearningModel:
         # This would call our intelligent model generator
         if hasattr(model, "to_code"):
             return model.to_code()
-        else:
-            return str(model)
+        return str(model)
 
     def _run_linting_check(self, code: str) -> list[str]:
         """Run linting check on generated code"""

@@ -200,9 +200,8 @@ class ModelManager:
             if entry_path[-1] in current:
                 del current[entry_path[-1]]
                 return self.save_model(model_name, data, backup=True)
-            else:
-                logger.warning(f"Entry {entry_path[-1]} not found")
-                return False
+            logger.warning(f"Entry {entry_path[-1]} not found")
+            return False
 
         except Exception as e:
             logger.error(f"Failed to remove model entry: {e}")
@@ -230,13 +229,10 @@ class ModelManager:
                     return False
             return True
 
-        elif isinstance(schema, list):  # type: ignore
+        if isinstance(schema, list):  # type: ignore
             if not isinstance(data, list):
                 return False
-            for item in data:
-                if not self._validate_against_schema(item, schema[0]):
-                    return False
-            return True
+            return all(self._validate_against_schema(item, schema[0]) for item in data)
 
         return True  # type: ignore
 

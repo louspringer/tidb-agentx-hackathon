@@ -160,13 +160,13 @@ class RecursiveCodeGenerator(CodeGenerator):
 
         if pattern.name == "import_statement":
             return self._decompose_import_statement(string)
-        elif pattern.name == "function_call":
+        if pattern.name == "function_call":
             return self._decompose_function_call(string)
-        elif pattern.name == "class_definition":
+        if pattern.name == "class_definition":
             return self._decompose_class_definition(string)
-        elif pattern.name == "variable_assignment":
+        if pattern.name == "variable_assignment":
             return self._decompose_variable_assignment(string)
-        elif pattern.name == "string_literal":
+        if pattern.name == "string_literal":
             return self._decompose_string_literal(string)
 
         return None

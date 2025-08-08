@@ -44,7 +44,8 @@ async def run_real_ghostbusters_analysis(
 
         project_path_obj = Path(project_path)
         if not project_path_obj.exists():
-            raise ValueError(f"Project path does not exist: {project_path}")
+            msg = f"Project path does not exist: {project_path}"
+            raise ValueError(msg)
 
         all_delusions = []
         all_recommendations = []

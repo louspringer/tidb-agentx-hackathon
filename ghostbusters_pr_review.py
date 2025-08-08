@@ -203,7 +203,7 @@ class GhostbustersPRReview:
         else:
             recommendations.append("✅ PR ready for review")
             recommendations.append(
-                "✅ Consider adding service management documentation"
+                "✅ Consider adding service management documentation",
             )
             recommendations.append("✅ Add deployment and rollback procedures")
 

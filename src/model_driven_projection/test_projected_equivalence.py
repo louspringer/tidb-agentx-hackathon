@@ -97,7 +97,7 @@ def test_projected_artifacts() -> None:
                 print("✅ Projected artifacts: DeploymentManager created")
             except Exception as e:
                 print(
-                    f"❌ Projected artifacts: DeploymentManager creation failed - {e}"
+                    f"❌ Projected artifacts: DeploymentManager creation failed - {e}",
                 )
                 # Removed return statement
 

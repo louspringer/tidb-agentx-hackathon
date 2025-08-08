@@ -30,12 +30,9 @@ class EnhancedLintingAwareImportStatement:
                 used_items = [item for item in self.items if item in self.used_items]
                 if used_items:
                     return f"from {self.module} import {', '.join(used_items)}"
-                else:
-                    return ""  # No unused imports! (F401)
-            else:
-                return f"from {self.module}"
-        else:
-            return f"import {self.module}"
+                return ""  # No unused imports! (F401)
+            return f"from {self.module}"
+        return f"import {self.module}"
 
 
 @dataclass
@@ -98,12 +95,14 @@ class EnhancedLintingAwareFunctionDefinition:
                 line = line.replace("logger.", "self.logger.")
 
             # Skip lines with unused variables (F841)
-            if any(
-                var in line
-                for var in ["logger = logging.getLogger", "logger = logging"]
+            if (
+                any(
+                    var in line
+                    for var in ["logger = logging.getLogger", "logger = logging"]
+                )
+                and "logger" not in self.used_variables
             ):
-                if "logger" not in self.used_variables:
-                    continue  # Skip unused logger assignment
+                continue  # Skip unused logger assignment
 
             lines.append(f"    {line}")
 

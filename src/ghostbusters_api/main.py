@@ -159,7 +159,8 @@ async def run_analysis(
                 Repo.clone_from(repo_url, temp_dir, branch=branch, depth=1)
                 logger.info("Successfully cloned repository to %s", temp_dir)
             except Exception as e:
-                raise Exception(f"Failed to clone repository: {str(e)}")
+                msg = f"Failed to clone repository: {str(e)}"
+                raise Exception(msg)
 
             # Convert to Path object for agents
             project_path = Path(temp_dir)

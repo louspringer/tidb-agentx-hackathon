@@ -73,20 +73,6 @@ class GCPBillingDailyReporter:
             daily_data = []
 
             # Services to track
-            services = [
-                "cloudfunctions.googleapis.com",
-                "run.googleapis.com",
-                "firestore.googleapis.com",
-                "pubsub.googleapis.com",
-                "storage.googleapis.com",
-                "bigquery.googleapis.com",
-                "speech.googleapis.com",
-                "cloudbuild.googleapis.com",
-                "logging.googleapis.com",
-                "monitoring.googleapis.com",
-                "aiplatform.googleapis.com",
-                "cloudaicompanion.googleapis.com",
-            ]
 
             # Generate realistic mock data based on your actual infrastructure
             for i in range(days):
@@ -788,8 +774,7 @@ class GCPBillingDailyReporter:
 def main():
     """Main function to run the daily billing analysis"""
     reporter = GCPBillingDailyReporter()
-    result = reporter.run_daily_analysis(days=14)
-    return result
+    return reporter.run_daily_analysis(days=14)
 
 
 if __name__ == "__main__":

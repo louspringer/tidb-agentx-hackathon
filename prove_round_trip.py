@@ -161,7 +161,7 @@ def prove_round_trip():
     print("\n🎯 STEP 4: Generating code from model")
     generated_files = system.generate_code_from_model(model.name)
     print(f"   ✅ Generated {len(generated_files)} files:")
-    for filename in generated_files.keys():
+    for filename in generated_files:
         print(f"      📄 {filename}")
 
     # STEP 5: Save generated code
@@ -226,11 +226,11 @@ def prove_round_trip():
     print("\n🎯 STEP 9: Demonstrating model persistence")
     model_data = json.load(open(model_file))
     print(
-        f"   📊 Model version: {model_data.get('metadata', {}).get('version', 'N/A')}"
+        f"   📊 Model version: {model_data.get('metadata', {}).get('version', 'N/A')}",
     )
     print(f"   📊 Model author: {model_data.get('metadata', {}).get('author', 'N/A')}")
     print(
-        f"   📊 Model created: {model_data.get('metadata', {}).get('created', 'N/A')}"
+        f"   📊 Model created: {model_data.get('metadata', {}).get('created', 'N/A')}",
     )
 
     print("\n" + "=" * 50)

@@ -94,10 +94,7 @@ class SecureExecutor:
 
     def _validate_command(self, command: Union[str, list[str]]) -> bool:
         """Validate command is allowed and safe"""
-        if isinstance(command, str):
-            parts = command.split()
-        else:
-            parts = command
+        parts = command.split() if isinstance(command, str) else command
 
         if not parts:
             return False
@@ -108,7 +105,7 @@ class SecureExecutor:
         # Check if command is allowed
         if cmd not in self.allowed_commands:
             # Allow python executable paths
-            if cmd.endswith("python") or cmd.endswith("python3") or "python" in cmd:
+            if cmd.endswith(("python", "python3")) or "python" in cmd:
                 # This is a python executable, allow it
                 pass
             else:
@@ -146,7 +143,7 @@ class SecureExecutor:
             return True
 
         # Special handling for python executable commands
-        if cmd.endswith("python") or cmd.endswith("python3") or "python" in cmd:
+        if cmd.endswith(("python", "python3")) or "python" in cmd:
             # Allow python module execution
             for arg in args:
                 if arg not in [
@@ -178,10 +175,7 @@ class SecureExecutor:
 
     def _sanitize_command(self, command: Union[str, list[str]]) -> list[str]:
         """Sanitize command for safe execution"""
-        if isinstance(command, str):
-            parts = command.split()
-        else:
-            parts = command.copy()
+        parts = command.split() if isinstance(command, str) else command.copy()
 
         # Remove any shell metacharacters
         sanitized = []

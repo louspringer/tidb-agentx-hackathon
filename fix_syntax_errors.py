@@ -73,7 +73,7 @@ def fix_file(filepath: str) -> bool:
 
 def main():
     """Fix syntax errors in Python files"""
-    src_dir = Path("src")
+    Path("src")
 
     # List of files with known issues
     problematic_files = [
@@ -90,9 +90,8 @@ def main():
 
     fixed_count = 0
     for filepath in problematic_files:
-        if os.path.exists(filepath):
-            if fix_file(filepath):
-                fixed_count += 1
+        if os.path.exists(filepath) and fix_file(filepath):
+            fixed_count += 1
 
     print(f"\nFixed {fixed_count} files")
 

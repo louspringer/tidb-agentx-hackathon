@@ -130,9 +130,8 @@ conflicts that prevented PR #6 from being merged.
     if result:
         logger.info("✅ PR created successfully!")
         return True
-    else:
-        logger.error("❌ Failed to create PR")
-        return False
+    logger.error("❌ Failed to create PR")
+    return False
 
 
 def main():

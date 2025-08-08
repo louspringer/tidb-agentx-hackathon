@@ -50,9 +50,8 @@ class GeminiBillingAnalyzer:
                 )
                 self.logger.info("✅ Gemini LLM initialized successfully")
                 return llm
-            else:
-                self.logger.warning("❌ No API key found for Gemini")
-                return None
+            self.logger.warning("❌ No API key found for Gemini")
+            return None
 
         except Exception as e:
             self.logger.error(f"❌ Error setting up Gemini LLM: {e}")
@@ -265,7 +264,7 @@ class GeminiBillingAnalyzer:
         }
 
         self.logger.info(
-            "✅ Gemini-Integrated Ghostbusters Billing Analysis completed!"
+            "✅ Gemini-Integrated Ghostbusters Billing Analysis completed!",
         )
 
         return {
@@ -294,7 +293,7 @@ async def main() -> None:
     """Main function for testing the Gemini billing analyzer"""
     # Configure logging
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    logging.getLogger(__name__)
 
     analyzer = GeminiBillingAnalyzer()
 

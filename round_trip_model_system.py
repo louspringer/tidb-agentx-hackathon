@@ -79,7 +79,8 @@ class RoundTripModelSystem:
     def generate_code_from_model(self, model_name: str) -> dict[str, str]:
         """Generate code from a design model (NO reverse engineering)"""
         if model_name not in self.design_models:
-            raise ValueError(f"Model {model_name} not found")
+            msg = f"Model {model_name} not found"
+            raise ValueError(msg)
 
         model = self.design_models[model_name]
         logger.info(f"🎯 Generating code from model: {model_name}")
@@ -259,7 +260,8 @@ class {component.name}Domain:
     def save_model(self, model_name: str, file_path: str) -> None:
         """Save a design model to JSON"""
         if model_name not in self.design_models:
-            raise ValueError(f"Model {model_name} not found")
+            msg = f"Model {model_name} not found"
+            raise ValueError(msg)
 
         model = self.design_models[model_name]
 

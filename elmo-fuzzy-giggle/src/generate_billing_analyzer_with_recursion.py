@@ -27,7 +27,7 @@ def main():
 
     # Generate with recursive decomposition
     print("🔍 Applying recursive decomposition...")
-    result = generator.generate_with_recursion(analyzer_file)
+    generator.generate_with_recursion(analyzer_file)
 
     # Write to file
     output_path = Path("gemini_billing_analyzer_enhanced.py")

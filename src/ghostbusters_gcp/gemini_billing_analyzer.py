@@ -53,9 +53,8 @@ def setup_gemini_llm() -> None:
             )
             logger.info("✅ Gemini LLM initialized successfully")
             return llm  # type: ignore
-        else:
-            logger.warning("❌ No API key found for Gemini")
-            return None
+        logger.warning("❌ No API key found for Gemini")
+        return None
 
     except Exception as e:
         logger.error(f"❌ Error setting up Gemini LLM: {e}")

@@ -93,9 +93,8 @@ def run_basic_tests():
     if passed == total:
         print("🎉 All basic validation tests passed!")
         return True
-    else:
-        print(f"⚠️  {passed}/{total} tests passed")
-        return False
+    print(f"⚠️  {passed}/{total} tests passed")
+    return False
 
 
 if __name__ == "__main__":

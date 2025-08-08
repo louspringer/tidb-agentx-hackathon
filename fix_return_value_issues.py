@@ -54,7 +54,6 @@ def fix_return_value_issues(filepath: str) -> bool:
         with open(filepath) as f:
             content = f.read()
 
-        original_content = content
         lines = content.split("\n")
         fixed_lines = []
         changes_made = False
@@ -65,8 +64,7 @@ def fix_return_value_issues(filepath: str) -> bool:
 
             # Look for function definitions with -> None
             if re.match(r"^\s*def\s+\w+\s*\([^)]*\)\s*->\s*None\s*:$", line):
-                func_name = re.search(r"def\s+(\w+)", line).group(1)
-                func_start = i
+                re.search(r"def\s+(\w+)", line).group(1)
 
                 # Find function body
                 indent_level = len(line) - len(line.lstrip())
@@ -113,7 +111,7 @@ def fix_return_value_issues(filepath: str) -> bool:
                                     lines[k] = import_line.replace(")", ", Any)")
                                     import_added = True
                                 break
-                            elif import_line.strip().startswith(
+                            if import_line.strip().startswith(
                                 "import ",
                             ) and not import_line.strip().startswith("import typing"):
                                 lines.insert(k, "from typing import Any")
@@ -132,9 +130,8 @@ def fix_return_value_issues(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed return value issues: {filepath}")
             return True
-        else:
-            print(f"⚠️  No return value issues found: {filepath}")
-            return False
+        print(f"⚠️  No return value issues found: {filepath}")
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing {filepath}: {e}")

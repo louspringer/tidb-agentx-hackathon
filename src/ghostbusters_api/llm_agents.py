@@ -36,11 +36,10 @@ class LLMEnhancedAgent:
         """Get API key for the specified LLM provider"""
         if self.llm_provider == "openai":
             return get_openai_api_key()
-        elif self.llm_provider == "anthropic":
+        if self.llm_provider == "anthropic":
             return get_anthropic_api_key()
-        else:
-            logger.warning(f"Unknown LLM provider: {self.llm_provider}")
-            return None
+        logger.warning(f"Unknown LLM provider: {self.llm_provider}")
+        return None
 
     def _call_llm(self, prompt: str, context: str) -> Optional[str]:
         """Call LLM with the given prompt and context"""
@@ -51,11 +50,10 @@ class LLMEnhancedAgent:
         try:
             if self.llm_provider == "openai":
                 return self._call_openai(prompt, context)
-            elif self.llm_provider == "anthropic":
+            if self.llm_provider == "anthropic":
                 return self._call_anthropic(prompt, context)
-            else:
-                logger.warning(f"Unsupported LLM provider: {self.llm_provider}")
-                return None
+            logger.warning(f"Unsupported LLM provider: {self.llm_provider}")
+            return None
         except Exception as e:
             logger.error(f"Error calling LLM: {e}")
             return None
@@ -205,8 +203,7 @@ Return your analysis in JSON format:
 
         try:
             # Parse LLM response
-            analysis = json.loads(llm_response)
-            return analysis  # type: ignore
+            return json.loads(llm_response)
         except json.JSONDecodeError:
             logger.warning("LLM response was not valid JSON")
             return None
@@ -292,7 +289,8 @@ def create_agent(
     if agent_class:
         return agent_class()  # type: ignore
 
-    raise ValueError(f"Unknown agent: {agent_name}")
+    msg = f"Unknown agent: {agent_name}"
+    raise ValueError(msg)
 
 
 if __name__ == "__main__":

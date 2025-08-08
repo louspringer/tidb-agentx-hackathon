@@ -15,7 +15,6 @@ def fix_test_return_values(filepath: str) -> bool:
         with open(filepath) as f:
             content = f.read()
 
-        original_content = content
         lines = content.split("\n")
         fixed_lines = []
         changes_made = False
@@ -33,7 +32,6 @@ def fix_test_return_values(filepath: str) -> bool:
                     continue
 
                 func_name = func_name.group(1)
-                func_start = i
 
                 # Find function body
                 indent_level = len(line) - len(line.lstrip())
@@ -94,9 +92,8 @@ def fix_test_return_values(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed test return values: {filepath}")
             return True
-        else:
-            print(f"⚠️  No test return value issues found: {filepath}")
-            return False
+        print(f"⚠️  No test return value issues found: {filepath}")
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing {filepath}: {e}")

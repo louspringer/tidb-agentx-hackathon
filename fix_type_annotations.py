@@ -42,9 +42,8 @@ def fix_type_annotations_in_file(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed type annotations: {filepath}")
             return True
-        else:
-            print(f"⚠️  No changes needed: {filepath}")
-            return False
+        print(f"⚠️  No changes needed: {filepath}")
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing {filepath}: {e}")

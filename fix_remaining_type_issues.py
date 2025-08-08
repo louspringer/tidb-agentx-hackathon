@@ -26,7 +26,6 @@ def fix_return_value_issues(filepath: str) -> bool:
             # Look for function definitions that return values but shouldn't
             if re.match(r"^\s*def\s+\w+\s*\([^)]*\)\s*->\s*None\s*:$", line):
                 # Find the function body and check for return statements
-                func_start = i
                 func_body = []
                 indent_level = len(line) - len(line.lstrip())
 
@@ -72,7 +71,7 @@ def fix_return_value_issues(filepath: str) -> bool:
                                     lines[k] = import_line.replace(")", ", Any)")
                                     import_added = True
                                 break
-                            elif import_line.strip().startswith(
+                            if import_line.strip().startswith(
                                 "import ",
                             ) and not import_line.strip().startswith("import typing"):
                                 # Insert new typing import before this line
@@ -97,8 +96,7 @@ def fix_return_value_issues(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed return value issues: {filepath}")
             return True
-        else:
-            return False
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing {filepath}: {e}")
@@ -117,9 +115,12 @@ def fix_missing_library_stubs(filepath: str) -> bool:
 
         for line in lines:
             # Add type ignore for yaml import
-            if "import yaml" in line and "# type: ignore" not in line:
-                line = line + "  # type: ignore"
-            elif "from yaml import" in line and "# type: ignore" not in line:
+            if (
+                "import yaml" in line
+                and "# type: ignore" not in line
+                or "from yaml import" in line
+                and "# type: ignore" not in line
+            ):
                 line = line + "  # type: ignore"
 
             fixed_lines.append(line)
@@ -131,8 +132,7 @@ def fix_missing_library_stubs(filepath: str) -> bool:
                 f.write(fixed_content)
             print(f"✅ Fixed library stub issues: {filepath}")
             return True
-        else:
-            return False
+        return False
 
     except Exception as e:
         print(f"❌ Error fixing {filepath}: {e}")

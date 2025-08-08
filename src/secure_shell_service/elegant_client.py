@@ -120,15 +120,14 @@ class ElegantSecureShellClient:
     ) -> dict[str, Any]:
         """Execute command elegantly - NO MORE CRINGING! 😄"""
         try:
-            if not self.stub:
-                if not await self.connect():
-                    return {
-                        "success": False,
-                        "output": "",
-                        "error": "Failed to connect to secure shell service",
-                        "exit_code": -1,
-                        "execution_time": 0.0,
-                    }
+            if not self.stub and not await self.connect():
+                return {
+                    "success": False,
+                    "output": "",
+                    "error": "Failed to connect to secure shell service",
+                    "exit_code": -1,
+                    "execution_time": 0.0,
+                }
 
             # Create a simple request object
             request = type(
@@ -165,9 +164,8 @@ class ElegantSecureShellClient:
     async def health_check(self) -> dict[str, Any]:
         """Check service health elegantly"""
         try:
-            if not self.stub:
-                if not await self.connect():
-                    return {"status": "unhealthy", "error": "Connection failed"}
+            if not self.stub and not await self.connect():
+                return {"status": "unhealthy", "error": "Connection failed"}
 
             request = type("obj", (object,), {})
             response = await self.stub.HealthCheck(request)  # type: ignore

@@ -56,9 +56,8 @@ def test_gemini_auth():
             print("✅ Set GOOGLE_API_KEY environment variable")
 
             return True
-        else:
-            print("❌ No access token returned")
-            return False
+        print("❌ No access token returned")
+        return False
 
     except subprocess.CalledProcessError as e:
         print(f"❌ Failed to get access token: {e}")

@@ -311,16 +311,21 @@ class HealthcareCDCDomainModel:
             with open(sql_file_path) as f:
                 return f.read()
         except FileNotFoundError:
-            raise FileNotFoundError(
+            msg = (
                 f"SQL template file not found: {sql_file_path}\n"
                 f"Expected location: {os.path.join(os.getcwd(), 'healthcare-cdc', 'sql', 'merge_cdc_operations.sql')}\n"
                 f"To resolve: Ensure the SQL template file exists or specify a custom path using sql_template_path parameter\n"
-                f"Note: This is a demo environment - in production, use proper file management",
+                f"Note: This is a demo environment - in production, use proper file management"
+            )
+            raise FileNotFoundError(
+                msg,
             )
         except OSError as e:
-            raise OSError(f"Error reading SQL template file: {e}")
+            msg = f"Error reading SQL template file: {e}"
+            raise OSError(msg)
         except (ValueError, TypeError) as e:
-            raise ValueError(f"Error processing SQL template content: {e}")
+            msg = f"Error processing SQL template content: {e}"
+            raise ValueError(msg)
 
     def generate_cloudformation_template(self) -> dict[str, Any]:
         """Generate CloudFormation template for the healthcare CDC infrastructure"""
@@ -385,52 +390,6 @@ class HealthcareCDCDomainModel:
                 "EC2InstanceProfile": {
                     "Type": "AWS::IAM::InstanceProfile",
                     "Properties": {"Roles": [{"Ref": "EC2InstanceRole"}]},
-                },
-                "EC2InstanceRole": {
-                    "Type": "AWS::IAM::Role",
-                    "Properties": {
-                        "AssumeRolePolicyDocument": {
-                            "Version": "2012-10-17",
-                            "Statement": [
-                                {
-                                    "Effect": "Allow",
-                                    "Principal": {"Service": "ec2.amazonaws.com"},
-                                    "Action": "sts:AssumeRole",
-                                },
-                            ],
-                        },
-                        "ManagedPolicyArns": [
-                            "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
-                            "arn:aws:iam::aws:policy/AmazonKinesisFullAccess",
-                        ],
-                    },
-                },
-                "EC2SecurityGroup": {
-                    "Type": "AWS::EC2::SecurityGroup",
-                    "Properties": {
-                        "GroupDescription": "Security group for Healthcare CDC EC2 instance",
-                        "VpcId": {"Ref": "VpcId"},
-                        "SecurityGroupIngress": [
-                            {
-                                "IpProtocol": "tcp",
-                                "FromPort": "22",
-                                "ToPort": "22",
-                                "CidrIp": "0.0.0.0/0",
-                            },
-                        ],
-                        "SecurityGroupEgress": [
-                            {
-                                "IpProtocol": "-1",
-                                "CidrIp": "0.0.0.0/0",
-                            },
-                        ],
-                    },
-                },
-                "EC2InstanceProfile": {
-                    "Type": "AWS::IAM::InstanceProfile",
-                    "Properties": {
-                        "Roles": [{"Ref": "EC2InstanceRole"}],
-                    },
                 },
                 "EC2InstanceRole": {
                     "Type": "AWS::IAM::Role",

@@ -157,9 +157,8 @@ class EnhancedPythonQualityTester:
                 if isinstance(imp, ast.Import):
                     for alias in imp.names:
                         import_names.add(alias.name)
-                elif isinstance(imp, ast.ImportFrom):
-                    if imp.module:
-                        import_names.add(imp.module)
+                elif isinstance(imp, ast.ImportFrom) and imp.module:
+                    import_names.add(imp.module)
 
             # This is a simplified check - in practice you'd need more sophisticated analysis
             logger.info(f"✅ Imports validation completed: {file_path}")
@@ -175,9 +174,7 @@ class EnhancedPythonQualityTester:
             functions = [
                 node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)
             ]
-            classes = [
-                node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)
-            ]
+            [node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]
 
             annotated_functions = 0
             total_functions = len(functions)
@@ -250,9 +247,8 @@ class EnhancedPythonQualityTester:
             if "try:" in content and "except" in content:
                 logger.info(f"✅ Error handling found: {file_path}")
                 return True
-            else:
-                logger.warning(f"⚠️ No explicit error handling found: {file_path}")
-                return False
+            logger.warning(f"⚠️ No explicit error handling found: {file_path}")
+            return False
         except Exception as e:
             logger.error(f"❌ Error handling check failed: {file_path} - {e}")
             return False
@@ -270,10 +266,9 @@ class EnhancedPythonQualityTester:
             if result.returncode == 0:
                 logger.info(f"✅ Security check passed: {file_path}")
                 return True
-            else:
-                logger.warning(f"⚠️ Security issues found: {file_path}")
-                logger.debug(f"Bandit output: {result.stdout}")
-                return False
+            logger.warning(f"⚠️ Security issues found: {file_path}")
+            logger.debug(f"Bandit output: {result.stdout}")
+            return False
         except Exception as e:
             logger.error(f"❌ Security check failed: {file_path} - {e}")
             return False
@@ -293,7 +288,7 @@ class EnhancedPythonQualityTester:
             sys.path.insert(0, str(self.project_root))
             from src.model_driven_projection import FinalProjectionSystem
 
-            system = FinalProjectionSystem()
+            FinalProjectionSystem()
 
             # Test that the file can be processed by the projection system
             # This is a basic test - in practice you'd want more comprehensive testing
@@ -324,10 +319,9 @@ class EnhancedPythonQualityTester:
             if result.returncode == 0:
                 logger.info(f"✅ Functional equivalence test passed: {file_path}")
                 return True
-            else:
-                logger.warning(f"⚠️ Functional equivalence test failed: {file_path}")
-                logger.debug(f"Test output: {result.stdout}")
-                return False
+            logger.warning(f"⚠️ Functional equivalence test failed: {file_path}")
+            logger.debug(f"Test output: {result.stdout}")
+            return False
         except Exception as e:
             logger.error(f"❌ Functional equivalence test failed: {file_path} - {e}")
             return False

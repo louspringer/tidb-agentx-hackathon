@@ -189,8 +189,7 @@ class DuetAIBillingChecker:
             if result.returncode == 0:
                 budgets = json.loads(result.stdout)
                 return {"budgets": budgets, "has_billing_data": True}
-            else:
-                return {"has_billing_data": False, "error": "No billing budgets found"}
+            return {"has_billing_data": False, "error": "No billing budgets found"}
 
         except Exception as e:
             return {"has_billing_data": False, "error": str(e)}
@@ -283,12 +282,11 @@ class DuetAIBillingChecker:
         """Calculate Duet AI usage level"""
         if len(enabled_services) >= 8:
             return "high"
-        elif len(enabled_services) >= 4:
+        if len(enabled_services) >= 4:
             return "medium"
-        elif len(enabled_services) >= 1:
+        if len(enabled_services) >= 1:
             return "low"
-        else:
-            return "none"
+        return "none"
 
     def estimate_duet_ai_cost(self, enabled_services: list[str]) -> dict[str, float]:
         """Estimate Duet AI related costs"""

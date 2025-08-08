@@ -99,7 +99,8 @@ class GhostbustersAPIClient:
 
             time.sleep(poll_interval)
 
-        raise TimeoutError(f"Job {job_id} did not complete within {timeout} seconds")
+        msg = f"Job {job_id} did not complete within {timeout} seconds"
+        raise TimeoutError(msg)
 
 
 def main() -> None:

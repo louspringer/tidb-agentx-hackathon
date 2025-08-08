@@ -102,7 +102,7 @@ def fix_file(file_path: Path, dry_run: bool = True) -> bool:
             # Find import section
             import_section = -1
             for i, line in enumerate(lines):
-                if line.startswith("import ") or line.startswith("from "):
+                if line.startswith(("import ", "from ")):
                     import_section = i
                     break
 

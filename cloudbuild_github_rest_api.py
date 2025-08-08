@@ -82,9 +82,8 @@ def create_github_connection(token: str) -> str:
     if "error" not in response:
         print("✅ GitHub connection created")
         return str(response.get("name", ""))
-    else:
-        print("❌ GitHub connection creation failed")
-        return ""
+    print("❌ GitHub connection creation failed")
+    return ""
 
 
 def create_repository(connection_name: str, token: str) -> str:

@@ -94,7 +94,8 @@ class RoundTripModelSystem:
     def generate_code_from_model(self, model_name: str) -> dict[str, str]:
         """Generate code from a design model (NO reverse engineering)"""
         if model_name not in self.design_models:
-            raise ValueError(f"Model {model_name} not found")
+            msg = f"Model {model_name} not found"
+            raise ValueError(msg)
 
         model = self.design_models[model_name]
         logger.info(f"🎯 Generating code from model: {model_name}")
@@ -144,10 +145,7 @@ class RoundTripModelSystem:
         params = component.metadata.get("parameters", [])
 
         param_str = ", ".join([f"{param['name']}: {param['type']}" for param in params])
-        if param_str:
-            param_str = f"({param_str})"
-        else:
-            param_str = "()"
+        param_str = f"({param_str})" if param_str else "()"
 
         code += f"""
 def {component.name}{param_str} -> {return_type}:
@@ -201,10 +199,7 @@ class {component.name}:
             param_str = ", ".join(
                 [f"{param['name']}: {param['type']}" for param in params],
             )
-            if param_str:
-                param_str = f"({param_str})"
-            else:
-                param_str = "()"
+            param_str = f"({param_str})" if param_str else "()"
 
             code += f"""
     def {method['name']}{param_str} -> {return_type}:
@@ -259,7 +254,7 @@ class {component.name}:
             elif return_type in [comp.name for comp in model.components]:
                 imports.add(f"from .{return_type.lower()} import {return_type}")
 
-        return sorted(list(imports))
+        return sorted(imports)
 
     def _resolve_type_reference(self, type_ref: str, model: DesignModel) -> str:
         """Resolve type references to internal components"""
@@ -268,12 +263,10 @@ class {component.name}:
             inner_type = type_ref[5:-1]  # Remove "List[" and "]"
             if inner_type in [comp.name for comp in model.components]:
                 return f"List[{inner_type}]"
-            else:
-                return type_ref
-        elif type_ref in [comp.name for comp in model.components]:
             return type_ref
-        else:
+        if type_ref in [comp.name for comp in model.components]:
             return type_ref
+        return type_ref
 
     def _generate_module_code(
         self,
@@ -283,7 +276,7 @@ class {component.name}:
         """Generate module code from component design"""
         imports = self._resolve_imports(component, model)
 
-        code = f"""#!/usr/bin/env python3
+        return f"""#!/usr/bin/env python3
 \"\"\"
 {component.description}
 
@@ -294,7 +287,6 @@ This module contains:
 {chr(10).join(imports)}
 
 """
-        return code
 
     def _generate_domain_code(
         self,
@@ -304,7 +296,7 @@ This module contains:
         """Generate domain code from component design"""
         imports = self._resolve_imports(component, model)
 
-        code = f"""#!/usr/bin/env python3
+        return f"""#!/usr/bin/env python3
 \"\"\"
 {component.description}
 
@@ -315,12 +307,12 @@ Requirements: {component.requirements}
 {chr(10).join(imports)}
 
 """
-        return code
 
     def save_model(self, model_name: str, file_path: str) -> None:
         """Save a design model to JSON file"""
         if model_name not in self.design_models:
-            raise ValueError(f"Model {model_name} not found")
+            msg = f"Model {model_name} not found"
+            raise ValueError(msg)
 
         model = self.design_models[model_name]
 

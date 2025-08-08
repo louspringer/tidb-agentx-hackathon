@@ -81,9 +81,8 @@ class CloudFunctionDeleter:
             if result.returncode == 0:
                 print(f"✅ Successfully deleted: {function_name}")
                 return True
-            else:
-                print(f"❌ Failed to delete {function_name}: {result.stderr}")
-                return False
+            print(f"❌ Failed to delete {function_name}: {result.stderr}")
+            return False
 
         except Exception as e:
             print(f"❌ Error deleting {function_name}: {e}")

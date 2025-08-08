@@ -73,9 +73,8 @@ def check_enterprise_quota(user_id: str) -> bool:
             )
 
             return monthly_usage < monthly_limit  # type: ignore
-        else:
-            # Default to basic plan
-            return True
+        # Default to basic plan
+        return True
     except Exception as e:
         logger.error("Enterprise quota check failed: %s", str(e))
         return True  # Allow on error
@@ -192,11 +191,13 @@ def validate_and_parse_advanced_request(request) -> dict[str, Any]:  # type: ign
     """Validate and parse advanced request data"""
     request_json = request.get_json()
     if not request_json:
-        raise ValueError("Invalid JSON in request body")
+        msg = "Invalid JSON in request body"
+        raise ValueError(msg)
 
     project_path = request_json.get("project_path")
     if not project_path:
-        raise ValueError("project_path is required")
+        msg = "project_path is required"
+        raise ValueError(msg)
 
     return {
         "project_path": project_path,
@@ -527,7 +528,7 @@ def ghostbusters_custom_agents(request):  # type: ignore
             agents = get_custom_agents(user_id)
             return {"status": "success", "agents": agents, "count": len(agents)}
 
-        elif action == "create":
+        if action == "create":
             # Create custom agent
             agent_config = request_json.get("agent_config")
             if not agent_config:
@@ -551,7 +552,7 @@ def ghostbusters_custom_agents(request):  # type: ignore
                 "message": "Custom agent created successfully",
             }
 
-        elif action == "update":
+        if action == "update":
             # Update custom agent
             agent_id = request_json.get("agent_id")
             if not agent_id:
@@ -572,7 +573,7 @@ def ghostbusters_custom_agents(request):  # type: ignore
 
             return {"status": "success", "message": "Custom agent updated successfully"}
 
-        elif action == "delete":
+        if action == "delete":
             # Delete custom agent
             agent_id = request_json.get("agent_id")
             if not agent_id:
@@ -585,8 +586,7 @@ def ghostbusters_custom_agents(request):  # type: ignore
 
             return {"status": "success", "message": "Custom agent deleted successfully"}
 
-        else:
-            return {"status": "error", "error_message": "Invalid action"}, 400
+        return {"status": "error", "error_message": "Invalid action"}, 400
 
     except Exception as e:
         logger.error("Error managing custom agents: %s", str(e))
@@ -627,7 +627,7 @@ def ghostbusters_enterprise_analytics(request):  # type: ignore
                 },
             }
 
-        elif analytics_type == "user_activity":
+        if analytics_type == "user_activity":
             # Get user activity analytics
             limit = request_json.get("limit", 10)
             docs = (
@@ -656,7 +656,7 @@ def ghostbusters_enterprise_analytics(request):  # type: ignore
                 "count": len(activities),
             }
 
-        elif analytics_type == "audit_logs":
+        if analytics_type == "audit_logs":
             # Get audit logs
             limit = request_json.get("limit", 50)
             docs = (
@@ -680,8 +680,7 @@ def ghostbusters_enterprise_analytics(request):  # type: ignore
 
             return {"status": "success", "audit_logs": logs, "count": len(logs)}
 
-        else:
-            return {"status": "error", "error_message": "Invalid analytics type"}, 400
+        return {"status": "error", "error_message": "Invalid analytics type"}, 400
 
     except Exception as e:
         logger.error("Error getting enterprise analytics: %s", str(e))

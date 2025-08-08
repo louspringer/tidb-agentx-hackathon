@@ -151,10 +151,7 @@ class MypyEnhancedASTParser:
 
     def _has_return_statement(self, node: ast.FunctionDef) -> bool:
         """Check if function has return statements"""
-        for item in ast.walk(node):
-            if isinstance(item, ast.Return):
-                return True
-        return False
+        return any(isinstance(item, ast.Return) for item in ast.walk(node))
 
 
 class MypyEnhancedCodeGenerator:
@@ -169,9 +166,7 @@ class MypyEnhancedCodeGenerator:
         analysis = self.ast_parser.analyze_code(code)
 
         # Apply mypy fixes
-        fixed_code = self._apply_mypy_fixes(code, analysis)
-
-        return fixed_code
+        return self._apply_mypy_fixes(code, analysis)
 
     def _apply_mypy_fixes(self, code: str, analysis: MypyASTAnalysis) -> str:
         """Apply mypy fixes to code"""
@@ -196,10 +191,7 @@ class MypyEnhancedCodeGenerator:
 
     def _has_return_statement(self, node: ast.FunctionDef) -> bool:
         """Check if function has return statements"""
-        for item in ast.walk(node):
-            if isinstance(item, ast.Return):
-                return True
-        return False
+        return any(isinstance(item, ast.Return) for item in ast.walk(node))
 
 
 # Test the mypy-enhanced AST parser

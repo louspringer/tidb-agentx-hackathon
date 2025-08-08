@@ -643,11 +643,11 @@ def main() -> None:
     print("🚀 Starting model-driven test recovery...")
 
     # Load model registry
-    model_registry = load_model_registry()
+    load_model_registry()
     print("✅ Loaded project model registry")
 
     # Get test patterns
-    test_patterns = get_test_patterns()
+    get_test_patterns()
 
     # List of broken test files to recover
     broken_tests = [

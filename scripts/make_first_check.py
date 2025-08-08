@@ -52,12 +52,11 @@ def check_command_has_make_target(command: str) -> tuple[bool, str]:
         if cmd_pattern in command:
             if target in targets:
                 return True, target
-            else:
-                # Try alternative targets
-                alternatives = [f"{target}-all", f"{target}-python"]
-                for alt in alternatives:
-                    if alt in targets:
-                        return True, alt
+            # Try alternative targets
+            alternatives = [f"{target}-all", f"{target}-python"]
+            for alt in alternatives:
+                if alt in targets:
+                    return True, alt
 
     return False, ""
 
@@ -68,8 +67,7 @@ def suggest_make_target(command: str) -> str:
 
     if has_target:
         return f"❌ Use 'make {target}' instead of '{command}'"
-    else:
-        return f"💡 Consider adding a Make target for: {command}"
+    return f"💡 Consider adding a Make target for: {command}"
 
 
 def main():

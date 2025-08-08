@@ -26,12 +26,9 @@ class LintingAwareImportStatement:
                 used_items = [item for item in self.items if item in self.used_items]
                 if used_items:
                     return f"from {self.module} import {', '.join(used_items)}"
-                else:
-                    return ""  # No unused imports!
-            else:
-                return f"from {self.module}"
-        else:
-            return f"import {self.module}"
+                return ""  # No unused imports!
+            return f"from {self.module}"
+        return f"import {self.module}"
 
 
 @dataclass

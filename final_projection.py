@@ -105,7 +105,7 @@ def main():
     """Main Streamlit application"""
     st.title("OpenFlow Quickstart")
     st.write("Welcome to the OpenFlow deployment application!")
-    security_manager = SecurityManager()
+    SecurityManager()
     st.write("Security manager initialized successfully!")
     st.write(f"Session timeout: {SECURITY_CONFIG['session_timeout_minutes']} minutes")
 

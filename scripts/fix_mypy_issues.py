@@ -92,17 +92,18 @@ def add_missing_type_annotations(file_path: Path) -> bool:
             if typing_imports:
                 # Find where to insert imports
                 for i, line in enumerate(lines):
-                    if line.strip().startswith("import ") or line.strip().startswith(
-                        "from ",
+                    if (
+                        line.strip().startswith("import ")
+                        or line.strip().startswith(
+                            "from ",
+                        )
+                        or line.strip() == ""
                     ):
                         continue
-                    elif line.strip() == "":
-                        continue
-                    else:
-                        # Insert imports here
-                        for imp in reversed(typing_imports):
-                            lines.insert(i, imp)
-                        break
+                    # Insert imports here
+                    for imp in reversed(typing_imports):
+                        lines.insert(i, imp)
+                    break
 
         if modified:
             with open(file_path, "w", encoding="utf-8") as f:
@@ -125,24 +126,24 @@ def infer_parameter_type(param_name: str) -> str:
         for word in ["file", "path", "name", "text", "content", "url", "string"]
     ):
         return "str"
-    elif any(
+    if any(
         word in param_lower
         for word in ["count", "index", "size", "length", "number", "id"]
     ):
         return "int"
-    elif any(
+    if any(
         word in param_lower for word in ["data", "items", "list", "array", "collection"]
     ):
         return "List[Any]"
-    elif any(
+    if any(
         word in param_lower for word in ["config", "settings", "dict", "map", "params"]
     ):
         return "Dict[str, Any]"
-    elif any(
+    if any(
         word in param_lower for word in ["flag", "enabled", "active", "is_", "has_"]
     ):
         return "bool"
-    elif any(word in param_lower for word in ["func", "callback", "handler"]):
+    if any(word in param_lower for word in ["func", "callback", "handler"]):
         return "Callable"
 
     return "Any"
