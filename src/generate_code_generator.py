@@ -7,7 +7,7 @@ This feat will live in halls of LLM valor!
 import logging
 from pathlib import Path
 
-from code_generator import (
+from code_generator import (  # type: ignore
     ClassDefinition,
     CodeFile,
     CodeGenerator,
@@ -314,7 +314,7 @@ def generate_code_generator() -> CodeFile:
     )
 
 
-def main():
+def main() -> None:
     """Generate the code generator using the code generator - META-RECURSIVE!"""
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)

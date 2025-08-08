@@ -211,7 +211,7 @@ class EnhancedLintingAwareCodeGenerator:
     No post-generation fixes needed!
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = None  # Will be set up when needed
 
     def generate_perfect_code(self, model: EnhancedLintingAwareCodeFile) -> str:
@@ -230,8 +230,8 @@ class EnhancedLintingAwareCodeGenerator:
         try:
             perfect_code = self.generate_perfect_code(model)
 
-            filepath = Path(filepath)
-            filepath.parent.mkdir(parents=True, exist_ok=True)
+            filepath = Path(filepath)  # type: ignore
+            filepath.parent.mkdir(parents=True, exist_ok=True)  # type: ignore
 
             with open(filepath, "w") as f:
                 f.write(perfect_code)

@@ -8,33 +8,31 @@ from the multi-agent analysis.
 
 Tests cover:
 - Security Expert blind spots
-- DevOps Engineer blind spots  
+- DevOps Engineer blind spots
 - Code Quality Expert blind spots
 - User Experience Advocate blind spots
 - Performance Engineer blind spots
 """
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
 import sys
-from typing import Dict, List
 from dataclasses import dataclass
+
+import pytest
 
 # Import the diversity hypothesis framework
 sys.path.append("..")
-from diversity_hypothesis.langgraph_diversity_orchestrator import (
+from diversity_hypothesis.langgraph_diversity_orchestrator import (  # type: ignore
     DiversityAgent,
-    BlindSpotFinding,
-    DiversityAnalysis,
 )
 
 # Import the Streamlit app
 sys.path.append("streamlit_app")
+from streamlit_app import (  # type: ignore
+    DeploymentManager,
+    InputValidator,
+    MonitoringDashboard,
     OpenFlowQuickstartApp,
     SecurityManager,
-    InputValidator,
-    DeploymentManager,
-    MonitoringDashboard,
 )
 
 
@@ -43,9 +41,9 @@ class BlindSpotTestResult:
     """Result of blind spot detection test"""
 
     agent_name: str
-    blind_spots_found: List[str]
-    blind_spots_addressed: List[str]
-    blind_spots_missing: List[str]
+    blind_spots_found: list[str]
+    blind_spots_addressed: list[str]
+    blind_spots_missing: list[str]
     confidence_score: float
     recommendation: str
 
@@ -267,7 +265,7 @@ class MultiAgentBlindSpotDetector:
             recommendation="Implement load testing, performance profiling, and resource optimization",
         )
 
-    def run_complete_analysis(self) -> Dict[str, BlindSpotTestResult]:
+    def run_complete_analysis(self) -> dict[str, BlindSpotTestResult]:
         """Run complete multi-agent blind spot analysis"""
         return {
             "security": self.analyze_security_blind_spots(),

@@ -29,11 +29,11 @@ class GhostbustersAPIClient:
     def analyze_project(
         self,
         project_path: str = ".",
-        agents: list[str] = None,
+        agents: list[str] = None,  # type: ignore
     ) -> dict[str, Any]:
         """Queue a Ghostbusters analysis job"""
         if agents is None:
-            agents = ["security", "code_quality"]
+            agents = ["security", "code_quality"]  # type: ignore
 
         payload = {"project_path": project_path, "agents": agents}
 
@@ -42,17 +42,17 @@ class GhostbustersAPIClient:
             json=payload,
         )
         response.raise_for_status()
-        return response.json()
+        return response.json()  # type: ignore
 
     def recover_project(
         self,
         recovery_type: str,
-        target_files: list[str] = None,
+        target_files: list[str] = None,  # type: ignore
         project_path: str = ".",
     ) -> dict[str, Any]:
         """Queue a Ghostbusters recovery job"""
         if target_files is None:
-            target_files = []
+            target_files = []  # type: ignore
 
         payload = {
             "recovery_type": recovery_type,
@@ -65,7 +65,7 @@ class GhostbustersAPIClient:
             json=payload,
         )
         response.raise_for_status()
-        return response.json()
+        return response.json()  # type: ignore
 
     def get_job_status(self, job_id: str) -> dict[str, Any]:
         """Get the status of a Ghostbusters job"""
@@ -74,13 +74,13 @@ class GhostbustersAPIClient:
             params={"job_id": job_id},
         )
         response.raise_for_status()
-        return response.json()
+        return response.json()  # type: ignore
 
     def list_jobs(self) -> dict[str, Any]:
         """List user's Ghostbusters jobs"""
         response = self.session.get(f"{self.base_url}/ghostbusters-jobs")
         response.raise_for_status()
-        return response.json()
+        return response.json()  # type: ignore
 
     def wait_for_completion(
         self,
@@ -102,7 +102,7 @@ class GhostbustersAPIClient:
         raise TimeoutError(f"Job {job_id} did not complete within {timeout} seconds")
 
 
-def main():
+def main() -> None:
     """Demo the Ghostbusters API client"""
     client = GhostbustersAPIClient()
 

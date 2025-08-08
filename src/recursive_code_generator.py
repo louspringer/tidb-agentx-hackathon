@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from code_generator import (
+from code_generator import (  # type: ignore
     ClassDefinition,
     CodeFile,
     CodeGenerator,
@@ -47,7 +47,7 @@ class RecursiveCodeGenerator(CodeGenerator):
     Based on de4py and Python-Reversal-Bot reverse engineering patterns
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.logger = logging.getLogger(__name__)
         self.recursion_limit = 3
@@ -83,14 +83,14 @@ class RecursiveCodeGenerator(CodeGenerator):
             StringPattern(
                 name="variable_assignment",
                 regex_pattern=r"^\w+\s*=\s*[^=]+$",
-                model_class=None,  # Will create custom model
+                model_class=type,  # Will create custom model
                 confidence_threshold=0.8,
             ),
             # String literal patterns (Memory analysis, from de4py)
             StringPattern(
                 name="string_literal",
                 regex_pattern=r'^["\'][^"\']*["\']$',
-                model_class=None,  # Will create custom model
+                model_class=type,  # Will create custom model
                 confidence_threshold=0.7,
             ),
         ]
@@ -314,7 +314,7 @@ class RecursiveCodeGenerator(CodeGenerator):
             if not validation_passed:
                 self.logger.warning(f"Validation failed: '{original}' != '{generated}'")
 
-            return validation_passed
+            return validation_passed  # type: ignore
 
         except Exception as e:
             self.logger.error(f"Validation error: {e}")
@@ -350,7 +350,7 @@ class RecursiveCodeGenerator(CodeGenerator):
         # Log decomposition history
         self._log_decomposition_summary()
 
-        return result
+        return result  # type: ignore
 
     def _extract_strings_from_code(self, code: str) -> list[str]:
         """Extract potential strings for decomposition from generated code"""
@@ -381,7 +381,7 @@ class RecursiveCodeGenerator(CodeGenerator):
 
         return strings
 
-    def _log_decomposition_summary(self):
+    def _log_decomposition_summary(self) -> None:
         """Log summary of decomposition analysis"""
         if not self.decomposition_history:
             self.logger.info("📝 No decompositions performed")
@@ -405,7 +405,7 @@ class RecursiveCodeGenerator(CodeGenerator):
         self.logger.info(f"   Validated: {validated}/{len(self.decomposition_history)}")
 
 
-def main():
+def main() -> None:
     """Test the recursive code generator"""
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)

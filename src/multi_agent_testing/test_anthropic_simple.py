@@ -4,8 +4,11 @@ Simple test to replicate the smoke test Anthropic API call
 """
 
 import json
+import os
 
 import requests
+
+api_key = os.getenv("ANTHROPIC_API_KEY")
 
 
 def test_anthropic_smoke_test() -> None:

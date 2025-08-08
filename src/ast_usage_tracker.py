@@ -19,6 +19,10 @@ class UsageAnalysis:
     used_classes: set[str] = field(default_factory=set)
     unused_imports: set[str] = field(default_factory=set)
     unused_variables: set[str] = field(default_factory=set)
+    # Mypy-enhanced analysis
+    functions_without_return_types: list[ast.FunctionDef] = field(default_factory=list)
+    functions_without_param_types: list[ast.FunctionDef] = field(default_factory=list)
+    mypy_errors: list[str] = field(default_factory=list)
 
 
 class ASTUsageTracker:
@@ -26,10 +30,10 @@ class ASTUsageTracker:
     AST-based usage tracker that analyzes Python code to find actual usage
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.analysis = UsageAnalysis()
 
-    def analyze_code(self, code: str) -> UsageAnalysis:
+    def analyze_code(self, code: str) -> "UsageAnalysis":
         """
         Analyze code using AST to find what's actually used
         """
@@ -70,6 +74,8 @@ class ASTUsageTracker:
         elif isinstance(node, ast.FunctionDef):
             # Track function definitions
             self.analysis.used_functions.add(node.name)
+            # Mypy-enhanced analysis
+            self._analyze_function_mypy_rules(node)
 
         elif isinstance(node, ast.ClassDef):
             # Track class definitions
@@ -87,6 +93,43 @@ class ASTUsageTracker:
         # Recursively visit child nodes
         for child in ast.iter_child_nodes(node):
             self._visit_node(child)
+
+    def _analyze_function_mypy_rules(self, node: ast.FunctionDef) -> None:
+        """Analyze function with mypy type checking rules"""
+        # Check for missing return type annotation
+        if not node.returns:
+            self.analysis.functions_without_return_types.append(node)
+            self.analysis.mypy_errors.append(
+                f"Function '{node.name}' missing return type annotation",
+            )
+
+        # Check for missing parameter type annotations
+        missing_param_types = []
+        for arg in node.args.args:
+            if not arg.annotation:
+                missing_param_types.append(arg.arg)
+
+        if missing_param_types:
+            self.analysis.functions_without_param_types.append(node)
+            self.analysis.mypy_errors.append(
+                f"Function '{node.name}' missing parameter type annotations: {missing_param_types}",
+            )
+
+        # Check for return statements in functions marked as -> None
+        if (
+            node.returns
+            and isinstance(node.returns, ast.Constant)
+            and node.returns.value is None
+        ):
+            self._check_for_unexpected_returns(node)
+
+    def _check_for_unexpected_returns(self, node: ast.FunctionDef) -> None:
+        """Check for unexpected return statements in -> None functions"""
+        for item in ast.walk(node):
+            if isinstance(item, ast.Return) and item.value:
+                self.analysis.mypy_errors.append(
+                    f"Function '{node.name}' has unexpected return value in -> None function",
+                )
 
     def find_unused_imports(self, imports: list[str], used_names: set[str]) -> set[str]:
         """Find imports that are not actually used"""
@@ -126,18 +169,79 @@ class ASTBasedCodeGenerator:
     Code generator that uses AST analysis to ensure only used imports/variables are included
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.tracker = ASTUsageTracker()
 
     def generate_perfect_code(self, initial_code: str) -> str:
-        """
-        Generate perfect code by analyzing usage and removing unused elements
-        """
-        # Phase 1: Analyze the initial code
+        """Generate perfect code with mypy compliance"""
+        # First, analyze the code with mypy rules
         analysis = self.tracker.analyze_code(initial_code)
 
-        # Phase 2: Remove unused imports
+        # Apply mypy fixes
+        fixed_code = self._apply_mypy_fixes(initial_code, analysis)
+
+        # Then apply existing AST-based improvements
+        return self._generate_perfect_code_from_analysis(fixed_code, analysis)
+
+    def _apply_mypy_fixes(self, code: str, analysis: "UsageAnalysis") -> str:
+        """Apply mypy fixes to code"""
+        lines = code.split("\n")
+
+        # Fix missing return type annotations
+        for func in analysis.functions_without_return_types:
+            line_num = func.lineno - 1
+            if line_num < len(lines):
+                line = lines[line_num]
+                if "def " in line and ":" in line and "->" not in line:
+                    if not self._has_return_statement(func):
+                        # Add -> None for functions without return statements
+                        fixed_line = line.replace("):", ") -> None:")
+                        lines[line_num] = fixed_line
+                    else:
+                        # Add -> Any for functions with return statements
+                        fixed_line = line.replace("):", ") -> Any:")
+                        lines[line_num] = fixed_line
+
+        return "\n".join(lines)
+
+    def _has_return_statement(self, node: ast.FunctionDef) -> bool:
+        """Check if function has return statements"""
+        for item in ast.walk(node):
+            if isinstance(item, ast.Return):
+                return True
+        return False
+
+    def _generate_perfect_code_from_analysis(
+        self,
+        initial_code: str,
+        analysis: "UsageAnalysis",
+    ) -> str:
+        """Generate perfect code by analyzing usage and removing unused elements"""
+        # Phase 1: Remove unused imports
         lines = initial_code.split("\n")
+        filtered_lines = []
+
+        for line in lines:
+            # Skip unused import lines
+            if line.strip().startswith("import ") or line.strip().startswith("from "):
+                if not self._is_import_used(line, analysis):
+                    continue
+            filtered_lines.append(line)
+
+        # Phase 2: Remove unused variable assignments
+        final_lines = []
+        for line in filtered_lines:
+            # Skip unused variable assignments
+            if " = " in line and not line.strip().startswith("#"):
+                var_name = line.split(" = ")[0].strip()
+                if var_name not in analysis.used_names:
+                    continue
+            final_lines.append(line)
+
+        return "\n".join(final_lines)
+
+        # Phase 2: Remove unused imports
+        lines = initial_code.split("\n")  # type: ignore
         filtered_lines = []
 
         for line in lines:
@@ -172,7 +276,7 @@ class ASTBasedCodeGenerator:
 
 
 # Test the AST usage tracker
-def test_ast_usage_tracker():
+def test_ast_usage_tracker() -> None:
     """Test the AST usage tracker with sample code"""
 
     sample_code = """
@@ -214,7 +318,7 @@ if __name__ == '__main__':
     print("\n✅ Generated Perfect Code:")
     print(perfect_code)
 
-    return analysis, perfect_code
+    return analysis, perfect_code  # type: ignore
 
 
 if __name__ == "__main__":

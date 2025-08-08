@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Generated from final model-driven projection"""
 
+import html
 import os
+import re
+from typing import Any
+from urllib.parse import urlparse
 
 from cryptography.fernet import Fernet
 
@@ -116,7 +120,7 @@ class InputValidator:
     def validate_json_schema(data: dict[str, Any], schema: dict[str, Any]) -> bool:
         """Validate data against JSON schema"""
         try:
-            from jsonschema import validate
+            from jsonschema import validate  # type: ignore
 
             validate(instance=data, schema=schema)
             return True
@@ -226,4 +230,4 @@ def test_input_validator() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    test_input_validator()

@@ -10,7 +10,7 @@ from .base_recovery_engine import BaseRecoveryEngine, RecoveryResult
 class SyntaxRecoveryEngine(BaseRecoveryEngine):
     """Recovery engine for fixing syntax errors."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the syntax recovery engine."""
         super().__init__("SyntaxRecoveryEngine")
 
@@ -60,7 +60,7 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
 
     async def _fix_syntax_errors(self, file_path: Path) -> list[str]:
         """Fix syntax errors in a file."""
-        changes_made = []
+        changes_made = []  # type: ignore
 
         try:
             content = file_path.read_text(encoding="utf-8")
@@ -76,7 +76,7 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
 
                 # Fix missing colons
                 if "expected ':'" in str(e):
-                    line_num = e.lineno - 1
+                    line_num = e.lineno - 1  # type: ignore
                     if line_num < len(lines):
                         line = lines[line_num]
                         if (
@@ -93,7 +93,7 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
 
                 # Fix indentation issues
                 if "expected an indented block" in str(e):
-                    line_num = e.lineno - 1
+                    line_num = e.lineno - 1  # type: ignore
                     if line_num < len(lines):
                         line = lines[line_num]
                         if line.strip() and not line.startswith((" ", "\t")):

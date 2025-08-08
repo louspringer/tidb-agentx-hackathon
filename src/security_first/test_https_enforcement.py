@@ -6,14 +6,15 @@ Tests for HTTPS Enforcement Module
 Validates critical security blind spot fixes identified by multi-agent analysis.
 """
 
-import pytest
+import ssl
 import unittest.mock as mock
 from unittest.mock import MagicMock
-import ssl
 
+import pytest
+from https_enforcement import (  # type: ignore
+    CSRFProtection,
     HTTPSEnforcement,
     RateLimiting,
-    CSRFProtection,
     SecurityManager,
 )
 
@@ -36,7 +37,7 @@ class TestHTTPSEnforcement:
 
         for url in valid_urls:
             assert self.enforcement.validate_https_url(
-                url
+                url,
             ), f"URL should be valid: {url}"
 
     def test_validate_https_url_invalid(self) -> None:
@@ -49,7 +50,7 @@ class TestHTTPSEnforcement:
 
         for url in invalid_urls:
             assert not self.enforcement.validate_https_url(
-                url
+                url,
             ), f"URL should be invalid: {url}"
 
     def test_enforce_https_redirect(self) -> None:
@@ -78,7 +79,7 @@ class TestHTTPSEnforcement:
         assert context.check_hostname is True
 
     @mock.patch("socket.create_connection")
-    def test_validate_ssl_certificate_success(self, mock_socket) -> None:
+    def test_validate_ssl_certificate_success(self, mock_socket) -> None:  # type: ignore
         """Test successful SSL certificate validation."""
         # Mock successful SSL connection
         mock_socket.return_value.__enter__.return_value = MagicMock()
@@ -90,7 +91,7 @@ class TestHTTPSEnforcement:
         assert isinstance(result, dict)
 
     @mock.patch("socket.create_connection")
-    def test_validate_ssl_certificate_failure(self, mock_socket) -> None:
+    def test_validate_ssl_certificate_failure(self, mock_socket) -> None:  # type: ignore
         """Test SSL certificate validation failure."""
         # Mock connection failure
         mock_socket.side_effect = Exception("Connection failed")
@@ -141,7 +142,8 @@ class TestRateLimiting:
         self.mock_redis.get.return_value = "75"  # 25 requests used
 
         remaining = self.rate_limiting.get_remaining_requests(
-            "user123", "/api/endpoint"
+            "user123",
+            "/api/endpoint",
         )
 
         assert remaining == 25  # 100 - 75 = 25 remaining
@@ -269,7 +271,11 @@ class TestIntegration:
         mock_redis.get.return_value = "50"
 
         result = security_manager.validate_request(
-            user_id, endpoint, url, csrf_token, session_id
+            user_id,
+            endpoint,
+            url,
+            csrf_token,
+            session_id,
         )
 
         # All security checks should pass

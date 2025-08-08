@@ -25,7 +25,7 @@ class PerfectASTGenerator:
     Uses AST analysis to ensure only used imports and variables are included
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.ast_tracker = ASTUsageTracker()
 
     def generate_perfect_code(self, model: PerfectCodeModel) -> str:
@@ -81,7 +81,11 @@ class PerfectASTGenerator:
 
         return "\n".join(lines).rstrip() + "\n"
 
-    def _generate_perfect_code_from_analysis(self, initial_code: str, analysis) -> str:
+    def _generate_perfect_code_from_analysis(
+        self,
+        initial_code: str,
+        analysis: "UsageAnalysis",
+    ) -> str:
         """Generate perfect code by removing unused elements"""
         lines = initial_code.split("\n")
         perfect_lines = []
@@ -102,7 +106,7 @@ class PerfectASTGenerator:
 
         return "\n".join(perfect_lines)
 
-    def _is_import_used(self, import_line: str, analysis) -> bool:
+    def _is_import_used(self, import_line: str, analysis: "UsageAnalysis") -> bool:
         """Check if an import is actually used"""
         if " as " in import_line:
             imported_name = import_line.split(" as ")[1].strip()
@@ -113,23 +117,21 @@ class PerfectASTGenerator:
 
         return imported_name in analysis.used_names
 
-    def _validate_syntax(self, code: str) -> bool:
+    def _validate_syntax(self, code: str) -> None:
         """Validate that the generated code has correct syntax"""
         try:
             ast.parse(code)
-            return True
         except SyntaxError as e:
             print(f"❌ Syntax error in generated code: {e}")
-            return False
 
 
 class ASTUsageTracker:
     """AST-based usage tracker (copied from ast_usage_tracker.py)"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.analysis = UsageAnalysis()
 
-    def analyze_code(self, code: str):
+    def analyze_code(self, code: str) -> "UsageAnalysis":
         try:
             tree = ast.parse(code)
             self.analysis = UsageAnalysis()
@@ -184,7 +186,7 @@ class UsageAnalysis:
 
 
 # Test the perfect AST generator
-def test_perfect_ast_generator():
+def test_perfect_ast_generator() -> None:
     """Test the perfect AST generator"""
 
     # Create a perfect billing analyzer model
@@ -242,7 +244,7 @@ def test_perfect_ast_generator():
     else:
         print(f"❌ Flake8 errors found: {result.stdout}")
 
-    return perfect_code
+    return
 
 
 if __name__ == "__main__":

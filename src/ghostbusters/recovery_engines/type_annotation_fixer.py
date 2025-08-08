@@ -10,7 +10,7 @@ from .base_recovery_engine import BaseRecoveryEngine, RecoveryResult
 class TypeAnnotationFixer(BaseRecoveryEngine):
     """Recovery engine for fixing type annotation issues."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the type annotation fixer."""
         super().__init__("TypeAnnotationFixer")
 

@@ -11,7 +11,7 @@ from .agents import (
     SecurityExpert,
     TestExpert,
 )
-from .ghostbusters_orchestrator import GhostbustersOrchestrator
+from .ghostbusters_orchestrator import GhostbustersOrchestrator, run_ghostbusters
 from .recovery import (
     ImportResolver,
     IndentationFixer,
@@ -30,6 +30,7 @@ from .validators import (
 __version__ = "1.0.0"
 __all__ = [
     "GhostbustersOrchestrator",
+    "run_ghostbusters",
     "SecurityExpert",
     "CodeQualityExpert",
     "TestExpert",

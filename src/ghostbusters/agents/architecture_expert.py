@@ -9,7 +9,7 @@ from .base_expert import BaseExpert, DelusionResult
 class ArchitectureExpert(BaseExpert):
     """Expert agent for detecting architectural issues."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the architecture expert."""
         super().__init__("ArchitectureExpert")
 

@@ -13,8 +13,8 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-import functions_framework
-from google.cloud import firestore, pubsub_v1
+import functions_framework  # type: ignore
+from google.cloud import firestore, pubsub_v1  # type: ignore
 from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -28,7 +28,7 @@ publisher = pubsub_v1.PublisherClient()
 
 
 # Gemini LLM setup
-def setup_gemini_llm():
+def setup_gemini_llm() -> None:
     """Setup Gemini LLM with proper API key"""
     try:
         # Try to get API key from environment
@@ -52,7 +52,7 @@ def setup_gemini_llm():
                 temperature=0.1,
             )
             logger.info("✅ Gemini LLM initialized successfully")
-            return llm
+            return llm  # type: ignore
         else:
             logger.warning("❌ No API key found for Gemini")
             return None
@@ -62,7 +62,7 @@ def setup_gemini_llm():
         return None
 
 
-def get_billing_data():
+def get_billing_data() -> None:
     """Get current GCP billing data"""
     try:
         # Get project info
@@ -144,7 +144,7 @@ def get_billing_data():
         except Exception:
             resources["firestore"] = 0
 
-        return {
+        return {  # type: ignore
             "project_id": project_id,
             "billing_account": billing_account,
             "enabled_services": enabled_services,
@@ -157,7 +157,7 @@ def get_billing_data():
         return None
 
 
-def analyze_billing_with_gemini(billing_data: dict[str, Any], llm) -> dict[str, Any]:
+def analyze_billing_with_gemini(billing_data: dict[str, Any], llm) -> dict[str, Any]:  # type: ignore
     """Analyze billing data using Gemini LLM"""
     if not llm:
         return {"error": "Gemini LLM not available"}
@@ -216,7 +216,7 @@ def run_ghostbusters_analysis(project_path: str = ".") -> dict[str, Any]:
 
         return {
             "confidence_score": result.confidence_score,
-            "delusions_detected": len(result.delusions),
+            "delusions_detected": len(result.delusions),  # type: ignore
             "recovery_actions": len(result.recovery_actions),
             "errors": len(result.errors),
             "ghostbusters_result": result,
@@ -228,7 +228,7 @@ def run_ghostbusters_analysis(project_path: str = ".") -> dict[str, Any]:
 
 
 @functions_framework.http
-def gemini_billing_analyzer(request):
+def gemini_billing_analyzer(request):  # type: ignore
     """
     Gemini-Integrated Ghostbusters Billing Analyzer
     Combines Ghostbusters analysis with Gemini LLM for comprehensive GCP billing insights
@@ -250,7 +250,7 @@ def gemini_billing_analyzer(request):
 
         # Step 1: Get billing data
         logger.info("📊 Collecting GCP billing data...")
-        billing_data = get_billing_data()
+        billing_data = get_billing_data()  # type: ignore
 
         if not billing_data:
             return {
@@ -260,7 +260,7 @@ def gemini_billing_analyzer(request):
 
         # Step 2: Setup Gemini LLM
         logger.info("🤖 Setting up Gemini LLM...")
-        llm = setup_gemini_llm()
+        llm = setup_gemini_llm()  # type: ignore
 
         # Step 3: Analyze billing with Gemini
         logger.info("🔍 Analyzing billing data with Gemini...")

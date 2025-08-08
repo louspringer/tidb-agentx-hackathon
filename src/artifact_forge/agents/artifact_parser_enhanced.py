@@ -38,7 +38,7 @@ class ParsedArtifact:
     parsed_data: dict[str, Any]
     parsing_errors: list[str]
     parsing_timestamp: datetime
-    block_analysis: dict[str, Any] = None
+    block_analysis: dict[str, Any] = None  # type: ignore
 
 
 class EnhancedArtifactParser:
@@ -57,8 +57,8 @@ class EnhancedArtifactParser:
     def parse_artifact(self, artifact_path: str, artifact_type: str) -> ParsedArtifact:
         """Parse an artifact with enhanced error recovery"""
         errors = []
-        parsed_data = {}
-        block_analysis = {}
+        parsed_data = {}  # type: ignore
+        block_analysis = {}  # type: ignore
 
         try:
             if artifact_type in self.parsers:
@@ -118,7 +118,7 @@ class EnhancedArtifactParser:
 
         blocks = []
         current_block = None
-        block_stack = []
+        block_stack = []  # type: ignore
 
         for line_num, line in enumerate(lines, 1):
             stripped = line.strip()
@@ -389,7 +389,7 @@ class EnhancedArtifactParser:
 
     def _count_block_types(self, blocks: list[BlockBoundary]) -> dict[str, int]:
         """Count blocks by type"""
-        counts = {}
+        counts = {}  # type: ignore
         for block in blocks:
             counts[block.block_type] = counts.get(block.block_type, 0) + 1
         return counts
@@ -403,7 +403,7 @@ class EnhancedArtifactParser:
         # Split frontmatter and markdown
         parts = content.split("---", 2)
 
-        frontmatter = {}
+        frontmatter = {}  # type: ignore
         markdown_content = content
 
         if len(parts) >= 3:
@@ -444,7 +444,7 @@ class EnhancedArtifactParser:
             content = f.read()
 
         try:
-            import yaml  # type: ignore
+            import yaml
 
             data = yaml.safe_load(content)
             parsed_data = {

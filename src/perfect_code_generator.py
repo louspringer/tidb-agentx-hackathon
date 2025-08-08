@@ -9,7 +9,7 @@ import logging
 import subprocess
 from pathlib import Path
 
-from code_generator import (
+from code_generator import (  # type: ignore
     ClassDefinition,
     CodeFile,
     CodeGenerator,
@@ -24,7 +24,7 @@ class PerfectCodeGenerator(CodeGenerator):
     Integrates with linting tools and validates before emission
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.logger = logging.getLogger(__name__)
         self.linters = {
@@ -53,7 +53,7 @@ class PerfectCodeGenerator(CodeGenerator):
 
             if self._is_perfect(code):
                 self.logger.info("✅ Code is PERFECT!")
-                return code
+                return code  # type: ignore
 
             # Fix linting issues
             code = self._fix_linting_issues(code)
@@ -403,7 +403,7 @@ def generate_perfect_code_generator() -> CodeFile:
     )
 
 
-def main():
+def main() -> None:
     """Generate the perfect code generator"""
     logging.basicConfig(level=logging.INFO)
 

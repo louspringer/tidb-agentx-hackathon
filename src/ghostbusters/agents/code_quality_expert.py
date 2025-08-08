@@ -10,7 +10,7 @@ from .base_expert import BaseExpert, DelusionResult
 class CodeQualityExpert(BaseExpert):
     """Expert agent for detecting code quality issues."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the code quality expert."""
         super().__init__("CodeQualityExpert")
 

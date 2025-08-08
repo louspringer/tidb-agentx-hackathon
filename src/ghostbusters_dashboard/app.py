@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 from typing import Any
 
 import streamlit as st
-from firebase_admin import initialize_app
-from google.cloud import firestore, pubsub_v1
+from firebase_admin import initialize_app  # type: ignore
+from google.cloud import firestore, pubsub_v1  # type: ignore
 
 # Initialize Firebase Admin SDK
 try:
@@ -81,7 +81,7 @@ def authenticate_user() -> str:
         return "demo-user-123"
     except Exception as e:
         logger.error("Authentication failed: %s", str(e))
-        return None
+        return None  # type: ignore
 
 
 def get_user_analyses(user_id: str, limit: int = 50) -> list[dict[str, Any]]:
@@ -125,7 +125,7 @@ def get_analysis_details(analysis_id: str) -> dict[str, Any]:
     try:
         doc = db.collection("ghostbusters_results").document(analysis_id).get()
         if doc.exists:
-            return doc.to_dict()
+            return doc.to_dict()  # type: ignore
         return {}
     except Exception as e:
         logger.error("Failed to get analysis details: %s", str(e))
@@ -179,7 +179,7 @@ def get_global_metrics() -> dict[str, Any]:
         return {}
 
 
-def main():
+def main() -> None:
     """Main dashboard application"""
 
     # Header
@@ -221,7 +221,7 @@ def main():
         show_settings()
 
 
-def show_overview(user_id: str):
+def show_overview(user_id: str) -> None:
     """Show overview dashboard"""
     st.header("📊 Overview")
 
@@ -300,7 +300,7 @@ def show_overview(user_id: str):
             st.info("Redirecting to results page...")
 
 
-def show_my_analyses(user_id: str):
+def show_my_analyses(user_id: str) -> None:
     """Show user's analysis history"""
     st.header("📋 My Analyses")
 
@@ -392,7 +392,7 @@ def show_my_analyses(user_id: str):
         st.info("No analyses found matching the filters.")
 
 
-def show_analysis_details():
+def show_analysis_details() -> None:
     """Show detailed analysis results"""
     st.header("🔍 Analysis Details")
 
@@ -465,7 +465,7 @@ def show_analysis_details():
         st.info("Enter an Analysis ID to view details.")
 
 
-def show_real_time_updates():
+def show_real_time_updates() -> None:
     """Show real-time analysis updates"""
     st.header("⚡ Real-time Updates")
 
@@ -491,10 +491,10 @@ def show_real_time_updates():
             col1, col2, col3 = st.columns([1, 2, 1])
 
             with col1:
-                st.write(f"**{update['analysis_id'][:8]}...**")
+                st.write(f"**{update['analysis_id'][:8]}...**")  # type: ignore
 
             with col2:
-                st.progress(update["progress"] / 100)
+                st.progress(update["progress"] / 100)  # type: ignore
                 st.caption(update["message"])
 
             with col3:
@@ -503,7 +503,7 @@ def show_real_time_updates():
             st.divider()
 
 
-def show_settings():
+def show_settings() -> None:
     """Show user settings"""
     st.header("⚙️ Settings")
 

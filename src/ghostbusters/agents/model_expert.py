@@ -9,7 +9,7 @@ from .base_expert import BaseExpert, DelusionResult
 class ModelExpert(BaseExpert):
     """Expert agent for detecting model-related issues."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the model expert."""
         super().__init__("ModelExpert")
 
@@ -37,7 +37,8 @@ class ModelExpert(BaseExpert):
             )
             recommendations.append(
                 self._create_recommendation(
-                    "Add data validation and schemas", "medium"
+                    "Add data validation and schemas",
+                    "medium",
                 ),
             )
         else:

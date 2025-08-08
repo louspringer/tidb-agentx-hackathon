@@ -3,7 +3,7 @@
 Test Model Traceability: Requirements → Implementation → Validation
 """
 
-# import subprocess  # REMOVED - replaced with secure_execute
+import subprocess
 
 from project_model import ProjectModel
 from src.secure_shell_service.secure_executor import secure_execute
@@ -128,7 +128,7 @@ def test_requirement_6_tool_execution() -> None:
 
     # Check if cfn-lint is available
     try:
-        secure_execute(["cfn-lint", "--version"], capture_output=True, check=True)
+        secure_execute(["cfn-lint", "--version"], capture_output=True, check=True)  # type: ignore
         assert "cfn-lint" in result["tools_used"], "cfn-lint not used"
         print("✅ cfn-lint executed successfully")
     except (subprocess.CalledProcessError, FileNotFoundError):
@@ -187,7 +187,7 @@ def main() -> None:
     else:
         print("⚠️ Some requirements not fully traceable")
 
-    return passed == total
+    return passed == total  # type: ignore
 
 
 if __name__ == "__main__":

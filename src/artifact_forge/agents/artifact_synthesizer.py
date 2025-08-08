@@ -79,7 +79,7 @@ class ArtifactSynthesizer:
         insights = []
 
         # Count artifacts by type
-        type_counts = {}
+        type_counts = {}  # type: ignore
         for artifact in artifacts:
             artifact_type = artifact.get("artifact_type", "unknown")
             type_counts[artifact_type] = type_counts.get(artifact_type, 0) + 1

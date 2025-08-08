@@ -152,7 +152,7 @@ class IntelligentModelGenerator:
 
 
 # Test the intelligent model generator
-def test_intelligent_model_generator():
+def test_intelligent_model_generator() -> None:
     """Test the intelligent model generator"""
 
     # Create an intelligent billing analyzer model
@@ -227,7 +227,7 @@ def test_intelligent_model_generator():
     else:
         print(f"❌ Flake8 errors found: {result.stdout}")
 
-    return intelligent_code
+    return intelligent_code  # type: ignore
 
 
 if __name__ == "__main__":

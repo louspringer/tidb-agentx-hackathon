@@ -7,12 +7,13 @@ Tool Discovery System for Ghostbusters with Web Search
 
 # Import web discovery
 import sys
-from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
 from typing import Any
 
+from src.secure_shell_service.secure_executor import secure_execute
+
 sys.path.append(str(Path(__file__).parent))
-from web_tool_discovery import WebToolDiscovery
+from web_tool_discovery import WebToolDiscovery  # type: ignore
 
 
 class ToolDiscovery:
@@ -80,7 +81,7 @@ class ToolDiscovery:
                     capture_output=True,
                     text=True,
                 )
-                if result.returncode == 0:
+                if result.returncode == 0:  # type: ignore
                     available_tools[tool_name] = {
                         "type": tool_type,
                         "version": result.stdout.strip(),

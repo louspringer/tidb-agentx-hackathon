@@ -26,11 +26,11 @@ class LiveLLMOrchestrator:
             try:
                 # Initialize LLM based on provider
                 if provider == "openai":
-                    from langchain_openai import ChatOpenAI
+                    from langchain_openai import ChatOpenAI  # type: ignore
 
                     self.llm = ChatOpenAI(api_key=self.api_key, model="gpt-4-turbo")
                 elif provider == "anthropic":
-                    from langchain_anthropic import ChatAnthropic
+                    from langchain_anthropic import ChatAnthropic  # type: ignore
 
                     self.llm = ChatAnthropic(
                         api_key=self.api_key,
@@ -82,7 +82,7 @@ Focus on questions that challenge the approach and reveal what might be missing.
 
         try:
             # Execute the chain
-            return self.chain.invoke(
+            return self.chain.invoke(  # type: ignore
                 {
                     "context": context,
                     "jeopardy_question": jeopardy_question,

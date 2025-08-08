@@ -193,7 +193,7 @@ class LintingAwareCodeGenerator:
     No post-generation fixes needed!
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = None  # Will be set up when needed
 
     def generate_perfect_code(self, model: LintingAwareCodeFile) -> str:
@@ -208,10 +208,10 @@ class LintingAwareCodeGenerator:
         try:
             perfect_code = self.generate_perfect_code(model)
 
-            filepath = Path(filepath)
-            filepath.parent.mkdir(parents=True, exist_ok=True)
+            filepath_obj = Path(filepath)
+            filepath_obj.parent.mkdir(parents=True, exist_ok=True)
 
-            with open(filepath, "w") as f:
+            with open(filepath_obj, "w") as f:
                 f.write(perfect_code)
 
             return True

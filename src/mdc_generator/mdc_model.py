@@ -26,7 +26,7 @@ class MDCFrontmatter:
             "globs": self.globs,
             "alwaysApply": self.always_apply,
         }
-        return yaml.dump(data, default_flow_style=False, sort_keys=False)
+        return yaml.dump(data, default_flow_style=False, sort_keys=False)  # type: ignore
 
 
 @dataclass

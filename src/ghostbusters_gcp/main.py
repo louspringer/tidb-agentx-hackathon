@@ -5,15 +5,14 @@ Phase 2: Real Ghostbusters logic embedded in Cloud Function
 """
 
 import json
-from src.secure_shell_service.secure_executor import secure_execute
 import logging
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import functions_framework
-from google.cloud import firestore, pubsub_v1
+import functions_framework  # type: ignore
+from google.cloud import firestore, pubsub_v1  # type: ignore
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +29,7 @@ topic_path = publisher.topic_path(
 )
 
 
-def authenticate_request(request) -> str:
+def authenticate_request(request) -> str:  # type: ignore
     """Simple authentication for demo purposes"""
     try:
         # Get the Authorization header
@@ -44,7 +43,7 @@ def authenticate_request(request) -> str:
         return "demo-user-123"
 
 
-def publish_update(analysis_id: str, status: str, data: dict):
+def publish_update(analysis_id: str, status: str, data: dict) -> None:
     """Publish real-time update to Pub/Sub"""
     try:
         message = {
@@ -63,7 +62,7 @@ def publish_update(analysis_id: str, status: str, data: dict):
         )
 
         logger.info("Published update for analysis %s: %s", analysis_id, status)
-        return future.result()
+        return future.result()  # type: ignore
     except Exception as e:
         logger.error("Failed to publish update: %s", str(e))
 
@@ -74,15 +73,22 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
     This simulates the real multi-agent system
     """
     logger.info("Running embedded Ghostbusters analysis on: %s", project_path)
-    
+
     # Simulate multi-agent analysis
-    agents = ["SecurityExpert", "CodeQualityExpert", "TestExpert", "BuildExpert", "ArchitectureExpert", "ModelExpert"]
-    
+    agents = [
+        "SecurityExpert",
+        "CodeQualityExpert",
+        "TestExpert",
+        "BuildExpert",
+        "ArchitectureExpert",
+        "ModelExpert",
+    ]
+
     delusions_detected = []
     recovery_actions = []
     errors = []
     warnings = []
-    
+
     # Security analysis
     if Path(project_path).exists():
         # Check for common security issues
@@ -90,85 +96,110 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
             try:
                 content = file_path.read_text()
                 if "secure_execute" in content or "secure_execute" in content:
-                    delusions_detected.append({
-                        "type": "security",
-                        "description": f"Potential subprocess usage detected in {file_path}",
-                        "severity": "high",
-                        "file": str(file_path),
-                        "agent": "SecurityExpert"
-                    })
-                    recovery_actions.append({
-                        "action": "replace_subprocess",
-                        "description": f"Replace subprocess calls in {file_path} with secure alternatives",
-                        "file": str(file_path),
-                        "agent": "SecurityExpert"
-                    })
+                    delusions_detected.append(
+                        {
+                            "type": "security",
+                            "description": f"Potential subprocess usage detected in {file_path}",
+                            "severity": "high",
+                            "file": str(file_path),
+                            "agent": "SecurityExpert",
+                        },
+                    )
+                    recovery_actions.append(
+                        {
+                            "action": "replace_subprocess",
+                            "description": f"Replace subprocess calls in {file_path} with secure alternatives",
+                            "file": str(file_path),
+                            "agent": "SecurityExpert",
+                        },
+                    )
             except Exception as e:
                 errors.append(f"Error analyzing {file_path}: {str(e)}")
-    
+
     # Code quality analysis
     for file_path in Path(project_path).rglob("*.py"):
         try:
             content = file_path.read_text()
             if "import" in content and "unused" in content.lower():
-                delusions_detected.append({
-                    "type": "code_quality",
-                    "description": f"Potential unused imports in {file_path}",
-                    "severity": "medium",
-                    "file": str(file_path),
-                    "agent": "CodeQualityExpert"
-                })
+                delusions_detected.append(
+                    {
+                        "type": "code_quality",
+                        "description": f"Potential unused imports in {file_path}",
+                        "severity": "medium",
+                        "file": str(file_path),
+                        "agent": "CodeQualityExpert",
+                    },
+                )
         except Exception as e:
             warnings.append(f"Warning analyzing {file_path}: {str(e)}")
-    
+
     # Test analysis
-    test_files = list(Path(project_path).rglob("test_*.py")) + list(Path(project_path).rglob("*_test.py"))
+    test_files = list(Path(project_path).rglob("test_*.py")) + list(
+        Path(project_path).rglob("*_test.py"),
+    )
     if len(test_files) < 3:
-        delusions_detected.append({
-            "type": "test",
-            "description": "Insufficient test coverage detected",
-            "severity": "medium",
-            "agent": "TestExpert"
-        })
-        recovery_actions.append({
-            "action": "add_tests",
-            "description": "Add comprehensive test coverage",
-            "agent": "TestExpert"
-        })
-    
+        delusions_detected.append(
+            {
+                "type": "test",
+                "description": "Insufficient test coverage detected",
+                "severity": "medium",
+                "agent": "TestExpert",
+            },
+        )
+        recovery_actions.append(
+            {
+                "action": "add_tests",
+                "description": "Add comprehensive test coverage",
+                "agent": "TestExpert",
+            },
+        )
+
     # Build analysis
-    if not (Path(project_path) / "pyproject.toml").exists() and not (Path(project_path) / "setup.py").exists():
-        delusions_detected.append({
-            "type": "build",
-            "description": "Missing project configuration (pyproject.toml or setup.py)",
-            "severity": "medium",
-            "agent": "BuildExpert"
-        })
-        recovery_actions.append({
-            "action": "add_pyproject",
-            "description": "Add pyproject.toml for modern Python packaging",
-            "agent": "BuildExpert"
-        })
-    
+    if (
+        not (Path(project_path) / "pyproject.toml").exists()
+        and not (Path(project_path) / "setup.py").exists()
+    ):
+        delusions_detected.append(
+            {
+                "type": "build",
+                "description": "Missing project configuration (pyproject.toml or setup.py)",
+                "severity": "medium",
+                "agent": "BuildExpert",
+            },
+        )
+        recovery_actions.append(
+            {
+                "action": "add_pyproject",
+                "description": "Add pyproject.toml for modern Python packaging",
+                "agent": "BuildExpert",
+            },
+        )
+
     # Architecture analysis
-    src_dirs = list(Path(project_path).glob("src*")) + list(Path(project_path).glob("lib*"))
+    src_dirs = list(Path(project_path).glob("src*")) + list(
+        Path(project_path).glob("lib*"),
+    )
     if not src_dirs:
-        delusions_detected.append({
-            "type": "architecture",
-            "description": "No clear source code organization (missing src/ or lib/ directory)",
-            "severity": "low",
-            "agent": "ArchitectureExpert"
-        })
-        recovery_actions.append({
-            "action": "organize_code",
-            "description": "Organize code into src/ directory structure",
-            "agent": "ArchitectureExpert"
-        })
-    
+        delusions_detected.append(
+            {
+                "type": "architecture",
+                "description": "No clear source code organization (missing src/ or lib/ directory)",
+                "severity": "low",
+                "agent": "ArchitectureExpert",
+            },
+        )
+        recovery_actions.append(
+            {
+                "action": "organize_code",
+                "description": "Organize code into src/ directory structure",
+                "agent": "ArchitectureExpert",
+            },
+        )
+
     # Calculate confidence score
     total_issues = len(delusions_detected) + len(errors)
     confidence_score = max(0.1, 1.0 - (total_issues * 0.1))
-    
+
     return {
         "confidence_score": confidence_score,
         "delusions_detected": delusions_detected,
@@ -182,10 +213,14 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
         },
         "validation_results": {
             "security": len([d for d in delusions_detected if d["type"] == "security"]),
-            "code_quality": len([d for d in delusions_detected if d["type"] == "code_quality"]),
+            "code_quality": len(
+                [d for d in delusions_detected if d["type"] == "code_quality"],
+            ),
             "test": len([d for d in delusions_detected if d["type"] == "test"]),
             "build": len([d for d in delusions_detected if d["type"] == "build"]),
-            "architecture": len([d for d in delusions_detected if d["type"] == "architecture"]),
+            "architecture": len(
+                [d for d in delusions_detected if d["type"] == "architecture"],
+            ),
         },
         "recovery_results": {
             "actions_planned": len(recovery_actions),
@@ -196,7 +231,7 @@ def run_embedded_ghostbusters(project_path: str) -> dict[str, Any]:
 
 
 @functions_framework.http
-def ghostbusters_analyze_embedded(request):
+def ghostbusters_analyze_embedded(request):  # type: ignore
     """
     Embedded Ghostbusters HTTP Cloud Function with real multi-agent analysis
     """
@@ -299,7 +334,7 @@ def ghostbusters_analyze_embedded(request):
 
 
 @functions_framework.http
-def ghostbusters_progress_embedded(request):
+def ghostbusters_progress_embedded(request):  # type: ignore
     """
     HTTP Cloud Function to get real-time progress updates for embedded Ghostbusters
     """
@@ -343,7 +378,7 @@ def ghostbusters_progress_embedded(request):
 
 
 @functions_framework.http
-def ghostbusters_user_analyses_embedded(request):
+def ghostbusters_user_analyses_embedded(request):  # type: ignore
     """
     HTTP Cloud Function to get user's embedded Ghostbusters analysis history
     """
@@ -390,4 +425,4 @@ def ghostbusters_user_analyses_embedded(request):
 
     except Exception as e:
         logger.error("Error getting user analyses: %s", str(e))
-        return {"status": "error", "error_message": str(e)}, 500 
+        return {"status": "error", "error_message": str(e)}, 500

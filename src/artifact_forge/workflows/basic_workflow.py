@@ -5,8 +5,6 @@ LangGraph workflow for artifact processing
 """
 
 import os
-
-# Import our agents
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -91,7 +89,7 @@ class ArtifactForgeWorkflow:
 
         return state
 
-    def _artifact_to_dict(self, artifact) -> dict[str, Any]:
+    def _artifact_to_dict(self, artifact) -> dict[str, Any]:  # type: ignore
         """Convert ArtifactInfo to dictionary"""
         return {
             "path": artifact.path,
@@ -104,7 +102,7 @@ class ArtifactForgeWorkflow:
             "metadata": artifact.metadata,
         }
 
-    def _parsed_artifact_to_dict(self, parsed_artifact) -> dict[str, Any]:
+    def _parsed_artifact_to_dict(self, parsed_artifact) -> dict[str, Any]:  # type: ignore
         """Convert ParsedArtifact to dictionary"""
         return {
             "path": parsed_artifact.path,
@@ -114,7 +112,7 @@ class ArtifactForgeWorkflow:
             "parsing_timestamp": parsed_artifact.parsing_timestamp.isoformat(),
         }
 
-    def _relationship_to_dict(self, relationship) -> dict[str, Any]:
+    def _relationship_to_dict(self, relationship) -> dict[str, Any]:  # type: ignore
         """Convert ArtifactRelationship to dictionary"""
         return {
             "source_artifact": relationship.source_artifact,

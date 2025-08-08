@@ -11,8 +11,8 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-import functions_framework
-from google.cloud import firestore, pubsub_v1
+import functions_framework  # type: ignore
+from google.cloud import firestore, pubsub_v1  # type: ignore
 
 # Import real Ghostbusters
 from src.ghostbusters.ghostbusters_orchestrator import run_ghostbusters
@@ -32,7 +32,7 @@ topic_path = publisher.topic_path(
 )
 
 
-def authenticate_request(request) -> str:
+def authenticate_request(request) -> str:  # type: ignore
     """Simple authentication for demo purposes"""
     try:
         # Get the Authorization header
@@ -46,7 +46,7 @@ def authenticate_request(request) -> str:
         return "demo-user-123"
 
 
-def publish_update(analysis_id: str, status: str, data: dict):
+def publish_update(analysis_id: str, status: str, data: dict) -> None:
     """Publish real-time update to Pub/Sub"""
     try:
         message = {
@@ -65,12 +65,12 @@ def publish_update(analysis_id: str, status: str, data: dict):
         )
 
         logger.info("Published update for analysis %s: %s", analysis_id, status)
-        return future.result()
+        return future.result()  # type: ignore
     except Exception as e:
         logger.error("Failed to publish update: %s", str(e))
 
 
-def convert_ghostbusters_result(result) -> dict[str, Any]:
+def convert_ghostbusters_result(result) -> dict[str, Any]:  # type: ignore
     """Convert Ghostbusters result to Cloud Function response format"""
     return {
         "confidence_score": result.confidence_score,
@@ -86,7 +86,7 @@ def convert_ghostbusters_result(result) -> dict[str, Any]:
 
 
 @functions_framework.http
-def ghostbusters_analyze_real(request):
+def ghostbusters_analyze_real(request):  # type: ignore
     """
     Real Ghostbusters HTTP Cloud Function with actual multi-agent analysis
     """
@@ -191,7 +191,7 @@ def ghostbusters_analyze_real(request):
 
 
 @functions_framework.http
-def ghostbusters_progress_real(request):
+def ghostbusters_progress_real(request):  # type: ignore
     """
     HTTP Cloud Function to get real-time progress updates for real Ghostbusters
     """
@@ -234,7 +234,7 @@ def ghostbusters_progress_real(request):
 
 
 @functions_framework.http
-def ghostbusters_user_analyses_real(request):
+def ghostbusters_user_analyses_real(request):  # type: ignore
     """
     HTTP Cloud Function to get user's real Ghostbusters analysis history
     """
@@ -279,4 +279,4 @@ def ghostbusters_user_analyses_real(request):
 
     except Exception as e:
         logger.error("Error getting user analyses: %s", str(e))
-        return {"status": "error", "error_message": str(e)}, 500 
+        return {"status": "error", "error_message": str(e)}, 500

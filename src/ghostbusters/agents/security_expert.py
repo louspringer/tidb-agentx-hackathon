@@ -10,7 +10,7 @@ from .base_expert import BaseExpert, DelusionResult
 class SecurityExpert(BaseExpert):
     """Expert agent for detecting security vulnerabilities."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the security expert."""
         super().__init__("SecurityExpert")
 

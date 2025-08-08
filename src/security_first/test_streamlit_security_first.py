@@ -12,26 +12,25 @@ Tests cover:
 - Performance: Caching, parallel processing, memory management
 """
 
-import pytest
-from unittest.mock import Mock, patch, MagicMock
-from datetime import datetime, timedelta
-import jwt
-from cryptography.fernet import Fernet
-import streamlit as st
-from pydantic import ValidationError
-
 # Import the app components
 import sys
+from datetime import datetime, timedelta
+from unittest.mock import Mock, patch
+
+import jwt
+import pytest
+from pydantic import ValidationError
 
 sys.path.append("streamlit_app")
-    SecurityManager,
-    InputValidator,
-    DeploymentManager,
-    MonitoringDashboard,
-    OpenFlowQuickstartApp,
-    SnowflakeConfig,
-    OpenFlowConfig,
+from streamlit_app import (  # type: ignore
     SECURITY_CONFIG,
+    DeploymentManager,
+    InputValidator,
+    MonitoringDashboard,
+    OpenFlowConfig,
+    OpenFlowQuickstartApp,
+    SecurityManager,
+    SnowflakeConfig,
 )
 
 
@@ -74,7 +73,8 @@ class TestSecurityManager:
         """Test JWT session token creation"""
         # Create session token
         token = self.security_manager.create_session_token(
-            self.test_user_id, self.test_role
+            self.test_user_id,
+            self.test_role,
         )
 
         # Verify token is not empty
@@ -90,7 +90,8 @@ class TestSecurityManager:
         """Test session validation with valid token"""
         # Create valid token
         token = self.security_manager.create_session_token(
-            self.test_user_id, self.test_role
+            self.test_user_id,
+            self.test_role,
         )
 
         # Validate token
@@ -108,7 +109,9 @@ class TestSecurityManager:
             "exp": datetime.utcnow() - timedelta(hours=1),  # Expired
         }
         expired_token = jwt.encode(
-            payload, SECURITY_CONFIG["jwt_secret"], algorithm="HS256"
+            payload,
+            SECURITY_CONFIG["jwt_secret"],
+            algorithm="HS256",
         )
 
         # Validate token
@@ -240,12 +243,12 @@ class TestDeploymentManager:
         self.deployment_manager = DeploymentManager()
 
     @patch("boto3.client")
-    def test_deploy_stack_success(self, mock_boto3_client) -> None:
+    def test_deploy_stack_success(self, mock_boto3_client) -> None:  # type: ignore
         """Test successful stack deployment"""
         # Mock successful response
         mock_cloudformation = Mock()
         mock_cloudformation.create_stack.return_value = {
-            "StackId": "arn:aws:cloudformation:us-east-1:123456789012:stack/test-stack/12345678-1234-1234-1234-123456789012"
+            "StackId": "arn:aws:cloudformation:us-east-1:123456789012:stack/test-stack/12345678-1234-1234-1234-123456789012",
         }
         mock_boto3_client.return_value = mock_cloudformation
 
@@ -261,7 +264,7 @@ class TestDeploymentManager:
         assert "stack_id" in result
 
     @patch("boto3.client")
-    def test_deploy_stack_failure(self, mock_boto3_client) -> None:
+    def test_deploy_stack_failure(self, mock_boto3_client) -> None:  # type: ignore
         """Test failed stack deployment"""
         # Mock failure response
         mock_cloudformation = Mock()
@@ -280,12 +283,12 @@ class TestDeploymentManager:
         assert "error_message" in result
 
     @patch("boto3.client")
-    def test_get_stack_status(self, mock_boto3_client) -> None:
+    def test_get_stack_status(self, mock_boto3_client) -> None:  # type: ignore
         """Test getting stack status"""
         # Mock successful response
         mock_cloudformation = Mock()
         mock_cloudformation.describe_stacks.return_value = {
-            "Stacks": [{"StackStatus": "CREATE_COMPLETE"}]
+            "Stacks": [{"StackStatus": "CREATE_COMPLETE"}],
         }
         mock_boto3_client.return_value = mock_cloudformation
 
@@ -296,7 +299,7 @@ class TestDeploymentManager:
         assert status == "CREATE_COMPLETE"
 
     @patch("boto3.client")
-    def test_get_stack_events(self, mock_boto3_client) -> None:
+    def test_get_stack_events(self, mock_boto3_client) -> None:  # type: ignore
         """Test getting stack events"""
         # Mock successful response
         mock_cloudformation = Mock()
@@ -306,8 +309,8 @@ class TestDeploymentManager:
                     "LogicalResourceId": "TestResource",
                     "ResourceStatus": "CREATE_COMPLETE",
                     "Timestamp": datetime.now(),
-                }
-            ]
+                },
+            ],
         }
         mock_boto3_client.return_value = mock_cloudformation
 

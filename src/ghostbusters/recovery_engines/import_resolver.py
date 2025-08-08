@@ -9,7 +9,7 @@ from .base_recovery_engine import BaseRecoveryEngine, RecoveryResult
 class ImportResolver(BaseRecoveryEngine):
     """Recovery engine for fixing import issues."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the import resolver."""
         super().__init__("ImportResolver")
 

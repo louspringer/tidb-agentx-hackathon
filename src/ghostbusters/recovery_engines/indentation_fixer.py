@@ -9,7 +9,7 @@ from .base_recovery_engine import BaseRecoveryEngine, RecoveryResult
 class IndentationFixer(BaseRecoveryEngine):
     """Recovery engine for fixing indentation issues."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the indentation fixer."""
         super().__init__("IndentationFixer")
 

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class RateLimiting:
     """Rate limiting implementation to prevent abuse."""
 
-    def __init__(self, redis_client) -> None:
+    def __init__(self, redis_client) -> None:  # type: ignore
         self.redis = redis_client
         self.default_limit = 100  # requests per minute
         self.default_window = 60  # seconds

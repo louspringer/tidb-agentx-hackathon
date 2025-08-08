@@ -7,7 +7,7 @@ Generates a complete perfect code generator with all classes
 import logging
 from pathlib import Path
 
-from linting_aware_model import (
+from linting_aware_model import (  # type: ignore
     LintingAwareClassDefinition,
     LintingAwareCodeFile,
     LintingAwareCodeGenerator,
@@ -440,7 +440,7 @@ def create_complete_linting_aware_generator() -> LintingAwareCodeFile:
     )
 
 
-def main():
+def main() -> None:
     """Generate the complete perfect linting-aware code generator"""
     logging.basicConfig(level=logging.INFO)
 

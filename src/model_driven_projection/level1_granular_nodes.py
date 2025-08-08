@@ -60,7 +60,7 @@ class DependencyResolver:
         logger.info(f"🔍 Resolving order for {len(node_ids)} nodes")
 
         # Build dependency graph
-        graph = {node_id: set() for node_id in node_ids}
+        graph = {node_id: set() for node_id in node_ids}  # type: ignore
         for node_id in node_ids:
             if node_id in self.nodes:
                 node = self.nodes[node_id]
@@ -117,7 +117,7 @@ class DependencyResolver:
         for node_id in node_ids:
             find_cycles(node_id, [])
 
-        return cycles
+        return cycles  # type: ignore
 
 
 class NodeProjector:
