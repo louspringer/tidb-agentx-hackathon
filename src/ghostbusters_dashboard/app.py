@@ -268,9 +268,7 @@ def show_overview(user_id: str) -> None:
                     confidence_color = (
                         "green"
                         if analysis["confidence_score"] > 0.8
-                        else "orange"
-                        if analysis["confidence_score"] > 0.6
-                        else "red"
+                        else "orange" if analysis["confidence_score"] > 0.6 else "red"
                     )
                     st.markdown(
                         f"<span style='color: {confidence_color}; font-weight: bold;'>{analysis['confidence_score']:.2f}</span>",
@@ -351,9 +349,7 @@ def show_my_analyses(user_id: str) -> None:
                     confidence_color = (
                         "green"
                         if analysis["confidence_score"] > 0.8
-                        else "orange"
-                        if analysis["confidence_score"] > 0.6
-                        else "red"
+                        else "orange" if analysis["confidence_score"] > 0.6 else "red"
                     )
                     st.markdown(
                         f"<span style='color: {confidence_color}; font-weight: bold;'>{analysis['confidence_score']:.2f}</span>",

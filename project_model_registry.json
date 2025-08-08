@@ -34,9 +34,43 @@
       ]
     },
     "cloudformation": {
+      "patterns": [
+        "*.template.yaml",
+        "*.template.yml",
+        "*.cfn.yaml",
+        "*.cfn.yml",
+        "cloudformation/*.yaml",
+        "cloudformation/*.yml",
+        "**/*cloudformation*.yaml",
+        "**/*cloudformation*.yml"
+      ],
+      "content_indicators": [
+        "AWSTemplateFormatVersion",
+        "Resources:",
+        "Parameters:",
+        "Outputs:",
+        "Mappings:",
+        "Conditions:",
+        "Transform:",
+        "!Ref",
+        "!Sub",
+        "!GetAtt",
+        "!Join",
+        "!Split",
+        "!Select",
+        "!FindInMap",
+        "!If",
+        "!Equals",
+        "!And",
+        "!Or",
+        "!Not"
+      ],
       "linter": "cfn-lint",
       "validator": "aws-cloudformation",
-      "exclusions": [],
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Don't lint CloudFormation with generic YAML tools",
         "Use cfn-lint for CloudFormation validation"
@@ -68,6 +102,38 @@
       ]
     },
     "streamlit": {
+      "patterns": [
+        "src/streamlit/*.py",
+        "src/streamlit/**/*.py",
+        "*.py"
+      ],
+      "content_indicators": [
+        "streamlit",
+        "st.",
+        "st.write",
+        "st.title",
+        "st.header",
+        "st.subheader",
+        "st.text",
+        "st.markdown",
+        "st.button",
+        "st.selectbox",
+        "st.slider",
+        "st.file_uploader",
+        "st.sidebar",
+        "st.container",
+        "st.columns",
+        "st.expander",
+        "st.form",
+        "st.session_state"
+      ],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "ast-parse",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Use flake8 for Streamlit Python linting",
         "Format Streamlit code with black",
@@ -75,15 +141,76 @@
       ]
     },
     "security_first": {
-      "linter": "yamllint",
-      "validator": "jsonschema",
-      "exclusions": [],
+      "patterns": [
+        "src/security_first/*.py",
+        "src/security_first/**/*.py",
+        "src/security_first/*.md",
+        "src/security_first/*.json",
+        "src/security_first/*.sh"
+      ],
+      "content_indicators": [
+        "security",
+        "encryption",
+        "authentication",
+        "authorization",
+        "https",
+        "ssl",
+        "tls",
+        "csrf",
+        "rate_limit",
+        "input_validation",
+        "sanitize",
+        "secure",
+        "password",
+        "credential",
+        "token",
+        "jwt",
+        "bcrypt",
+        "cryptography"
+      ],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "ast-parse",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Use yamllint for configuration YAML files",
-        "Apply schema validation for config files"
+        "Apply schema validation for config files",
+        "HTTPS enforcement for all connections",
+        "Rate limiting to prevent abuse",
+        "CSRF protection for session security"
       ]
     },
     "mdc_generator": {
+      "patterns": [
+        "src/mdc_generator/*.py",
+        "src/mdc_generator/**/*.py",
+        "**/*mdc*.py",
+        "*.mdc",
+        "**/*.mdc",
+        "rules/*.mdc"
+      ],
+      "content_indicators": [
+        "mdc",
+        "MDC",
+        "markdown",
+        "cursor",
+        "rule",
+        "generator",
+        "template",
+        "format",
+        "parse",
+        "generate"
+      ],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "ast-parse",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Use flake8 for MDC generator Python linting",
         "Format MDC generator code with black",
@@ -91,6 +218,37 @@
       ]
     },
     "healthcare_cdc": {
+      "patterns": [
+        "healthcare-cdc/*.py",
+        "healthcare-cdc/**/*.py",
+        "healthcare-cdc/*.md",
+        "healthcare-cdc/*.sql",
+        "healthcare-cdc/**/*.sql",
+        "tests/test_healthcare_cdc*.py"
+      ],
+      "content_indicators": [
+        "healthcare",
+        "CDC",
+        "HIPAA",
+        "PHI",
+        "patient",
+        "provider",
+        "claim",
+        "medical",
+        "health",
+        "compliance",
+        "audit",
+        "encryption",
+        "authentication",
+        "authorization"
+      ],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "ast-parse",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Enforce HIPAA compliance validation",
         "Implement PHI detection and validation",
@@ -103,6 +261,9 @@
     "mcp_integration": {
       "patterns": [
         "src/mcp_integration/*.py",
+        "src/mcp_integration/**/*.py",
+        "src/**/mcp_*.py",
+        "**/*mcp_*.py",
         "mcp-git-ingest/**/*",
         "*.mcp"
       ],
@@ -238,10 +399,34 @@
       }
     },
     "rule_compliance": {
+      "patterns": [
+        "rules/*.md",
+        "rules/*.mdc",
+        "*.cursor",
+        "**/*.cursor",
+        ".cursor/**/*",
+        "**/*rule*.py",
+        "**/*compliance*.py"
+      ],
+      "content_indicators": [
+        "rule",
+        "compliance",
+        "enforcement",
+        "cursor",
+        "deterministic",
+        "validation",
+        "check",
+        "lint",
+        "format",
+        "validate"
+      ],
       "linter": "shellcheck",
       "formatter": "black",
       "validator": "pytest",
-      "exclusions": [],
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Rule compliance enforcement system",
         "Deterministic editing enforcement",
@@ -249,10 +434,38 @@
       ]
     },
     "package_management": {
+      "patterns": [
+        "pyproject.toml",
+        "uv.lock",
+        "requirements*.txt",
+        "setup.py",
+        "Pipfile",
+        "poetry.lock",
+        "*.toml"
+      ],
+      "content_indicators": [
+        "uv",
+        "pip",
+        "poetry",
+        "pipenv",
+        "requirements",
+        "dependencies",
+        "dev-dependencies",
+        "package",
+        "install",
+        "sync",
+        "add",
+        "remove",
+        "update",
+        "lock"
+      ],
       "linter": "uv check",
       "validator": "uv sync",
       "formatter": "uv format",
-      "exclusions": [],
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
       "requirements": [
         "Use UV for all Python package management",
         "Enforce UV lock file usage",
@@ -265,7 +478,10 @@
         "src/ghostbusters/*.py",
         "src/ghostbusters/**/*.py",
         "tests/test_ghostbusters*.py",
-        "**/*.py"
+        "src/ghostbusters_*.py",
+        "**/*ghostbusters*.py",
+        "ghostbusters_*.py",
+        "**/ghostbusters_*.py"
       ],
       "content_indicators": [
         "GhostbustersOrchestrator",
@@ -292,9 +508,9 @@
         "shell_security",
         "performance_hanging"
       ],
-      "linter": "ghostbusters-orchestrator",
-      "formatter": "ghostbusters-recovery",
-      "validator": "ghostbusters-validator",
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "ast-parse",
       "exclusions": [
         "__pycache__/*",
         "*.pyc"
@@ -322,7 +538,8 @@
         "src/ghostbusters_gcp/*.py",
         "src/ghostbusters_gcp/**/*.py",
         "tests/test_ghostbusters_gcp*.py",
-        "**/*ghostbusters_gcp*.py"
+        "**/*ghostbusters_gcp*.py",
+        "**/ghostbusters_gcp/**/*.py"
       ],
       "content_indicators": [
         "functions_framework",

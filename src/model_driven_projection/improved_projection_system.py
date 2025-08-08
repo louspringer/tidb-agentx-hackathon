@@ -27,9 +27,9 @@ class ImprovedProjectionSystem:
     def __init__(self) -> None:
         self.extracted_nodes: dict[str, CodeNode] = {}
         self.position_counter = 0
-        self.seen_definitions: set[
-            tuple[str, str, int]
-        ] = set()  # (type, name, line_number)
+        self.seen_definitions: set[tuple[str, str, int]] = (
+            set()
+        )  # (type, name, line_number)
 
     def extract_and_project_file(self, file_path: str) -> str:
         """Extract and project with improved functional equivalence."""

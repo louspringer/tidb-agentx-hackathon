@@ -55,7 +55,7 @@ Return your analysis as a JSON array of questions, each with:
 
 Focus on identifying what might be missing or overlooked.
 """
-input_text = system_message + "\n\n" + user_message
+            input_text = system_message + "\n\n" + user_message
             input_tokens = estimate_tokens(input_text)
             total_input_tokens += input_tokens
             # Estimate output tokens (response)
@@ -96,7 +96,7 @@ def analyze_langgraph_costs():
     if not os.path.exists(analysis_file):
         print("❌ Analysis file not found")
         return {}
-with open(analysis_file, "r") as f:
+    with open(analysis_file, "r") as f:
         data = json.load(f)
 
     total_input_tokens = 0
@@ -126,7 +126,7 @@ Return your analysis as a JSON array of findings, each with:
 
 Focus on your area of expertise and provide unique insights that other perspectives might miss.
 """
-input_text = system_message + "\n\n" + user_message
+            input_text = system_message + "\n\n" + user_message
             input_tokens = estimate_tokens(input_text)
             total_input_tokens += input_tokens
             # Estimate output tokens (response with 5 findings)
@@ -168,7 +168,7 @@ def analyze_synthesis_costs():
     if not os.path.exists(synthesis_file):
         print("❌ Synthesis file not found")
         return {}
-with open(synthesis_file, "r") as f:
+    with open(synthesis_file, "r") as f:
         data = json.load(f)
 
     # One synthesis call that processed all findings
@@ -216,8 +216,8 @@ For each fix, provide:
 
 Return as a JSON array of fixes, prioritizing fixes that address multiple high-priority stakeholder concerns.
 """
-input_text = system_message + "\n\n" + user_message
-    input_tokens = estimate_tokens(input_text)
+            input_text = system_message + "\n\n" + user_message
+            input_tokens = estimate_tokens(input_text)
 
     # Estimate output tokens (synthesis response with 6 fixes)
     output_text = json.dumps(data.get("fixes", []), indent=2)
@@ -255,7 +255,7 @@ def main():
     multi_dimensional = analyze_multi_dimensional_costs()
     langgraph = analyze_langgraph_costs()
     synthesis = analyze_synthesis_costs()
-# Calculate totals
+    # Calculate totals
     total_calls = multi_dimensional.get("calls", 0) + langgraph.get("calls", 0) + synthesis.get("calls", 0)
     total_input_tokens = multi_dimensional.get("input_tokens", 0) + langgraph.get("input_tokens", 0) + synthesis.get("input_tokens", 0)
     total_output_tokens = multi_dimensional.get("output_tokens", 0) + langgraph.get("output_tokens", 0) + synthesis.get("output_tokens", 0)

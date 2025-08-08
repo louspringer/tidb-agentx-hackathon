@@ -22,8 +22,8 @@ class SubprocessMigrator:
         for py_file in self.src_dir.rglob("*.py"):
             try:
                 content = py_file.read_text()
-# import subprocess  # REMOVED - replaced with secure_execute
-                    subprocess_files.append(py_file)
+                # import subprocess  # REMOVED - replaced with secure_execute
+                subprocess_files.append(py_file)
             except Exception as e:
                 print(f"⚠️ Could not read {py_file}: {e}")
 

@@ -112,7 +112,9 @@ def test_ghostbusters_analyze_success(mock_firestore):
 def test_ghostbusters_history_success(mock_firestore):
     """Test history retrieval"""
     # Mock: return empty list for simplicity
-    mock_firestore.collection.return_value.order_by.return_value.limit.return_value.stream.return_value = []
+    mock_firestore.collection.return_value.order_by.return_value.limit.return_value.stream.return_value = (
+        []
+    )
 
     request = MockRequest({"limit": 5})
     result = ghostbusters_history(request)

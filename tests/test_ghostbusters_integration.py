@@ -44,7 +44,9 @@ def test_ghostbusters_domain_in_model() -> None:
     assert (
         "tests/test_ghostbusters*.py" in patterns
     ), "Should include Ghostbusters test files"
-    assert "**/*ghostbusters*.py" in patterns, "Should include all Ghostbusters Python files"
+    assert (
+        "**/*ghostbusters*.py" in patterns
+    ), "Should include all Ghostbusters Python files"
 
     # Check content indicators
     content_indicators = ghostbusters_domain["content_indicators"]
@@ -66,15 +68,11 @@ def test_ghostbusters_domain_in_model() -> None:
         ), f"Should include '{indicator}' in content indicators"
 
     # Check tools
-    assert (
-        ghostbusters_domain["linter"] == "flake8"
-    ), "Should use flake8 as linter"
+    assert ghostbusters_domain["linter"] == "flake8", "Should use flake8 as linter"
     assert (
         ghostbusters_domain["validator"] == "ast-parse"
     ), "Should use ast-parse as validator"
-    assert (
-        ghostbusters_domain["formatter"] == "black"
-    ), "Should use black as formatter"
+    assert ghostbusters_domain["formatter"] == "black", "Should use black as formatter"
 
     # Check requirements
     requirements = ghostbusters_domain["requirements"]
