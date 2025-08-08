@@ -7,7 +7,7 @@ Enforces proper type assertion patterns for Any -> Specific Type conversions
 import ast
 import re
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 
 
 class TypeAssertionEnforcer:
@@ -35,12 +35,12 @@ class TypeAssertionEnforcer:
             },
         }
 
-    def check_file(self, file_path: Path) -> Dict[str, Any]:
+    def check_file(self, file_path: Path) -> dict[str, Any]:
         """Check a file for proper type assertions"""
         violations = []
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 content = f.read()
 
             tree = ast.parse(content)
@@ -58,7 +58,7 @@ class TypeAssertionEnforcer:
             "clean": len(violations) == 0,
         }
 
-    def _check_function(self, func: ast.FunctionDef, content: str) -> List[str]:
+    def _check_function(self, func: ast.FunctionDef, content: str) -> list[str]:
         """Check a function for type assertion violations"""
         violations = []
 
@@ -72,7 +72,7 @@ class TypeAssertionEnforcer:
             if self._has_pattern(func, pattern_name):
                 if not self._has_proper_assertion(func, pattern_info):
                     violations.append(
-                        f"Function '{func.name}' uses {pattern_name} but missing proper type assertion"
+                        f"Function '{func.name}' uses {pattern_name} but missing proper type assertion",
                     )
 
         return violations
@@ -83,7 +83,9 @@ class TypeAssertionEnforcer:
         return pattern in func_code
 
     def _has_proper_assertion(
-        self, func: ast.FunctionDef, pattern_info: Dict[str, str]
+        self,
+        func: ast.FunctionDef,
+        pattern_info: dict[str, str],
     ) -> bool:
         """Check if function has proper type assertion"""
         func_code = ast.unparse(func)
@@ -92,9 +94,9 @@ class TypeAssertionEnforcer:
         assert_pattern = f"assert isinstance(.*, {pattern_info['assert_type']})"
         return bool(re.search(assert_pattern, func_code))
 
-    def enforce_patterns(self, directory: Path = Path(".")) -> Dict[str, Any]:
+    def enforce_patterns(self, directory: Path = Path()) -> dict[str, Any]:
         """Enforce type assertion patterns across directory"""
-        results: Dict[str, Any] = {
+        results: dict[str, Any] = {
             "files_checked": 0,
             "files_with_violations": 0,
             "total_violations": 0,

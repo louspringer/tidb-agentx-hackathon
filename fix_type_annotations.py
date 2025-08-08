@@ -4,8 +4,9 @@ Fix common type annotation issues
 """
 
 import re
-from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 
 def fix_type_annotations_in_file(filepath: str) -> bool:
@@ -140,7 +141,7 @@ def main():
 
     # Test MyPy again
     print("\n🧪 Testing MyPy after fixes...")
-# import subprocess  # REMOVED - replaced with secure_execute
+    # import subprocess  # REMOVED - replaced with secure_execute
 
     result = secure_execute(
         ["uv", "run", "mypy", "src/", "--ignore-missing-imports"],

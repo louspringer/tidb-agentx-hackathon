@@ -3,20 +3,19 @@
 Tests for Healthcare CDC Domain Model
 """
 
-import pytest
 import json
 from datetime import datetime
-import re
+
 from healthcare_cdc_domain_model import (
+    CDCEvent,
+    ClaimStatus,
+    EventType,
     HealthcareCDCDomainModel,
     HealthcareClaim,
     PatientInfo,
-    ProviderInfo,
     PayerInfo,
-    CDCEvent,
-    EventType,
-    ClaimStatus,
     PaymentStatus,
+    ProviderInfo,
 )
 
 

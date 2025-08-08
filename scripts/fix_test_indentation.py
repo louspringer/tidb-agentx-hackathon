@@ -12,7 +12,7 @@ def fix_test_file(file_path: str) -> None:
     """Fix indentation issues in a test file"""
     print(f"🔧 Fixing {file_path}")
 
-    with open(file_path, "r") as f:
+    with open(file_path) as f:
         content = f.read()
 
     # Remove merge conflict markers

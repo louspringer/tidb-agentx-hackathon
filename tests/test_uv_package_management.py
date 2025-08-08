@@ -4,11 +4,8 @@ UV Package Management Tests
 Tests UV package management functionality using projected artifact patterns
 """
 
-import json
 import sys
 from pathlib import Path
-from unittest.mock import Mock
-
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -34,7 +31,7 @@ def test_pyproject_toml_structure():
     """Test pyproject.toml structure"""
     pyproject_file = Path("pyproject.toml")
 
-    with open(pyproject_file, "r") as f:
+    with open(pyproject_file) as f:
         content = f.read()
 
     # Test that it contains required sections

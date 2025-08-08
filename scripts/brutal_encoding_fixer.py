@@ -90,7 +90,7 @@ def main() -> None:
 
     # Fix the problematic file
     problem_file = Path(
-        ".venv/lib/python3.12/site-packages/joblib/test/test_func_inspect_special_encoding.py"
+        ".venv/lib/python3.12/site-packages/joblib/test/test_func_inspect_special_encoding.py",
     )
 
     if problem_file.exists():

@@ -7,15 +7,13 @@ Based on: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_
 Original Contributors: Snowflake Inc.
 """
 
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Dict, List, Optional, Any
-from enum import Enum
-from datetime import datetime
 import json
-import re
 import os
-from uuid import UUID
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Optional
 
 
 class EventType(Enum):
@@ -90,10 +88,10 @@ class HealthcareClaim:
     claim_id: str
     member_id: str
     insurance_plan: str
-    diagnosis_codes: List[str]
+    diagnosis_codes: list[str]
     date_of_service: str
     total_charge: float
-    procedure_details: Dict[str, Any]
+    procedure_details: dict[str, Any]
     claim_status: ClaimStatus
     payment_status: PaymentStatus
     created_timestamp: str
@@ -184,9 +182,9 @@ class PipelineConfiguration:
     """Openflow Pipeline Configuration"""
 
     pipeline_name: str = "HealthcareCDC"
-    processors: List[Dict[str, Any]] = field(default_factory=list)
+    processors: list[dict[str, Any]] = field(default_factory=list)
 
-    def add_processor(self, processor_type: str, config: Dict[str, Any]):
+    def add_processor(self, processor_type: str, config: dict[str, Any]):
         """Add a processor to the pipeline"""
         self.processors.append({"type": processor_type, "config": config})
 
@@ -213,7 +211,8 @@ class HealthcareCDCDomainModel:
 
         # Flat JSON (for nested structures)
         self.pipeline_config.add_processor(
-            "FlatJson", {"flattenArrays": True, "flattenObjects": True},
+            "FlatJson",
+            {"flattenArrays": True, "flattenObjects": True},
         )
 
         # Jolt Transform (for data transformation)
@@ -297,7 +296,8 @@ class HealthcareCDCDomainModel:
 
         # Execute SQL for merging CDC events
         self.pipeline_config.add_processor(
-            "ExecuteSQLStatement", {"sqlStatement": self._get_merge_sql()},
+            "ExecuteSQLStatement",
+            {"sqlStatement": self._get_merge_sql()},
         )
 
     def _get_merge_sql(self) -> str:
@@ -308,7 +308,7 @@ class HealthcareCDCDomainModel:
             sql_file_path = Path(__file__).parent / "sql" / "merge_cdc_operations.sql"
 
         try:
-            with open(sql_file_path, "r") as f:
+            with open(sql_file_path) as f:
                 return f.read()
         except FileNotFoundError:
             raise FileNotFoundError(
@@ -317,12 +317,12 @@ class HealthcareCDCDomainModel:
                 f"To resolve: Ensure the SQL template file exists or specify a custom path using sql_template_path parameter\n"
                 f"Note: This is a demo environment - in production, use proper file management",
             )
-        except (OSError, IOError) as e:
+        except OSError as e:
             raise OSError(f"Error reading SQL template file: {e}")
         except (ValueError, TypeError) as e:
             raise ValueError(f"Error processing SQL template content: {e}")
 
-    def generate_cloudformation_template(self) -> Dict[str, Any]:
+    def generate_cloudformation_template(self) -> dict[str, Any]:
         """Generate CloudFormation template for the healthcare CDC infrastructure"""
         return {
             "AWSTemplateFormatVersion": "2010-09-09",
@@ -455,7 +455,6 @@ class HealthcareCDCDomainModel:
                     "Type": "AWS::EC2::Instance",
                     "Properties": {
                         "InstanceType": {"Ref": "EC2InstanceType"},
-
                         "SubnetId": {"Ref": "SubnetId"},
                         "SecurityGroupIds": [{"Ref": "EC2SecurityGroup"}],
                         "IamInstanceProfile": {"Ref": "EC2InstanceProfile"},
@@ -471,7 +470,6 @@ class HealthcareCDCDomainModel:
                                     "pip install boto3\n",
                                     "echo 'Setting up Kinesis stream...' >> /var/log/user-data.log\n",
                                     "aws kinesis put-record --stream-name ${StreamName} --partition-key test --data test >> /var/log/user-data.log 2>&1\n",
-
                                 ],
                                 "StreamName": {"Ref": "InsuranceClaimsStream"},
                             },

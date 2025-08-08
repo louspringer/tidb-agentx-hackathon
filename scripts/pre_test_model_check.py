@@ -5,14 +5,16 @@ This script MUST be run before any testing to ensure model-driven approach.
 """
 
 import json
-from src.secure_shell_service.secure_executor import secure_execute
 import sys
+
 # import subprocess  # REMOVED - replaced with secure_execute
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 
-def load_project_model() -> Dict[str, Any]:
+def load_project_model() -> dict[str, Any]:
     """Load the project model registry."""
     model_path = Path("project_model_registry.json")
     if not model_path.exists():
@@ -23,7 +25,8 @@ def load_project_model() -> Dict[str, Any]:
     with open(model_path) as f:
         data = json.load(f)
         assert isinstance(
-            data, dict
+            data,
+            dict,
         ), "project_model_registry.json must be a JSON object"
         return data
 
@@ -86,7 +89,9 @@ def run_model_driven_tests(model: Any, testing_domain: Any) -> None:
     if testing_domain.get("type_checker") == "mypy":
         print("   Step 3: Running mypy type checking...")
         result = secure_execute(
-            ["python", "-m", "mypy", "tests/"], capture_output=True, text=True
+            ["python", "-m", "mypy", "tests/"],
+            capture_output=True,
+            text=True,
         )
         if result.returncode != 0:
             print(f"   ⚠️  Type checking issues found:\n{result.stdout}")

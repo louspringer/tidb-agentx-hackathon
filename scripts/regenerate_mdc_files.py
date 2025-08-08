@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 Regenerate all .mdc files using the Python model

@@ -7,7 +7,6 @@ Interactive setup for Openflow deployment configuration
 import os
 import re
 import sys
-from pathlib import Path
 
 # Color codes for output
 RED = "\033[91m"
@@ -116,7 +115,7 @@ def main():
     # Check if config.env already exists
     if os.path.exists("config.env"):
         response = input(
-            f"{YELLOW}config.env already exists. Overwrite? (y/N):{END} "
+            f"{YELLOW}config.env already exists. Overwrite? (y/N):{END} ",
         ).lower()
         if response != "y":
             print("Setup cancelled.")
@@ -132,22 +131,26 @@ def main():
     )
 
     values["organization"] = prompt_with_validation(
-        "Enter your Snowflake organization name", example="MY_ORG"
+        "Enter your Snowflake organization name",
+        example="MY_ORG",
     )
 
     values["account"] = prompt_with_validation(
-        "Enter your Snowflake account identifier", example="ABC123"
+        "Enter your Snowflake account identifier",
+        example="ABC123",
     )
 
     print_header("OAuth Configuration")
     print_warning("You need these from Snowflake support!")
 
     values["oauth_integration"] = prompt_with_validation(
-        "Enter OAuth integration name", example="my-oauth-integration"
+        "Enter OAuth integration name",
+        example="my-oauth-integration",
     )
 
     values["oauth_client_id"] = prompt_with_validation(
-        "Enter OAuth client ID", example="8ThBttNtEB44hNz7yxGXZ7Jouuw="
+        "Enter OAuth client ID",
+        example="8ThBttNtEB44hNz7yxGXZ7Jouuw=",
     )
 
     values["oauth_client_secret"] = prompt_with_validation(
@@ -165,15 +168,20 @@ def main():
     )
 
     values["data_plane_uuid"] = prompt_with_validation(
-        "Enter data plane UUID", validate_uuid, "your-data-plane-uuid-here"
+        "Enter data plane UUID",
+        validate_uuid,
+        "your-data-plane-uuid-here",
     )
 
     values["data_plane_key"] = prompt_with_validation(
-        "Enter unique deployment key", example="my-deployment-2024"
+        "Enter unique deployment key",
+        example="my-deployment-2024",
     )
 
     values["telemetry_url"] = prompt_with_validation(
-        "Enter telemetry URL", validate_url, "https://telemetry.snowflake-customer.app"
+        "Enter telemetry URL",
+        validate_url,
+        "https://telemetry.snowflake-customer.app",
     )
 
     values["control_plane_url"] = prompt_with_validation(

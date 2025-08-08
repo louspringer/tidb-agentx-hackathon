@@ -5,8 +5,9 @@ MDC Linter - Lint .mdc files for proper structure and content
 
 import os
 import sys
-import yaml
 from pathlib import Path
+
+import yaml
 
 
 class MDCLinter:
@@ -45,7 +46,7 @@ class MDCLinter:
             frontmatter_start = lines.index("---")
             frontmatter_end = lines.index("---", frontmatter_start + 1)
             frontmatter_content = "\n".join(
-                lines[frontmatter_start + 1 : frontmatter_end]
+                lines[frontmatter_start + 1 : frontmatter_end],
             )
             frontmatter = yaml.safe_load(frontmatter_content)
 
@@ -111,13 +112,16 @@ class MDCLinter:
             return False
 
     def validate_deterministic_editing_compliance(
-        self, file_path: str, content: str
+        self,
+        file_path: str,
+        content: str,
     ) -> bool:
         """Validate deterministic editing compliance"""
         # Check for deterministic patterns
         if "TODO" in content or "FIXME" in content:
             self.log_warning(
-                file_path, "Contains TODO/FIXME - ensure deterministic resolution"
+                file_path,
+                "Contains TODO/FIXME - ensure deterministic resolution",
             )
 
         return True
@@ -125,7 +129,7 @@ class MDCLinter:
     def lint_file(self, file_path: str) -> bool:
         """Lint a single .mdc file"""
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 content = f.read()
 
             is_valid = True

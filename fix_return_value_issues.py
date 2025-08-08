@@ -4,10 +4,11 @@ Fix Return Value Issues - Targeted Fix for Most Common MyPy Pattern
 """
 
 import ast
-from src.secure_shell_service.secure_executor import secure_execute
 import re
 from pathlib import Path
 from typing import Any
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 
 def find_return_value_issues(filepath: str) -> list[dict[str, Any]]:
@@ -169,7 +170,7 @@ def main():
 
     if total_fixed > 0:
         print("\n🚀 Running MyPy to check improvements...")
-# import subprocess  # REMOVED - replaced with secure_execute
+        # import subprocess  # REMOVED - replaced with secure_execute
 
         result = secure_execute(
             ["uv", "run", "mypy", "src/", "--ignore-missing-imports"],

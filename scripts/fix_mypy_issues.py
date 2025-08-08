@@ -4,15 +4,16 @@ Comprehensive Mypy Issue Fixer
 """
 
 import re
+
 # import subprocess  # REMOVED - replaced with secure_execute
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 
 
 def add_missing_type_annotations(file_path: Path) -> bool:
     """Add missing type annotations to a file"""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content: Any = f.read()
 
         lines: Any = content.split("\n")
@@ -34,10 +35,10 @@ def add_missing_type_annotations(file_path: Path) -> bool:
                 params: Any = match.group(1)
                 if params and not any(":" in param for param in params.split(",")):
                     # Add type annotations to parameters
-                    new_params: List[Any] = []
+                    new_params: list[Any] = []
                     for param in params.split(","):
                         param: Any = param.strip()
-                        if param and not ":" in param:
+                        if param and ":" not in param:
                             # Infer type based on parameter name
                             param_name: Any = param.split("=")[0].strip()
                             param_type: Any = infer_parameter_type(param_name)
@@ -70,7 +71,7 @@ def add_missing_type_annotations(file_path: Path) -> bool:
         # Add missing imports
         if modified:
             # Check if typing imports are needed
-            typing_imports: List[Any] = []
+            typing_imports: list[Any] = []
             for line in lines:
                 if any(
                     type_name in line
@@ -83,8 +84,8 @@ def add_missing_type_annotations(file_path: Path) -> bool:
                         "Any",
                     ]
                 ):
-                    typing_imports: List[Any] = [
-                        "from typing import List, Dict, Tuple, Optional, Union, Any"
+                    typing_imports: list[Any] = [
+                        "from typing import List, Dict, Tuple, Optional, Union, Any",
                     ]
                     break
 
@@ -92,7 +93,7 @@ def add_missing_type_annotations(file_path: Path) -> bool:
                 # Find where to insert imports
                 for i, line in enumerate(lines):
                     if line.strip().startswith("import ") or line.strip().startswith(
-                        "from "
+                        "from ",
                     ):
                         continue
                     elif line.strip() == "":
@@ -186,10 +187,10 @@ def infer_variable_type(value: str) -> str:
     return "Any"
 
 
-def fix_mypy_issues(directories: List[str] = None) -> Dict[str, Any]:
+def fix_mypy_issues(directories: list[str] = None) -> dict[str, Any]:
     """Fix mypy issues in all files"""
     if directories is None:
-        directories: List[Any] = ["src", "tests", "scripts", ".cursor"]
+        directories: list[Any] = ["src", "tests", "scripts", ".cursor"]
 
     results: Any = {"total_files": 0, "files_fixed": 0, "errors": []}
 
@@ -214,7 +215,7 @@ def main() -> None:
 
     results: Any = fix_mypy_issues()
 
-    print(f"\n📊 Results:")
+    print("\n📊 Results:")
     print(f"Files processed: {results['total_files']}")
     print(f"Files fixed: {results['files_fixed']}")
 

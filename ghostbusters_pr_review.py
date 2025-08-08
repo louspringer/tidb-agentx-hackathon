@@ -4,7 +4,6 @@ Ghostbusters PR Review and Service Management Analysis
 """
 
 import asyncio
-from src.secure_shell_service.secure_executor import secure_execute
 from typing import Any
 
 # Import Ghostbusters components
@@ -30,6 +29,7 @@ from src.ghostbusters.validators import (
     SecurityValidator,
     TestValidator,
 )
+from src.secure_shell_service.secure_executor import secure_execute
 
 
 class GhostbustersPRReview:
@@ -121,7 +121,7 @@ class GhostbustersPRReview:
         print("🔍 Analyzing service management...")
 
         # Check for running services
-# import subprocess  # REMOVED - replaced with secure_execute
+        # import subprocess  # REMOVED - replaced with secure_execute
 
         try:
             result = secure_execute(["ps", "aux"], capture_output=True, text=True)

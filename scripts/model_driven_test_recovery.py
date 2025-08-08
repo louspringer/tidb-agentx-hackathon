@@ -9,16 +9,16 @@ test patterns and projected artifacts to restore functionality.
 
 import json
 import os
-from typing import Dict, Any
+from typing import Any
 
 
-def load_model_registry() -> Dict[str, Any]:
+def load_model_registry() -> dict[str, Any]:
     """Load the project model registry"""
-    with open("project_model_registry.json", "r") as f:
+    with open("project_model_registry.json") as f:
         return json.load(f)
 
 
-def get_test_patterns() -> Dict[str, str]:
+def get_test_patterns() -> dict[str, str]:
     """Get test patterns from projected artifacts"""
     return {
         "basic_validation": "tests/test_basic_validation_simple.py",
@@ -56,7 +56,7 @@ def test_security_manager_initialization():
     # Mock the SecurityManager class
     SecurityManager = Mock()
     security_manager = SecurityManager()
-    
+
     # Test that security manager can be initialized
     assert security_manager is not None
     print("✅ SecurityManager initialization test passed")
@@ -67,7 +67,7 @@ def test_input_validator_methods():
     # Mock the InputValidator class
     InputValidator = Mock()
     validator = InputValidator()
-    
+
     # Test that validator can be initialized
     assert validator is not None
     print("✅ InputValidator methods test passed")
@@ -78,7 +78,7 @@ def test_deployment_manager_initialization():
     # Mock the DeploymentManager class
     DeploymentManager = Mock()
     deployment_manager = DeploymentManager()
-    
+
     # Test that deployment manager can be initialized
     assert deployment_manager is not None
     print("✅ DeploymentManager initialization test passed")
@@ -90,7 +90,7 @@ def test_monitoring_dashboard_initialization():
     MonitoringDashboard = Mock()
     deployment_manager = Mock()
     monitoring_dashboard = MonitoringDashboard(deployment_manager)
-    
+
     # Test that monitoring dashboard can be initialized
     assert monitoring_dashboard is not None
     print("✅ MonitoringDashboard initialization test passed")
@@ -101,7 +101,7 @@ def test_openflow_app_initialization():
     # Mock the OpenFlowQuickstartApp class
     OpenFlowQuickstartApp = Mock()
     app = OpenFlowQuickstartApp()
-    
+
     # Test that Streamlit app can be initialized
     assert app is not None
     print("✅ OpenFlowQuickstartApp initialization test passed")
@@ -110,7 +110,7 @@ def test_openflow_app_initialization():
 def run_basic_tests():
     """Run all basic validation tests"""
     print("🚀 Running basic validation tests...")
-    
+
     tests = [
         test_security_manager_initialization,
         test_input_validator_methods,
@@ -118,17 +118,17 @@ def run_basic_tests():
         test_monitoring_dashboard_initialization,
         test_openflow_app_initialization,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         try:
             test()
             passed += 1
         except Exception as e:
             print(f"❌ Test {test.__name__} failed: {e}")
-    
+
     if passed == total:
         print("🎉 All basic validation tests passed!")
         return True
@@ -166,17 +166,17 @@ def test_python_syntax():
         "src/security_first/input_validator.py",
         "src/mdc_generator/mdc_model.py"
     ]
-    
+
     for file_path in test_files:
         if Path(file_path).exists():
             try:
                 with open(file_path, 'r') as f:
                     content = f.read()
-                
+
                 # Parse with AST to check syntax
                 ast.parse(content)
                 print(f"✅ {file_path} has valid Python syntax")
-                
+
             except SyntaxError as e:
                 print(f"❌ Syntax error in {file_path}: {e}")
                 return False
@@ -185,7 +185,7 @@ def test_python_syntax():
                 return False
         else:
             print(f"⚠️  File not found: {file_path}")
-    
+
     return True
 
 
@@ -196,14 +196,14 @@ def test_code_structure():
     if streamlit_file.exists():
         with open(streamlit_file, 'r') as f:
             content = f.read()
-        
+
         tree = ast.parse(content)
-        
+
         # Count elements
         imports = 0
         functions = 0
         classes = 0
-        
+
         for node in ast.walk(tree):
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 imports += 1
@@ -211,41 +211,41 @@ def test_code_structure():
                 functions += 1
             elif isinstance(node, ast.ClassDef):
                 classes += 1
-        
+
         print(f"📊 Streamlit app structure:")
         print(f"  Imports: {imports}")
         print(f"  Functions: {functions}")
         print(f"  Classes: {classes}")
-        
+
         # Basic structure validation
         assert imports > 0, "Should have imports"
         assert functions > 0, "Should have functions"
         assert classes > 0, "Should have classes"
-        
+
         print("✅ Streamlit app has expected structure")
-    
+
     return True
 
 
 def run_code_quality_tests():
     """Run all code quality tests"""
     print("🚀 Running code quality tests...")
-    
+
     tests = [
         test_python_syntax,
         test_code_structure,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         try:
             if test():
                 passed += 1
         except Exception as e:
             print(f"❌ Test {test.__name__} failed: {e}")
-    
+
     if passed == total:
         print("🎉 All code quality tests passed!")
         return True
@@ -285,12 +285,12 @@ def test_security_configuration():
         "max_login_attempts": 3,
         "password_min_length": 12,
     }
-    
+
     # Test security configuration
     assert SECURITY_CONFIG["session_timeout_minutes"] == 15
     assert SECURITY_CONFIG["max_login_attempts"] == 3
     assert SECURITY_CONFIG["password_min_length"] == 12
-    
+
     print("✅ Security configuration test passed")
 
 
@@ -300,11 +300,11 @@ def test_credential_encryption():
     SecurityManager = Mock()
     security_manager = SecurityManager()
     test_credential = "test_secret_value"
-    
+
     # Test that credentials are encrypted
     assert security_manager is not None
     assert test_credential == "test_secret_value"
-    
+
     print("✅ Credential encryption test passed")
 
 
@@ -313,10 +313,10 @@ def test_input_validation():
     # Mock the InputValidator class
     InputValidator = Mock()
     validator = InputValidator()
-    
+
     # Test that input validation works
     assert validator is not None
-    
+
     print("✅ Input validation test passed")
 
 
@@ -328,34 +328,34 @@ def test_https_enforcement():
         "ftp://test-account.snowflakecomputing.com",  # Wrong protocol
         "https://snowflakecomputing.com",  # Missing account
     ]
-    
+
     # Test that invalid URLs are detected
     assert len(invalid_urls) == 4
-    
+
     print("✅ HTTPS enforcement test passed")
 
 
 def run_security_tests():
     """Run all security tests"""
     print("🚀 Running security enhancement tests...")
-    
+
     tests = [
         test_security_configuration,
         test_credential_encryption,
         test_input_validation,
         test_https_enforcement,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         try:
             test()
             passed += 1
         except Exception as e:
             print(f"❌ Test {test.__name__} failed: {e}")
-    
+
     if passed == total:
         print("🎉 All security enhancement tests passed!")
         return True
@@ -391,10 +391,10 @@ def test_healthcare_cdc_domain_model():
     # Mock the healthcare CDC domain model
     HealthcareCDCDomainModel = Mock()
     domain_model = HealthcareCDCDomainModel()
-    
+
     # Test that domain model can be initialized
     assert domain_model is not None
-    
+
     print("✅ Healthcare CDC domain model test passed")
 
 
@@ -407,13 +407,13 @@ def test_patient_info_structure():
         "date_of_birth": "1980-01-01",
         "gender": "M"
     }
-    
+
     # Test patient info structure
     assert "patient_id" in patient_info
     assert "name" in patient_info
     assert "date_of_birth" in patient_info
     assert "gender" in patient_info
-    
+
     print("✅ Patient info structure test passed")
 
 
@@ -426,13 +426,13 @@ def test_provider_info_structure():
         "specialty": "Cardiology",
         "npi": "1234567890"
     }
-    
+
     # Test provider info structure
     assert "provider_id" in provider_info
     assert "name" in provider_info
     assert "specialty" in provider_info
     assert "npi" in provider_info
-    
+
     print("✅ Provider info structure test passed")
 
 
@@ -446,38 +446,38 @@ def test_healthcare_claim_structure():
         "service_date": "2024-01-15",
         "amount": 150.00
     }
-    
+
     # Test claim structure
     assert "claim_id" in claim
     assert "patient_id" in claim
     assert "provider_id" in claim
     assert "service_date" in claim
     assert "amount" in claim
-    
+
     print("✅ Healthcare claim structure test passed")
 
 
 def run_healthcare_tests():
     """Run all healthcare CDC tests"""
     print("🚀 Running healthcare CDC requirements tests...")
-    
+
     tests = [
         test_healthcare_cdc_domain_model,
         test_patient_info_structure,
         test_provider_info_structure,
         test_healthcare_claim_structure,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         try:
             test()
             passed += 1
         except Exception as e:
             print(f"❌ Test {test.__name__} failed: {e}")
-    
+
     if passed == total:
         print("🎉 All healthcare CDC requirements tests passed!")
         return True
@@ -513,7 +513,7 @@ def test_pyproject_toml_exists():
     """Test that pyproject.toml exists"""
     pyproject_file = Path("pyproject.toml")
     assert pyproject_file.exists(), "pyproject.toml should exist"
-    
+
     print("✅ pyproject.toml exists")
 
 
@@ -521,21 +521,21 @@ def test_uv_lock_exists():
     """Test that uv.lock exists"""
     uv_lock_file = Path("uv.lock")
     assert uv_lock_file.exists(), "uv.lock should exist"
-    
+
     print("✅ uv.lock exists")
 
 
 def test_pyproject_toml_structure():
     """Test pyproject.toml structure"""
     pyproject_file = Path("pyproject.toml")
-    
+
     with open(pyproject_file, 'r') as f:
         content = f.read()
-    
+
     # Test that it contains required sections
     assert "[project]" in content, "Should have [project] section"
     assert "[project.optional-dependencies]" in content, "Should have optional dependencies"
-    
+
     print("✅ pyproject.toml has correct structure")
 
 
@@ -550,12 +550,12 @@ def test_dependencies_defined():
         "pandas": ">=2.0.0",
         "pydantic": ">=2.0.0",
     }
-    
+
     # Test dependencies
     for dep, version in dependencies.items():
         assert dep in dependencies
         assert version.startswith(">=")
-    
+
     print("✅ Dependencies are properly defined")
 
 
@@ -568,19 +568,19 @@ def test_dev_dependencies_defined():
         "black": ">=23.0.0",
         "mypy": ">=1.0.0",
     }
-    
+
     # Test dev dependencies
     for dep, version in dev_dependencies.items():
         assert dep in dev_dependencies
         assert version.startswith(">=")
-    
+
     print("✅ Dev dependencies are properly defined")
 
 
 def run_uv_package_tests():
     """Run all UV package management tests"""
     print("🚀 Running UV package management tests...")
-    
+
     tests = [
         test_pyproject_toml_exists,
         test_uv_lock_exists,
@@ -588,17 +588,17 @@ def run_uv_package_tests():
         test_dependencies_defined,
         test_dev_dependencies_defined,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         try:
             test()
             passed += 1
         except Exception as e:
             print(f"❌ Test {test.__name__} failed: {e}")
-    
+
     if passed == total:
         print("🎉 All UV package management tests passed!")
         return True

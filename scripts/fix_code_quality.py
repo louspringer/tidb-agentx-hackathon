@@ -1,14 +1,14 @@
-from typing import List, Dict, Tuple, Optional, Union, Any
+from typing import Any
 
 #!/usr/bin/env python3
 """
 Code Quality Fixer - Comprehensive Linting and Fixing Tool
 """
 
-import sys
 import json
+import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -22,7 +22,9 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Comprehensive Code Quality Fixer")
     parser.add_argument(
-        "--analyze", action="store_true", help="Analyze files without fixing"
+        "--analyze",
+        action="store_true",
+        help="Analyze files without fixing",
     )
     parser.add_argument("--fix", action="store_true", help="Fix all issues")
     parser.add_argument(
@@ -58,8 +60,10 @@ def main() -> None:
 
 
 def analyze_all_files(
-    model: CodeQualityModel, directories: List[str], verbose: bool
-) -> Dict[str, Any]:
+    model: CodeQualityModel,
+    directories: list[str],
+    verbose: bool,
+) -> dict[str, Any]:
     """Analyze all files for linting issues"""
     results = {
         "total_files": 0,
@@ -93,15 +97,19 @@ def analyze_all_files(
 
 
 def fix_all_files(
-    model: CodeQualityModel, directories: List[str], verbose: bool
-) -> Dict[str, Any]:
+    model: CodeQualityModel,
+    directories: list[str],
+    verbose: bool,
+) -> dict[str, Any]:
     """Fix all files"""
     return model.fix_all_files(directories)
 
 
 def analyze_and_fix_all_files(
-    model: CodeQualityModel, directories: List[str], verbose: bool
-) -> Dict[str, Any]:
+    model: CodeQualityModel,
+    directories: list[str],
+    verbose: bool,
+) -> dict[str, Any]:
     """Analyze, fix, and re-analyze all files"""
     print("🔍 Initial analysis...")
     before_results = analyze_all_files(model, directories, verbose)
@@ -128,7 +136,7 @@ def analyze_and_fix_all_files(
     }
 
 
-def print_summary(results: Dict[str, Any]) -> None:
+def print_summary(results: dict[str, Any]) -> None:
     """Print a summary of the results"""
     if "improvement" in results:
         # Combined analysis and fix

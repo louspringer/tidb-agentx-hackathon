@@ -7,4 +7,3 @@ This package contains multi-agent testing framework components including:
 - Multi-agent validation
 - Coverage analysis
 """
-

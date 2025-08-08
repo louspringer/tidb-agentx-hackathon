@@ -22,13 +22,13 @@ def estimate_tokens(text: str) -> int:
 
 def analyze_multi_dimensional_costs():
     """Analyze costs from multi-dimensional smoke test"""
-    
+
     print("🔍 Analyzing multi-dimensional smoke test costs...")
-    
+
     # Load results
     with open("multi_dimensional_results.json", "r") as f:
         data = json.load(f)
-    
+
     total_input_tokens = 0
     total_output_tokens = 0
     successful_calls = 0
@@ -89,7 +89,7 @@ input_text = system_message + "\n\n" + user_message
 
 def analyze_langgraph_costs():
     """Analyze costs from LangGraph diversity orchestrator"""
-    
+
     print("\n🔍 Analyzing LangGraph diversity orchestrator costs...")
     # Load analysis data
     analysis_file = "diversity_analysis_output/analysis_data.json"
@@ -98,7 +98,7 @@ def analyze_langgraph_costs():
         return {}
 with open(analysis_file, "r") as f:
         data = json.load(f)
-    
+
     total_input_tokens = 0
     total_output_tokens = 0
     successful_calls = 0
@@ -120,7 +120,7 @@ Analyze this context from your perspective and identify blind spots. Generate 5 
 Return your analysis as a JSON array of findings, each with:
 - question: A challenging question about blind spots
 - confidence: High, Medium, or Low confidence
-- blind_spots: Description of the blind spot identified  
+- blind_spots: Description of the blind spot identified
 - recommendation: Recommendation to address the blind spot
 - category: One of: security, performance, ux, code_quality, devops
 
@@ -161,7 +161,7 @@ input_text = system_message + "\n\n" + user_message
 
 def analyze_synthesis_costs():
     """Analyze costs from synthesis orchestrator"""
-    
+
     print("\n🔍 Analyzing synthesis orchestrator costs...")
     # Load synthesis data
     synthesis_file = "synthesis_output/synthesis_data.json"
@@ -170,7 +170,7 @@ def analyze_synthesis_costs():
         return {}
 with open(synthesis_file, "r") as f:
         data = json.load(f)
-    
+
     # One synthesis call that processed all findings
     system_message = "You are an expert technical architect specializing in synthesizing diverse technical findings into actionable, prioritized solutions."
     # Estimate the synthesis prompt (includes all findings)
@@ -218,7 +218,7 @@ Return as a JSON array of fixes, prioritizing fixes that address multiple high-p
 """
 input_text = system_message + "\n\n" + user_message
     input_tokens = estimate_tokens(input_text)
-    
+
     # Estimate output tokens (synthesis response with 6 fixes)
     output_text = json.dumps(data.get("fixes", []), indent=2)
     output_tokens = estimate_tokens(output_text)
@@ -248,7 +248,7 @@ input_text = system_message + "\n\n" + user_message
 
 def main():
     """Calculate total costs for diversity hypothesis testing"""
-    
+
     print("💰 DIVERSITY HYPOTHESIS COST ANALYSIS")
     print("=" * 50)
     # Analyze each component
@@ -271,7 +271,7 @@ def main():
 # Cost per finding
     total_findings = 25  # From our diversity analysis
     cost_per_finding = total_cost / total_findings if total_findings > 0 else 0
-    
+
     print(f"\n📈 COST EFFICIENCY:")
     print(f"   Cost per finding: ${cost_per_finding:.4f}")
     print(f"   Cost per API call: ${total_cost/total_calls:.4f}")

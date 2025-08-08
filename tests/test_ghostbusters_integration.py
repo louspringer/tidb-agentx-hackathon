@@ -167,7 +167,7 @@ def test_ghostbusters_component_structure() -> None:
 
     for file_path in component_files:
         assert Path(
-            file_path
+            file_path,
         ).exists(), f"Ghostbusters component file should exist: {file_path}"
 
     # Check test files
@@ -178,7 +178,7 @@ def test_ghostbusters_component_structure() -> None:
 
     for file_path in test_files:
         assert Path(
-            file_path
+            file_path,
         ).exists(), f"Ghostbusters test file should exist: {file_path}"
 
 

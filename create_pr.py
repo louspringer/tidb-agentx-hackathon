@@ -4,9 +4,10 @@ Create GitHub PR for the code quality enforcement fixes
 """
 
 # import subprocess  # REMOVED - replaced with secure_execute
-import sys
-from src.secure_shell_service.secure_executor import secure_execute
 import logging
+import sys
+
+from src.secure_shell_service.secure_executor import secure_execute
 
 # Set up logging
 logging.basicConfig(
@@ -25,7 +26,11 @@ def run_command(cmd, capture_output=True):
     try:
         logger.info(f"Running command: {cmd}")
         result = secure_execute(
-            cmd, shell=True, capture_output=capture_output, text=True, check=True
+            cmd,
+            shell=True,
+            capture_output=capture_output,
+            text=True,
+            check=True,
         )
         if capture_output:
             logger.info(f"Command output: {result.stdout}")
@@ -69,11 +74,11 @@ def create_pr():
     pr_body = f"""## ✅ Resolves PR #6 Merge Conflicts
 
 ### **Problem:**
-PR #6 had extensive merge conflicts (40+ files) due to both branches 
+PR #6 had extensive merge conflicts (40+ files) due to both branches
 working on similar files independently.
 
 ### **Solution:**
-Created new clean branch `{current_branch}` from latest develop branch 
+Created new clean branch `{current_branch}` from latest develop branch
 with targeted security fixes.
 
 ### **🔧 Security Fixes Applied:**
@@ -86,12 +91,12 @@ with targeted security fixes.
 ```bash
 # Before (potentially unsafe)
 sanitized_field_name=$(printf '%q' "$field_name")
-credential=$(op item get "$item_name" --fields "$sanitized_field_name" 
+credential=$(op item get "$item_name" --fields "$sanitized_field_name"
 --reveal 2>/dev/null)
 if [ $? -eq 0 ] && [ -n "$credential" ]; then
 
 # After (secure whitelist approach)
-if credential=$(op item get "$item_name" --fields "$field_name" 
+if credential=$(op item get "$item_name" --fields "$field_name"
 --reveal 2>/dev/null) && [ -n "$credential" ]; then
 ```
 
@@ -102,7 +107,7 @@ if credential=$(op item get "$item_name" --fields "$field_name"
 - ✅ No shell variable substitution issues (already clean in develop)
 
 ### **🎯 Ready for Merge:**
-This PR contains only the essential security fixes without the massive 
+This PR contains only the essential security fixes without the massive
 conflicts that prevented PR #6 from being merged.
 
 ### **📋 Files Changed:**
@@ -139,7 +144,7 @@ def main():
     if current_branch != "feature/code-quality-enforcement-fixed":
         logger.error(
             f"Expected to be on feature/code-quality-enforcement-fixed, "
-            f"but on {current_branch}"
+            f"but on {current_branch}",
         )
         return False
 
@@ -154,7 +159,7 @@ def main():
         logger.info("📋 Manual steps:")
         logger.info(
             "1. Visit: https://github.com/louspringer/OpenFlow-Playground/"
-            "pull/new/feature/code-quality-enforcement-fixed"
+            "pull/new/feature/code-quality-enforcement-fixed",
         )
         logger.info("2. Create PR manually with the provided description")
 
