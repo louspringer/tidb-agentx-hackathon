@@ -98,6 +98,8 @@ class SecurityExpert(BaseExpert):
             "Replace subprocess calls with native Python operations",
             "Use Go/Rust for performance-critical shell operations",
             "Implement gRPC shell service for secure command execution",
+            "Integrate GitHub MCP for intelligent repository analysis",
+            "Use mcp-git-ingest for structured repository context"
             "Add timeouts and resource limits to all subprocess calls",
         ]
 
@@ -357,6 +359,94 @@ class ModelExpert(BaseExpert):
 
         confidence = 0.8 if delusions else 0.9
         recommendations = ["Add model registry", "Structure models properly"]
+
+        return DelusionResult(
+            delusions=delusions,
+            confidence=confidence,
+            recommendations=recommendations,
+        )
+
+
+class MCPExpert(BaseExpert):
+    """MCP expert for detecting MCP-related delusions"""
+
+    async def detect_delusions(self, project_path: Path) -> DelusionResult:
+        """Detect MCP-related delusions"""
+        delusions = []
+        recommendations = []
+
+        # Check for MCP integration files
+        mcp_integration_dir = project_path / "src" / "mcp_integration"
+        if not mcp_integration_dir.exists():
+            delusions.append(
+                {
+                    "type": "missing_mcp_integration",
+                    "file": str(mcp_integration_dir),
+                    "priority": "high",
+                    "description": "Missing MCP integration directory - needed for intelligent repository analysis",
+                },
+            )
+
+        # Check for GitHub MCP client
+        github_mcp_client = mcp_integration_dir / "github_mcp_client.py"
+        if not github_mcp_client.exists():
+            delusions.append(
+                {
+                    "type": "missing_github_mcp_client",
+                    "file": str(github_mcp_client),
+                    "priority": "high",
+                    "description": "Missing GitHub MCP client - needed for repository analysis",
+                },
+            )
+
+        # Check for mcp-git-ingest integration
+        mcp_git_ingest_dir = project_path / "mcp-git-ingest"
+        if not mcp_git_ingest_dir.exists():
+            delusions.append(
+                {
+                    "type": "missing_mcp_git_ingest",
+                    "file": str(mcp_git_ingest_dir),
+                    "priority": "medium",
+                    "description": "Missing mcp-git-ingest - consider integrating for better repository analysis",
+                },
+            )
+
+        # Check for manual file discovery patterns
+        for py_file in project_path.rglob("*.py"):
+            try:
+                content = py_file.read_text()
+
+                # Check for manual file discovery instead of MCP
+                manual_patterns = [
+                    r"list_dir\(",
+                    r"file_search\(",
+                    r"grep_search\(",
+                    r"codebase_search\(",
+                ]
+
+                for pattern in manual_patterns:
+                    if pattern in content:
+                        delusions.append(
+                            {
+                                "type": "manual_file_discovery",
+                                "file": str(py_file),
+                                "pattern": pattern,
+                                "priority": "medium",
+                                "description": f"Manual file discovery detected: {pattern} - consider using MCP for intelligent context",
+                            },
+                        )
+
+            except Exception as e:
+                self.logger.warning(f"Could not read {py_file}: {e}")
+
+        confidence = 0.8 if delusions else 0.9
+        recommendations = [
+            "Integrate GitHub MCP for intelligent repository analysis",
+            "Use mcp-git-ingest for structured repository context",
+            "Replace manual file discovery with MCP-based analysis",
+            "Implement intelligent file prioritization via MCP",
+            "Enable structured repository context for AI tools",
+        ]
 
         return DelusionResult(
             delusions=delusions,
