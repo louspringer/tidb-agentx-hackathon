@@ -4,6 +4,7 @@ from .architecture_expert import ArchitectureExpert
 from .base_expert import BaseExpert
 from .build_expert import BuildExpert
 from .code_quality_expert import CodeQualityExpert
+from .mcp_expert import MCPExpert
 from .model_expert import ModelExpert
 from .security_expert import SecurityExpert
 from .test_expert import TestExpert
@@ -16,4 +17,5 @@ __all__ = [
     "BuildExpert",
     "ArchitectureExpert",
     "ModelExpert",
+    "MCPExpert",
 ]

@@ -129,7 +129,6 @@
         "Support fallback methods when MCP server unavailable",
         "Ensure secure repository analysis with proper cleanup"
       ]
-      ]
     },
     "go": {
       "patterns": [
