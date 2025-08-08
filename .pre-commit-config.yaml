@@ -13,7 +13,8 @@ repos:
               \.cursor/.*\.backup[0-9]+\.py$|
               data/cost_analysis\.py$|
               scripts/.*\.backup[0-9]+\.py$|
-              scripts/mdc-linter\.py\.backup[0-9]+$
+              scripts/mdc-linter\.py\.backup[0-9]+$|
+              scripts/mdc-linter\.py\.working$
           )$
 
   # Ruff (Fast Python linter) - practical configuration
@@ -21,20 +22,5 @@ repos:
     rev: v0.1.6
     hooks:
       - id: ruff
-        args: [--fix, --ignore=E902]
-        exclude: |
-          (?x)^(
-              \.cursor/.*\.backup[0-9]+\.py$|
-              data/cost_analysis\.py$|
-              scripts/.*\.backup[0-9]+\.py$|
-              scripts/mdc-linter\.py\.backup[0-9]+$
-          )$
-        # E902: No such file or directory (pre-commit hook issue)
+        args: [--fix]
       - id: ruff-format
-        exclude: |
-          (?x)^(
-              \.cursor/.*\.backup[0-9]+\.py$|
-              data/cost_analysis\.py$|
-              scripts/.*\.backup[0-9]+\.py$|
-              scripts/mdc-linter\.py\.backup[0-9]+$
-          )$
