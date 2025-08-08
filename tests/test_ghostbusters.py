@@ -1,12 +1,8 @@
 """Tests for the Ghostbusters system."""
 
-# Import from the elmo-fuzzy-giggle project
-import sys
 from pathlib import Path
 
 import pytest
-
-sys.path.insert(0, "elmo-fuzzy-giggle")
 
 from src.ghostbusters import GhostbustersOrchestrator, run_ghostbusters
 from src.ghostbusters.agents import (
@@ -34,7 +30,7 @@ class TestGhostbustersOrchestrator:
     ) -> None:
         """Test orchestrator initialization."""
         assert orchestrator.project_path is not None
-        assert orchestrator.graph is not None
+        assert orchestrator.workflow is not None
 
     @pytest.mark.asyncio
     async def test_run_ghostbusters(self, tmp_path: Path) -> None:
@@ -47,7 +43,7 @@ class TestGhostbustersOrchestrator:
 
         assert state is not None
         assert hasattr(state, "confidence_score")
-        assert hasattr(state, "delusions")
+        assert hasattr(state, "delusions_detected")
         assert hasattr(state, "errors")
 
 

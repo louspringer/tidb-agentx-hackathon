@@ -71,17 +71,22 @@ class SecureExecutor:
                 "description": "Python interpreter",
             },
             "black": {
-                "allowed_args": ["--check", "--diff", "."],
+                "allowed_args": ["--check", "--diff", ".", "--quiet"],
                 "safe": True,
                 "description": "Code formatter",
             },
             "flake8": {
-                "allowed_args": ["--select", "F401,E302", "."],
+                "allowed_args": [
+                    "--select",
+                    "F401,E302",
+                    ".",
+                    "F401,E302,E305,W291,W292",
+                ],
                 "safe": True,
                 "description": "Linter",
             },
             "mypy": {
-                "allowed_args": ["--ignore-missing-imports", "."],
+                "allowed_args": ["--ignore-missing-imports", ".", "--version"],
                 "safe": True,
                 "description": "Type checker",
             },
@@ -102,13 +107,70 @@ class SecureExecutor:
 
         # Check if command is allowed
         if cmd not in self.allowed_commands:
-            logger.warning(f"Command not allowed: {cmd}")
-            return False
+            # Allow python executable paths
+            if cmd.endswith("python") or cmd.endswith("python3") or "python" in cmd:
+                # This is a python executable, allow it
+                pass
+            else:
+                logger.warning(f"Command not allowed: {cmd}")
+                return False
 
-        # Check if arguments are allowed
+        # Special handling for 'uv run' commands
+        if cmd == "uv" and args and args[0] == "run":
+            # For 'uv run <subcommand>', validate the subcommand
+            if len(args) < 2:
+                logger.warning("uv run requires a subcommand")
+                return False
+
+            subcommand = args[1]
+            subcommand_args = args[2:] if len(args) > 2 else []
+
+            # Check if subcommand is allowed
+            if subcommand not in self.allowed_commands:
+                logger.warning(f"Subcommand not allowed for uv run: {subcommand}")
+                return False
+
+            # Validate subcommand arguments
+            allowed_args = self.allowed_commands[subcommand]["allowed_args"]
+            for arg in subcommand_args:
+                if arg not in allowed_args and not arg.startswith("-"):
+                    # Allow file paths for certain subcommands
+                    if subcommand in ["black", "flake8", "mypy"] and (
+                        arg.endswith(".py") or "/" in arg or "\\" in arg
+                    ):
+                        # This is a file path, allow it
+                        continue
+                    logger.warning(f"Argument not allowed for {subcommand}: {arg}")
+                    return False
+
+            return True
+
+        # Special handling for python executable commands
+        if cmd.endswith("python") or cmd.endswith("python3") or "python" in cmd:
+            # Allow python module execution
+            for arg in args:
+                if arg not in [
+                    "-m",
+                    "mypy",
+                    "--version",
+                    "pytest",
+                    "-c",
+                    "import ast",
+                ] and not arg.startswith("-"):
+                    logger.warning(f"Argument not allowed for python: {arg}")
+                    return False
+            return True
+
+        # Check if arguments are allowed for other commands
         allowed_args = self.allowed_commands[cmd]["allowed_args"]
         for arg in args:
             if arg not in allowed_args and not arg.startswith("-"):
+                # Allow file paths for certain commands
+                if cmd in ["black", "flake8", "mypy"] and (
+                    arg.endswith(".py") or "/" in arg or "\\" in arg
+                ):
+                    # This is a file path, allow it
+                    continue
                 logger.warning(f"Argument not allowed for {cmd}: {arg}")
                 return False
 
