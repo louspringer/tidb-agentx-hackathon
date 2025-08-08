@@ -5,10 +5,11 @@ Ghostbusters Orchestrator - Multi-Agent Delusion Detection & Recovery System
 
 import asyncio
 import logging
-from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel, Field, ConfigDict
 
 # LangGraph imports
 from langgraph.graph import END, StateGraph
@@ -39,20 +40,21 @@ from .validators import (
 )
 
 
-@dataclass
-class GhostbustersState:
+class GhostbustersState(BaseModel):
     """State for Ghostbusters workflow"""
 
     project_path: str
-    delusions_detected: list[dict[str, Any]]
-    recovery_actions: list[dict[str, Any]]
-    confidence_score: float
-    validation_results: dict[str, Any]
-    recovery_results: dict[str, Any]
-    current_phase: str
-    errors: list[str]
-    warnings: list[str]
-    metadata: dict[str, Any]
+    delusions_detected: List[Dict[str, Any]] = Field(default_factory=list)
+    recovery_actions: List[Dict[str, Any]] = Field(default_factory=list)
+    confidence_score: float = Field(default=0.0, ge=0.0, le=1.0)
+    validation_results: Dict[str, Any] = Field(default_factory=dict)
+    recovery_results: Dict[str, Any] = Field(default_factory=dict)
+    current_phase: str = Field(default="detection")
+    errors: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class GhostbustersOrchestrator:
@@ -290,7 +292,7 @@ class GhostbustersOrchestrator:
 
         return state
 
-    def _calculate_confidence(self, validation_results: dict[str, Any]) -> float:
+    def _calculate_confidence(self, validation_results: Dict[str, Any]) -> float:
         """Calculate confidence score from validation results"""
         if not validation_results:
             return 0.0
@@ -478,8 +480,8 @@ class GhostbustersOrchestrator:
 
     async def _plan_recovery_action(
         self,
-        delusion: dict[str, Any],
-    ) -> Optional[dict[str, Any]]:
+        delusion: Dict[str, Any],
+    ) -> Optional[Dict[str, Any]]:
         """Plan a recovery action for a delusion"""
         delusion_type = delusion.get("type", "")
 

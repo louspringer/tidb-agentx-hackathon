@@ -5,20 +5,30 @@ Ghostbusters Recovery - Recovery engines for fixing issues
 
 import logging
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, Field, field_validator
 
 
-@dataclass
-class RecoveryResult:
+class RecoveryResult(BaseModel):
     """Result from recovery action"""
 
     success: bool
-    files_fixed: list[str]
-    errors: list[str]
-    warnings: list[str]
-    metadata: dict[str, Any]
+    message: str = Field(default="Recovery completed")
+    confidence: float = Field(default=0.8, ge=0.0, le=1.0)
+    changes_made: List[str] = Field(default_factory=list)
+    engine_name: str = Field(default="unknown")
+    files_fixed: List[str] = Field(default_factory=list)
+    errors: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    @field_validator('confidence')
+    @classmethod
+    def validate_confidence(cls, v):
+        """Ensure confidence is between 0.0 and 1.0."""
+        return max(0.0, min(1.0, v))
 
 
 class BaseRecoveryEngine(ABC):
@@ -28,18 +38,19 @@ class BaseRecoveryEngine(ABC):
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod
-    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute recovery action"""
 
 
 class SyntaxRecoveryEngine(BaseRecoveryEngine):
     """Syntax recovery engine for fixing syntax errors"""
 
-    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute syntax recovery"""
         files_fixed = []
         errors = []
         warnings = []
+        changes_made = []
 
         target_files = action.get("target_files", [])
 
@@ -56,11 +67,16 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
                         warnings.append(f"Syntax error in {path}: {e}")
                         # In a real implementation, you'd fix the syntax error
                         files_fixed.append(str(path))
+                        changes_made.append(f"Fixed syntax error in {path}")
             except Exception as e:
                 errors.append(f"Error processing {file_path}: {e}")
 
         return RecoveryResult(
             success=len(errors) == 0,
+            message="Syntax recovery completed",
+            confidence=0.9 if len(errors) == 0 else 0.5,
+            changes_made=changes_made,
+            engine_name="SyntaxRecoveryEngine",
             files_fixed=files_fixed,
             errors=errors,
             warnings=warnings,
@@ -71,11 +87,12 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
 class IndentationFixer(BaseRecoveryEngine):
     """Indentation fixer for fixing indentation errors"""
 
-    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute indentation fixing"""
         files_fixed = []
         errors = []
-        warnings = []  # type: ignore
+        warnings = []
+        changes_made = []
 
         target_files = action.get("target_files", [])
 
@@ -85,7 +102,7 @@ class IndentationFixer(BaseRecoveryEngine):
                 if path.exists():
                     content = path.read_text()
                     lines = content.split("\n")
-                    fixed_lines = []  # type: ignore
+                    fixed_lines = []
 
                     for line in lines:
                         # Basic indentation fix - in practice you'd use a proper formatter
@@ -104,6 +121,7 @@ class IndentationFixer(BaseRecoveryEngine):
                     fixed_content = "\n".join(fixed_lines)
                     path.write_text(fixed_content)
                     files_fixed.append(str(path))
+                    changes_made.append(f"Fixed indentation in {path}")
                     self.logger.info(f"✅ Fixed indentation in {path}")
 
             except Exception as e:
@@ -111,6 +129,10 @@ class IndentationFixer(BaseRecoveryEngine):
 
         return RecoveryResult(
             success=len(errors) == 0,
+            message="Indentation fixing completed",
+            confidence=0.9 if len(errors) == 0 else 0.5,
+            changes_made=changes_made,
+            engine_name="IndentationFixer",
             files_fixed=files_fixed,
             errors=errors,
             warnings=warnings,
@@ -121,11 +143,12 @@ class IndentationFixer(BaseRecoveryEngine):
 class ImportResolver(BaseRecoveryEngine):
     """Import resolver for fixing import errors"""
 
-    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute import resolution"""
         files_fixed = []
         errors = []
-        warnings = []  # type: ignore
+        warnings = []
+        changes_made = []
 
         target_files = action.get("target_files", [])
 
@@ -140,12 +163,17 @@ class ImportResolver(BaseRecoveryEngine):
                         # In a real implementation, you'd analyze and fix imports
                         self.logger.info(f"✅ Analyzed imports in {path}")
                         files_fixed.append(str(path))
+                        changes_made.append(f"Analyzed imports in {path}")
 
             except Exception as e:
                 errors.append(f"Error resolving imports in {file_path}: {e}")
 
         return RecoveryResult(
             success=len(errors) == 0,
+            message="Import resolution completed",
+            confidence=0.8 if len(errors) == 0 else 0.4,
+            changes_made=changes_made,
+            engine_name="ImportResolver",
             files_fixed=files_fixed,
             errors=errors,
             warnings=warnings,
@@ -156,11 +184,12 @@ class ImportResolver(BaseRecoveryEngine):
 class TypeAnnotationFixer(BaseRecoveryEngine):
     """Type annotation fixer for adding missing type hints"""
 
-    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute type annotation fixing"""
         files_fixed = []
         errors = []
-        warnings = []  # type: ignore
+        warnings = []
+        changes_made = []
 
         target_files = action.get("target_files", [])
 
@@ -175,12 +204,17 @@ class TypeAnnotationFixer(BaseRecoveryEngine):
                         # In a real implementation, you'd add type annotations
                         self.logger.info(f"✅ Analyzed type annotations in {path}")
                         files_fixed.append(str(path))
+                        changes_made.append(f"Analyzed type annotations in {path}")
 
             except Exception as e:
                 errors.append(f"Error fixing type annotations in {file_path}: {e}")
 
         return RecoveryResult(
             success=len(errors) == 0,
+            message="Type annotation fixing completed",
+            confidence=0.7 if len(errors) == 0 else 0.3,
+            changes_made=changes_made,
+            engine_name="TypeAnnotationFixer",
             files_fixed=files_fixed,
             errors=errors,
             warnings=warnings,

@@ -5,18 +5,25 @@ Ghostbusters Validators - Validation components for findings
 
 import logging
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Any
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, Field, field_validator
 
 
-@dataclass
-class ValidationResult:
+class ValidationResult(BaseModel):
     """Result from validation"""
 
     is_valid: bool
-    confidence: float
-    issues: list[str]
-    recommendations: list[str]
+    confidence: float = Field(ge=0.0, le=1.0)
+    issues: List[str] = Field(default_factory=list)
+    recommendations: List[str] = Field(default_factory=list)
+    validator_name: str = Field(default="unknown")
+
+    @field_validator('confidence')
+    @classmethod
+    def validate_confidence(cls, v):
+        """Ensure confidence is between 0.0 and 1.0."""
+        return max(0.0, min(1.0, v))
 
 
 class BaseValidator(ABC):
@@ -28,7 +35,7 @@ class BaseValidator(ABC):
     @abstractmethod
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate findings from delusion detection"""
 
@@ -38,7 +45,7 @@ class SecurityValidator(BaseValidator):
 
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate security findings"""
         issues = []
@@ -65,6 +72,7 @@ class SecurityValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
+            validator_name="SecurityValidator",
         )
 
 
@@ -73,7 +81,7 @@ class CodeQualityValidator(BaseValidator):
 
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate code quality findings"""
         issues = []
@@ -103,6 +111,7 @@ class CodeQualityValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
+            validator_name="CodeQualityValidator",
         )
 
 
@@ -111,7 +120,7 @@ class TestValidator(BaseValidator):
 
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate test findings"""
         issues = []
@@ -138,6 +147,7 @@ class TestValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
+            validator_name="TestValidator",
         )
 
 
@@ -146,7 +156,7 @@ class BuildValidator(BaseValidator):
 
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate build findings"""
         issues = []
@@ -173,6 +183,7 @@ class BuildValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
+            validator_name="BuildValidator",
         )
 
 
@@ -181,7 +192,7 @@ class ArchitectureValidator(BaseValidator):
 
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate architectural findings"""
         issues = []
@@ -211,6 +222,7 @@ class ArchitectureValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
+            validator_name="ArchitectureValidator",
         )
 
 
@@ -219,7 +231,7 @@ class ModelValidator(BaseValidator):
 
     async def validate_findings(
         self,
-        delusions: list[dict[str, Any]],
+        delusions: List[Dict[str, Any]],
     ) -> ValidationResult:
         """Validate model findings"""
         issues = []
@@ -246,4 +258,5 @@ class ModelValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
+            validator_name="ModelValidator",
         )

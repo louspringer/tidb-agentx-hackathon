@@ -1,19 +1,25 @@
 """Base recovery engine class for Ghostbusters recovery engines."""
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Any
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, Field, field_validator
 
 
-@dataclass
-class RecoveryResult:
+class RecoveryResult(BaseModel):
     """Result from recovery engine execution."""
 
     success: bool
     message: str
-    confidence: float
-    changes_made: list[str]
+    confidence: float = Field(ge=0.0, le=1.0)
+    changes_made: List[str] = Field(default_factory=list)
     engine_name: str
+
+    @field_validator('confidence')
+    @classmethod
+    def validate_confidence(cls, v):
+        """Ensure confidence is between 0.0 and 1.0."""
+        return max(0.0, min(1.0, v))
 
 
 class BaseRecoveryEngine(ABC):
@@ -25,10 +31,10 @@ class BaseRecoveryEngine(ABC):
         self.confidence_threshold = 0.7
 
     @abstractmethod
-    async def execute_recovery(self, action: dict[str, Any]) -> RecoveryResult:
+    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute recovery action."""
 
-    def _calculate_confidence(self, changes_made: list[str]) -> float:
+    def _calculate_confidence(self, changes_made: List[str]) -> float:
         """Calculate confidence score based on recovery success."""
         if not changes_made:
             return 0.5  # Medium confidence if no changes made

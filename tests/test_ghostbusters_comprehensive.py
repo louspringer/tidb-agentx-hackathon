@@ -10,18 +10,25 @@ from typing import Any
 
 from src.ghostbusters import (
     GhostbustersOrchestrator,
+    run_ghostbusters,
+)
+from src.ghostbusters.agents import (
     SecurityExpert,
     CodeQualityExpert,
     TestExpert,
     BuildExpert,
     ArchitectureExpert,
     ModelExpert,
+)
+from src.ghostbusters.validators import (
     SecurityValidator,
     CodeQualityValidator,
     TestValidator,
     BuildValidator,
     ArchitectureValidator,
     ModelValidator,
+)
+from src.ghostbusters.recovery import (
     SyntaxRecoveryEngine,
     IndentationFixer,
     ImportResolver,
@@ -275,15 +282,15 @@ class TestGhostbustersRecovery:
         result = await engine.execute_recovery(sample_action)
 
         assert hasattr(result, "success")
-        assert hasattr(result, "files_fixed")
-        assert hasattr(result, "errors")
-        assert hasattr(result, "warnings")
-        assert hasattr(result, "metadata")
+        assert hasattr(result, "message")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "changes_made")
+        assert hasattr(result, "engine_name")
         assert isinstance(result.success, bool)
-        assert isinstance(result.files_fixed, list)
-        assert isinstance(result.errors, list)
-        assert isinstance(result.warnings, list)
-        assert isinstance(result.metadata, dict)
+        assert isinstance(result.message, str)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.changes_made, list)
+        assert result.engine_name == "SyntaxRecoveryEngine"
 
     @pytest.mark.asyncio
     async def test_indentation_fixer(self, sample_action: dict[str, Any]) -> None:
@@ -292,15 +299,15 @@ class TestGhostbustersRecovery:
         result = await engine.execute_recovery(sample_action)
 
         assert hasattr(result, "success")
-        assert hasattr(result, "files_fixed")
-        assert hasattr(result, "errors")
-        assert hasattr(result, "warnings")
-        assert hasattr(result, "metadata")
+        assert hasattr(result, "message")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "changes_made")
+        assert hasattr(result, "engine_name")
         assert isinstance(result.success, bool)
-        assert isinstance(result.files_fixed, list)
-        assert isinstance(result.errors, list)
-        assert isinstance(result.warnings, list)
-        assert isinstance(result.metadata, dict)
+        assert isinstance(result.message, str)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.changes_made, list)
+        assert result.engine_name == "IndentationFixer"
 
     @pytest.mark.asyncio
     async def test_import_resolver(self, sample_action: dict[str, Any]) -> None:
@@ -309,15 +316,15 @@ class TestGhostbustersRecovery:
         result = await engine.execute_recovery(sample_action)
 
         assert hasattr(result, "success")
-        assert hasattr(result, "files_fixed")
-        assert hasattr(result, "errors")
-        assert hasattr(result, "warnings")
-        assert hasattr(result, "metadata")
+        assert hasattr(result, "message")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "changes_made")
+        assert hasattr(result, "engine_name")
         assert isinstance(result.success, bool)
-        assert isinstance(result.files_fixed, list)
-        assert isinstance(result.errors, list)
-        assert isinstance(result.warnings, list)
-        assert isinstance(result.metadata, dict)
+        assert isinstance(result.message, str)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.changes_made, list)
+        assert result.engine_name == "ImportResolver"
 
     @pytest.mark.asyncio
     async def test_type_annotation_fixer(self, sample_action: dict[str, Any]) -> None:
@@ -326,15 +333,15 @@ class TestGhostbustersRecovery:
         result = await engine.execute_recovery(sample_action)
 
         assert hasattr(result, "success")
-        assert hasattr(result, "files_fixed")
-        assert hasattr(result, "errors")
-        assert hasattr(result, "warnings")
-        assert hasattr(result, "metadata")
+        assert hasattr(result, "message")
+        assert hasattr(result, "confidence")
+        assert hasattr(result, "changes_made")
+        assert hasattr(result, "engine_name")
         assert isinstance(result.success, bool)
-        assert isinstance(result.files_fixed, list)
-        assert isinstance(result.errors, list)
-        assert isinstance(result.warnings, list)
-        assert isinstance(result.metadata, dict)
+        assert isinstance(result.message, str)
+        assert isinstance(result.confidence, float)
+        assert isinstance(result.changes_made, list)
+        assert result.engine_name == "TypeAnnotationFixer"
 
 
 class TestGhostbustersOrchestrator:
@@ -349,10 +356,10 @@ class TestGhostbustersOrchestrator:
         self, orchestrator: GhostbustersOrchestrator
     ) -> None:
         """Test orchestrator initialization"""
-        assert hasattr(orchestrator, "agents")
-        assert hasattr(orchestrator, "validators")
-        assert hasattr(orchestrator, "recovery_engines")
-        assert hasattr(orchestrator, "workflow")
+        assert orchestrator.agents is not None
+        assert orchestrator.validators is not None
+        assert orchestrator.recovery_engines is not None
+        assert orchestrator.workflow is not None
 
         # Check that all agents are initialized
         expected_agents = [
@@ -394,12 +401,12 @@ class TestGhostbustersOrchestrator:
 
         # Test that the workflow has the expected nodes
         # Note: This is a simplified test - actual LangGraph testing would be more complex
-        assert hasattr(orchestrator, "_detect_delusions_node")
-        assert hasattr(orchestrator, "_validate_findings_node")
-        assert hasattr(orchestrator, "_plan_recovery_node")
-        assert hasattr(orchestrator, "_execute_recovery_node")
-        assert hasattr(orchestrator, "_validate_recovery_node")
-        assert hasattr(orchestrator, "_generate_report_node")
+        assert orchestrator._detect_delusions_node is not None
+        assert orchestrator._validate_findings_node is not None
+        assert orchestrator._plan_recovery_node is not None
+        assert orchestrator._execute_recovery_node is not None
+        assert orchestrator._validate_recovery_node is not None
+        assert orchestrator._generate_report_node is not None
 
 
 class TestGhostbustersIntegration:

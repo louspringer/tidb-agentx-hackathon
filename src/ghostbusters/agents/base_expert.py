@@ -1,19 +1,25 @@
 """Base expert class for Ghostbusters agents."""
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, Field, field_validator
 
 
-@dataclass
-class DelusionResult:
+class DelusionResult(BaseModel):
     """Result from expert agent delusion detection."""
 
-    delusions: list[dict[str, Any]]
-    confidence: float
-    recommendations: list[str]
+    delusions: List[Dict[str, Any]] = Field(default_factory=list)
+    confidence: float = Field(ge=0.0, le=1.0)
+    recommendations: List[str] = Field(default_factory=list)
     agent_name: str
+
+    @field_validator('confidence')
+    @classmethod
+    def validate_confidence(cls, v):
+        """Ensure confidence is between 0.0 and 1.0."""
+        return max(0.0, min(1.0, v))
 
 
 class BaseExpert(ABC):
@@ -28,7 +34,7 @@ class BaseExpert(ABC):
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect delusions in the project."""
 
-    def _calculate_confidence(self, delusions: list[dict[str, Any]]) -> float:
+    def _calculate_confidence(self, delusions: List[Dict[str, Any]]) -> float:
         """Calculate confidence score based on delusions found."""
         if not delusions:
             return 0.9  # High confidence if no issues found
@@ -58,7 +64,7 @@ class BaseExpert(ABC):
         confidence: float,
         severity: str = "medium",
         **kwargs: Any,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Create a standardized delusion object."""
         return {
             "type": delusion_type,
