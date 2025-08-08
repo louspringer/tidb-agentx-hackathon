@@ -31,9 +31,9 @@ ANTHROPIC_API_KEY=""
 allowed_anthropic_items=("ANTHROPIC_API_KEY" "Anthropic Cursor AI" "Anthropic API Key" "Anthropic" "Claude API Key")
 for item_name in "${allowed_anthropic_items[@]}"; do
     echo "  Trying: $item_name"
-    # Try different field names
+    # Try different field names (whitelist approach for security)
     for field_name in "credential" "api key" "password" "key" "secret"; do
-# Use field_name directly since it's from a hardcoded whitelist
+        # Use field_name directly since it's from a hardcoded whitelist
         if credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null) && [ -n "$credential" ]; then
             echo "  ✅ Found Anthropic API key in '$item_name' field '$field_name'"
             ANTHROPIC_API_KEY="$credential"
@@ -56,7 +56,7 @@ OPENAI_API_KEY=""
 allowed_openai_items=("OPENAI_API_KEY" "OpenAI API Key" "OpenAI" "GPT API Key")
 for item_name in "${allowed_openai_items[@]}"; do
     echo "  Trying: $item_name"
-    # Try different field names
+    # Try different field names (whitelist approach for security)
     for field_name in "credential" "api key" "password" "key" "secret"; do
         # Use field_name directly since it's from a hardcoded whitelist
         if credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null) && [ -n "$credential" ]; then

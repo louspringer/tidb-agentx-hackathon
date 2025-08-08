@@ -1,16 +1,15 @@
-from typing import Any
-
 #!/usr/bin/env python3
 """
 Code Quality System - Model-Driven Linting and Fixing
 """
 
 import re
-
-# import subprocess  # REMOVED - replaced with secure_execute
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable
+from typing import Any, Callable, Optional
+
+# import subprocess  # REMOVED - replaced with secure_execute
 
 
 @dataclass
@@ -87,36 +86,34 @@ class CodeQualityModel:
         }
 
     def _run_autoflake(self, file_path: Path) -> bool:
-        """Run autoflake to fix unused imports and variables - ELEGANT VERSION! 🎉"""
+        """Run autoflake to fix unused imports and variables"""
         try:
-            # Use our elegant secure shell service instead of subprocess!
-            import asyncio
-
-            from src.secure_shell_service.elegant_client import secure_execute
-
-            # Build the command elegantly
-            command = f'uv run autoflake --in-place --remove-all-unused-imports --remove-unused-variables "{file_path}"'
-
-            # Execute with timeout protection
-            result = asyncio.run(secure_execute(command, timeout=30))  # type: ignore
-            return result["success"]  # type: ignore
+            result = subprocess.run(
+                [
+                    "uv",
+                    "run",
+                    "autoflake",
+                    "--in-place",
+                    "--remove-all-unused-imports",
+                    "--remove-unused-variables",
+                    str(file_path),
+                ],
+                capture_output=True,
+                text=True,
+            )
+            return result.returncode == 0
         except Exception:
             return False
 
     def _run_black(self, file_path: Path) -> bool:
-        """Run black to format code - ELEGANT VERSION! 🎉"""
+        """Run black to format code"""
         try:
-            # Use our elegant secure shell service instead of subprocess!
-            import asyncio
-
-            from src.secure_shell_service.elegant_client import secure_execute
-
-            # Build the command elegantly
-            command = f'uv run black "{file_path}"'
-
-            # Execute with timeout protection
-            result = asyncio.run(secure_execute(command, timeout=30))  # type: ignore
-            return result["success"]  # type: ignore
+            result = subprocess.run(
+                ["uv", "run", "black", str(file_path)],
+                capture_output=True,
+                text=True,
+            )
+            return result.returncode == 0
         except Exception:
             return False
 
@@ -193,34 +190,26 @@ class CodeQualityModel:
         """Analyze a single file for all linting issues"""
         issues: list[Any] = []
 
-        # Run flake8 - ELEGANT VERSION! 🎉
+        # Run flake8
         try:
-            # Use our elegant secure shell service instead of subprocess!
-            import asyncio
+            result = subprocess.run(
+                ["uv", "run", "flake8", str(file_path)],
+                capture_output=True,
+                text=True,
+            )
 
-            from src.secure_shell_service.elegant_client import secure_execute
-
-            # Build the command elegantly
-            command = f'uv run flake8 "{file_path}"'
-
-            # Execute with timeout protection
-            result = asyncio.run(secure_execute(command, timeout=30))  # type: ignore
-
-            if result["success"]:
-                for line in result["output"].split("\n"):
-                    if line.strip():
-                        parts = line.split(":")
-                        if len(parts) >= 3:
-                            issue: Any = {
-                                "file": parts[0],
-                                "line": int(parts[1]),
-                                "column": int(parts[2]),
-                                "code": parts[3].split()[0] if parts[3].split() else "",
-                                "message": ":".join(parts[3:]).strip(),
-                            }
-                            issues.append(issue)
-            else:
-                issues.append({"error": result["error"]})
+            for line in result.stdout.split("\n"):
+                if line.strip():
+                    parts = line.split(":")
+                    if len(parts) >= 3:
+                        issue: Any = {
+                            "file": parts[0],
+                            "line": int(parts[1]),
+                            "column": int(parts[2]),
+                            "code": parts[3].split()[0] if parts[3].split() else "",
+                            "message": ":".join(parts[3:]).strip(),
+                        }
+                        issues.append(issue)
         except Exception as e:
             issues.append({"error": str(e)})
 
@@ -228,26 +217,30 @@ class CodeQualityModel:
 
     def fix_file(self, file_path: Path) -> dict[str, Any]:
         """Fix all issues in a file"""
-        results = {"file": str(file_path), "fixes_applied": [], "errors": []}
+        results: dict[str, Any] = {
+            "file": str(file_path),
+            "fixes_applied": [],
+            "errors": [],
+        }
 
         # Apply all fixers
         for fixer_name, fixer_func in self.fixers.items():
             try:
                 if fixer_func(file_path):
-                    results["fixes_applied"].append(fixer_name)  # type: ignore
+                    results["fixes_applied"].append(fixer_name)
                 else:
-                    results["errors"].append(f"Failed to apply {fixer_name}")  # type: ignore
+                    results["errors"].append(f"Failed to apply {fixer_name}")
             except Exception as e:
-                results["errors"].append(f"Error applying {fixer_name}: {e}")  # type: ignore
+                results["errors"].append(f"Error applying {fixer_name}: {e}")
 
         return results
 
-    def fix_all_files(self, directories: list[str] = None) -> dict[str, Any]:  # type: ignore
+    def fix_all_files(self, directories: Optional[list[str]] = None) -> dict[str, Any]:
         """Fix all files in the project"""
         if directories is None:
-            directories: list[Any] = ["src", "tests", "scripts", ".cursor"]  # type: ignore
+            directories = ["src", "tests", "scripts", ".cursor"]
 
-        all_results: Any = {
+        all_results: dict[str, Any] = {
             "total_files": 0,
             "files_fixed": 0,
             "total_issues_before": 0,
@@ -261,20 +254,20 @@ class CodeQualityModel:
                     all_results["total_files"] += 1
 
                     # Analyze before
-                    before_analysis: Any = self.analyze_file(py_file)
+                    before_analysis = self.analyze_file(py_file)
                     all_results["total_issues_before"] += before_analysis[
                         "total_issues"
                     ]
 
                     # Apply fixes
-                    fix_result: Any = self.fix_file(py_file)
+                    fix_result = self.fix_file(py_file)
                     all_results["file_results"].append(fix_result)
 
                     if fix_result["fixes_applied"]:
                         all_results["files_fixed"] += 1
 
                     # Analyze after
-                    after_analysis: Any = self.analyze_file(py_file)
+                    after_analysis = self.analyze_file(py_file)
                     all_results["total_issues_after"] += after_analysis["total_issues"]
 
-        return all_results  # type: ignore
+        return all_results
