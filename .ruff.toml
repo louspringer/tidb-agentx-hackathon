@@ -1,5 +1,5 @@
 # .ruff.toml
-# Practical Python linter configuration
+# Practical Python linter configuration - synchronized with Black
 
 target-version = "py39"
 line-length = 88
@@ -83,6 +83,8 @@ ignore = [
     "SIM105", # simplification (minor)
     "SIM117", # simplification (minor)
     "COM818", # trailing commas (minor)
+    "COM812", # missing trailing comma (conflicts with formatter)
+    "ISC001", # implicit string concatenation (conflicts with formatter)
     "E902",  # No such file or directory (pre-commit hook issue)
 ]
 
@@ -106,3 +108,10 @@ exclude = [
     "scripts/mdc-linter.py.backup4",
     "scripts/mdc-linter.py.working",
 ]
+
+# Formatting configuration - match Black's preferences
+[format]
+line-ending = "auto"
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false

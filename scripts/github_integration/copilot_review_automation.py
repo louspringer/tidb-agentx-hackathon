@@ -22,19 +22,13 @@ except ImportError:
     # Fallback for environments without grpc (like GitHub Actions)
     async def secure_execute(command: str) -> dict[str, Any]:
         """Fallback secure_execute for environments without grpc"""
-        import subprocess
         try:
-            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=30)
-            return {
-                "success": result.returncode == 0,
-                "output": result.stdout,
-                "error": result.stderr if result.returncode != 0 else None
-            }
+            # Use secure shell service instead of subprocess with shell=True
+            from src.secure_shell_service.client import secure_execute
+
+            return await secure_execute(command, timeout=30)
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e)
-            }
+            return {"success": False, "error": str(e)}
 
 
 class CopilotReviewAutomation:
@@ -58,8 +52,8 @@ class CopilotReviewAutomation:
                     "1. Open this PR in VS Code with GitHub Copilot extension",
                     "2. Use '@copilot review' to request a code review",
                     "3. Follow the security-first guidelines in .github/copilot-instructions.md",
-                    "4. Address any issues identified by Copilot"
-                ]
+                    "4. Address any issues identified by Copilot",
+                ],
             }
 
         except Exception as e:
@@ -211,24 +205,24 @@ async def main():
 
     print(f"🔍 Analyzing PR #{pr_number}")
 
-        # Request Copilot review (manual instructions)
+    # Request Copilot review (manual instructions)
     review_result = await automation.request_copilot_review(int(pr_number))
     print(f"📝 Review Instructions: {review_result}")
-    
+
     # Analyze security issues
     security_result = await automation.analyze_security_issues(int(pr_number))
     print(f"🛡️ Security Analysis: {security_result}")
-    
+
     # Validate model compliance
     compliance_result = await automation.validate_model_compliance(int(pr_number))
     print(f"📋 Model Compliance: {compliance_result}")
-    
+
     # Summary
     print("\n🎯 Summary:")
     print(f"   Security Issues: {security_result.get('total_issues', 0)}")
     print(f"   Compliance Issues: {compliance_result.get('total_issues', 0)}")
-    print(f"   Review Method: Manual Copilot review")
-    
+    print("   Review Method: Manual Copilot review")
+
     # Print manual instructions
     if review_result.get("instructions"):
         print("\n🤖 Manual Copilot Review Instructions:")

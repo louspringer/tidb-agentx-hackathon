@@ -349,9 +349,9 @@ class SVGVisualizationEngine:
         visualizations = {}
 
         try:
-            visualizations["system_architecture"] = (
-                self.create_system_architecture_svg()
-            )
+            visualizations[
+                "system_architecture"
+            ] = self.create_system_architecture_svg()
             logger.info("✓ Generated system architecture SVG")
         except Exception as e:
             logger.error(f"✗ Failed to generate system architecture SVG: {e}")

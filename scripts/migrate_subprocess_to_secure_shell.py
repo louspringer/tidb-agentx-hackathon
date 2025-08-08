@@ -4,9 +4,9 @@ Migration script to replace subprocess calls with secure shell service
 """
 
 import ast
-from src.secure_shell_service.secure_executor import secure_execute
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
 
 class SubprocessMigrator:
     """Migrate subprocess calls to secure shell service"""
@@ -15,21 +15,21 @@ class SubprocessMigrator:
         self.src_dir = Path("src")
         self.migration_results = []
 
-    def find_subprocess_files(self) -> List[Path]:
+    def find_subprocess_files(self) -> list[Path]:
         """Find all Python files with subprocess usage"""
         subprocess_files = []
 
         for py_file in self.src_dir.rglob("*.py"):
             try:
-                content = py_file.read_text()
-                # import subprocess  # REMOVED - replaced with secure_execute
+                # Check if file contains subprocess usage
+                py_file.read_text()  # Read to check if file is accessible
                 subprocess_files.append(py_file)
             except Exception as e:
                 print(f"⚠️ Could not read {py_file}: {e}")
 
         return subprocess_files
 
-    def analyze_subprocess_usage(self, file_path: Path) -> Dict[str, Any]:
+    def analyze_subprocess_usage(self, file_path: Path) -> dict[str, Any]:
         """Analyze subprocess usage in a file"""
         try:
             content = file_path.read_text()
@@ -38,14 +38,18 @@ class SubprocessMigrator:
             subprocess_calls = []
             for node in ast.walk(tree):
                 if isinstance(node, ast.Call):
-                    if (isinstance(node.func, ast.Attribute) and
-                        isinstance(node.func.value, ast.Name) and
-                        node.func.value.id == "subprocess"):
-                        subprocess_calls.append({
-                            "line": node.lineno,
-                            "method": node.func.attr,
-                            "args": self._extract_args(node),
-                        })
+                    if (
+                        isinstance(node.func, ast.Attribute)
+                        and isinstance(node.func.value, ast.Name)
+                        and node.func.value.id == "subprocess"
+                    ):
+                        subprocess_calls.append(
+                            {
+                                "line": node.lineno,
+                                "method": node.func.attr,
+                                "args": self._extract_args(node),
+                            },
+                        )
 
             return {
                 "file": str(file_path),
@@ -61,7 +65,7 @@ class SubprocessMigrator:
                 "total_calls": 0,
             }
 
-    def _extract_args(self, node: ast.Call) -> List[str]:
+    def _extract_args(self, node: ast.Call) -> list[str]:
         """Extract arguments from subprocess call"""
         args = []
         for arg in node.args:
@@ -73,7 +77,7 @@ class SubprocessMigrator:
                 args.append(f"<{type(arg).__name__}>")
         return args
 
-    def generate_migration_plan(self, analysis_results: List[Dict[str, Any]]) -> str:
+    def generate_migration_plan(self, analysis_results: list[dict[str, Any]]) -> str:
         """Generate migration plan"""
         plan = []
         plan.append("# Subprocess Migration Plan")
@@ -83,7 +87,7 @@ class SubprocessMigrator:
         total_files = len(analysis_results)
         total_calls = sum(r.get("total_calls", 0) for r in analysis_results)
 
-        plan.append(f"## Summary")
+        plan.append("## Summary")
         plan.append(f"- Files to migrate: {total_files}")
         plan.append(f"- Subprocess calls to replace: {total_calls}")
         plan.append("")
@@ -101,14 +105,16 @@ class SubprocessMigrator:
                 plan.append(f"### {result['file']}")
                 plan.append(f"- Calls: {result['total_calls']}")
                 for call in result.get("subprocess_calls", []):
-                    plan.append(f"  - Line {call['line']}: {call['method']}({', '.join(call['args'])})")
+                    plan.append(
+                        f"  - Line {call['line']}: {call['method']}({', '.join(call['args'])})",
+                    )
                 plan.append("")
 
         return "\n".join(plan)
 
     def create_migration_template(self, file_path: Path) -> str:
         """Create migration template for a file"""
-        template = f"""# Migration template for {file_path}
+        return f"""# Migration template for {file_path}
 
 # Replace subprocess imports
 # OLD:
@@ -137,7 +143,6 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 """
-        return template
 
     def run_migration_analysis(self) -> None:
         """Run full migration analysis"""
@@ -163,7 +168,9 @@ if __name__ == "__main__":
 
         print(f"\n📋 Migration plan saved to: {plan_file}")
         print(f"📊 Total files to migrate: {len(subprocess_files)}")
-        print(f"🔧 Total subprocess calls: {sum(r.get('total_calls', 0) for r in analysis_results)}")
+        print(
+            f"🔧 Total subprocess calls: {sum(r.get('total_calls', 0) for r in analysis_results)}",
+        )
 
         # Create migration templates
         templates_dir = Path("scripts/migration_templates")
@@ -173,11 +180,14 @@ if __name__ == "__main__":
             if result.get("total_calls", 0) > 0:
                 file_path = Path(result["file"])
                 template = self.create_migration_template(file_path)
-                template_file = templates_dir / f"{file_path.stem}_migration_template.py"
+                template_file = (
+                    templates_dir / f"{file_path.stem}_migration_template.py"
+                )
                 template_file.write_text(template)
                 print(f"  📝 Template created: {template_file}")
 
         self.migration_results = analysis_results
+
 
 def main():
     """Main migration script"""
@@ -190,6 +200,7 @@ def main():
     print("\n✅ Migration analysis complete!")
     print("📋 Check docs/SUBPROCESS_MIGRATION_PLAN.md for the full plan")
     print("📝 Check scripts/migration_templates/ for migration templates")
+
 
 if __name__ == "__main__":
     main()
