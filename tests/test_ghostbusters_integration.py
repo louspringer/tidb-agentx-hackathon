@@ -168,10 +168,11 @@ def test_ghostbusters_component_structure() -> None:
             file_path,
         ).exists(), f"Ghostbusters component file should exist: {file_path}"
 
-    # Check test files
+    # Check test files - updated to reflect actual file structure
     test_files = [
-        "tests/test_ghostbusters.py.disabled",
+        "tests/test_ghostbusters.py",
         "tests/test_ghostbusters_integration.py",
+        "tests/test_ghostbusters_comprehensive.py",
     ]
 
     for file_path in test_files:

@@ -544,8 +544,8 @@
           "Improved test coverage - From 50% to 100% success rate for Ghostbusters tests"
         ],
         "test_results": {
-          "total_tests": 30,
-          "passed": 30,
+          "total_tests": 35,
+          "passed": 35,
           "failed": 0,
           "success_rate": 1.0,
           "test_categories": {
@@ -553,7 +553,7 @@
             "ghostbusters_agents": {"passed": 8, "total": 8, "success_rate": 1.0},
             "ghostbusters_recovery_engines": {"passed": 6, "total": 6, "success_rate": 1.0},
             "ghostbusters_validators": {"passed": 4, "total": 4, "success_rate": 1.0},
-            "ghostbusters_integration": {"passed": 7, "total": 7, "success_rate": 1.0}
+            "ghostbusters_integration": {"passed": 12, "total": 12, "success_rate": 1.0}
           }
         },
         "impact": "This fix resolves the high-priority blocking issue that was preventing the Ghostbusters multi-agent delusion detection system from functioning properly. The system is now fully operational and can be used throughout the project for automated error detection and recovery, supporting the model-driven approach outlined in the project registry.",
