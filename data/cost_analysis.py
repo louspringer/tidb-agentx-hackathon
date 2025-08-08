@@ -84,7 +84,7 @@ Focus on identifying what might be missing or overlooked.
         "total_tokens": total_input_tokens + total_output_tokens,
         "input_cost": input_cost,
         "output_cost": output_cost,
-"total_cost": total_cost
+"total_cost": total_cost,
     }
 
 def analyze_langgraph_costs():
@@ -156,7 +156,7 @@ Focus on your area of expertise and provide unique insights that other perspecti
         "total_tokens": total_input_tokens + total_output_tokens,
         "input_cost": input_cost,
         "output_cost": output_cost,
-"total_cost": total_cost
+"total_cost": total_cost,
     }
 
 def analyze_synthesis_costs():
@@ -243,7 +243,7 @@ Return as a JSON array of fixes, prioritizing fixes that address multiple high-p
         "total_tokens": input_tokens + output_tokens,
         "input_cost": input_cost,
         "output_cost": output_cost,
-"total_cost": total_cost
+"total_cost": total_cost,
     }
 
 def main():

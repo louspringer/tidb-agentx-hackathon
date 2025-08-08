@@ -3,11 +3,12 @@
 MDC Linter - Lint .mdc files for proper structure and content
 """
 
-import sys
-import re
-from pathlib import Path
-from typing import List, Any
 import argparse
+import re
+import sys
+from pathlib import Path
+from typing import Any
+
 import yaml
 
 
@@ -15,8 +16,8 @@ class MDCLinter:
     """Linter for .mdc files with YAML frontmatter"""
 
     def __init__(self: Any) -> None:
-        self.violations: List[str] = []
-        self.warnings: List[str] = []
+        self.violations: list[str] = []
+        self.warnings: list[str] = []
         self.total_files: int = 0
 
     def log_violation(self, file_path: str, message: str) -> None:
@@ -29,7 +30,7 @@ class MDCLinter:
 
     def validate_yaml_frontmatter(self, file_path: str, content: str) -> bool:
         """Validate YAML frontmatter structure"""
-        lines: List[str] = content.split("\n")
+        lines: list[str] = content.split("\n")
 
         # Check for proper YAML frontmatter delimiters
         delimiter_count: int = 0
@@ -58,7 +59,7 @@ class MDCLinter:
                 return False
 
             # Check required fields
-            required_fields: List[str] = ["description", "globs", "alwaysApply"]
+            required_fields: list[str] = ["description", "globs", "alwaysApply"]
             for field in required_fields:
                 if field not in frontmatter:
                     self.log_violation(file_path, f"Missing required field: {field}")
@@ -126,7 +127,7 @@ class MDCLinter:
             return True
 
         # Check if file is in appropriate domain directory
-        valid_dirs: List[Any] = [
+        valid_dirs: list[Any] = [
             "src",
             "scripts",
             "docs",
@@ -138,14 +139,16 @@ class MDCLinter:
             return True
 
         # Root level .mdc files are also valid
-        if path.parent == Path("."):
+        if path.parent == Path():
             return True
 
         self.log_warning(file_path, f"File may be in wrong directory: {parent_dir}")
         return True
 
     def validate_deterministic_editing_compliance(
-        self, file_path: str, content: str
+        self,
+        file_path: str,
+        content: str,
     ) -> bool:
         """Check for deterministic editing compliance"""
         # Check for non-deterministic patterns
@@ -170,7 +173,7 @@ class MDCLinter:
         self.total_files += 1
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content: Any = f.read()
 
             # Validate YAML frontmatter
@@ -235,15 +238,14 @@ class MDCLinter:
         if not self.violations:
             print("\n✅ All .mdc files pass linting!")
             return 0
-        else:
-            print(f"\n❌ Found {len(self.violations)} violations")
-            return 1
+        print(f"\n❌ Found {len(self.violations)} violations")
+        return 1
 
 
 def main() -> None:
     """Main function"""
     parser: Any = argparse.ArgumentParser(
-        description="Lint .mdc files for proper structure"
+        description="Lint .mdc files for proper structure",
     )
     parser.add_argument(
         "path",
@@ -260,7 +262,7 @@ def main() -> None:
 
     if path.is_file():
         # Lint a single file
-        if not path.suffix == ".mdc":
+        if path.suffix != ".mdc":
             print(f"Error: {path} is not a .mdc file")
             sys.exit(1)
 
