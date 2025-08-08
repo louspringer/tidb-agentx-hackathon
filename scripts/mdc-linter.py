@@ -3,19 +3,21 @@
 MDC Linter - Lint .mdc files for proper structure and content
 """
 
-import os
 import sys
+import re
 from pathlib import Path
-
+from typing import List, Any
+import argparse
 import yaml
 
 
 class MDCLinter:
-    """Linter for .mdc files"""
+    """Linter for .mdc files with YAML frontmatter"""
 
-    def __init__(self):
-        self.violations = []
-        self.warnings = []
+    def __init__(self: Any) -> None:
+        self.violations: List[str] = []
+        self.warnings: List[str] = []
+        self.total_files: int = 0
 
     def log_violation(self, file_path: str, message: str) -> None:
         """Log a violation"""
@@ -27,9 +29,10 @@ class MDCLinter:
 
     def validate_yaml_frontmatter(self, file_path: str, content: str) -> bool:
         """Validate YAML frontmatter structure"""
-        lines = content.split("\n")
-        delimiter_count = 0
+        lines: List[str] = content.split("\n")
 
+        # Check for proper YAML frontmatter delimiters
+        delimiter_count: int = 0
         for line in lines:
             if line.strip() == "---":
                 delimiter_count += 1
@@ -43,20 +46,19 @@ class MDCLinter:
 
         # Extract frontmatter
         try:
-            frontmatter_start = lines.index("---")
-            frontmatter_end = lines.index("---", frontmatter_start + 1)
-            frontmatter_content = "\n".join(
-                lines[frontmatter_start + 1 : frontmatter_end],
-            )
-            frontmatter = yaml.safe_load(frontmatter_content)
+            frontmatter_start: int = lines.index("---")
+            frontmatter_end: int = lines.index("---", frontmatter_start + 1)
+            frontmatter_lines = lines[frontmatter_start + 1 : frontmatter_end]
+            frontmatter_text: str = "\n".join(frontmatter_lines)
 
+            # Parse YAML frontmatter
+            frontmatter: Any = yaml.safe_load(frontmatter_text)
             if not frontmatter:
                 self.log_violation(file_path, "Empty or invalid YAML frontmatter")
                 return False
 
             # Check required fields
-            required_fields = ["description", "globs", "alwaysApply"]
-
+            required_fields: List[str] = ["description", "globs", "alwaysApply"]
             for field in required_fields:
                 if field not in frontmatter:
                     self.log_violation(file_path, f"Missing required field: {field}")
@@ -89,10 +91,12 @@ class MDCLinter:
 
     def validate_markdown_content(self, file_path: str, content: str) -> bool:
         """Validate markdown content structure"""
-        lines = content.split("\n")
+        lines: Any = content.split("\n")
 
+        # Check for content after frontmatter
         try:
-            frontmatter_end = lines.index("---", lines.index("---") + 1)
+            frontmatter_start: Any = lines.index("---")
+            frontmatter_end: Any = lines.index("---", frontmatter_start + 1)
             content_after_frontmatter = lines[frontmatter_end + 1 :]
 
             if not any(line.strip() for line in content_after_frontmatter):
@@ -100,77 +104,123 @@ class MDCLinter:
                 return False
 
             # Check for proper markdown structure
-            has_content = any(line.strip() for line in content_after_frontmatter)
-            if not has_content:
-                self.log_violation(file_path, "No meaningful content in markdown")
-                return False
+            has_headers: Any = any(
+                line.startswith("#") for line in content_after_frontmatter
+            )
+            if not has_headers:
+                self.log_warning(file_path, "No markdown headers found in content")
 
             return True
 
         except ValueError:
-            self.log_violation(file_path, "Could not find YAML frontmatter")
+            self.log_violation(file_path, "Cannot find YAML frontmatter delimiters")
             return False
 
+    def validate_file_organization(self, file_path: str) -> bool:
+        """Validate file is in appropriate directory"""
+        path: Any = Path(file_path)
+        parent_dir: Any = path.parent.name
+
+        # Check if file is in a .cursor/rules directory
+        if ".cursor/rules" in str(path):
+            return True
+
+        # Check if file is in appropriate domain directory
+        valid_dirs: List[Any] = [
+            "src",
+            "scripts",
+            "docs",
+            "config",
+            "data",
+            "healthcare-cdc",
+        ]
+        if parent_dir in valid_dirs:
+            return True
+
+        # Root level .mdc files are also valid
+        if path.parent == Path("."):
+            return True
+
+        self.log_warning(file_path, f"File may be in wrong directory: {parent_dir}")
+        return True
+
     def validate_deterministic_editing_compliance(
-        self,
-        file_path: str,
-        content: str,
+        self, file_path: str, content: str
     ) -> bool:
-        """Validate deterministic editing compliance"""
-        # Check for deterministic patterns
-        if "TODO" in content or "FIXME" in content:
-            self.log_warning(
-                file_path,
-                "Contains TODO/FIXME - ensure deterministic resolution",
-            )
+        """Check for deterministic editing compliance"""
+        # Check for non-deterministic patterns
+        non_deterministic_patterns: Any = [
+            r"edit_file\s*\(",
+            r"fuzzy.*edit",
+            r"random.*format",
+        ]
+
+        for pattern in non_deterministic_patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                self.log_violation(
+                    file_path,
+                    f"Contains non-deterministic pattern: {pattern}",
+                )
+                return False
 
         return True
 
     def lint_file(self, file_path: str) -> bool:
         """Lint a single .mdc file"""
-        try:
-            with open(file_path) as f:
-                content = f.read()
+        self.total_files += 1
 
-            is_valid = True
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                content: Any = f.read()
 
             # Validate YAML frontmatter
             if not self.validate_yaml_frontmatter(file_path, content):
-                is_valid = False
+                return False
 
             # Validate markdown content
             if not self.validate_markdown_content(file_path, content):
-                is_valid = False
+                return False
+
+            # Validate file organization
+            self.validate_file_organization(file_path)
 
             # Validate deterministic editing compliance
             if not self.validate_deterministic_editing_compliance(file_path, content):
-                is_valid = False
+                return False
 
-            return is_valid
+            return True
 
         except Exception as e:
             self.log_violation(file_path, f"Error reading file: {e}")
             return False
 
     def lint_directory(self, directory: str) -> int:
-        """Lint all .mdc files in a directory"""
-        mdc_files = list(Path(directory).rglob("*.mdc"))
+        """Lint all .mdc files in directory"""
+        directory_path: Any = Path(directory)
+
+        if not directory_path.exists():
+            print(f"Error: Directory {directory} does not exist")
+            sys.exit(1)
+
+        mdc_files: Any = list(directory_path.rglob("*.mdc"))
 
         if not mdc_files:
             print(f"No .mdc files found in {directory}")
             return 0
 
-        valid_files = 0
-        total_files = len(mdc_files)
+        print(f"Found {len(mdc_files)} .mdc files to lint")
 
+        failed_files: int = 0
         for file_path in mdc_files:
-            if self.lint_file(str(file_path)):
-                valid_files += 1
+            if not self.lint_file(str(file_path)):
+                failed_files += 1
 
         # Print results
-        print(f"Linted {total_files} .mdc files")
-        print(f"Valid: {valid_files}")
-        print(f"Invalid: {total_files - valid_files}")
+        print("\nLinting completed:")
+        print(f"Total files: {self.total_files}")
+        print(f"Failed files: {failed_files}")
+        print(f"Violations: {len(self.violations)}")
+        print(f"Warnings: {len(self.warnings)}")
 
         if self.violations:
             print("\nViolations:")
@@ -182,23 +232,51 @@ class MDCLinter:
             for warning in self.warnings:
                 print(f"  ⚠️  {warning}")
 
-        return total_files - valid_files
+        if not self.violations:
+            print("\n✅ All .mdc files pass linting!")
+            return 0
+        else:
+            print(f"\n❌ Found {len(self.violations)} violations")
+            return 1
 
 
 def main() -> None:
     """Main function"""
-    if len(sys.argv) != 2:
-        print("Usage: python mdc-linter.py <directory>")
-        sys.exit(1)
+    parser: Any = argparse.ArgumentParser(
+        description="Lint .mdc files for proper structure"
+    )
+    parser.add_argument(
+        "path",
+        nargs="?",
+        default=".",
+        help="File or directory to lint (default: current directory)",
+    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
 
-    directory = sys.argv[1]
-    if not os.path.exists(directory):
-        print(f"Directory not found: {directory}")
-        sys.exit(1)
+    args: Any = parser.parse_args()
 
-    linter = MDCLinter()
-    exit_code = linter.lint_directory(directory)
-    sys.exit(exit_code)
+    linter: Any = MDCLinter()
+    path: Any = Path(args.path)
+
+    if path.is_file():
+        # Lint a single file
+        if not path.suffix == ".mdc":
+            print(f"Error: {path} is not a .mdc file")
+            sys.exit(1)
+
+        success: Any = linter.lint_file(str(path))
+        if success:
+            print(f"✅ {path} passes linting")
+            sys.exit(0)
+        else:
+            print(f"❌ {path} has violations:")
+            for violation in linter.violations:
+                print(f"  {violation}")
+            sys.exit(1)
+    else:
+        # Lint a directory
+        exit_code: Any = linter.lint_directory(args.path)
+        sys.exit(exit_code)
 
 
 if __name__ == "__main__":
