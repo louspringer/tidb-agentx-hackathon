@@ -215,7 +215,12 @@ test-cloudformation: ## Run CloudFormation tests
 
 test-docs: ## Run documentation tests
 	@echo "$(BLUE)📚 Running documentation tests...$(NC)"
-	@find docs/ -name "*.md" -exec markdownlint {} \;
+	@if command -v markdownlint >/dev/null 2>&1; then \
+		find docs/ -name "*.md" -exec markdownlint {} \; ; \
+	else \
+		echo "⚠️  markdownlint not installed, skipping documentation linting"; \
+		echo "   To install: npm install -g markdownlint-cli"; \
+	fi
 	@echo "$(GREEN)✅ Documentation tests completed$(NC)"
 
 test-security: ## Run security tests and scans

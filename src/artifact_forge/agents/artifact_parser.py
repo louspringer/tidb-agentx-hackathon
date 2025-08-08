@@ -412,8 +412,11 @@ class ArtifactParser:
 
                 frontmatter = yaml.safe_load(parts[1]) or {}
                 markdown_content = parts[2]
-            except Exception:
-                pass
+            except Exception as e:
+                # Log the error for debugging but continue with empty frontmatter
+                logger.debug(f"Failed to parse YAML frontmatter in {file_path}: {e}")
+                frontmatter = {}
+                markdown_content = parts[2] if len(parts) > 2 else ""
 
         parsed_data = {
             "frontmatter": frontmatter,

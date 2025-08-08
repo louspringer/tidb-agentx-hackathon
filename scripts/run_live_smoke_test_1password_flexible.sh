@@ -39,8 +39,7 @@ find_1password_credential() {
             echo "    Trying field: '$field_name'"
             
             # Try to get the credential
-            credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null)
-            if [ $? -eq 0 ] && [ -n "$credential" ]; then
+            if credential=$(op item get "$item_name" --fields "$field_name" --reveal 2>/dev/null) && [ -n "$credential" ]; then
                 echo "    ✅ Found $provider API key in '$item_name' field '$field_name'"
                 echo "$credential"
                 return 0
@@ -94,8 +93,7 @@ ANTHROPIC_FIELDS=(
 
 # Try to get OpenAI API key
 echo ""
-OPENAI_API_KEY=$(find_1password_credential "OpenAI" "${OPENAI_ITEMS[*]}" "${OPENAI_FIELDS[*]}")
-if [ $? -eq 0 ]; then
+if OPENAI_API_KEY=$(find_1password_credential "OpenAI" "${OPENAI_ITEMS[*]}" "${OPENAI_FIELDS[*]}"); then
     echo "✅ Found OpenAI API key in 1Password"
     export OPENAI_API_KEY
 else
@@ -105,8 +103,7 @@ fi
 
 # Try to get Anthropic API key
 echo ""
-ANTHROPIC_API_KEY=$(find_1password_credential "Anthropic" "${ANTHROPIC_ITEMS[*]}" "${ANTHROPIC_FIELDS[*]}")
-if [ $? -eq 0 ]; then
+if ANTHROPIC_API_KEY=$(find_1password_credential "Anthropic" "${ANTHROPIC_ITEMS[*]}" "${ANTHROPIC_FIELDS[*]}"); then
     echo "✅ Found Anthropic API key in 1Password"
     export ANTHROPIC_API_KEY
 else

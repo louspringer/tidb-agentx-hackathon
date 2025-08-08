@@ -39,16 +39,16 @@ echo "🔧 Building Docker image..."
 cd src/ghostbusters_api
 
 # Build the image
-gcloud builds submit --tag $IMAGE_NAME --project=$PROJECT_ID .
+gcloud builds submit --tag "$IMAGE_NAME" --project="$PROJECT_ID" .
 
 # Deploy to Cloud Run
 echo ""
 echo "🚀 Deploying to Cloud Run..."
-gcloud run deploy $SERVICE_NAME \
-    --image=$IMAGE_NAME \
+gcloud run deploy "$SERVICE_NAME" \
+    --image="$IMAGE_NAME" \
     --platform=managed \
-    --region=$REGION \
-    --project=$PROJECT_ID \
+    --region="$REGION" \
+    --project="$PROJECT_ID" \
     --allow-unauthenticated \
     --memory=2Gi \
     --cpu=2 \
@@ -59,7 +59,7 @@ gcloud run deploy $SERVICE_NAME \
     --service-account="1077539189076-compute@developer.gserviceaccount.com"
 
 # Get the service URL
-SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --project=$PROJECT_ID --format="value(status.url)")
+SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --region="$REGION" --project="$PROJECT_ID" --format="value(status.url)")
 
 echo ""
 echo "✅ Ghostbusters API Container deployed successfully!"

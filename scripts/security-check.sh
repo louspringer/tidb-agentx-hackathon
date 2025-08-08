@@ -61,11 +61,14 @@ check_hardcoded_credentials() {
     for pattern in "${patterns[@]}"; do
         # Skip ParameterKey patterns which are legitimate
         if [[ "$pattern" == *"key.*=.*"* ]]; then
-            local matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.cursor --exclude=*.log --exclude=security-check.sh 2>/dev/null | grep -v "ParameterKey" | grep -v "values\[" || true)
+            local matches
+            matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log --exclude=security-check.sh 2>/dev/null | grep -v "ParameterKey" | grep -v "values\[" || true)
         elif [[ "$pattern" == *"credential.*=.*"* ]]; then
-            local matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.cursor --exclude=*.log --exclude=security-check.sh 2>/dev/null | grep -v "values\[" || true)
+            local matches
+            matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log --exclude=security-check.sh 2>/dev/null | grep -v "values\[" || true)
         else
-            local matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.cursor --exclude=*.log --exclude=security-check.sh 2>/dev/null || true)
+            local matches
+            matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log --exclude=security-check.sh 2>/dev/null || true)
         fi
         if [ -n "$matches" ]; then
             print_error "Found potential hardcoded credentials with pattern: $pattern"
@@ -74,7 +77,7 @@ check_hardcoded_credentials() {
         fi
     done
     
-    if [ $violations -eq 0 ]; then
+    if [ "$violations" -eq 0 ]; then
         print_success "No hardcoded credentials found"
     else
         print_error "Found $violations potential credential violations"
@@ -100,7 +103,8 @@ check_account_specific_data() {
     )
     
     for pattern in "${patterns[@]}"; do
-        local matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log 2>/dev/null || true)
+        local matches
+        matches=$(grep -r -E "$pattern" . --exclude-dir=.git --exclude-dir=node_modules --exclude=*.log 2>/dev/null || true)
         if [ -n "$matches" ]; then
             print_warning "Found potential account-specific data with pattern: $pattern"
             echo "$matches" | head -3
@@ -108,7 +112,7 @@ check_account_specific_data() {
         fi
     done
     
-    if [ $violations -eq 0 ]; then
+    if [ "$violations" -eq 0 ]; then
         print_success "No account-specific data found"
     else
         print_warning "Found $violations potential account-specific data violations"
@@ -132,7 +136,8 @@ check_cloudformation_hardcoded() {
     )
     
     for pattern in "${hardcoded_patterns[@]}"; do
-        local matches=$(grep -r -E "$pattern" . --include="*.yaml" --include="*.yml" --exclude-dir=.git 2>/dev/null || true)
+        local matches
+        matches=$(grep -r -E "$pattern" . --include="*.yaml" --include="*.yml" --exclude-dir=.git 2>/dev/null || true)
         if [ -n "$matches" ]; then
             print_error "Found hardcoded values in CloudFormation templates: $pattern"
             echo "$matches"
@@ -140,7 +145,7 @@ check_cloudformation_hardcoded() {
         fi
     done
     
-    if [ $violations -eq 0 ]; then
+    if [ "$violations" -eq 0 ]; then
         print_success "No hardcoded values found in CloudFormation templates"
     else
         print_error "Found $violations hardcoded value violations in CloudFormation templates"
@@ -230,7 +235,7 @@ check_placeholder_usage() {
         done
     done
     
-    if [ $violations -eq 0 ]; then
+    if [ "$violations" -eq 0 ]; then
         print_success "Example files use proper placeholders"
     else
         print_error "Found $violations violations in example files"
@@ -251,12 +256,12 @@ check_parameter_validation() {
     # Check for parameters with hardcoded defaults (bad)
     local hardcoded_defaults=$(grep -r "Default:" . --include="*.yaml" --include="*.yml" --exclude-dir=.git | grep -E "(https://|UUID|KEY|SECRET)" | wc -l)
     
-    if [ $hardcoded_defaults -gt 0 ]; then
+    if [ "$hardcoded_defaults" -gt 0 ]; then
         print_error "Found $hardcoded_defaults parameters with hardcoded defaults"
         violations=$((violations + hardcoded_defaults))
     fi
     
-    if [ $required_params -gt 0 ]; then
+    if [ "$required_params" -gt 0 ]; then
         print_success "Found $required_params required parameters (good)"
     fi
     
@@ -300,7 +305,7 @@ main() {
     echo "Checks performed: $checks"
     echo "Total violations found: $total_violations"
     
-    if [ $total_violations -eq 0 ]; then
+    if [ "$total_violations" -eq 0 ]; then
         print_success "All security checks passed! ✅"
         exit 0
     else

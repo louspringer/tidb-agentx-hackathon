@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 
-def test_python_syntax():
+def test_python_syntax() -> None:
     """Test that Python files have valid syntax"""
     test_files = [
         "src/streamlit/openflow_quickstart_app.py",
@@ -32,17 +32,17 @@ def test_python_syntax():
 
             except SyntaxError as e:
                 print(f"❌ Syntax error in {file_path}: {e}")
-                return False
+                error_msg = f"Syntax error in {file_path}: {e}"
+                raise AssertionError(error_msg)
             except Exception as e:
                 print(f"❌ Error reading {file_path}: {e}")
-                return False
+                error_msg = f"Error reading {file_path}: {e}"
+                raise AssertionError(error_msg)
         else:
             print(f"⚠️  File not found: {file_path}")
 
-    return True
 
-
-def test_code_structure():
+def test_code_structure() -> None:
     """Test that code has expected structure"""
     # Test streamlit app structure
     streamlit_file = Path("src/streamlit/openflow_quickstart_app.py")
@@ -77,10 +77,8 @@ def test_code_structure():
 
         print("✅ Streamlit app has expected structure")
 
-    return True
 
-
-def run_code_quality_tests():
+def run_code_quality_tests() -> None:
     """Run all code quality tests"""
     print("🚀 Running code quality tests...")
 
@@ -94,16 +92,15 @@ def run_code_quality_tests():
 
     for test in tests:
         try:
-            if test():
-                passed += 1
-        except Exception as e:
+            test()
+            passed += 1
+        except AssertionError as e:
             print(f"❌ Test {test.__name__} failed: {e}")
 
     if passed == total:
         print("🎉 All code quality tests passed!")
-        return True
-    print(f"⚠️  {passed}/{total} tests passed")
-    return False
+    else:
+        print(f"⚠️  {passed}/{total} tests passed")
 
 
 if __name__ == "__main__":

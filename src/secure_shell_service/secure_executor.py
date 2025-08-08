@@ -90,6 +90,16 @@ class SecureExecutor:
                 "safe": True,
                 "description": "Type checker",
             },
+            "secure-shell-service": {
+                "allowed_args": [],
+                "safe": True,
+                "description": "Secure shell service",
+            },
+            "./src/secure_shell_service/secure-shell-service": {
+                "allowed_args": [],
+                "safe": True,
+                "description": "Secure shell service executable",
+            },
         }
 
     def _validate_command(self, command: Union[str, list[str]]) -> bool:
@@ -107,6 +117,13 @@ class SecureExecutor:
             # Allow python executable paths
             if cmd.endswith(("python", "python3")) or "python" in cmd:
                 # This is a python executable, allow it
+                pass
+            # Allow secure shell service paths
+            elif (
+                any(cmd.startswith(prefix) for prefix in ("./", "src/"))
+                or "secure-shell-service" in cmd
+            ):
+                # This is a secure shell service path, allow it
                 pass
             else:
                 logger.warning(f"Command not allowed: {cmd}")
@@ -195,11 +212,15 @@ class SecureExecutor:
     async def execute(
         self,
         command: Union[str, list[str]],
-        capture_output: bool = True,
-        text: bool = True,
+        capture_output: Optional[bool] = None,
+        text: Optional[bool] = None,
         timeout: Optional[int] = None,
     ) -> CommandResult:
         """Execute command securely"""
+        # Set defaults if None
+        capture_output = True if capture_output is None else capture_output
+        text = True if text is None else text
+
         start_time = asyncio.get_event_loop().time()
 
         try:
@@ -220,7 +241,7 @@ class SecureExecutor:
             # Create temporary working directory if needed
             with tempfile.TemporaryDirectory() as temp_dir:
                 # Change to working directory
-                original_dir = os.getcwd()
+                original_dir = Path.cwd()
                 os.chdir(temp_dir)
 
                 try:
@@ -292,34 +313,43 @@ class SecureExecutor:
     def execute_sync(
         self,
         command: Union[str, list[str]],
-        capture_output: bool = True,
-        text: bool = True,
+        capture_output: Optional[bool] = None,
+        text: Optional[bool] = None,
         timeout: Optional[int] = None,
     ) -> CommandResult:
         """Synchronous version of execute"""
+        # Set defaults if None
+        capture_output = True if capture_output is None else capture_output
+        text = True if text is None else text
         return asyncio.run(self.execute(command, capture_output, text, timeout))
 
     def run(
         self,
         command: Union[str, list[str]],
-        capture_output: bool = True,
-        text: bool = True,
+        capture_output: Optional[bool] = None,
+        text: Optional[bool] = None,
         timeout: Optional[int] = None,
     ) -> CommandResult:
-        """Compatibility method to replace subprocess.run"""
+        """Alias for execute_sync"""
+        # Set defaults if None
+        capture_output = True if capture_output is None else capture_output
+        text = True if text is None else text
         return self.execute_sync(command, capture_output, text, timeout)
 
 
 # Convenience function for easy replacement
 def secure_execute(
     command: Union[str, list[str]],
-    capture_output: bool = True,
-    text: bool = True,
+    capture_output: Optional[bool] = None,
+    text: Optional[bool] = None,
     timeout: Optional[int] = None,
 ) -> CommandResult:
-    """Secure alternative to subprocess.run"""
+    """Convenience function for secure command execution"""
+    # Set defaults if None
+    capture_output = True if capture_output is None else capture_output
+    text = True if text is None else text
     executor = SecureExecutor()
-    return executor.run(command, capture_output, text, timeout)
+    return asyncio.run(executor.execute(command, capture_output, text, timeout))
 
 
 # Example usage

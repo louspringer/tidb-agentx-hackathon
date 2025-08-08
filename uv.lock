@@ -1607,6 +1607,7 @@ dev = [
     { name = "flake8" },
     { name = "mypy" },
     { name = "pandas-stubs" },
+    { name = "pymarkdown" },
     { name = "pytest" },
     { name = "pytest-mock" },
     { name = "safety" },
@@ -1661,6 +1662,7 @@ dev = [
     { name = "flake8", specifier = ">=6.0.0" },
     { name = "mypy", specifier = ">=1.0.0" },
     { name = "pandas-stubs", specifier = ">=2.0.0" },
+    { name = "pymarkdown", specifier = ">=0.1.4" },
     { name = "pytest", specifier = ">=7.4.0" },
     { name = "pytest-mock", specifier = ">=3.11.0" },
     { name = "safety", specifier = ">=2.3.0" },
@@ -2294,6 +2296,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/e7/46/bd74733ff23167559
 wheels = [
     { url = "https://files.pythonhosted.org/packages/61/ad/689f02752eeec26aed679477e80e632ef1b682313be70793d798c1d5fc8f/PyJWT-2.10.1-py3-none-any.whl", hash = "sha256:dcdd193e30abefd5debf142f9adfcdd2b58004e644f25406ffaebd50bd98dacb", size = 22997, upload-time = "2024-11-28T03:43:27.893Z" },
 ]
+
+[[package]]
+name = "pymarkdown"
+version = "0.1.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "toolz" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f2/93/28382c3eec15f7cce0b07d92770de445d2cc1d4702dfa16ba2892cbf0ad1/pymarkdown-0.1.4.tar.gz", hash = "sha256:680e36d2d81148a0f9ff4b932b8e30517a591f3f719215940a6672c163cf6de8", size = 3978, upload-time = "2015-04-05T23:58:54.391Z" }
 
 [[package]]
 name = "pytest"
@@ -3011,6 +3022,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/cc/18/0bbf3884e9eaa38819ebe46a7bd25dcd56b67434402b66a58c4b8e552575/tomlkit-0.13.3.tar.gz", hash = "sha256:430cf247ee57df2b94ee3fbe588e71d362a941ebb545dec29b53961d61add2a1", size = 185207, upload-time = "2025-06-05T07:13:44.947Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/75/8539d011f6be8e29f339c42e633aae3cb73bffa95dd0f9adec09b9c58e85/tomlkit-0.13.3-py3-none-any.whl", hash = "sha256:c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0", size = 38901, upload-time = "2025-06-05T07:13:43.546Z" },
+]
+
+[[package]]
+name = "toolz"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/0b/d80dfa675bf592f636d1ea0b835eab4ec8df6e9415d8cfd766df54456123/toolz-1.0.0.tar.gz", hash = "sha256:2c86e3d9a04798ac556793bced838816296a2f085017664e4995cb40a1047a02", size = 66790, upload-time = "2024-10-04T16:17:04.001Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/98/eb27cc78ad3af8e302c9d8ff4977f5026676e130d28dd7578132a457170c/toolz-1.0.0-py3-none-any.whl", hash = "sha256:292c8f1c4e7516bf9086f8850935c799a874039c8bcf959d47b600e4c44a6236", size = 56383, upload-time = "2024-10-04T16:17:01.533Z" },
 ]
 
 [[package]]
