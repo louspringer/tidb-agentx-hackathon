@@ -9,11 +9,10 @@ import sys
 from pathlib import Path
 
 
-def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProcess:
+def run_command(cmd: list[str], *, check: bool = True) -> subprocess.CompletedProcess:
     """Run a command with proper error handling"""
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=check)
-        return result
+        return subprocess.run(cmd, capture_output=True, text=True, check=check)
     except subprocess.CalledProcessError as e:
         print(f"❌ Command failed: {' '.join(cmd)}")
         print(f"Error: {e.stderr}")
@@ -55,9 +54,8 @@ def run_tests() -> bool:
     if result.returncode == 0:
         print("✅ All tests passed")
         return True
-    else:
-        print("❌ Tests failed")
-        return False
+    print("❌ Tests failed")
+    return False
 
 
 def main():
