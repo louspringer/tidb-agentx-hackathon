@@ -6,6 +6,8 @@ config.env
 .aws/
 aws-credentials
 
+
+
 # CloudFormation temporary files
 *.template
 *.yaml.bak
