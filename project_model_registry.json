@@ -69,6 +69,13 @@
         "hackathon"
       ],
       "purpose": "Track, coordinate, and manage hackathon participation across all relevant contests"
+    },
+    "project_management_coordination": {
+      "description": "Central coordination domain for project management, design methodology, and workflow orchestration",
+      "domains": [
+        "project_management_design"
+      ],
+      "purpose": "Provide unified project management, systematic design approaches, and cross-domain workflow orchestration"
     }
   },
   "dependency_relationships": {
@@ -109,6 +116,9 @@
     },
     "hackathon_coordination_dependencies": {
       "hackathon": ["ghostbusters", "multi_agent_testing", "model_driven_projection", "streamlit_demo_app"]
+    },
+    "project_management_dependencies": {
+      "project_management_design": ["ghostbusters", "model_driven_projection", "multi_agent_testing", "hackathon"]
     }
   },
   "domains": {
@@ -1157,6 +1167,91 @@
           "Prepare backup plans for component failures"
         ]
       }
+    },
+    "project_management_design": {
+      "patterns": [
+        "project_management/*.md",
+        "project_management/*.yaml",
+        "project_management/*.json",
+        "**/*project_management*.py",
+        "**/*project_management*.md",
+        "**/*design_methodology*.py",
+        "**/*workflow_orchestration*.py",
+        "**/*project_planning*.py"
+      ],
+      "content_indicators": [
+        "project_management",
+        "design_methodology",
+        "workflow_orchestration",
+        "project_planning",
+        "resource_allocation",
+        "risk_management",
+        "milestone_tracking",
+        "stakeholder_communication",
+        "model_driven_design",
+        "domain_driven_design",
+        "architecture_patterns",
+        "design_validation",
+        "workflow_definition",
+        "workflow_execution",
+        "workflow_monitoring",
+        "cross_domain_workflows"
+      ],
+      "linter": "flake8",
+      "formatter": "black",
+      "validator": "pytest",
+      "exclusions": [
+        "__pycache__/*",
+        "*.pyc"
+      ],
+      "requirements": [
+        "Provide unified project management oversight across all domains",
+        "Implement systematic design methodologies and patterns",
+        "Orchestrate cross-domain workflows and automation",
+        "Manage project planning, scheduling, and resource allocation",
+        "Implement risk management and milestone tracking",
+        "Provide stakeholder communication and progress reporting",
+        "Support model-driven and domain-driven design approaches",
+        "Enable workflow definition, execution, and monitoring",
+        "Integrate with existing Ghostbusters and multi-agent systems",
+        "Support hackathon coordination and project execution"
+      ],
+      "demo_role": "coordination",
+      "extraction_candidate": false,
+      "reason": "Central project management and design coordination domain that should remain in main project",
+      "project_management_capabilities": {
+        "planning_and_scheduling": [
+          "Project timeline management",
+          "Resource allocation and planning",
+          "Milestone definition and tracking",
+          "Dependency mapping and management"
+        ],
+        "design_methodology": [
+          "Model-driven design approaches",
+          "Domain-driven design patterns",
+          "Architecture pattern validation",
+          "Design evolution and iteration"
+        ],
+        "workflow_orchestration": [
+          "Cross-domain workflow definition",
+          "Workflow execution and monitoring",
+          "Workflow automation and optimization",
+          "Integration with existing systems"
+        ],
+        "risk_management": [
+          "Risk identification and assessment",
+          "Mitigation strategy development",
+          "Progress monitoring and reporting",
+          "Stakeholder communication"
+        ]
+      },
+      "integration_points": {
+        "ghostbusters": "Multi-agent orchestration and automation",
+        "multi_agent_testing": "Workflow testing and validation",
+        "model_driven_projection": "Design methodology support",
+        "hackathon": "Project coordination and execution",
+        "all_domains": "Centralized management and oversight"
+      }
     }
   },
   "tool_selection_logic": {
@@ -1781,6 +1876,36 @@
       "domain": "data",
       "implementation": "Jsonschema integration for comprehensive data validation",
       "test": "test_requirement_90_data_jsonschema_validation"
+    },
+    {
+      "requirement": "Provide unified project management oversight across all domains",
+      "domain": "project_management_design",
+      "implementation": "Centralized project management with cross-domain coordination",
+      "test": "test_requirement_91_project_management_unified_oversight"
+    },
+    {
+      "requirement": "Implement systematic design methodologies and patterns",
+      "domain": "project_management_design",
+      "implementation": "Model-driven and domain-driven design approaches with pattern validation",
+      "test": "test_requirement_92_project_management_design_methodologies"
+    },
+    {
+      "requirement": "Orchestrate cross-domain workflows and automation",
+      "domain": "project_management_design",
+      "implementation": "Workflow orchestration system with cross-domain integration",
+      "test": "test_requirement_93_project_management_workflow_orchestration"
+    },
+    {
+      "requirement": "Manage project planning, scheduling, and resource allocation",
+      "domain": "project_management_design",
+      "implementation": "Comprehensive project planning with resource management",
+      "test": "test_requirement_94_project_management_planning_scheduling"
+    },
+    {
+      "requirement": "Implement risk management and milestone tracking",
+      "domain": "project_management_design",
+      "implementation": "Risk assessment and milestone tracking system",
+      "test": "test_requirement_95_project_management_risk_milestone"
     }
   ],
   "implementation_plan": {
@@ -2203,23 +2328,24 @@
     "model_type": "Demo-focused architecture with comprehensive tool ecosystem",
     "file": "project_model_registry.json",
     "project_purpose": "Demonstrate end-to-end Snowflake OpenFlow deployment while providing tools for creating and managing such demos",
-    "domain_architecture": {
-      "demo_core": 4,
-      "demo_tools": 6,
-      "demo_infrastructure": 6,
-      "demo_apis": 3,
-      "demo_utilities": 6,
-      "hackathon_coordination": 1
-    },
-    "domain_coverage": {
-      "total_domains": 26,
-      "core_domains": 4,
-      "tool_domains": 6,
-      "infrastructure_domains": 6,
-      "api_domains": 3,
-      "utility_domains": 6,
-      "coordination_domains": 1
-    },
+                    "domain_architecture": {
+                  "demo_core": 4,
+                  "demo_tools": 6,
+                  "demo_infrastructure": 6,
+                  "demo_apis": 3,
+                  "demo_utilities": 6,
+                  "hackathon_coordination": 1,
+                  "project_management_coordination": 1
+                },
+                    "domain_coverage": {
+                  "total_domains": 27,
+                  "core_domains": 4,
+                  "tool_domains": 6,
+                  "infrastructure_domains": 6,
+                  "api_domains": 3,
+                  "utility_domains": 6,
+                  "coordination_domains": 2
+                },
     "test_coverage": {
       "total_tests": 144,
       "success_rate": "100%",
