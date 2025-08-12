@@ -73,3 +73,7 @@ secrets/
 keys/ 
 # Mypy cache
 .mypy_cache/
+
+# Confidential and incoming files
+.incoming/
+*.pdf
