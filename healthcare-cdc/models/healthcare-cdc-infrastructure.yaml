@@ -1,0 +1,485 @@
+# Copyright (c) 2025 Snowflake Inc. All rights reserved.
+# This software is proprietary and may not be disclosed to third parties without the express written consent of Snowflake Inc.
+# Any unauthorized reproduction, distribution, modification, or use is strictly prohibited.
+#
+# Healthcare CDC Infrastructure CloudFormation Template
+# Based on: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/
+# Original Contributors: Snowflake Inc.
+# Enhanced by: OpenFlow Playground Team
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Healthcare CDC Infrastructure with DynamoDB, Kinesis, and Openflow'
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC ID for the infrastructure
+    ConstraintDescription: Must be a valid VPC ID
+
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Subnet ID for the EC2 instance (must be public with internet access)
+    ConstraintDescription: Must be a valid subnet ID
+
+  DynamoDBTableName:
+    Type: String
+    Default: InsuranceClaims
+    Description: Name for the DynamoDB table
+    AllowedPattern: '[a-zA-Z0-9_-]+'
+    ConstraintDescription: Must contain only alphanumeric characters, hyphens, and underscores
+
+  KinesisStreamName:
+    Type: String
+    Default: InsuranceClaimsStream
+    Description: Name for the Kinesis Data Stream
+    AllowedPattern: '[a-zA-Z0-9_-]+'
+    ConstraintDescription: Must contain only alphanumeric characters, hyphens, and underscores
+
+  EC2InstanceType:
+    Type: String
+    Default: t3.medium
+    Description: EC2 instance type for the jumphost
+    AllowedValues:
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+
+  TrustedIpRange:
+    Type: String
+    Default: 203.0.113.0/24
+    Description: Trusted IP range for SSH and HTTP access (CIDR notation)
+    AllowedPattern: '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$'
+    ConstraintDescription: Must be a valid CIDR block (e.g., 203.0.113.0/24)
+
+Resources:
+  # DynamoDB Table for Healthcare Claims
+  InsuranceClaimsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref DynamoDBTableName
+      AttributeDefinitions:
+        - AttributeName: claim_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: claim_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      StreamSpecification:
+        StreamEnabled: true
+        StreamViewType: NEW_AND_OLD_IMAGES
+      Tags:
+        - Key: Purpose
+          Value: Healthcare CDC Demo
+        - Key: Environment
+          Value: Development
+
+  # Kinesis Data Stream for CDC Events
+  InsuranceClaimsStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: !Ref KinesisStreamName
+      ShardCount: 1
+      StreamEncryption:
+        EncryptionType: KMS
+        KeyId: alias/aws/kinesis
+      Tags:
+        - Key: Purpose
+          Value: Healthcare CDC Demo
+        - Key: Environment
+          Value: Development
+
+  # Security Group for EC2 Instance
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Healthcare CDC EC2 instance
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref TrustedIpRange
+          Description: SSH access (restricted to trusted IP range)
+          # DEMO ONLY: This allows SSH access for demonstration purposes
+          # In production, consider using AWS Systems Manager Session Manager
+          # For healthcare compliance, implement strict IP restrictions
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref TrustedIpRange
+          Description: HTTP access (restricted to trusted IP range)
+          # DEMO ONLY: This allows HTTP access for demonstration purposes
+          # In production, use a load balancer with proper security groups
+          # For healthcare compliance, implement strict access controls
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref TrustedIpRange
+          Description: HTTPS access (restricted to trusted IP range)
+          # DEMO ONLY: This allows HTTPS access for demonstration purposes
+          # In production, use a load balancer with proper security groups
+          # For healthcare compliance, implement strict access controls
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: All outbound traffic
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-EC2-SecurityGroup'
+
+  # IAM Role for EC2 Instance
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AWS::StackName}-EC2-Role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Policies:
+        - PolicyName: HealthcareCDCPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetRecords
+                  - dynamodb:GetShardIterator
+                  - dynamodb:DescribeStream
+                  - dynamodb:ListStreams
+                Resource:
+                  - !GetAtt InsuranceClaimsTable.Arn
+                  - !Sub '${InsuranceClaimsTable.Arn}/stream/*'
+              - Effect: Allow
+                Action:
+                  - kinesis:PutRecord
+                  - kinesis:PutRecords
+                  - kinesis:GetRecords
+                  - kinesis:GetShardIterator
+                  - kinesis:DescribeStream
+                  - kinesis:ListStreams
+                Resource: !GetAtt InsuranceClaimsStream.Arn
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                Resource: '*'
+      Tags:
+        - Key: Purpose
+          Value: Healthcare CDC Demo
+
+  # IAM Instance Profile
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub '${AWS::StackName}-EC2-Profile'
+      Roles:
+        - !Ref EC2InstanceRole
+
+  # EC2 Instance for Data Ingestion and Testing
+  HealthcareCDCInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref EC2InstanceType
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      SubnetId: !Ref SubnetId
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 20
+            VolumeType: gp3
+            Encrypted: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -e
+          
+          # Update system
+          yum update -y
+          yum install -y aws-cli jq python3 python3-pip git
+          
+          # Create application directory
+          mkdir -p /opt/healthcare-cdc
+          cd /opt/healthcare-cdc
+          
+          # Download and setup data ingestion script
+          cat > /opt/healthcare-cdc/ingest_data.py << 'EOF'
+          #!/usr/bin/env python3
+          """
+          Healthcare Claims Data Ingestion Script
+          Generates sample healthcare claims and sends them to DynamoDB
+          """
+          
+          import boto3
+          import json
+          import time
+          import uuid
+          from datetime import datetime, timedelta
+          import random
+          
+          # Initialize AWS clients
+          dynamodb = boto3.resource('dynamodb')
+          kinesis = boto3.client('kinesis')
+          
+          # Configuration
+          TABLE_NAME = '${DynamoDBTableName}'
+          STREAM_NAME = '${KinesisStreamName}'
+          
+          def generate_sample_claim():
+              """Generate a sample healthcare claim"""
+              claim_id = f"CLM-{uuid.uuid4().hex[:8].upper()}"
+              
+              # Sample data
+              patients = [
+                  {"name": "John Doe", "email": "john.doe@email.com", "phone": "555-123-4567"},
+                  {"name": "Jane Smith", "email": "jane.smith@email.com", "phone": "555-234-5678"},
+                  {"name": "Bob Johnson", "email": "bob.johnson@email.com", "phone": "555-345-6789"}
+              ]
+              
+              providers = [
+                  {"name": "City Medical Center", "npi": "1234567890"},
+                  {"name": "Regional Hospital", "npi": "0987654321"},
+                  {"name": "Community Clinic", "npi": "1122334455"}
+              ]
+              
+              payers = [
+                  {"name": "Blue Cross Blue Shield", "id": "BCBS001"},
+                  {"name": "Aetna", "id": "AETNA001"},
+                  {"name": "Cigna", "id": "CIGNA001"}
+              ]
+              
+              patient = random.choice(patients)
+              provider = random.choice(providers)
+              payer = random.choice(payers)
+              
+              claim = {
+                  "claim_id": claim_id,
+                  "member_id": f"M{random.randint(1000, 9999)}",
+                  "insurance_plan": random.choice(["Premium PPO", "Standard HMO", "Basic Plan"]),
+                  "diagnosis_codes": random.sample(["E11.9", "I10", "Z51.11", "E78.5"], random.randint(1, 3)),
+                  "date_of_service": (datetime.now() - timedelta(days=random.randint(1, 30))).strftime("%Y-%m-%d"),
+                  "total_charge": round(random.uniform(500, 5000), 2),
+                  "procedure_details": {
+                      "procedure_code": f"99{random.randint(200, 299)}",
+                      "description": random.choice(["Office visit", "Lab test", "X-ray", "Surgery"])
+                  },
+                  "claim_status": random.choice(["Pending", "In Review", "Approved", "Rejected"]),
+                  "payment_status": random.choice(["Pending", "Processing", "Completed"]),
+                  "created_timestamp": datetime.now().isoformat(),
+                  "bill_submit_date": datetime.now().strftime("%Y-%m-%d"),
+                  "patient": {
+                      "first_name": patient["name"].split()[0],
+                      "last_name": patient["name"].split()[1],
+                      "email": patient["email"],
+                      "phone": patient["phone"],
+                      "date_of_birth": f"19{random.randint(60, 90)}-{random.randint(1, 12):02d}-{random.randint(1, 28):02d}",
+                      "gender": random.choice(["M", "F"]),
+                      "street": f"{random.randint(100, 9999)} Main St",
+                      "city": random.choice(["Anytown", "Somewhere", "Elsewhere"]),
+                      "state": random.choice(["CA", "NY", "TX", "FL"]),
+                      "zip_code": f"{random.randint(10000, 99999)}"
+                  },
+                  "provider": {
+                      "name": provider["name"],
+                      "npi": provider["npi"],
+                      "street": f"{random.randint(100, 9999)} Medical Blvd",
+                      "city": random.choice(["Anytown", "Somewhere", "Elsewhere"]),
+                      "state": random.choice(["CA", "NY", "TX", "FL"]),
+                      "zip_code": f"{random.randint(10000, 99999)}"
+                  },
+                  "payer": {
+                      "name": payer["name"],
+                      "id": payer["id"],
+                      "contact_number": f"555-{random.randint(100, 999)}-{random.randint(1000, 9999)}"
+                  }
+              }
+              
+              return claim
+          
+          def put_claim_to_dynamodb(claim):
+              """Put claim to DynamoDB"""
+              try:
+                  table = dynamodb.Table(TABLE_NAME)
+                  table.put_item(Item=claim)
+                  print(f"✅ Added claim {claim['claim_id']} to DynamoDB")
+                  return True
+              except Exception as e:
+                  print(f"❌ Error adding claim to DynamoDB: {e}")
+                  return False
+          
+          def send_to_kinesis(claim):
+              """Send claim to Kinesis stream"""
+              try:
+                  kinesis.put_record(
+                      StreamName=STREAM_NAME,
+                      Data=json.dumps(claim),
+                      PartitionKey=claim['claim_id']
+                  )
+                  print(f"📤 Sent claim {claim['claim_id']} to Kinesis")
+                  return True
+              except Exception as e:
+                  print(f"❌ Error sending to Kinesis: {e}")
+                  return False
+          
+          def main():
+              print("🏥 Healthcare Claims Data Ingestion")
+              print("=" * 50)
+              
+              while True:
+                  try:
+                      # Generate and process claim
+                      claim = generate_sample_claim()
+                      
+                      # Add to DynamoDB
+                      if put_claim_to_dynamodb(claim):
+                          # Send to Kinesis
+                          send_to_kinesis(claim)
+                      
+                      # Wait between claims
+                      time.sleep(random.uniform(5, 15))
+                      
+                  except KeyboardInterrupt:
+                      print("\n🛑 Stopping data ingestion...")
+                      break
+                  except Exception as e:
+                      print(f"❌ Unexpected error: {e}")
+                      time.sleep(10)
+          
+          if __name__ == "__main__":
+              main()
+          EOF
+          
+          # Make script executable
+          chmod +x /opt/healthcare-cdc/ingest_data.py
+          
+          # Create systemd service for data ingestion
+          cat > /etc/systemd/system/healthcare-cdc-ingestion.service << EOF
+          [Unit]
+          Description=Healthcare CDC Data Ingestion
+          After=network.target
+          
+          [Service]
+          Type=simple
+          User=ec2-user
+          WorkingDirectory=/opt/healthcare-cdc
+          ExecStart=/usr/bin/python3 /opt/healthcare-cdc/ingest_data.py
+          Restart=always
+          RestartSec=10
+          
+          [Install]
+          WantedBy=multi-user.target
+          EOF
+          
+          # Enable and start the service
+          systemctl enable healthcare-cdc-ingestion.service
+          systemctl start healthcare-cdc-ingestion.service
+          
+          # Create monitoring script
+          cat > /opt/healthcare-cdc/monitor.sh << 'EOF'
+          #!/bin/bash
+          
+          echo "🏥 Healthcare CDC Monitoring"
+          echo "=========================="
+          echo
+          
+          # Check DynamoDB table
+          echo "📊 DynamoDB Table Status:"
+          aws dynamodb describe-table --table-name ${DynamoDBTableName} --query 'Table.{Status:TableStatus,ItemCount:ItemCount,StreamEnabled:StreamSpecification.StreamEnabled}' --output table
+          echo
+          
+          # Check Kinesis stream
+          echo "🌊 Kinesis Stream Status:"
+          aws kinesis describe-stream --stream-name ${KinesisStreamName} --query 'StreamDescription.{Status:StreamStatus,ShardCount:Shards}' --output table
+          echo
+          
+          # Check service status
+          echo "🔧 Service Status:"
+          systemctl status healthcare-cdc-ingestion.service --no-pager -l
+          echo
+          
+          # Show recent logs
+          echo "📝 Recent Logs:"
+          journalctl -u healthcare-cdc-ingestion.service -n 20 --no-pager
+          EOF
+          
+          chmod +x /opt/healthcare-cdc/monitor.sh
+          
+          echo "✅ Healthcare CDC infrastructure setup complete!"
+          echo "📊 Monitor with: /opt/healthcare-cdc/monitor.sh"
+          
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-Healthcare-CDC-Instance'
+        - Key: Purpose
+          Value: Healthcare CDC Demo
+        - Key: Environment
+          Value: Development
+
+  # Latest AMI ID
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+Outputs:
+  DynamoDBTableName:
+    Description: Name of the DynamoDB table
+    Value: !Ref DynamoDBTableName
+    Export:
+      Name: !Sub '${AWS::StackName}-DynamoDBTableName'
+
+  DynamoDBTableArn:
+    Description: ARN of the DynamoDB table
+    Value: !GetAtt InsuranceClaimsTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-DynamoDBTableArn'
+
+  KinesisStreamName:
+    Description: Name of the Kinesis Data Stream
+    Value: !Ref KinesisStreamName
+    Export:
+      Name: !Sub '${AWS::StackName}-KinesisStreamName'
+
+  KinesisStreamArn:
+    Description: ARN of the Kinesis Data Stream
+    Value: !GetAtt InsuranceClaimsStream.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-KinesisStreamArn'
+
+  EC2InstanceId:
+    Description: ID of the EC2 instance
+    Value: !Ref HealthcareCDCInstance
+    Export:
+      Name: !Sub '${AWS::StackName}-EC2InstanceId'
+
+  EC2InstancePublicIP:
+    Description: Public IP of the EC2 instance
+    Value: !GetAtt HealthcareCDCInstance.PublicIp
+    Export:
+      Name: !Sub '${AWS::StackName}-EC2InstancePublicIP'
+
+  MonitoringScriptPath:
+    Description: Path to the monitoring script
+    Value: /opt/healthcare-cdc/monitor.sh
+    Export:
+      Name: !Sub '${AWS::StackName}-MonitoringScriptPath' 

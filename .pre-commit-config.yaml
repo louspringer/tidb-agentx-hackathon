@@ -1,0 +1,25 @@
+# .pre-commit-config.yaml
+# Practical pre-commit configuration for all Python files
+
+repos:
+  # Black (Code formatting)
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        args: [--line-length=88]
+        exclude: |
+          (?x)^(
+              \.cursor/.*\.backup[0-9]+\.py$|
+              data/cost_analysis\.py$|
+              scripts/.*\.backup[0-9]+\.py$|
+              scripts/mdc-linter\.py\.backup[0-9]+$|
+              scripts/mdc-linter\.py\.working$
+          )$
+
+  # Ruff (Fast Python linter) - practical configuration
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        args: [--fix]

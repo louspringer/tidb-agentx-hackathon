@@ -1,89 +1,154 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
-name = "tidb-agentx-hackathon"
-version = "0.1.0"
-description = "TiDB AgentX Hackathon 2025: Forging Agentic AI for Real-World Impact"
-readme = "README.md"
-license = {text = "MIT"}
+name = "openflow-playground"
+version = "1.0.0"
+description = "OpenFlow Playground with Security-First Architecture and Multi-Agent Blind Spot Detection"
 authors = [
-    {name = "nkllon Team", email = "team@nkllon.dev"}
+    {name = "Lou Springer", email = "lou@example.com"}
 ]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Software Development :: Quality Assurance",
-    "Topic :: Software Development :: Testing",
-]
-requires-python = ">=3.9"
+readme = "README.md"
+requires-python = ">=3.10"
 dependencies = [
-    "pymysql>=1.1.0",
-    "pydantic>=2.0.0",
+    # Core Framework
+    "streamlit>=1.28.0",
+    # Security Dependencies
+    "bcrypt>=4.0.0",
+    "cryptography>=41.0.0",
+    "PyJWT>=2.8.0",
+    # Data Processing
     "pandas>=2.0.0",
     "numpy>=1.24.0",
+    # Visualization
     "plotly>=5.15.0",
-    "streamlit>=1.28.0",
-    "clewcrew-common>=0.1.0",
-    "clewcrew-framework>=0.1.0",
-    "clewcrew-agents>=0.1.0",
+    # AWS Integration
+    "boto3>=1.28.0",
+    "botocore>=1.31.0",
+    # Database and Caching
+    "redis>=4.6.0",
+    # HTTP Requests
+    "requests>=2.31.0",
+    # Data Validation
+    "pydantic>=2.0.0",
+    "autoflake8>=0.4.1",
+    # Multi-Agent Framework
+    "langgraph>=0.2.0",
+    "langchain>=0.2.0",
+    "grpcio>=1.74.0",
+    "grpcio-tools>=1.74.0",
+    "gitpython>=3.1.45",
+    "mypy==1.16.0",
+    "functions-framework>=3.9.2",
+    "google-cloud-firestore>=2.21.0",
+    "google-cloud-pubsub>=2.31.1",
+    "pytest-asyncio>=1.1.0",
+    "matplotlib>=3.10.5",
+    "kaleido>=1.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
+    # Development and Testing
     "pytest>=7.4.0",
-    "pytest-asyncio>=0.21.0",
     "pytest-mock>=3.11.0",
+    
+    # Code Quality
+    "flake8>=6.0.0",
     "black>=23.0.0",
-    "ruff>=0.1.0",
     "mypy>=1.0.0",
-    "pre-commit>=3.4.0",
-]
-test = [
-    "pytest>=7.4.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-cov>=4.1.0",
-    "pytest-mock>=3.11.0",
+    
+    # Security Scanning
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    
+    # Type Stubs
+    "types-requests>=2.31.0",
+    "pandas-stubs>=2.0.0",
+
 ]
 
-[project.urls]
-Homepage = "https://github.com/nkllon/tidb-agentx-hackathon"
-Documentation = "https://github.com/nkllon/tidb-agentx-hackathon#readme"
-Repository = "https://github.com/nkllon/tidb-agentx-hackathon.git"
-Issues = "https://github.com/nkllon/tidb-agentx-hackathon/issues"
+security = [
+    # Security Tools
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    "detect-secrets>=1.4.0",
+]
+
+[project.scripts]
+openflow-app = "src.streamlit.openflow_quickstart_app:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
 
+[tool.hatch.build]
+include = [
+    "src/**/*.py",
+    "tests/**/*.py",
+    "README.md",
+    "LICENSE",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.4.0",
+    "pytest-mock>=3.11.0",
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "bandit>=1.7.0",
+    "safety>=2.3.0",
+    "types-requests>=2.31.0",
+    "pandas-stubs>=2.0.0",
+    "autoflake>=2.3.1",
+    "pymarkdown>=0.1.4",
+]
+
 [tool.black]
 line-length = 88
-target-version = ['py39']
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
 
-[tool.ruff]
-target-version = "py39"
-line-length = 88
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-    "C4", # flake8-comprehensions
-    "UP", # pyupgrade
-]
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["test_*.py"]
+python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
-asyncio_mode = "auto"
+
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv"]
+skips = ["B101", "B601"]
+
+[tool.safety]
+output = "json"

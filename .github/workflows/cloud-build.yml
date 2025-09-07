@@ -1,0 +1,39 @@
+name: Cloud Build CI/CD
+
+on:
+  push:
+    branches: [ ghostbusters-gcp-implementation ]
+  pull_request:
+    branches: [ ghostbusters-gcp-implementation ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: aardvark-linkedin-grepper
+        
+    - name: Trigger Cloud Build
+      run: |
+        echo "🚀 Triggering Cloud Build pipeline"
+        gcloud builds submit \
+          --config=cloudbuild.yaml \
+          --project=aardvark-linkedin-grepper \
+          .
+          
+    - name: Check deployment status
+      run: |
+        echo "🔍 Checking deployment status..."
+        sleep 30
+        curl -f https://ghostbusters-api-container-1077539189076.us-central1.run.app/health || echo "Service not ready yet" 

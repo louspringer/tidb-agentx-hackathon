@@ -1,0 +1,310 @@
+---
+description: Healthcare CDC infrastructure patterns for CloudFormation and Snowflake
+globs: ["healthcare-cdc/**/*.yaml", "healthcare-cdc/**/*.sql", "healthcare-cdc/**/*.py"]
+alwaysApply: false
+---
+
+# Healthcare CDC Infrastructure Patterns
+
+## CONTEXT
+This component uses AWS CloudFormation for infrastructure deployment and Snowflake for data warehousing. All infrastructure must be healthcare-compliant and support real-time CDC operations.
+
+## CLOUDFORMATION TEMPLATES
+
+### Required Resources
+- **DynamoDB Table**: With stream enabled for CDC
+- **Kinesis Data Stream**: For event capture and processing
+- **EC2 Instance**: For data ingestion and monitoring
+- **IAM Roles**: Least privilege access
+- **Security Groups**: Network security
+- **VPC/Subnet**: Network isolation
+
+### Template Structure
+```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Healthcare CDC Infrastructure'
+Parameters:
+  VpcId: {Type: AWS::EC2::VPC::Id}
+  SubnetId: {Type: AWS::EC2::Subnet::Id}
+Resources:
+  # DynamoDB with stream
+  InsuranceClaimsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      StreamSpecification:
+        StreamEnabled: true
+        StreamViewType: NEW_AND_OLD_IMAGES
+      
+  # Kinesis stream
+  InsuranceClaimsStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      ShardCount: 1
+      StreamEncryption:
+        EncryptionType: KMS
+```
+
+### Security Requirements
+- **Encryption**: All data encrypted at rest and in transit
+- **IAM**: Least privilege principle
+- **Network**: VPC isolation with security groups
+- **Audit**: CloudTrail logging enabled
+- **Compliance**: HIPAA considerations for healthcare data
+
+## SNOWFLAKE SCHEMA
+
+### Required Tables
+```sql
+-- Destination table (synchronized)
+CREATE TABLE openflow_insclaim_dest_tbl (
+    eventName STRING,
+    eventCreationUnixTime NUMBER,
+    claimId STRING,
+    -- ... all claim fields
+);
+
+-- CDC staging table
+CREATE TABLE openflow_insclaim_cdc_tbl (
+    -- Same structure as destination
+);
+
+-- Event history table (audit trail)
+CREATE TABLE openflow_insclaim_event_hist_tbl (
+    -- Same structure as destination
+);
+```
+
+### Views for Analytics
+```sql
+-- Summary view
+CREATE VIEW v_healthcare_claims_summary AS
+SELECT claimId, claimStatus, paymentStatus, totalCharge
+FROM openflow_insclaim_dest_tbl;
+
+-- Recent events view
+CREATE VIEW v_recent_events AS
+SELECT eventName, claimId, claimStatus
+FROM openflow_insclaim_event_hist_tbl
+ORDER BY eventCreationUnixTime DESC;
+```
+
+## OPENFLOW PIPELINE
+
+### Required Processors
+1. **Kinesis Consumer**: Read from stream
+2. **JSON Parser**: Parse event data
+3. **Flat JSON**: Flatten nested structures
+4. **Jolt Transform**: Standardize data format
+5. **Route on Attribute**: Direct to appropriate tables
+6. **Put Database Record**: Insert into Snowflake
+7. **Execute SQL**: Merge CDC events
+
+### Pipeline Configuration
+```python
+def _setup_pipeline(self):
+    # Kinesis Consumer
+    self.pipeline_config.add_processor("KinesisConsumer", {
+        "streamName": self.infrastructure.kinesis_stream,
+        "region": "us-east-1"
+    })
+    
+    # JSON Parser
+    self.pipeline_config.add_processor("ParseJson", {
+        "jsonPath": "$"
+    })
+    
+    # Database Records
+    self.pipeline_config.add_processor("PutDatabaseRecord", {
+        "tableName": self.infrastructure.destination_table,
+        "databaseType": "SNOWFLAKE"
+    })
+```
+
+## DEPLOYMENT PATTERNS
+
+### Infrastructure Deployment
+```bash
+# Deploy CloudFormation stack
+aws cloudformation create-stack \
+  --stack-name healthcare-cdc-demo \
+  --template-body file://models/healthcare-cdc-infrastructure.yaml \
+  --parameters ParameterKey=VpcId,ParameterValue=vpc-12345678 \
+               ParameterKey=SubnetId,ParameterValue=subnet-12345678 \
+  --capabilities CAPABILITY_NAMED_IAM
+```
+
+### Snowflake Setup
+```sql
+-- Run schema creation
+source sql/healthcare-cdc-schema.sql
+
+-- Verify setup
+SELECT COUNT(*) FROM openflow_insclaim_dest_tbl;
+```
+
+### Openflow Configuration
+1. Access Openflow Console
+2. Create pipeline: `HealthcareCDC`
+3. Add required processors
+4. Configure Snowflake connection
+5. Test data flow
+
+## MONITORING AND OBSERVABILITY
+
+### AWS CloudWatch
+- DynamoDB table metrics
+- Kinesis stream metrics
+- EC2 instance metrics
+- Lambda function metrics (if applicable)
+
+### Snowflake Monitoring
+```sql
+-- Query performance
+SELECT query_text, execution_time, bytes_scanned
+FROM table(information_schema.query_history())
+WHERE query_text LIKE '%openflow_insclaim%'
+ORDER BY start_time DESC;
+
+-- Table statistics
+SELECT table_name, row_count, bytes
+FROM information_schema.tables
+WHERE table_schema = 'CDC_SCHEMA';
+```
+
+### Openflow Monitoring
+- Queue depths and throughput
+- Processor status and errors
+- Data transformation logs
+- Pipeline health metrics
+
+## SECURITY PATTERNS
+
+### Data Encryption
+```yaml
+# DynamoDB encryption
+StreamSpecification:
+  StreamEnabled: true
+  StreamViewType: NEW_AND_OLD_IMAGES
+
+# Kinesis encryption
+StreamEncryption:
+  EncryptionType: KMS
+  KeyId: alias/aws/kinesis
+```
+
+### IAM Roles
+```yaml
+# EC2 instance role
+EC2InstanceRole:
+  Type: AWS::IAM::Role
+  Properties:
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+    Policies:
+      - PolicyName: HealthcareCDCPolicy
+        PolicyDocument:
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - kinesis:PutRecord
+                - kinesis:GetRecords
+```
+
+### Network Security
+```yaml
+# Security group
+EC2SecurityGroup:
+  Type: AWS::EC2::SecurityGroup
+  Properties:
+    SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+    SecurityGroupEgress:
+      - IpProtocol: -1
+        CidrIp: 0.0.0.0/0
+```
+
+## COMPLIANCE REQUIREMENTS
+
+### HIPAA Considerations
+- **Data Encryption**: All PHI encrypted
+- **Access Controls**: Role-based access
+- **Audit Logging**: Complete audit trail
+- **Data Retention**: Appropriate retention policies
+- **Business Associate Agreements**: If applicable
+
+### Audit Trail
+```sql
+-- Event history tracking
+SELECT eventName, claimId, eventCreationUnixTime
+FROM openflow_insclaim_event_hist_tbl
+WHERE claimId = 'CLM-ABC123'
+ORDER BY eventCreationUnixTime DESC;
+```
+
+## PERFORMANCE OPTIMIZATION
+
+### DynamoDB
+- On-demand billing for variable workloads
+- Stream enabled for real-time CDC
+- Efficient key schema design
+
+### Kinesis
+- Single shard for demo (scale as needed)
+- KMS encryption for security
+- Real-time stream processing
+
+### Snowflake
+- Small warehouse for cost optimization
+- Auto-suspend/resume for efficiency
+- Optimized table structure
+
+## TROUBLESHOOTING PATTERNS
+
+### Common Issues
+1. **DynamoDB Stream Not Capturing**
+   ```bash
+   aws dynamodb describe-table --table-name InsuranceClaims
+   ```
+
+2. **Kinesis Stream Errors**
+   ```bash
+   aws kinesis describe-stream --stream-name InsuranceClaimsStream
+   ```
+
+3. **Snowflake Connection Problems**
+   ```sql
+   SELECT CURRENT_USER(), CURRENT_ROLE(), CURRENT_DATABASE();
+   ```
+
+4. **Openflow Pipeline Issues**
+   - Check processor status in console
+   - Verify Snowflake connection
+   - Review error logs
+
+## FORBIDDEN PATTERNS
+- ❌ Don't use hardcoded credentials
+- ❌ Don't skip encryption configuration
+- ❌ Don't ignore IAM least privilege
+- ❌ Don't forget audit logging
+- ❌ Don't skip security group configuration
+- ❌ Don't ignore compliance requirements
+
+## REQUIRED ATTRIBUTES
+- **Original Source**: Snowflake Healthcare CDC Quickstart
+- **URL**: https://quickstarts.snowflake.com/guide/Streamline_Healthcare_CDC_DDB_And_Openflow/
+- **Credits**: "Original Contributors: Snowflake Inc. Enhanced by: OpenFlow Playground Team"
+
+## SUCCESS METRICS
+- Infrastructure deploys successfully
+- All security requirements met
+- Monitoring and alerting configured
+- Compliance requirements satisfied
+- Performance benchmarks achieved
+- Audit trail functional
+
+

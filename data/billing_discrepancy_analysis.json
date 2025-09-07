@@ -1,0 +1,144 @@
+{
+  "timestamp": "2025-08-06T18:35:12.787469",
+  "project_info": {
+    "project_id": "aardvark-linkedin-grepper",
+    "billing_account_id": "01F112-E73FD5-795507"
+  },
+  "actual_usage": {
+    "cloudfunctions.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "run.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "firestore.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "pubsub.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "storage.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "bigquery.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "speech.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "cloudbuild.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "logging.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "monitoring.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "aiplatform.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    },
+    "cloudaicompanion.googleapis.com": {
+      "enabled": false,
+      "status": "disabled"
+    }
+  },
+  "cost_estimates": {
+    "cloud_functions": {
+      "count": 0,
+      "estimated_monthly": 0.0,
+      "free_tier": "2M invocations/month",
+      "status": "inactive"
+    },
+    "cloud_run": {
+      "count": 0,
+      "estimated_monthly": 0.0,
+      "free_tier": "2M requests/month",
+      "status": "inactive"
+    },
+    "firestore": {
+      "count": 0,
+      "estimated_monthly": 0.0,
+      "free_tier": "1GB storage, 50K reads/day",
+      "status": "inactive"
+    },
+    "storage": {
+      "count": 0,
+      "estimated_monthly": 0.0,
+      "free_tier": "5GB storage",
+      "status": "inactive"
+    },
+    "pubsub": {
+      "estimated_monthly": 0.5,
+      "free_tier": "10GB/month",
+      "status": "active"
+    },
+    "bigquery": {
+      "estimated_monthly": 0.0,
+      "free_tier": "1TB/month",
+      "status": "active"
+    },
+    "speech": {
+      "estimated_monthly": 0.0,
+      "free_tier": "60 minutes/month",
+      "status": "active"
+    },
+    "cloudbuild": {
+      "estimated_monthly": 0.0,
+      "free_tier": "120 build-minutes/day",
+      "status": "active"
+    },
+    "logging": {
+      "estimated_monthly": 0.0,
+      "free_tier": "50GB/month",
+      "status": "active"
+    },
+    "monitoring": {
+      "estimated_monthly": 0.0,
+      "free_tier": "Basic monitoring",
+      "status": "active"
+    },
+    "aiplatform": {
+      "estimated_monthly": 0.0,
+      "free_tier": "Limited",
+      "status": "inactive"
+    },
+    "cloudaicompanion": {
+      "estimated_monthly": 0.0,
+      "free_tier": "Basic usage",
+      "status": "active"
+    },
+    "total_estimated_monthly": 0.5
+  },
+  "high_cost_services": [],
+  "discrepancy_analysis": {
+    "estimated_monthly": 0.5,
+    "actual_charge": 50.0,
+    "discrepancy": 49.5,
+    "discrepancy_percentage": 99.0,
+    "possible_causes": [
+      "High resource usage beyond free tier limits",
+      "Data transfer costs (egress)",
+      "Premium tier services",
+      "Historical usage from previous months",
+      "Cloud Functions cold starts and execution time",
+      "Cloud Run CPU and memory allocation",
+      "Firestore read/write operations",
+      "Storage operations and data transfer",
+      "API calls to paid services",
+      "Network egress charges",
+      "Regional pricing differences"
+    ]
+  }
+}

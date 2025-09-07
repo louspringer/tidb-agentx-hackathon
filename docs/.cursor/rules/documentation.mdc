@@ -1,0 +1,39 @@
+---
+description: Documentation development rules and guidelines
+globs: ["docs/*.md", "*.md"]
+alwaysApply: true
+---
+
+# Documentation Rules
+
+## Documentation Development Guidelines
+
+### Documentation Standards
+- **Markdown Format**: Use consistent Markdown formatting
+- **Clear Structure**: Use proper headings and sections
+- **Code Examples**: Include working code examples
+- **Screenshots**: Add relevant screenshots and diagrams
+
+### Content Requirements
+- **Comprehensive Coverage**: Document all features and components
+- **User-Focused**: Write for the target audience
+- **Step-by-Step**: Provide clear step-by-step instructions
+- **Troubleshooting**: Include common issues and solutions
+
+### Technical Documentation
+- **API Documentation**: Document all APIs and interfaces
+- **Configuration**: Document all configuration options
+- **Deployment**: Provide deployment instructions
+- **Architecture**: Document system architecture
+
+### User Documentation
+- **Quick Start**: Provide quick start guides
+- **Tutorials**: Create step-by-step tutorials
+- **Reference**: Provide comprehensive reference documentation
+- **Examples**: Include practical examples
+
+### Maintenance
+- **Regular Updates**: Keep documentation current
+- **Version Control**: Track documentation changes
+- **Review Process**: Implement documentation review
+- **Feedback**: Collect and incorporate user feedback

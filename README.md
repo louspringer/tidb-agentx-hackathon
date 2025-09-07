@@ -1,169 +1,189 @@
-# TiDB AgentX Hackathon 2025: Forging Agentic AI for Real-World Impact
+# OpenFlow Playground
 
-**🎯 Hackathon Focus:** Forging agentic AI for real-world impact using TiDB Serverless
+A comprehensive, model-driven development environment with security-first architecture, multi-agent testing, and healthcare CDC compliance.
 
-**🏆 Prizes:** $30,500 in cash  
-**📅 Dates:** August 1 – September 15, 2025  
-**⏰ Deadline:** September 15, 2025
+## 🚀 Features
 
-## 🚀 Project Overview
+### **Model-Driven Development**
+- **Project Model Registry**: Single source of truth for domain detection, tool selection, and requirements traceability
+- **MDC Generator**: Python-based component for modeling and generating `.mdc` rule files
+- **Deterministic Editing**: Enforced through specialized tools and validation
 
-This repository contains our submission for the TiDB AgentX Hackathon 2025, showcasing multi-agent AI workflows with TiDB Serverless for real-world impact.
+### **Security-First Architecture**
+- **Credential Management**: Environment variables and secure storage
+- **HTTPS Enforcement**: SSL/TLS validation and redirect enforcement
+- **Rate Limiting**: Redis-based rate limiting for API protection
+- **CSRF Protection**: Token-based CSRF protection for web forms
+- **Audit Logging**: Immutable audit trails for compliance
 
-## 🏗️ Architecture Components
+### **Multi-Agent Testing**
+- **Blind Spot Detection**: AI agents identify overlooked issues
+- **Diversity Testing**: Multiple perspectives for comprehensive coverage
+- **Automated Validation**: Continuous testing and validation
 
-### AI Agents & Orchestration
-- **Ghostbusters Multi-Agent System** - Advanced AI orchestration framework
-- **Multi-Agent Testing** - Blind spot detection and validation
-- **Real-World Workflows** - Production-ready AI agent pipelines
+### **Healthcare CDC Compliance**
+- **HIPAA Compliance**: PHI detection and validation
+- **Data Encryption**: Healthcare data encryption at rest and in transit
+- **Access Control**: Role-based access control for clinical data
+- **Audit Logging**: Immutable audit trails for regulatory compliance
 
-### Data & Analytics
-- **TiDB Serverless Integration** - Vector search and data storage
-- **Data Analysis** - Comprehensive data processing and insights
-- **Visualization Engine** - Interactive dashboards and reporting
+### **Package Management**
+- **UV Integration**: Modern Python package management with UV
+- **Lock File Enforcement**: Reproducible builds with `uv.lock`
+- **Security Scanning**: Automated vulnerability detection
 
-### Impact Demonstration
-- **Multi-Step Agents** - Complex workflow orchestration
-- **Real-World Applications** - Practical use cases and demos
-- **Performance Metrics** - Measurable impact and outcomes
+## 🛠️ Quick Start
 
-## 🔧 Technology Stack
-
-- **AI Framework:** Ghostbusters multi-agent orchestration
-- **Database:** TiDB Serverless for vector search and analytics
-- **Backend:** Python with async processing
-- **Data Processing:** Pandas, NumPy for analytics
-- **Visualization:** Plotly, Streamlit for interactive dashboards
-- **Testing:** Comprehensive multi-agent testing framework
-
-## 📁 Repository Structure
-
-```
-tidb-agentx-hackathon/
-├── src/
-│   ├── ai_agents/           # Multi-agent orchestration
-│   ├── tidb_integration/    # TiDB Serverless integration
-│   ├── data_processing/     # Data analysis and processing
-│   ├── workflows/           # Real-world AI workflows
-│   └── visualization/       # Interactive dashboards
-├── infrastructure/
-│   ├── tidb_setup/          # TiDB Serverless configuration
-│   ├── data_pipelines/      # ETL and data processing
-│   └── monitoring/          # Performance monitoring
-├── docs/
-│   ├── architecture.md      # System architecture
-│   ├── tidb_integration.md  # TiDB setup and usage
-│   └── workflows.md         # AI workflow documentation
-├── data/
-│   ├── raw/                 # Raw data sources
-│   ├── processed/           # Processed datasets
-│   └── models/              # Trained AI models
-└── tests/
-    ├── unit/                # Unit tests
-    ├── integration/         # Integration tests
-    └── e2e/                 # End-to-end workflow tests
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- TiDB Serverless account
-- Python 3.9+ environment
-- Access to data sources
-
-### Local Development
+### **Installation**
 ```bash
 # Clone the repository
-git clone https://github.com/nkllon/tidb-agentx-hackathon.git
-cd tidb-agentx-hackathon
+git clone https://github.com/louspringer/OpenFlow-Playground.git
+cd OpenFlow-Playground
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies with UV
+uv sync --all-extras
 
-# Configure TiDB connection
-export TIDB_HOST="your-tidb-host"
-export TIDB_USER="your-username"
-export TIDB_PASSWORD="your-password"
-
-# Run local development
-python -m src.workflows.main
+# Run tests
+make test-python
 ```
 
-### TiDB Integration
+### **Development**
 ```bash
-# Test TiDB connection
-python -m src.tidb_integration.test_connection
+# Install development dependencies
+uv sync --extra dev
 
-# Run data pipeline
-python -m src.data_processing.pipeline
+# Run linting
+make lint
 
-# Start AI workflow
-python -m src.ai_agents.orchestrator
+# Run formatting
+make format
+
+# Run all tests
+make test
 ```
+
+## 📁 Project Structure
+
+```
+OpenFlow-Playground/
+├── src/                          # Source code
+│   ├── streamlit/                # Streamlit application
+│   ├── security_first/           # Security components
+│   ├── multi_agent_testing/      # Multi-agent testing
+│   └── mdc_generator/           # MDC file generator
+├── tests/                        # Test suite
+├── scripts/                      # Utility scripts
+├── config/                       # Configuration files
+├── docs/                         # Documentation
+├── healthcare-cdc/              # Healthcare CDC components
+├── .cursor/                      # Cursor IDE configuration
+│   ├── rules/                   # MDC rule files
+│   └── plugins/                 # IDE plugins
+├── project_model_registry.json   # Model registry
+├── pyproject.toml               # UV project configuration
+├── uv.lock                      # UV lock file
+└── Makefile                     # Build system
+```
+
+## 🔧 Model-Driven Architecture
+
+### **Domain Detection**
+The project uses a model-driven approach with `project_model_registry.json` as the single source of truth:
+
+- **Domain Detection**: Automatic detection of file types and domains
+- **Tool Selection**: Domain-specific linting, formatting, and validation
+- **Requirements Traceability**: Link requirements to implementations
+
+### **Rule Compliance**
+- **MDC Linter**: Validates `.mdc` files for proper structure
+- **Pre-commit Hooks**: Automated rule enforcement
+- **IDE Integration**: Cursor IDE plugin for immediate feedback
 
 ## 🧪 Testing
 
+### **Test Categories**
+- **Python Tests**: Core functionality and security validation
+- **Core Concept Tests**: Architecture and design pattern validation
+- **Healthcare CDC Tests**: HIPAA compliance and PHI detection
+- **Rule Compliance Tests**: MDC validation and rule enforcement
+
+### **Running Tests**
 ```bash
 # Run all tests
-pytest tests/ -v
+make test
 
-# Test specific components
-pytest tests/unit/ -v
-pytest tests/integration/ -v
-pytest tests/e2e/ -v
-
-# Test TiDB integration
-pytest tests/tidb_integration/ -v
+# Run specific test categories
+make test-python
+make test-core-concepts
+make test-healthcare-cdc
+make test-rule-compliance
 ```
 
-## 📊 Performance Metrics
+## 🔒 Security Features
 
-- **Agent Response Time:** < 50ms for simple queries
-- **Workflow Throughput:** 500+ workflows/hour
-- **Data Processing:** 1GB+ data processed per minute
-- **TiDB Performance:** Sub-second query response times
-- **Scalability:** Linear scaling with agent count
+### **Credential Management**
+- Environment variables for all sensitive data
+- AWS Secrets Manager integration
+- No hardcoded credentials in source code
 
-## 🔗 Related Repositories
+### **Data Protection**
+- Encryption at rest and in transit
+- PHI detection and validation
+- Immutable audit logging
 
-- [nkllon/clewcrew-common](https://github.com/nkllon/clewcrew-common) - Foundation utilities
-- [nkllon/clewcrew-framework](https://github.com/nkllon/clewcrew-framework) - Core framework
-- [nkllon/clewcrew-agents](https://github.com/nkllon/clewcrew-agents) - AI expert agents
+### **Access Control**
+- Role-based access control (RBAC)
+- JWT-based session management
+- Multi-factor authentication support
 
-## 📝 Submission Strategy
+## 📊 Healthcare CDC Features
 
-**Partial submission** focusing on multi-agent AI workflows with:
-- TiDB Serverless integration for vector search
-- Multi-agent orchestration and testing
-- Real-world workflow demonstrations
-- Comprehensive data processing pipeline
-- Impact measurement and visualization
+### **HIPAA Compliance**
+- PHI detection and validation
+- Healthcare data encryption
+- Access control and authentication
+- Immutable audit logging
 
-## 🌟 Key Features
+### **CDC Integration**
+- Clinical data transformation
+- CDC format compliance
+- Data retention policies
 
-### Multi-Agent Orchestration
-- **Blind Spot Detection** - Identify gaps in AI reasoning
-- **Diversity Testing** - Multiple agent perspectives
-- **Workflow Validation** - End-to-end testing
+## 🚀 Deployment
 
-### TiDB Integration
-- **Vector Search** - Semantic similarity and retrieval
-- **Real-Time Analytics** - Live data processing
-- **Scalable Storage** - Serverless database architecture
+### **Streamlit Application**
+```bash
+# Run the Streamlit app
+streamlit run src/streamlit/openflow_quickstart_app.py
+```
 
-### Real-World Impact
-- **Practical Applications** - Solve actual business problems
-- **Performance Metrics** - Measurable outcomes
-- **Scalable Solutions** - Production-ready architecture
+### **Security Validation**
+```bash
+# Run security scans
+make security
+
+# Check for vulnerabilities
+uv run safety check
+```
+
+## 📚 Documentation
+
+- **Architecture**: Model-driven development patterns
+- **Security**: Security-first design principles
+- **Testing**: Multi-agent testing framework
+- **Healthcare**: CDC compliance and HIPAA requirements
 
 ## 🤝 Contributing
 
-This is a hackathon submission repository. For questions or collaboration, please contact the team.
+1. Follow the model-driven development approach
+2. Ensure all tests pass
+3. Follow security-first principles
+4. Update documentation as needed
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+[License information]
 
 ---
 
-**Built with ❤️ for the TiDB AgentX Hackathon 2025**
+**Built with security-first principles and model-driven development.**

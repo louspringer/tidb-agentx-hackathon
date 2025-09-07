@@ -1,0 +1,28 @@
+{
+    "github.copilot.enable": {
+        "*": true
+    },
+    "github.copilot.chat.enable": true,
+    "github.copilot.chat.autoComplete": true,
+    "kiroAgent.configureMCP": "Disabled",
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#9c57ef",
+        "activityBar.background": "#9c57ef",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#743b0b",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#9c57ef",
+        "statusBar.background": "#8029ea",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#9c57ef",
+        "statusBarItem.remoteBackground": "#8029ea",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#8029ea",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#8029ea99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#8029ea"
+} 

@@ -1,0 +1,43 @@
+steps:
+  # Install dependencies with pip
+  - name: 'python:3.12-slim'
+    args: ['pip', 'install', 'langchain', 'langgraph', 'pydantic', 'aiofiles', 'typing-extensions']
+
+  # Run simple dependency test
+  - name: 'python:3.12-slim'
+    args: ['python', 'test_cloudbuild_simple.py']
+
+  # Run Ghostbusters on the project itself
+  - name: 'python:3.12-slim'
+    args: ['python', '-m', 'src.ghostbusters.ghostbusters_orchestrator', '.']
+
+  # Code quality checks
+  - name: 'python:3.12-slim'
+    args: ['pip', 'install', 'black', 'flake8']
+
+  - name: 'python:3.12-slim'
+    args: ['black', '--check', 'src/', 'tests/']
+
+  - name: 'python:3.12-slim'
+    args: ['flake8', 'src/', 'tests/']
+
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/elmo-fuzzy-giggle:$COMMIT_SHA', '-t', 'gcr.io/$PROJECT_ID/elmo-fuzzy-giggle:latest', '.']
+
+  # Push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/elmo-fuzzy-giggle:$COMMIT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/elmo-fuzzy-giggle:latest']
+
+# Build timeout
+timeout: '1200s'
+
+# Build options
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+# No substitutions needed for this build 

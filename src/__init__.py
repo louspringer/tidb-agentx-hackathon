@@ -1,9 +1,11 @@
 """
-TiDB AgentX Hackathon
+OpenFlow Playground Source Package
 
-Forging agentic AI for real-world impact using TiDB Serverless.
+This package contains the main application components organized by domain:
+- streamlit: Streamlit application components
+- security_first: Security-first architecture components
+- multi_agent_testing: Multi-agent testing framework components
 """
 
-__version__ = "0.1.0"
-__author__ = "nkllon Team"
-__description__ = "TiDB AgentX Hackathon 2025: Forging Agentic AI for Real-World Impact"
+__version__ = "1.0.0"
+__author__ = "OpenFlow Playground Team"

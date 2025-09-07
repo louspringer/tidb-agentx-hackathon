@@ -1,0 +1,427 @@
+---
+description: Healthcare CDC testing patterns and requirements
+globs: ["healthcare-cdc/**/*.py", "healthcare-cdc/**/*.md"]
+alwaysApply: false
+---
+
+# Healthcare CDC Testing Patterns
+
+## CONTEXT
+This component requires comprehensive testing for healthcare data processing, CDC operations, and infrastructure deployment. All tests must be stateless, repeatable, and maintain data privacy.
+
+## TESTING PHILOSOPHY
+
+### Core Principles
+- **Stateless**: Tests should not depend on external state
+- **Repeatable**: Tests should produce same results every time
+- **Fast**: Unit tests should complete quickly
+- **Comprehensive**: Cover all domain model functionality
+- **Secure**: No real healthcare data in tests
+
+### Test Categories
+1. **Unit Tests**: Individual components and methods
+2. **Integration Tests**: End-to-end workflows
+3. **Infrastructure Tests**: CloudFormation validation
+4. **Security Tests**: Data handling and encryption
+5. **Performance Tests**: JSON serialization and processing
+
+## UNIT TESTING PATTERNS
+
+### Domain Model Tests
+```python
+import pytest
+from healthcare_cdc_domain_model import (
+    HealthcareCDCDomainModel,
+    HealthcareClaim,
+    PatientInfo,
+    ProviderInfo,
+    PayerInfo,
+    CDCEvent,
+    EventType,
+    ClaimStatus,
+    PaymentStatus
+)
+
+class TestHealthcareCDCDomainModel:
+    def test_domain_model_initialization(self):
+        """Test domain model initialization"""
+        model = HealthcareCDCDomainModel()
+        
+        assert model.infrastructure.dynamodb_table == "InsuranceClaims"
+        assert model.infrastructure.kinesis_stream == "InsuranceClaimsStream"
+        assert model.infrastructure.database == "CDC_DB"
+        assert model.infrastructure.schema == "CDC_SCHEMA"
+```
+
+### Data Structure Tests
+```python
+class TestHealthcareClaim:
+    def test_claim_creation(self):
+        """Test creating a healthcare claim"""
+        patient = PatientInfo(
+            patient_id="P001",
+            first_name="John",
+            last_name="Doe",
+            email="john.doe@email.com",
+            phone="555-123-4567",
+            date_of_birth="1980-01-15",
+            gender="M",
+            street="123 Main St",
+            city="Anytown",
+            state="CA",
+            zip_code="90210"
+        )
+        
+        provider = ProviderInfo(
+            provider_name="City Medical Center",
+            provider_npi="1234567890",
+            street="456 Medical Blvd",
+            city="Anytown",
+            state="CA",
+            zip_code="90211"
+        )
+        
+        payer = PayerInfo(
+            payer_name="Blue Cross Blue Shield",
+            payer_id="BCBS001",
+            contact_number="555-987-6543"
+        )
+        
+        claim = HealthcareClaim(
+            claim_id="CLM001",
+            member_id="M001",
+            insurance_plan="Premium PPO",
+            diagnosis_codes=["E11.9", "I10"],
+            date_of_service="2024-01-15",
+            total_charge=2500.00,
+            procedure_details={"procedure_code": "99213", "description": "Office visit"},
+            claim_status=ClaimStatus.PENDING,
+            payment_status=PaymentStatus.PENDING,
+            created_timestamp="2024-01-15T10:00:00Z",
+            bill_submit_date="2024-01-15",
+            patient=patient,
+            provider=provider,
+            payer=payer
+        )
+        
+        assert claim.claim_id == "CLM001"
+        assert claim.member_id == "M001"
+        assert claim.insurance_plan == "Premium PPO"
+        assert claim.diagnosis_codes == ["E11.9", "I10"]
+        assert claim.total_charge == 2500.00
+        assert claim.claim_status == ClaimStatus.PENDING
+        assert claim.payment_status == PaymentStatus.PENDING
+```
+
+### CDC Event Tests
+```python
+class TestCDCEvent:
+    def test_cdc_event_creation(self):
+        """Test creating a CDC event"""
+        # Create sample claim
+        claim = create_sample_claim()
+        
+        cdc_event = CDCEvent(
+            event_name=EventType.INSERT,
+            event_creation_unix_time=int(datetime.now().timestamp() * 1000000),
+            claim=claim
+        )
+        
+        assert cdc_event.event_name == EventType.INSERT
+        assert cdc_event.claim.claim_id == "CLM001"
+        assert cdc_event.event_creation_unix_time > 0
+    
+    def test_cdc_event_json_serialization(self):
+        """Test CDC event JSON serialization"""
+        claim = create_sample_claim()
+        
+        cdc_event = CDCEvent(
+            event_name=EventType.INSERT,
+            event_creation_unix_time=1705312800000000,  # Fixed timestamp for testing
+            claim=claim
+        )
+        
+        json_data = cdc_event.to_json()
+        parsed_data = json.loads(json_data)
+        
+        # Check required fields
+        assert parsed_data["eventName"] == "INSERT"
+        assert parsed_data["eventCreationUnixTime"] == 1705312800000000
+        assert parsed_data["claimId"] == "CLM001"
+        assert parsed_data["claimStatus"] == "Pending"
+        assert parsed_data["paymentStatus"] == "Pending"
+        assert parsed_data["totalCharge"] == 2500.00
+        assert parsed_data["insurancePlan"] == "Premium PPO"
+        assert parsed_data["memberId"] == "M001"
+        assert parsed_data["providerName"] == "City Medical Center"
+        assert parsed_data["patientFirstName"] == "John"
+        assert parsed_data["patientLastName"] == "Doe"
+        assert parsed_data["patientEmail"] == "john.doe@email.com"
+        assert parsed_data["diagnosisCodes"] == ["E11.9", "I10"]
+        assert parsed_data["procedureDetails"] == {"procedure_code": "99213", "description": "Office visit"}
+```
+
+### Enum Tests
+```python
+class TestEnums:
+    def test_event_types(self):
+        """Test event type enum values"""
+        assert EventType.INSERT.value == "INSERT"
+        assert EventType.MODIFY.value == "MODIFY"
+        assert EventType.REMOVE.value == "REMOVE"
+    
+    def test_claim_status(self):
+        """Test claim status enum values"""
+        assert ClaimStatus.PENDING.value == "Pending"
+        assert ClaimStatus.IN_REVIEW.value == "In Review"
+        assert ClaimStatus.APPROVED.value == "Approved"
+        assert ClaimStatus.REJECTED.value == "Rejected"
+        assert ClaimStatus.PAID.value == "Paid"
+    
+    def test_payment_status(self):
+        """Test payment status enum values"""
+        assert PaymentStatus.PENDING.value == "Pending"
+        assert PaymentStatus.PROCESSING.value == "Processing"
+        assert PaymentStatus.COMPLETED.value == "Completed"
+        assert PaymentStatus.FAILED.value == "Failed"
+```
+
+## INTEGRATION TESTING
+
+### End-to-End Workflow
+```python
+def test_integration():
+    """Integration test for the complete domain model"""
+    model = HealthcareCDCDomainModel()
+    
+    # Test domain model functionality
+    assert model.infrastructure.dynamodb_table == "InsuranceClaims"
+    assert model.infrastructure.kinesis_stream == "InsuranceClaimsStream"
+    
+    # Test pipeline configuration
+    assert len(model.pipeline_config.processors) > 0
+    
+    # Test SQL generation
+    merge_sql = model._get_merge_sql()
+    assert "MERGE INTO" in merge_sql
+    
+    # Test CloudFormation template
+    template = model.generate_cloudformation_template()
+    assert "AWSTemplateFormatVersion" in template
+    
+    # Test Snowflake schema
+    schema_sql = model.generate_snowflake_schema()
+    assert "CREATE DATABASE" in schema_sql
+```
+
+### Infrastructure Generation Tests
+```python
+def test_cloudformation_template_generation(self):
+    """Test CloudFormation template generation"""
+    model = HealthcareCDCDomainModel()
+    template = model.generate_cloudformation_template()
+    
+    # Check template structure
+    assert template["AWSTemplateFormatVersion"] == "2010-09-09"
+    assert "Healthcare CDC Infrastructure" in template["Description"]
+    assert "Parameters" in template
+    assert "Resources" in template
+    assert "Outputs" in template
+    
+    # Check for required resources
+    resources = template["Resources"]
+    assert "InsuranceClaimsTable" in resources
+    assert "InsuranceClaimsStream" in resources
+    assert "EC2Instance" in resources
+    
+    # Check for required outputs
+    outputs = template["Outputs"]
+    assert "DynamoDBTableName" in outputs
+    assert "KinesisStreamName" in outputs
+    assert "EC2InstanceId" in outputs
+```
+
+## TEST DATA PATTERNS
+
+### Sample Data Creation
+```python
+def create_sample_claim() -> HealthcareClaim:
+    """Create sample healthcare claim for testing"""
+    patient = PatientInfo(
+        patient_id="P001",
+        first_name="John",
+        last_name="Doe",
+        email="john.doe@email.com",
+        phone="555-123-4567",
+        date_of_birth="1980-01-15",
+        gender="M",
+        street="123 Main St",
+        city="Anytown",
+        state="CA",
+        zip_code="90210"
+    )
+    
+    provider = ProviderInfo(
+        provider_name="City Medical Center",
+        provider_npi="1234567890",
+        street="456 Medical Blvd",
+        city="Anytown",
+        state="CA",
+        zip_code="90211"
+    )
+    
+    payer = PayerInfo(
+        payer_name="Blue Cross Blue Shield",
+        payer_id="BCBS001",
+        contact_number="555-987-6543"
+    )
+    
+    return HealthcareClaim(
+        claim_id="CLM001",
+        member_id="M001",
+        insurance_plan="Premium PPO",
+        diagnosis_codes=["E11.9", "I10"],
+        date_of_service="2024-01-15",
+        total_charge=2500.00,
+        procedure_details={"procedure_code": "99213", "description": "Office visit"},
+        claim_status=ClaimStatus.PENDING,
+        payment_status=PaymentStatus.PENDING,
+        created_timestamp="2024-01-15T10:00:00Z",
+        bill_submit_date="2024-01-15",
+        patient=patient,
+        provider=provider,
+        payer=payer
+    )
+```
+
+### Mock Data for Testing
+```python
+def create_mock_cdc_event(event_type: EventType = EventType.INSERT) -> CDCEvent:
+    """Create mock CDC event for testing"""
+    claim = create_sample_claim()
+    
+    return CDCEvent(
+        event_name=event_type,
+        event_creation_unix_time=int(datetime.now().timestamp() * 1000000),
+        claim=claim
+    )
+```
+
+## TESTING REQUIREMENTS
+
+### Required Test Coverage
+- **Domain Model**: 100% coverage
+- **Data Structures**: All classes and methods
+- **JSON Serialization**: Complete validation
+- **Infrastructure Generation**: Template validation
+- **SQL Generation**: Schema validation
+- **Enum Values**: All enum types
+
+### Test Organization
+```
+healthcare-cdc/
+├── test_healthcare_cdc_domain_model.py  # Main test file
+├── conftest.py                          # Pytest configuration
+└── test_data/                          # Test data files
+    ├── sample_claims.json
+    └── expected_outputs.json
+```
+
+### Test Execution
+```bash
+# Run all tests
+python -m pytest test_healthcare_cdc_domain_model.py -v
+
+# Run specific test class
+python -m pytest test_healthcare_cdc_domain_model.py::TestHealthcareCDCDomainModel -v
+
+# Run with coverage
+python -m pytest test_healthcare_cdc_domain_model.py --cov=healthcare_cdc_domain_model -v
+```
+
+## SECURITY TESTING
+
+### Data Privacy
+- No real healthcare data in tests
+- Use mock/sample data only
+- Validate data handling patterns
+- Test encryption requirements
+
+### Input Validation
+```python
+def test_input_validation():
+    """Test input validation for healthcare data"""
+    # Test invalid claim ID
+    with pytest.raises(ValueError):
+        HealthcareClaim(
+            claim_id="",  # Empty claim ID
+            # ... other required fields
+        )
+    
+    # Test invalid diagnosis codes
+    with pytest.raises(ValueError):
+        HealthcareClaim(
+            claim_id="CLM001",
+            diagnosis_codes=[],  # Empty diagnosis codes
+            # ... other required fields
+        )
+```
+
+## PERFORMANCE TESTING
+
+### JSON Serialization Performance
+```python
+def test_json_serialization_performance():
+    """Test JSON serialization performance"""
+    import time
+    
+    claim = create_sample_claim()
+    cdc_event = CDCEvent(
+        event_name=EventType.INSERT,
+        event_creation_unix_time=int(time.time() * 1000000),
+        claim=claim
+    )
+    
+    # Measure serialization time
+    start_time = time.time()
+    json_data = cdc_event.to_json()
+    serialization_time = time.time() - start_time
+    
+    # Should complete within reasonable time
+    assert serialization_time < 0.1  # 100ms
+    assert len(json_data) > 0
+```
+
+## FORBIDDEN TESTING PATTERNS
+- ❌ Don't use real healthcare data in tests
+- ❌ Don't skip validation tests
+- ❌ Don't ignore security requirements
+- ❌ Don't skip performance tests
+- ❌ Don't forget attribution in test documentation
+- ❌ Don't create tests that depend on external services
+
+## REQUIRED TEST IMPORTS
+```python
+import pytest
+import json
+from datetime import datetime
+from healthcare_cdc_domain_model import (
+    HealthcareCDCDomainModel,
+    HealthcareClaim,
+    PatientInfo,
+    ProviderInfo,
+    PayerInfo,
+    CDCEvent,
+    EventType,
+    ClaimStatus,
+    PaymentStatus
+)
+```
+
+## SUCCESS METRICS
+- All tests passing (12/12)
+- 100% test coverage for domain model
+- Performance benchmarks met
+- Security requirements validated
+- Documentation updated
+- Attribution preserved

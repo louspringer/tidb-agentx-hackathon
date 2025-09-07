@@ -1,0 +1,33 @@
+---
+description: Data management rules and guidelines
+globs: ["data/*.json", "data/*.py", "data/*.csv", "data/*.yaml", "data/*.html"]
+alwaysApply: true
+---
+
+# Data Management Rules
+
+## Data Management Guidelines
+
+### Data Security
+- **Encryption**: Encrypt sensitive data at rest and in transit
+- **Access Control**: Implement proper access controls for data
+- **Audit Logging**: Log all data access and modifications
+- **Data Classification**: Classify data by sensitivity level
+
+### Data Quality
+- **Validation**: Validate all data inputs
+- **Cleaning**: Implement data cleaning processes
+- **Consistency**: Ensure data consistency across systems
+- **Documentation**: Document data schemas and formats
+
+### Data Processing
+- **Efficient Processing**: Use efficient data processing methods
+- **Error Handling**: Implement robust error handling
+- **Monitoring**: Monitor data processing performance
+- **Backup**: Maintain data backups
+
+### Data Storage
+- **Appropriate Storage**: Choose appropriate storage solutions
+- **Scalability**: Design for data growth
+- **Retention**: Implement data retention policies
+- **Archival**: Archive old data appropriately
