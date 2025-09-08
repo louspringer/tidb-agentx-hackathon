@@ -1,0 +1,887 @@
+# Copyright (c) 2025 Snowflake Inc. All rights reserved.
+# This software is proprietary and may not be disclosed to third parties without the express written consent of Snowflake Inc.
+# Any unauthorized reproduction, distribution, modification, or use is strictly prohibited.
+
+---
+Parameters:
+
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+
+  SnowflakeOAuthIntegrationName:
+    Description: Name of the Snowflake integration that provides OAuth2 for Snowflake Openflow services
+    Type: String
+    MinLength: 1
+
+  SnowflakeOAuthClientID:
+    Description: Snowflake OAuth2 Client ID to secure communications to Snowflake Openflow services
+    Type: String
+    MinLength: 1
+
+  SnowflakeOAuthClientSecret:
+    NoEcho: true
+    Description: Snowflake OAuth2 Client Secret to secure communications to Snowflake Openflow services
+    Type: String
+    MinLength: 1
+
+  SnowflakeAccountURL:
+    Description: Snowflake Account base URL (e.g., https://your-account.snowflakecomputing.com)
+    Type: String
+    MinLength: 1
+
+  SnowflakeOrganization:
+    Description: Identifier for the organization of the Snowflake account
+    Type: String
+    MinLength: 1
+
+  SnowflakeAccount:
+    Description: Identifier for the Snowflake account, excluding the organization
+    Type: String
+    MinLength: 1
+
+  SnowflakeDatabase:
+    Description: The database that hosts Snowflake images
+    Default: snowflake
+    Type: String
+    MinLength: 1
+
+  SnowflakeSchema:
+    Description: The schema that hosts Snowflake images
+    Default: images
+    Type: String
+    MinLength: 1
+
+  SnowflakeImageRepository:
+    Description: The image repository that hosts Snowflake images
+    Default: snowflake_images
+    Type: String
+    MinLength: 1
+
+  DataPlaneURL:
+    Description: The URL for accessing this Data Plane through a web browser (provided by Snowflake)
+    Type: String
+    MinLength: 1
+
+  DataPlaneKey:
+    Description: The unique key for this Data Plane, used as part of the name of created cloud resources.
+    Type: String
+    MinLength: 1
+
+  DataPlaneUUID:
+    Description: The unique identifier for this Data Plane, used to validate the Data Plane with the Control Plane (provided by Snowflake)
+    Type: String
+    MinLength: 1
+
+  AgentImageVersion:
+    Description: The version of the Data Plane Agent image. If not specified, Openflow will find the latest available.
+    Type: String
+
+  DataPlaneServiceChartVersion:
+    Description: The version of the Data Plane Service Chart to install. If not specified, Openflow will find the latest available.
+    Type: String
+
+  DataPlaneUIChartVersion:
+    Description: The version of the Data Plane UI Chart to install. If not specified, Openflow will find the latest available.
+    Type: String
+
+  RuntimeGatewayVersion:
+    Description: The version of the Runtime Gateway to install. If not specified, Openflow will find the latest available.
+    Type: String
+
+  RuntimeOperatorChartVersion:
+    Description: The version of the Runtime Operator Chart to install. If not specified, Openflow will find the latest available.
+    Type: String
+
+  CidrVPC:
+    Description: The unique CIDR block granted to this VPC.
+    Type: String
+    Default: "10.10.0.0/16"
+    AllowedPattern: ^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/\d{1,3}$
+
+  CidrPublicSubnet1:
+    Description: The CIDR block granted to Public Subnet 1.
+    Type: String
+    Default: "10.10.128.0/24"
+    AllowedPattern: ^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/\d{1,3}$
+
+  CidrPublicSubnet2:
+    Description: The CIDR block granted to Public Subnet 2.
+    Type: String
+    Default: "10.10.129.0/24"
+    AllowedPattern: ^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/\d{1,3}$
+
+  CidrPrivateSubnet1:
+    Description: The CIDR block granted to Private Subnet 1.
+    Type: String
+    Default: "10.10.0.0/18"
+    AllowedPattern: ^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/\d{1,3}$
+
+  CidrPrivateSubnet2:
+    Description: The CIDR block granted to Private Subnet 2.
+    Type: String
+    Default: "10.10.64.0/18"
+    AllowedPattern: ^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/\d{1,3}$
+
+  TelemetryURL:
+    Description: The Snowflake URL that receives telemetry emitted from this Data Plane (provided by Snowflake)
+    Type: String
+    MinLength: 1
+
+  ControlPlaneURL:
+    Description: The Snowflake URL of the Control Plane that manages this Data Plane (provided by Snowflake)
+    Type: String
+    MinLength: 1
+
+  UseImageRegistryOverPrivateLink:
+    Description: Whether to use a private link endpoint for connecting to the image registry
+    Type: String
+    Default: false
+    AllowedValues: [true, false]
+
+  UseCustomIngress:
+    Description: Whether to use a customer created ingress with certificates setup following installation or generate an ingress with certificates during installation.
+    Type: String
+    Default: false
+    AllowedValues: [true, false]
+
+Resources:
+  SnowflakeOAuthSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      Name: !Sub "snowflake-oauth2-${DataPlaneKey}"
+      Description: OAuth2 configuration to use for secure communications to Snowflake Openflow services
+      SecretString: !Sub '{"clientID":"${SnowflakeOAuthClientID}","clientSecret":"${SnowflakeOAuthClientSecret}"}'
+
+  InfraVPC:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPC"
+    DeletionPolicy: "Delete"
+    Properties:
+      CidrBlock: !Ref CidrVPC
+      EnableDnsSupport: true
+      InstanceTenancy: "default"
+      EnableDnsHostnames: true
+      Tags:
+        - Value: !Sub "vpc-${DataPlaneKey}"
+          Key: "Name"
+  PrivateSubnet1:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "InfraVPC"
+      MapPublicIpOnLaunch: false
+      EnableDns64: false
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: !Ref CidrPrivateSubnet1
+      Ipv6Native: false
+      Tags:
+        - Value: !Sub "private_subnet_1-${DataPlaneKey}"
+          Key: "Name"
+        - Value: "1"
+          Key: "kubernetes.io/role/internal-elb"
+  PrivateSubnet2:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "InfraVPC"
+      MapPublicIpOnLaunch: false
+      EnableDns64: false
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: !Ref CidrPrivateSubnet2
+      Ipv6Native: false
+      Tags:
+        - Value: !Sub "private_subnet_2-${DataPlaneKey}"
+          Key: "Name"
+        - Value: "1"
+          Key: "kubernetes.io/role/internal-elb"
+  PublicSubnet1:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "InfraVPC"
+      MapPublicIpOnLaunch: true
+      EnableDns64: false
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: !Ref CidrPublicSubnet1
+      Ipv6Native: false
+      Tags:
+        - Value: !Sub "public_subnet_1-${DataPlaneKey}"
+          Key: "Name"
+        - Value: "1"
+          Key: "kubernetes.io/role/elb"
+  PublicSubnet2:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "InfraVPC"
+      MapPublicIpOnLaunch: true
+      EnableDns64: false
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: !Ref CidrPublicSubnet2
+      Ipv6Native: false
+      Tags:
+        - Value: !Sub "public_subnet_2-${DataPlaneKey}"
+          Key: "Name"
+        - Value: "1"
+          Key: "kubernetes.io/role/elb"
+
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Value: !Sub "igw-${DataPlaneKey}"
+          Key: "Name"
+
+  AttachGateway:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref InfraVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicRouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref InfraVPC
+
+  PublicRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnet2RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+
+  NatGateway:
+    Type: "AWS::EC2::NatGateway"
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      AllocationId: !GetAtt ElasticIPForNatGateway.AllocationId
+
+  ElasticIPForNatGateway:
+    Type: "AWS::EC2::EIP"
+
+  PrivateRouteTable1:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref InfraVPC
+
+  PrivateRouteTable2:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref InfraVPC
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable1
+
+  PrivateSubnet2RouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTable2
+
+  PrivateRoute1:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NatGateway
+
+  PrivateRoute2:
+    Type: "AWS::EC2::Route"
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NatGateway
+
+
+  OpenflowAgentRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "openflow-agent-role-${DataPlaneKey}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "ec2.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "OpenflowAgentPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "autoscaling:DescribeTags"
+                  - "ec2:DescribeImages"
+                  - "ec2:DescribeInstances"
+                  - "ec2:DescribeLaunchTemplates"
+                  - "ec2:DescribeLaunchTemplateVersions"
+                  - "ec2:DescribeNetworkInterfaces"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DescribeSubnets"
+                  - "ec2:DescribeTags"
+                  - "ec2:DescribeVolumes"
+                  - "ec2:DescribeVpcs"
+                  - "ec2:DescribeVpcAttribute"
+                  - "iam:GetRole"
+                  - "iam:GetOpenIDConnectProvider"
+                  - "ecr:GetAuthorizationToken"
+                  - "ec2:RunInstances"
+                  - "ec2:CreateLaunchTemplate"
+                  - "ec2:CreateSecurityGroup"
+                  - "ec2:CreateTags"
+                  - "ec2:DeleteTags"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "iam:CreateOpenIDConnectProvider"
+                  - "iam:DeleteOpenIDConnectProvider"
+                  - "iam:TagOpenIDConnectProvider"
+                  - "iam:UpdateOpenIDConnectProviderThumbprint"
+                Resource: !Sub "arn:aws:iam::${AWS::AccountId}:oidc-provider/oidc.eks.${AWS::Region}.amazonaws.com/id/*"
+                Condition:
+                  StringLike:
+                    "aws:ResourceTag/Name":
+                      - !Sub "${DataPlaneKey}-oidc-provider"
+              - Effect: "Allow"
+                Action:
+                  - "iam:CreatePolicy"
+                  - "iam:DeletePolicy"
+                  - "iam:GetPolicy"
+                  - "iam:GetPolicyVersion"
+                  - "iam:ListPolicyVersions"
+                  - "iam:ModifyPolicy"
+                  - "iam:TagPolicy"
+                  - "iam:UntagPolicy"
+                Resource:
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/dp-service-role-policy-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/oauth2-role-policy-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/temporal-service-role-policy-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/oidc-service-role-policy-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/dps-temporal-role-policy-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/dps-postgres-role-policy-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:policy/token-refresh-role-policy-${DataPlaneKey}"
+              - Effect: "Allow"
+                Action:
+                  - "iam:AttachRolePolicy"
+                  - "iam:CreateRole"
+                  - "iam:DeleteRole"
+                  - "iam:DeleteRolePolicy"
+                  - "iam:DetachRolePolicy"
+                  - "iam:GetRolePolicy"
+                  - "iam:ListAttachedRolePolicies"
+                  - "iam:ListInstanceProfilesForRole"
+                  - "iam:ListRolePolicies"
+                  - "iam:ModifyRole"
+                  - "iam:PutRolePolicy"
+                  - "iam:TagRole"
+                  - "iam:UntagRole"
+                  - "iam:UpdateAssumeRolePolicy"
+                Resource:
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/openflow-agent-role-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/${DataPlaneKey}-*"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/dps-temporal-role-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/dps-postgres-role-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/dp-service-role-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/oauth2-role-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/oidc-service-role-${DataPlaneKey}"
+                  - !Sub "arn:aws:iam::${AWS::AccountId}:role/token-refresh-role-${DataPlaneKey}"
+              - Effect: "Allow"
+                Action:
+                  - "autoscaling:CreateOrUpdateTags"
+                  - "autoscaling:DeleteTags"
+                Resource: !Sub "arn:aws:autoscaling:${AWS::Region}:${AWS::AccountId}:autoScalingGroup:*:autoScalingGroupName/eks-${DataPlaneKey}-*"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:AuthorizeSecurityGroupEgress"
+                  - "ec2:AuthorizeSecurityGroupIngress"
+                  - "ec2:RevokeSecurityGroupEgress"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:CreateTags"
+                  - "ec2:DeleteTags"
+                  - "ec2:CreateNetworkInterface"
+                  - "ec2:DeleteNetworkInterface"
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:security-group/*"
+                Condition:
+                  StringLike:
+                    "aws:ResourceTag/Name":
+                      - !Sub "${DataPlaneKey}-EC2SecurityGroup-*"
+                      - !Sub "k8s-traffic-${DataPlaneKey}-*"
+                      - !Sub "eks-cluster-sg-${DataPlaneKey}-*"
+                      - !Sub "${DataPlaneKey}-cluster-sg"
+                      - !Sub "postgres-${DataPlaneKey}-sg"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:AuthorizeSecurityGroupEgress"
+                  - "ec2:AuthorizeSecurityGroupIngress"
+                  - "ec2:RevokeSecurityGroupEgress"
+                  - "ec2:DeleteSecurityGroup"
+                  - "ec2:CreateTags"
+                  - "ec2:DeleteTags"
+                  - "ec2:CreateNetworkInterface"
+                  - "ec2:DeleteNetworkInterface"
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:security-group/*"
+                Condition:
+                  StringLike:
+                    "aws:ResourceTag/elbv2.k8s.aws/cluster": !Sub "${DataPlaneKey}"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:CreateSecurityGroup"
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:vpc/${InfraVPC}"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:AttachNetworkInterface"
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*"
+                Condition:
+                  StringLike:
+                    "ec2:ResourceTag/Name": !Sub "openflow-agent-${DataPlaneKey}"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:DeleteLaunchTemplate"
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:launch-template/*"
+                Condition:
+                  StringLike:
+                    "aws:ResourceTag/Name": !Sub "${DataPlaneKey}-*-group"
+              - Effect: "Allow"
+                Action:
+                  - "eks:CreateCluster"
+                  - "eks:CreateAccessEntry"
+                  - "eks:CreateAddon"
+                  - "eks:CreateNodegroup"
+                  - "eks:DeleteCluster"
+                  - "eks:DescribeCluster"
+                  - "eks:ListClusters"
+                  - "eks:ListNodeGroups"
+                  - "eks:DescribeUpdate"
+                  - "eks:UpdateClusterConfig"
+                  - "eks:TagResource"
+                Resource: !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:cluster/${DataPlaneKey}"
+              - Effect: "Allow"
+                Action:
+                  - "eks:DescribeAddon"
+                  - "eks:DescribeAddonVersions"
+                  - "eks:UpdateAddon"
+                  - "eks:DeleteAddon"
+                  - "eks:DescribeUpdate"
+                Resource: !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:addon/${DataPlaneKey}/*"
+              - Effect: "Allow"
+                Action:
+                  - "eks:DeleteNodegroup"
+                  - "eks:DescribeNodegroup"
+                  - "eks:ListNodegroups"
+                  - "eks:UpdateNodegroupConfig"
+                  - "eks:TagResource"
+                  - "eks:DescribeUpdate"
+                Resource: !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:nodegroup/${DataPlaneKey}/*"
+              - Effect: Allow
+                Action:
+                  - "s3:CreateBucket"
+                  - "s3:ListBucket"
+                Resource: !Sub arn:aws:s3:::byoc-tf-state-${DataPlaneKey}-${AWS::Region}
+              - Effect: Allow
+                Action:
+                  - "s3:DeleteObject"
+                  - "s3:GetObject"
+                  - "s3:PutObject"
+                Resource: !Sub arn:aws:s3:::byoc-tf-state-${DataPlaneKey}-${AWS::Region}/*
+              - Effect: Allow
+                Action:
+                - "secretsmanager:CreateSecret"
+                - "secretsmanager:DeleteSecret"
+                - "secretsmanager:DescribeSecret"
+                - "secretsmanager:GetResourcePolicy"
+                - "secretsmanager:GetSecretValue"
+                - "secretsmanager:PutSecretValue"
+                - "secretsmanager:UpdateSecretVersionStage"
+                - "secretsmanager:TagResource"
+                - "secretsmanager:UntagResource"
+                Resource: !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:*-${DataPlaneKey}*
+              - Effect: "Allow"
+                Action:
+                  - "ecr:BatchCheckLayerAvailability"
+                  - "ecr:BatchGetImage"
+                  - "ecr:CompleteLayerUpload"
+                  - "ecr:CreateRepository"
+                  - "ecr:DescribeImages"
+                  - "ecr:DescribeRepositories"
+                  - "ecr:GetDownloadUrlForLayer"
+                  - "ecr:InitiateLayerUpload"
+                  - "ecr:ListImages"
+                  - "ecr:PutImage"
+                  - "ecr:TagResource"
+                  - "ecr:UntagResource"
+                  - "ecr:UploadLayerPart"
+                # Assumes that all data plane images in ECR will use a "snowflake-openflow/" prefix in the repository name
+                Resource: !Sub "arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/snowflake-openflow/*"
+              - Effect: "Allow"
+                Action:
+                  - "iam:CreateServiceLinkedRole"
+                Resource: "arn:aws:iam::*:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS"
+                Condition:
+                  StringLike:
+                    iam:AWSServiceName: "eks.amazonaws.com"
+              - Effect: "Allow"
+                Action:
+                  - "iam:CreateServiceLinkedRole"
+                Resource: "arn:aws:iam::*:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup"
+                Condition:
+                  StringLike:
+                    iam:AWSServiceName: "eks-nodegroup.amazonaws.com"
+              - Effect: "Allow"
+                Action:
+                  - "eks:AssociateAccessPolicy"
+                  - "eks:ListAssociatedAccessPolicies"
+                  - "eks:DisassociateAccessPolicy"
+                Resource: !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:access-entry/${DataPlaneKey}/*"
+              - Effect: "Allow"
+                Action: "iam:PassRole"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "iam:TagRole"
+                  - "iam:UntagRole"
+                Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/${DataPlaneKey}-*"
+              - Effect: "Allow"
+                Action:
+                  - "iam:UntagOpenIDConnectProvider"
+                Resource: !Sub "arn:aws:iam::${AWS::AccountId}:oidc-provider/oidc.eks.${AWS::Region}.amazonaws.com/id/*"
+              - Effect: "Allow"
+                Action:
+                  - "eks:TagResource"
+                  - "eks:UntagResource"
+                  - "eks:UpdateNodegroupVersion"
+                Resource:
+                  - !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:cluster/${DataPlaneKey}"
+                  - !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:nodegroup/${DataPlaneKey}/*"
+                  - !Sub "arn:aws:eks:${AWS::Region}:${AWS::AccountId}:addon/${DataPlaneKey}/*"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:CreateLaunchTemplateVersion"
+                  - "ec2:ModifyLaunchTemplate"
+                Resource: !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:launch-template/*"
+                Condition:
+                  StringLike:
+                    "aws:ResourceTag/Name": !Sub "${DataPlaneKey}-*-group"
+
+  # IAM Instance Profile for EC2
+  EC2InstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      InstanceProfileName: !Sub "OpenflowAgentEC2InstanceProfile-${DataPlaneKey}"
+      Roles:
+        - Ref: "OpenflowAgentRole"
+
+  EC2InstanceConnectEndpoint:
+    Type: "AWS::EC2::InstanceConnectEndpoint"
+    UpdateReplacePolicy: "Delete"
+    DeletionPolicy: "Delete"
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      Tags:
+        - Key: "Name"
+          Value: !Sub "openflow-agent-connect-endpoint-${DataPlaneKey}"
+
+  TerraformStateBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub "byoc-tf-state-${DataPlaneKey}-${AWS::Region}"
+
+  # EC2 Instance with user data to download, extract, and run the software infrastructure installation
+  OpenflowAgentInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      InstanceType: "t3.medium"
+      IamInstanceProfile: 
+        Ref: "EC2InstanceProfile"
+      ImageId: !Ref LatestAmiId
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 20
+            VolumeType: gp3
+      SubnetId: !Ref "PrivateSubnet1"
+      Tags:
+        - Key: "Name"
+          Value: !Sub "openflow-agent-${DataPlaneKey}"
+      PropagateTagsToVolumeOnCreation: true
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash
+            cat <<\EOF > /home/ec2-user/.env
+            #!/bin/bash
+            UNIQUE_SUFFIX=${DataPlaneKey}
+            DATA_PLANE_UUID=${DataPlaneUUID}
+            AWS_REGION=${AWSRegion}
+            DOMAIN=${DataPlaneURL}
+            IMAGE_REGISTRY=${AWSAccountId}.dkr.ecr.${AWSRegion}.amazonaws.com
+            AGENT_IMAGE_REPOSITORY=openflow-data-plane-agent-aws
+            AGENT_IMAGE_VERSION=${AgentImageVersion}
+            S3_BUCKET_NAME=${TerraformStateBucket}
+            OPERATOR_IMAGE_REPOSITORY=runtime-operator
+            OPERATOR_CHART_REPOSITORY=runtime-operator-chart
+            OPERATOR_CHART_VERSION=${RuntimeOperatorChartVersion}
+            SNOWFLAKE_LOGIN_ENABLE=true
+            GATEWAY_IMAGE_REPOSITORY=openflow-runtime-gateway
+            GATEWAY_IMAGE_VERSION=${RuntimeGatewayVersion}
+            SERVER_IMAGE_REPOSITORY=runtime-server
+            EXTENSIONS_IMAGE_REPOSITORY=runtime-extensions
+            SNOWFLAKE_ORG=${SnowflakeOrganization}
+            SNOWFLAKE_ACCOUNT=${SnowflakeAccount}
+            SNOWFLAKE_DATABASE=${SnowflakeDatabase}
+            SNOWFLAKE_SCHEMA=${SnowflakeSchema}
+            SNOWFLAKE_IMAGE_REPOSITORY=${SnowflakeImageRepository}
+            SNOWFLAKE_ACCOUNT_URL=${SnowflakeAccountURL}
+            SNOWFLAKE_OAUTH_INTEGRATION_NAME=${SnowflakeOAuthIntegrationName}
+            SNOWFLAKE_OAUTH_TOKEN_URL=${SnowflakeAccountURL}/oauth/token-request
+            ENABLE_TELEMETRY=true
+            TELEMETRY_URL=${TelemetryURL}
+            CONTROL_PLANE_URL=${ControlPlaneURL}
+            VPC_ID=${VpcId}
+            PRIVATE_SUBNET_1_ID=${PrivateSubnet1Id}
+            PRIVATE_SUBNET_2_ID=${PrivateSubnet2Id}
+            DPS_ENABLE=true
+            DPS_IMAGE_REPOSITORY=openflow-dataplane-service
+            DPS_CHART_REPOSITORY=openflow-dataplane-service-chart
+            DPS_CHART_VERSION=${DataPlaneServiceChartVersion}
+            DPUI_IMAGE_REPOSITORY=openflow-dataplane-ui
+            DPUI_CHART_REPOSITORY=openflow-dataplane-ui-chart
+            DPUI_CHART_VERSION=${DataPlaneUIChartVersion}
+            DPS_FEATURE_CONNECTOR_INSTALLATION=true
+            USE_IMAGE_REGISTRY_OVER_PRIVATE_LINK=${UseImageRegistryOverPrivateLink}
+            USE_CUSTOM_INGRESS=${UseCustomIngress}
+            EOF
+
+            chown ec2-user:ec2-user /home/ec2-user/.env
+            chmod 644 /home/ec2-user/.env
+            source /home/ec2-user/.env
+
+            dnf update -y
+            dnf install -y docker
+
+            systemctl start docker
+            systemctl enable docker
+
+            usermod -a -G docker ec2-user
+
+            cat <<\EOF > /home/ec2-user/setup-agent.sh
+            #!/bin/bash
+            source /home/ec2-user/.env
+
+            image_name=$AGENT_IMAGE_REPOSITORY
+
+            instance_id=$(ec2-metadata -i | cut -d ' ' -f2)
+            agent_tags=$(aws ec2 describe-tags --filters "Name=resource-id,Values=$instance_id" --query 'Tags[?!contains(Key, `aws:cloudformation`)&&Key!=`Name`]' | jq -c 'map(del(.ResourceId?, .ResourceType?))')
+
+            tags_array=()
+            while IFS= read -r tag; do
+              tags_array+=("$tag")
+            done < <(echo "$agent_tags" | jq -r '.[] | "Key=\(.Key),Value=\(.Value)"')
+
+            repo_arn=$(aws ecr describe-repositories --region $AWS_REGION --repository-names snowflake-openflow/$image_name --query 'repositories[0].repositoryArn' --output text 2>&1)
+            if [ $? -eq 0 ]; then
+              [ ${!#tags_array[@]} -gt 0 ] && aws ecr tag-resource --resource-arn $repo_arn --tags "${!tags_array[@]}"
+            elif echo $repo_arn | grep -q RepositoryNotFoundException; then
+              aws ecr create-repository --region $AWS_REGION --repository-name snowflake-openflow/$image_name --tags "${!tags_array[@]}"
+            else
+              >&2 echo $repo_arn
+            fi
+
+            echo "Logging in to local private ECR..."
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $IMAGE_REGISTRY
+
+            oauth_secret_id="snowflake-oauth2-$UNIQUE_SUFFIX"
+
+            oauth2_creds=$(aws secretsmanager get-secret-value --region $AWS_REGION --query SecretString --output text --secret-id $oauth_secret_id)
+            client_id=$(echo $oauth2_creds | jq -r '.clientID')
+            client_secret=$(echo $oauth2_creds | jq -r '.clientSecret')
+
+            oauth_resp=$(curl -s --request POST --url $SNOWFLAKE_OAUTH_TOKEN_URL \
+              --header 'content-type: application/x-www-form-urlencoded' \
+              --data-urlencode grant_type=client_credentials \
+              --data-urlencode client_id=$client_id \
+              --data-urlencode client_secret=$client_secret)
+            access_token=$(echo $oauth_resp | jq -er '.access_token')
+            
+            [ $? -ne 0 ] && echo "Unable to obtain OAuth access token: "$(echo $oauth_resp | jq -r '.message') && exit 1
+            
+            token_path="/home/ec2-user/access.token"
+            echo -n $access_token > $token_path
+
+            if ! command -v snow &>/dev/null; then
+              echo "Installing Snowflake CLI v3.8.3"
+          
+              curl "$CONTROL_PLANE_URL/api/v1/package-binaries/snowflake-cli-3.8.3.rpm" \
+                -H "Authorization: Bearer $access_token" -o "snowflake-cli.rpm"
+          
+              sudo rpm -i snowflake-cli.rpm
+              snow --version
+          
+              rm snowflake-cli.rpm
+            fi
+
+            private_link_param=''
+            if [[ "$USE_IMAGE_REGISTRY_OVER_PRIVATE_LINK" == true ]]; then
+              echo "Connecting to image registry using a private link"
+              private_link_param='--private-link'
+            fi
+
+            spcs_params="""-x \
+              --account=$SNOWFLAKE_ORG-$SNOWFLAKE_ACCOUNT \
+              --database=$SNOWFLAKE_DATABASE \
+              --schema=$SNOWFLAKE_SCHEMA \
+              --host=${!SNOWFLAKE_ACCOUNT_URL#"https://"} \
+              --authenticator=OAUTH \
+              --token-file-path=$token_path \
+              --format=JSON
+            """
+
+            snowflake_registry=$(snow spcs image-registry url $private_link_param $spcs_params | jq -r '.message')
+
+            set -e
+            echo "Logging in to Snowflake Image Registry https://$snowflake_registry ..."
+            echo $access_token | docker login "https://$snowflake_registry" \
+              --username 0auth2accesstoken \
+              --password-stdin
+
+            if [ -n "$AGENT_IMAGE_VERSION" ]; then
+              image_tag=$AGENT_IMAGE_VERSION
+            else
+              echo "Finding latest Agent image version in repo $SNOWFLAKE_IMAGE_REPOSITORY"
+              image_tag=$(snow spcs image-repository list-images $SNOWFLAKE_IMAGE_REPOSITORY $spcs_params --like $image_name | jq -r ".[] | .tags" | sed -r 's/-/~/' | sort -Vr | sed -r 's/~/-/' | head -1)
+              sed -i'' -E "s|^(AGENT_IMAGE_VERSION=).*|\1$image_tag|g" /home/ec2-user/.env
+            fi
+            
+            rm $token_path
+            
+            echo "Using Agent image version $image_tag"
+            
+            snow_image_path="$SNOWFLAKE_DATABASE/$SNOWFLAKE_SCHEMA/$SNOWFLAKE_IMAGE_REPOSITORY/$image_name:$image_tag"
+            local_image_path=$IMAGE_REGISTRY/snowflake-openflow/$image_name:$image_tag
+            docker pull $snowflake_registry/$snow_image_path >/dev/null
+            docker tag $snowflake_registry/$snow_image_path $local_image_path
+            docker push $local_image_path >/dev/null
+            
+            container_id=$(docker create "$IMAGE_REGISTRY/snowflake-openflow/$image_name:$image_tag")
+            docker cp "$container_id":/opt/openflow/host-scripts /home/ec2-user/
+            docker rm "$container_id" >/dev/null
+            
+            chmod +x /home/ec2-user/host-scripts/*.sh
+            echo "Retrieved host scripts for $image_name:$image_tag"
+            
+            /home/ec2-user/host-scripts/initialize.sh
+            
+            sudo systemctl stop openflow-setup-agent.timer
+            sudo systemctl disable openflow-setup-agent.timer
+            EOF
+
+            chmod +x /home/ec2-user/setup-agent.sh
+            chown ec2-user:ec2-user /home/ec2-user/setup-agent.sh
+
+            cat <<\EOF > /etc/systemd/system/openflow-setup-agent.service
+            [Unit]
+            Description="Setup agent for Snowflake Openflow"
+            [Service]
+            User=ec2-user
+            Group=ec2-user
+            TimeoutSec=120
+            WorkingDirectory=/home/ec2-user
+            ExecStart=/home/ec2-user/setup-agent.sh
+            [Install]
+            WantedBy=multi-user.target
+            EOF
+
+            cat <<\EOF > /etc/systemd/system/openflow-setup-agent.timer
+            [Unit]
+            Description="Run openflow-setup-agent.service every 5 minutes relative to deactivation time"
+            [Timer]
+            OnBootSec=0
+            OnUnitInactiveSec=5min
+            Unit=openflow-setup-agent.service
+            [Install]
+            WantedBy=timers.target
+            EOF
+
+            systemctl daemon-reload
+            
+            systemctl enable openflow-setup-agent.timer
+            systemctl start openflow-setup-agent.timer
+          - AWSAccountId: !Ref AWS::AccountId
+            AWSRegion: !Ref AWS::Region
+            TerraformStateBucket: !Ref TerraformStateBucket
+            DataPlaneKey: !Ref DataPlaneKey
+            DataPlaneUUID: !Ref DataPlaneUUID
+            DataPlaneURL: !Ref DataPlaneURL
+            AgentImageVersion: !Ref AgentImageVersion
+            DataPlaneServiceChartVersion: !Ref DataPlaneServiceChartVersion
+            DataPlaneUIChartVersion: !Ref DataPlaneUIChartVersion
+            RuntimeOperatorChartVersion: !Ref RuntimeOperatorChartVersion
+            RuntimeGatewayVersion: !Ref RuntimeGatewayVersion
+            SnowflakeOrganization: !Ref SnowflakeOrganization
+            SnowflakeAccount: !Ref SnowflakeAccount
+            SnowflakeDatabase: !Ref SnowflakeDatabase
+            SnowflakeSchema: !Ref SnowflakeSchema
+            SnowflakeImageRepository: !Ref SnowflakeImageRepository
+            SnowflakeAccountURL: !Ref SnowflakeAccountURL
+            SnowflakeOAuthIntegrationName: !Ref SnowflakeOAuthIntegrationName
+            TelemetryURL: !Ref TelemetryURL
+            ControlPlaneURL: !Ref ControlPlaneURL
+            VpcId: !Ref InfraVPC
+            PrivateSubnet1Id: !Ref PrivateSubnet1
+            PrivateSubnet2Id: !Ref PrivateSubnet2
+            UseImageRegistryOverPrivateLink: !Ref UseImageRegistryOverPrivateLink
+            UseCustomIngress: !Ref UseCustomIngress

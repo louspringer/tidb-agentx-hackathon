@@ -279,35 +279,83 @@ class TestRedisConnectionManager:
     
     @pytest.mark.asyncio
     async def test_listen_for_messages(self, manager):
-        """Test message listening loop."""
+        """Test message listening loop with proper timeout and debugging."""
+        import logging
+        import time
+        
+        # Enable verbose logging for debugging
+        logging.basicConfig(level=logging.DEBUG)
+        logger = logging.getLogger(__name__)
+        
         mock_pubsub = AsyncMock()
         mock_handler = AsyncMock()
         
-        # Mock message stream
+        # Mock message stream with proper async iteration termination
         messages = [
             {'type': 'subscribe', 'channel': 'test_channel'},
             {'type': 'message', 'channel': 'test_channel', 'data': 'test_message'},
             {'type': 'message', 'channel': 'test_channel', 'data': 'another_message'},
         ]
         
+        message_count = 0
+        
         async def mock_listen():
-            for msg in messages:
+            nonlocal message_count
+            logger.debug("Mock listen started")
+            
+            for i, msg in enumerate(messages):
+                logger.debug(f"Yielding message {i}: {msg}")
                 yield msg
+                message_count += 1
+                
+                # Add small delay to simulate real behavior
+                await asyncio.sleep(0.01)
+                
+                # Check if shutdown requested after each message
+                if manager._is_shutting_down:
+                    logger.debug("Shutdown detected, breaking from mock_listen")
+                    break
+            
+            logger.debug("Mock listen completed - no more messages")
+            # Important: Don't yield indefinitely - let the async iterator end
         
         mock_pubsub.listen = mock_listen
         
-        # Run listener for a short time
+        # Reset shutdown flag
+        manager._is_shutting_down = False
+        
+        logger.debug("Starting message listener task")
+        start_time = time.time()
+        
+        # Run listener for a short time with timeout protection
         task = asyncio.create_task(manager._listen_for_messages(mock_pubsub, mock_handler))
-        await asyncio.sleep(0.1)
+        
+        # Let it process some messages
+        await asyncio.sleep(0.05)
+        logger.debug(f"Messages processed so far: {message_count}")
+        
+        # Signal shutdown
         manager._is_shutting_down = True
+        logger.debug("Shutdown flag set")
         
         try:
-            await asyncio.wait_for(task, timeout=1.0)
+            # Use shorter timeout and better error handling
+            await asyncio.wait_for(task, timeout=0.5)
+            logger.debug("Task completed normally")
         except asyncio.TimeoutError:
+            logger.warning("Task timed out - cancelling")
             task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                logger.debug("Task cancelled successfully")
+        
+        elapsed = time.time() - start_time
+        logger.debug(f"Test completed in {elapsed:.3f} seconds")
         
         # Verify handler was called for message types only
-        assert mock_handler.call_count == 2
+        logger.debug(f"Handler call count: {mock_handler.call_count}")
+        assert mock_handler.call_count == 2, f"Expected 2 calls, got {mock_handler.call_count}"
         mock_handler.assert_any_call('test_channel', 'test_message')
         mock_handler.assert_any_call('test_channel', 'another_message')
     

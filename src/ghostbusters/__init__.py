@@ -11,7 +11,13 @@ from .agents import (
     SecurityExpert,
     TestExpert,
 )
-from .ghostbusters_orchestrator import GhostbustersOrchestrator, run_ghostbusters
+# Optional LangGraph imports
+try:
+    from .ghostbusters_orchestrator import GhostbustersOrchestrator, run_ghostbusters
+except ImportError:
+    # LangGraph not available, orchestrator functionality disabled
+    GhostbustersOrchestrator = None
+    run_ghostbusters = None
 from .recovery import (
     ImportResolver,
     IndentationFixer,

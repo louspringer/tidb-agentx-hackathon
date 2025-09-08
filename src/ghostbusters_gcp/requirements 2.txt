@@ -1,0 +1,12 @@
+# GCP Services
+google-cloud-firestore==2.11.1
+google-cloud-pubsub==2.18.4
+functions-framework==3.4.0
+
+# Real Ghostbusters Dependencies
+langchain==0.3.27
+langgraph==0.6.3
+pydantic==2.9.2
+
+# Basic dependencies
+typing-extensions==4.8.0 

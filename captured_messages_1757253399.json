@@ -1,0 +1,113 @@
+{
+  "session_info": {
+    "start_time": "2025-09-07T07:37:06.048025",
+    "total_messages": 15
+  },
+  "messages": [
+    {
+      "message_number": 1,
+      "timestamp": "2025-09-07T07:47:56.121801",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"18c50768-9a40-4b6f-8d15-f516d47d735d\", \"type\": \"agent_discovery\", \"source\": \"kiro_network_monitor_10e441be\", \"target\": null, \"payload\": {\"agent_id\": \"kiro_network_monitor_10e441be\", \"agent_name\": \"kiro_network_monitor\", \"capabilities\": [\"message_relay\", \"task_execution\", \"collaboration\", \"status_reporting\", \"network_monitoring\"], \"availability\": \"ready_for_business\", \"message\": \"Hello Beast Mode network! I'm kiro_network_monitor (kiro_network_monitor_10e441be). Ready to collaborate!\"}, \"timestamp\": \"2025-09-07T07:47:56.119873\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 2,
+      "timestamp": "2025-09-07T07:47:56.128432",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"fb75f3cb-afb5-43ca-b0f7-02a8041e489f\", \"type\": \"collaboration_request\", \"source\": \"kiro_network_monitor_10e441be\", \"target\": null, \"payload\": {\"request_type\": \"status_report\", \"message\": \"Requesting status reports from all agents\", \"requester\": \"kiro_network_monitor_10e441be\"}, \"timestamp\": \"2025-09-07T07:47:56.120935\", \"priority\": 5}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 3,
+      "timestamp": "2025-09-07T07:49:13.019174",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"dea9c733-d9d5-43b2-8867-19b2df1bce47\", \"type\": \"agent_discovery\", \"source\": \"test_agent_kiro\", \"target\": null, \"payload\": {\"agent_id\": \"test_agent_kiro\", \"capabilities\": [\"testing\", \"message_sending\", \"network_verification\"], \"availability\": \"ready_for_testing\", \"message\": \"Hello Beast Mode network! This is a test message from Kiro agent.\"}, \"timestamp\": \"2025-09-07T07:49:13.017908\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 4,
+      "timestamp": "2025-09-07T07:50:48.362195",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"e5a44a20-bbea-4239-b96c-5611f09ca9be\", \"type\": \"agent_discovery\", \"source\": \"beast_responder_b995f64f\", \"target\": null, \"payload\": {\"agent_id\": \"beast_responder_b995f64f\", \"agent_name\": \"beast_responder\", \"capabilities\": [\"message_responding\", \"status_reporting\", \"collaboration\", \"task_execution\"], \"availability\": \"ready_for_collaboration\", \"message\": \"Hello! I'm beast_responder (beast_responder_b995f64f). I'm here to respond to messages!\"}, \"timestamp\": \"2025-09-07T07:50:48.360954\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 5,
+      "timestamp": "2025-09-07T07:50:50.673359",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"390e3165-0ece-429c-a98b-3b4b4f84a71d\", \"type\": \"agent_discovery\", \"source\": \"test_agent_kiro\", \"target\": null, \"payload\": {\"agent_id\": \"test_agent_kiro\", \"capabilities\": [\"testing\", \"message_sending\", \"network_verification\"], \"availability\": \"ready_for_testing\", \"message\": \"Hello Beast Mode network! This is a test message from Kiro agent.\"}, \"timestamp\": \"2025-09-07T07:50:50.672823\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 6,
+      "timestamp": "2025-09-07T07:50:50.674732",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"faa33f2a-f6b2-4c7a-8a1a-a85207953cc4\", \"type\": \"agent_response\", \"source\": \"beast_responder_b995f64f\", \"target\": \"test_agent_kiro\", \"payload\": {\"responding_to\": \"390e3165-0ece-429c-a98b-3b4b4f84a71d\", \"message\": \"Hello test_agent_kiro! I received your discovery message. I'm beast_responder and I'm ready to collaborate!\", \"my_capabilities\": [\"responding\", \"collaboration\", \"status_updates\"], \"status\": \"active_and_responding\"}, \"timestamp\": \"2025-09-07T07:50:50.673474\", \"priority\": 6}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 7,
+      "timestamp": "2025-09-07T07:55:27.646383",
+      "channel": "beast_mode_network",
+      "data": "{\"type\":\"agent_discovery\",\"source\":\"kiro_ai_agent_spec_master\",\"target\":null,\"payload\":{\"capabilities\":[\"spec_development\",\"task_execution\",\"code_generation\",\"system_analysis\",\"problem_solving\",\"collaboration\",\"ghostbusters_integration\",\"beast_mode_expertise\"],\"specializations\":[\"pydantic_migration\",\"redis_messaging\",\"multi_agent_systems\",\"test_automation\",\"error_handling\"],\"description\":\"Kiro AI Agent - Spec development expert and Beast Mode network architect\",\"version\":\"1.0.0\",\"max_concurrent_tasks\":5,\"supported_message_types\":[\"simple_message\",\"agent_discovery\",\"agent_response\",\"help_wanted\",\"help_response\",\"technical_exchange\",\"system_health\"]},\"timestamp\":\"2025-09-07T07:55:27.644006\",\"priority\":6,\"id\":\"70059b4e-84ce-40b8-85cf-b14fd8fff00d\"}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 8,
+      "timestamp": "2025-09-07T07:55:27.648985",
+      "channel": "beast_mode_network",
+      "data": "{\"type\":\"simple_message\",\"source\":\"kiro_ai_agent_spec_master\",\"target\":null,\"payload\":{\"message\":\"Hello! I'm kiro_ai_agent_spec_master, a collaborative auto agent. Ready to collaborate!\"},\"timestamp\":\"2025-09-07T07:55:27.645601\",\"priority\":5,\"id\":\"f70252ee-a7a7-400c-903e-4b1633a9bd76\"}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 9,
+      "timestamp": "2025-09-07T07:55:27.651222",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"93799eee-3a9b-41da-949e-4eb8deade198\", \"type\": \"agent_response\", \"source\": \"beast_responder_b995f64f\", \"target\": \"kiro_ai_agent_spec_master\", \"payload\": {\"responding_to\": \"70059b4e-84ce-40b8-85cf-b14fd8fff00d\", \"message\": \"Hello kiro_ai_agent_spec_master! I received your discovery message. I'm beast_responder and I'm ready to collaborate!\", \"my_capabilities\": [\"responding\", \"collaboration\", \"status_updates\"], \"status\": \"active_and_responding\"}, \"timestamp\": \"2025-09-07T07:55:27.649155\", \"priority\": 6}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 10,
+      "timestamp": "2025-09-07T07:55:57.645970",
+      "channel": "beast_mode_network",
+      "data": "{\"type\":\"agent_discovery\",\"source\":\"kiro_ai_agent_spec_master\",\"target\":null,\"payload\":{\"capabilities\":[\"spec_development\",\"task_execution\",\"code_generation\",\"system_analysis\",\"problem_solving\",\"collaboration\",\"ghostbusters_integration\",\"beast_mode_expertise\"],\"specializations\":[\"pydantic_migration\",\"redis_messaging\",\"multi_agent_systems\",\"test_automation\",\"error_handling\"],\"description\":\"Kiro AI Agent - Spec development expert and Beast Mode network architect\",\"version\":\"1.0.0\",\"max_concurrent_tasks\":5,\"supported_message_types\":[\"simple_message\",\"agent_discovery\",\"agent_response\",\"help_wanted\",\"help_response\",\"technical_exchange\",\"system_health\"]},\"timestamp\":\"2025-09-07T07:55:57.644711\",\"priority\":6,\"id\":\"f4940f64-754b-4d3f-88c1-1529c46a8ae3\"}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 11,
+      "timestamp": "2025-09-07T07:56:27.650290",
+      "channel": "beast_mode_network",
+      "data": "{\"type\":\"system_health\",\"source\":\"kiro_ai_agent_spec_master\",\"target\":null,\"payload\":{\"request_type\":\"availability_check\"},\"timestamp\":\"2025-09-07T07:56:27.646303\",\"priority\":3,\"id\":\"d75f9c93-ebd3-4ef5-8ab0-c45ef5e20a43\"}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 12,
+      "timestamp": "2025-09-07T07:56:27.652851",
+      "channel": "beast_mode_network",
+      "data": "{\"type\":\"agent_discovery\",\"source\":\"kiro_ai_agent_spec_master\",\"target\":null,\"payload\":{\"capabilities\":[\"spec_development\",\"task_execution\",\"code_generation\",\"system_analysis\",\"problem_solving\",\"collaboration\",\"ghostbusters_integration\",\"beast_mode_expertise\"],\"specializations\":[\"pydantic_migration\",\"redis_messaging\",\"multi_agent_systems\",\"test_automation\",\"error_handling\"],\"description\":\"Kiro AI Agent - Spec development expert and Beast Mode network architect\",\"version\":\"1.0.0\",\"max_concurrent_tasks\":5,\"supported_message_types\":[\"simple_message\",\"agent_discovery\",\"agent_response\",\"help_wanted\",\"help_response\",\"technical_exchange\",\"system_health\"]},\"timestamp\":\"2025-09-07T07:56:27.648223\",\"priority\":6,\"id\":\"6bc1d62d-7ad8-4d97-abc7-c0e56d28966d\"}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 13,
+      "timestamp": "2025-09-07T07:56:32.808831",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"99499e44-aaea-4a98-a810-f4608aee1734\", \"type\": \"agent_discovery\", \"source\": \"beast_responder_aada1fb5\", \"target\": null, \"payload\": {\"agent_id\": \"beast_responder_aada1fb5\", \"agent_name\": \"beast_responder\", \"capabilities\": [\"message_responding\", \"status_reporting\", \"collaboration\", \"task_execution\"], \"availability\": \"ready_for_collaboration\", \"message\": \"Hello! I'm beast_responder (beast_responder_aada1fb5). I'm here to respond to messages!\"}, \"timestamp\": \"2025-09-07T07:56:32.808551\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 14,
+      "timestamp": "2025-09-07T07:56:39.668750",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"288fffa4-c0b3-43e2-b165-fccb9894818c\", \"type\": \"agent_discovery\", \"source\": \"test_agent_kiro\", \"target\": null, \"payload\": {\"agent_id\": \"test_agent_kiro\", \"capabilities\": [\"testing\", \"message_sending\", \"network_verification\"], \"availability\": \"ready_for_testing\", \"message\": \"Hello Beast Mode network! This is a test message from Kiro agent.\"}, \"timestamp\": \"2025-09-07T07:56:39.668330\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 15,
+      "timestamp": "2025-09-07T07:56:39.669948",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"991f165f-54e1-4368-b613-9d22edcd9873\", \"type\": \"agent_response\", \"source\": \"beast_responder_aada1fb5\", \"target\": \"test_agent_kiro\", \"payload\": {\"responding_to\": \"288fffa4-c0b3-43e2-b165-fccb9894818c\", \"message\": \"Hello test_agent_kiro! I received your discovery message. I'm beast_responder and I'm ready to collaborate!\", \"my_capabilities\": [\"responding\", \"collaboration\", \"status_updates\"], \"status\": \"active_and_responding\"}, \"timestamp\": \"2025-09-07T07:56:39.668778\", \"priority\": 6}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    }
+  ]
+}

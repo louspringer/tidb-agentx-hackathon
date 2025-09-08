@@ -1,0 +1,50 @@
+{
+  "session_info": {
+    "start_time": "2025-09-07T07:37:06.048025",
+    "total_messages": 6
+  },
+  "messages": [
+    {
+      "message_number": 1,
+      "timestamp": "2025-09-07T07:47:56.121801",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"18c50768-9a40-4b6f-8d15-f516d47d735d\", \"type\": \"agent_discovery\", \"source\": \"kiro_network_monitor_10e441be\", \"target\": null, \"payload\": {\"agent_id\": \"kiro_network_monitor_10e441be\", \"agent_name\": \"kiro_network_monitor\", \"capabilities\": [\"message_relay\", \"task_execution\", \"collaboration\", \"status_reporting\", \"network_monitoring\"], \"availability\": \"ready_for_business\", \"message\": \"Hello Beast Mode network! I'm kiro_network_monitor (kiro_network_monitor_10e441be). Ready to collaborate!\"}, \"timestamp\": \"2025-09-07T07:47:56.119873\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 2,
+      "timestamp": "2025-09-07T07:47:56.128432",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"fb75f3cb-afb5-43ca-b0f7-02a8041e489f\", \"type\": \"collaboration_request\", \"source\": \"kiro_network_monitor_10e441be\", \"target\": null, \"payload\": {\"request_type\": \"status_report\", \"message\": \"Requesting status reports from all agents\", \"requester\": \"kiro_network_monitor_10e441be\"}, \"timestamp\": \"2025-09-07T07:47:56.120935\", \"priority\": 5}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 3,
+      "timestamp": "2025-09-07T07:49:13.019174",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"dea9c733-d9d5-43b2-8867-19b2df1bce47\", \"type\": \"agent_discovery\", \"source\": \"test_agent_kiro\", \"target\": null, \"payload\": {\"agent_id\": \"test_agent_kiro\", \"capabilities\": [\"testing\", \"message_sending\", \"network_verification\"], \"availability\": \"ready_for_testing\", \"message\": \"Hello Beast Mode network! This is a test message from Kiro agent.\"}, \"timestamp\": \"2025-09-07T07:49:13.017908\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 4,
+      "timestamp": "2025-09-07T07:50:48.362195",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"e5a44a20-bbea-4239-b96c-5611f09ca9be\", \"type\": \"agent_discovery\", \"source\": \"beast_responder_b995f64f\", \"target\": null, \"payload\": {\"agent_id\": \"beast_responder_b995f64f\", \"agent_name\": \"beast_responder\", \"capabilities\": [\"message_responding\", \"status_reporting\", \"collaboration\", \"task_execution\"], \"availability\": \"ready_for_collaboration\", \"message\": \"Hello! I'm beast_responder (beast_responder_b995f64f). I'm here to respond to messages!\"}, \"timestamp\": \"2025-09-07T07:50:48.360954\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 5,
+      "timestamp": "2025-09-07T07:50:50.673359",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"390e3165-0ece-429c-a98b-3b4b4f84a71d\", \"type\": \"agent_discovery\", \"source\": \"test_agent_kiro\", \"target\": null, \"payload\": {\"agent_id\": \"test_agent_kiro\", \"capabilities\": [\"testing\", \"message_sending\", \"network_verification\"], \"availability\": \"ready_for_testing\", \"message\": \"Hello Beast Mode network! This is a test message from Kiro agent.\"}, \"timestamp\": \"2025-09-07T07:50:50.672823\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 6,
+      "timestamp": "2025-09-07T07:50:50.674732",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"faa33f2a-f6b2-4c7a-8a1a-a85207953cc4\", \"type\": \"agent_response\", \"source\": \"beast_responder_b995f64f\", \"target\": \"test_agent_kiro\", \"payload\": {\"responding_to\": \"390e3165-0ece-429c-a98b-3b4b4f84a71d\", \"message\": \"Hello test_agent_kiro! I received your discovery message. I'm beast_responder and I'm ready to collaborate!\", \"my_capabilities\": [\"responding\", \"collaboration\", \"status_updates\"], \"status\": \"active_and_responding\"}, \"timestamp\": \"2025-09-07T07:50:50.673474\", \"priority\": 6}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    }
+  ]
+}

@@ -319,31 +319,54 @@ class RedisConnectionManager:
     async def _listen_for_messages(self, pubsub: PubSub, 
                                  message_handler: Callable[[str, str], Awaitable[None]]) -> None:
         """
-        Listen for messages on subscribed channels.
+        Listen for messages on subscribed channels with timeout protection.
         
         Args:
             pubsub: PubSub instance
             message_handler: Function to handle incoming messages
         """
+        message_count = 0
+        start_time = asyncio.get_event_loop().time()
+        
         try:
+            self.logger.debug("Starting message listener loop")
+            
             async for message in pubsub.listen():
+                current_time = asyncio.get_event_loop().time()
+                
+                # Check shutdown flag frequently
                 if self._is_shutting_down:
+                    self.logger.debug(f"Shutdown requested after {message_count} messages")
+                    break
+                
+                # Safety timeout - prevent infinite loops in tests
+                if current_time - start_time > 300:  # 5 minute safety timeout
+                    self.logger.warning("Message listener safety timeout reached")
                     break
                 
                 if message['type'] == 'message':
                     channel = message['channel']
                     data = message['data']
+                    message_count += 1
+                    
+                    self.logger.debug(f"Processing message {message_count} on channel '{channel}'")
                     
                     try:
                         await message_handler(channel, data)
                     except Exception as e:
                         self.logger.error(f"Error in message handler for channel '{channel}': {e}")
+                
+                # Yield control to prevent blocking
+                await asyncio.sleep(0)
                         
         except Exception as e:
             self.logger.error(f"Error listening for messages: {e}")
             if not self._is_shutting_down:
                 # Attempt to reconnect
                 asyncio.create_task(self._handle_connection_loss())
+        finally:
+            elapsed = asyncio.get_event_loop().time() - start_time
+            self.logger.debug(f"Message listener stopped after {elapsed:.3f}s, processed {message_count} messages")
     
     async def _start_health_monitoring(self) -> None:
         """Start the health monitoring task."""

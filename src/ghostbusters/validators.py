@@ -4,44 +4,18 @@ Ghostbusters Validators - Validation components for findings
 """
 
 import logging
-from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 
-from pydantic import BaseModel, Field, field_validator
-
-
-class ValidationResult(BaseModel):
-    """Result from validation"""
-
-    is_valid: bool
-    confidence: float = Field(ge=0.0, le=1.0)
-    issues: List[str] = Field(default_factory=list)
-    recommendations: List[str] = Field(default_factory=list)
-    validator_name: str = Field(default="unknown")
-
-    @field_validator('confidence')
-    @classmethod
-    def validate_confidence(cls, v):
-        """Ensure confidence is between 0.0 and 1.0."""
-        return max(0.0, min(1.0, v))
-
-
-class BaseValidator(ABC):
-    """Base class for all validators"""
-
-    def __init__(self) -> None:
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-    @abstractmethod
-    async def validate_findings(
-        self,
-        delusions: List[Dict[str, Any]],
-    ) -> ValidationResult:
-        """Validate findings from delusion detection"""
+# Import the pydantic-based classes
+from .validators.base_validator import BaseValidator, ValidationResult
 
 
 class SecurityValidator(BaseValidator):
     """Security validator for validating security findings"""
+
+    def __init__(self):
+        super().__init__("SecurityValidator")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def validate_findings(
         self,
@@ -72,12 +46,16 @@ class SecurityValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
-            validator_name="SecurityValidator",
+            validator_name=self.name,
         )
 
 
 class CodeQualityValidator(BaseValidator):
     """Code quality validator for validating quality findings"""
+
+    def __init__(self):
+        super().__init__("CodeQualityValidator")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def validate_findings(
         self,
@@ -111,12 +89,16 @@ class CodeQualityValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
-            validator_name="CodeQualityValidator",
+            validator_name=self.name,
         )
 
 
 class TestValidator(BaseValidator):
     """Test validator for validating test findings"""
+
+    def __init__(self):
+        super().__init__("TestValidator")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def validate_findings(
         self,
@@ -147,12 +129,16 @@ class TestValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
-            validator_name="TestValidator",
+            validator_name=self.name,
         )
 
 
 class BuildValidator(BaseValidator):
     """Build validator for validating build findings"""
+
+    def __init__(self):
+        super().__init__("BuildValidator")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def validate_findings(
         self,
@@ -183,12 +169,16 @@ class BuildValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
-            validator_name="BuildValidator",
+            validator_name=self.name,
         )
 
 
 class ArchitectureValidator(BaseValidator):
     """Architecture validator for validating architectural findings"""
+
+    def __init__(self):
+        super().__init__("ArchitectureValidator")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def validate_findings(
         self,
@@ -222,12 +212,16 @@ class ArchitectureValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
-            validator_name="ArchitectureValidator",
+            validator_name=self.name,
         )
 
 
 class ModelValidator(BaseValidator):
     """Model validator for validating model findings"""
+
+    def __init__(self):
+        super().__init__("ModelValidator")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def validate_findings(
         self,
@@ -258,5 +252,5 @@ class ModelValidator(BaseValidator):
             confidence=confidence,
             issues=issues,
             recommendations=recommendations,
-            validator_name="ModelValidator",
+            validator_name=self.name,
         )

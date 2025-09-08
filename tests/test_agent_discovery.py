@@ -785,23 +785,67 @@ class TestAgentRegistry:
     @pytest.mark.asyncio
     async def test_cleanup_loop_offline_detection(self, mock_sleep, registry):
         """Test that cleanup loop marks agents as offline."""
+        import asyncio
+        import logging
+        
+        # Enable debug logging
+        logging.basicConfig(level=logging.DEBUG)
+        logger = logging.getLogger(__name__)
+        
+        logger.debug("=== STARTING CLEANUP LOOP TEST ===")
+        
         # Register agent
         caps = AgentCapabilities(agent_id="test_agent", capabilities=["python"])
         await registry.register_agent(caps)
+        logger.debug("Agent registered")
         
         # Manually set last_seen to old time
         agent = await registry.get_agent("test_agent")
         agent.last_seen = datetime.now() - timedelta(minutes=10)
+        logger.debug(f"Agent last_seen set to: {agent.last_seen}")
         
-        # Mock sleep to return immediately
-        mock_sleep.return_value = asyncio.sleep(0)
+        # Mock sleep to return immediately and count calls
+        call_count = 0
+        def mock_sleep_func(duration):
+            nonlocal call_count
+            call_count += 1
+            logger.debug(f"Mock sleep call #{call_count}, duration: {duration}")
+            
+            # After first iteration, trigger shutdown to prevent infinite loop
+            if call_count >= 1:
+                logger.debug("Setting shutdown flag to break loop")
+                registry._is_shutting_down = True
+            
+            # Return a completed future instead of calling real asyncio.sleep
+            future = asyncio.Future()
+            future.set_result(None)
+            return future
         
-        # Run one iteration of cleanup
-        await registry._cleanup_loop()
+        mock_sleep.side_effect = mock_sleep_func
+        
+        # Ensure shutdown flag is initially False
+        registry._is_shutting_down = False
+        logger.debug(f"Initial shutdown flag: {registry._is_shutting_down}")
+        
+        # Run cleanup loop with timeout protection
+        logger.debug("Starting cleanup loop with timeout")
+        try:
+            await asyncio.wait_for(registry._cleanup_loop(), timeout=2.0)
+        except asyncio.TimeoutError:
+            logger.warning("Cleanup loop timed out - forcing shutdown")
+            registry._is_shutting_down = True
+        
+        logger.debug(f"Cleanup completed, sleep was called {call_count} times")
         
         # Agent should be marked offline
         updated_agent = await registry.get_agent("test_agent")
+        logger.debug(f"Agent availability after cleanup: {updated_agent.availability}")
         assert updated_agent.availability == AgentStatus.OFFLINE
+        
+        logger.debug("=== CLEANUP LOOP TEST COMPLETED ===")
+        
+        # Reset shutdown flag for other tests
+        registry._is_shutting_down = False
 
     @pytest.mark.asyncio
     async def test_capability_indexing_comprehensive(self, registry):

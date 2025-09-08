@@ -1,0 +1,46 @@
+# Openflow Playground Configuration
+# Copy this file to config.env and update the values below with YOUR specific values
+
+# AWS Configuration
+AWS_REGION=us-east-1
+STACK_NAME=openflow-playground
+
+# Snowflake Configuration
+SNOWFLAKE_ACCOUNT_URL=https://your-account.snowflakecomputing.com
+SNOWFLAKE_ORGANIZATION=YOUR_ORG
+SNOWFLAKE_ACCOUNT=YOUR_ACCOUNT
+SNOWFLAKE_DATABASE=snowflake
+SNOWFLAKE_SCHEMA=images
+SNOWFLAKE_IMAGE_REPOSITORY=snowflake_images
+
+# OAuth Configuration (provided by Snowflake - DO NOT use the example values!)
+SNOWFLAKE_OAUTH_INTEGRATION_NAME=YOUR_OAUTH_INTEGRATION_NAME
+SNOWFLAKE_OAUTH_CLIENT_ID=YOUR_OAUTH_CLIENT_ID
+SNOWFLAKE_OAUTH_CLIENT_SECRET=YOUR_OAUTH_CLIENT_SECRET
+
+# Data Plane Configuration (provided by Snowflake - DO NOT use the example values!)
+DATA_PLANE_KEY=your-unique-key
+DATA_PLANE_URL=YOUR_DATA_PLANE_URL
+DATA_PLANE_UUID=YOUR_DATA_PLANE_UUID
+
+# URLs (provided by Snowflake - DO NOT use the example values!)
+TELEMETRY_URL=YOUR_TELEMETRY_URL
+CONTROL_PLANE_URL=YOUR_CONTROL_PLANE_URL
+
+# Optional: Image Versions (leave empty to use latest)
+AGENT_IMAGE_VERSION=
+DATA_PLANE_SERVICE_CHART_VERSION=
+DATA_PLANE_UI_CHART_VERSION=
+RUNTIME_OPERATOR_CHART_VERSION=
+RUNTIME_GATEWAY_VERSION=
+
+# Network Configuration
+USE_IMAGE_REGISTRY_OVER_PRIVATE_LINK=false
+USE_CUSTOM_INGRESS=false
+
+# VPC CIDR Blocks
+CIDR_VPC=10.10.0.0/16
+CIDR_PUBLIC_SUBNET_1=10.10.128.0/24
+CIDR_PUBLIC_SUBNET_2=10.10.129.0/24
+CIDR_PRIVATE_SUBNET_1=10.10.0.0/18
+CIDR_PRIVATE_SUBNET_2=10.10.64.0/18 

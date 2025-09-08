@@ -1,0 +1,22 @@
+{
+  "session_info": {
+    "start_time": "2025-09-07T07:37:06.048025",
+    "total_messages": 2
+  },
+  "messages": [
+    {
+      "message_number": 1,
+      "timestamp": "2025-09-07T07:47:56.121801",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"18c50768-9a40-4b6f-8d15-f516d47d735d\", \"type\": \"agent_discovery\", \"source\": \"kiro_network_monitor_10e441be\", \"target\": null, \"payload\": {\"agent_id\": \"kiro_network_monitor_10e441be\", \"agent_name\": \"kiro_network_monitor\", \"capabilities\": [\"message_relay\", \"task_execution\", \"collaboration\", \"status_reporting\", \"network_monitoring\"], \"availability\": \"ready_for_business\", \"message\": \"Hello Beast Mode network! I'm kiro_network_monitor (kiro_network_monitor_10e441be). Ready to collaborate!\"}, \"timestamp\": \"2025-09-07T07:47:56.119873\", \"priority\": 8}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    },
+    {
+      "message_number": 2,
+      "timestamp": "2025-09-07T07:47:56.128432",
+      "channel": "beast_mode_network",
+      "data": "{\"id\": \"fb75f3cb-afb5-43ca-b0f7-02a8041e489f\", \"type\": \"collaboration_request\", \"source\": \"kiro_network_monitor_10e441be\", \"target\": null, \"payload\": {\"request_type\": \"status_report\", \"message\": \"Requesting status reports from all agents\", \"requester\": \"kiro_network_monitor_10e441be\"}, \"timestamp\": \"2025-09-07T07:47:56.120935\", \"priority\": 5}",
+      "session_start": "2025-09-07T07:37:06.048025"
+    }
+  ]
+}

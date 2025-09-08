@@ -4,34 +4,18 @@ Ghostbusters Agents - Expert agents for delusion detection
 """
 
 import logging
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
-
-@dataclass
-class DelusionResult:
-    """Result from delusion detection"""
-
-    delusions: list[dict[str, Any]]
-    confidence: float
-    recommendations: list[str]
-
-
-class BaseExpert(ABC):
-    """Base class for all expert agents"""
-
-    def __init__(self) -> None:
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-    @abstractmethod
-    async def detect_delusions(self, project_path: Path) -> DelusionResult:
-        """Detect delusions in the project"""
+# Import the new pydantic-based classes
+from .agents.base_expert import BaseExpert, DelusionResult
 
 
 class SecurityExpert(BaseExpert):
     """Security expert for detecting security delusions"""
+
+    def __init__(self):
+        super().__init__("SecurityExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect security-related delusions"""
@@ -99,7 +83,7 @@ class SecurityExpert(BaseExpert):
             "Use Go/Rust for performance-critical shell operations",
             "Implement gRPC shell service for secure command execution",
             "Integrate GitHub MCP for intelligent repository analysis",
-            "Use mcp-git-ingest for structured repository context"
+            "Use mcp-git-ingest for structured repository context",
             "Add timeouts and resource limits to all subprocess calls",
         ]
 
@@ -107,11 +91,16 @@ class SecurityExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )
 
 
 class CodeQualityExpert(BaseExpert):
     """Code quality expert for detecting quality delusions"""
+
+    def __init__(self):
+        super().__init__("CodeQualityExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect code quality delusions"""
@@ -167,11 +156,16 @@ class CodeQualityExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )
 
 
 class TestExpert(BaseExpert):
     """Test expert for detecting test-related delusions"""
+
+    def __init__(self):
+        super().__init__("TestExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect test-related delusions"""
@@ -220,11 +214,16 @@ class TestExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )
 
 
 class BuildExpert(BaseExpert):
     """Build expert for detecting build-related delusions"""
+
+    def __init__(self):
+        super().__init__("BuildExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect build-related delusions"""
@@ -273,11 +272,16 @@ class BuildExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )
 
 
 class ArchitectureExpert(BaseExpert):
     """Architecture expert for detecting architectural delusions"""
+
+    def __init__(self):
+        super().__init__("ArchitectureExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect architectural delusions"""
@@ -316,11 +320,16 @@ class ArchitectureExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )
 
 
 class ModelExpert(BaseExpert):
     """Model expert for detecting model-related delusions"""
+
+    def __init__(self):
+        super().__init__("ModelExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect model-related delusions"""
@@ -364,11 +373,16 @@ class ModelExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )
 
 
 class MCPExpert(BaseExpert):
     """MCP expert for detecting MCP-related delusions"""
+
+    def __init__(self):
+        super().__init__("MCPExpert")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def detect_delusions(self, project_path: Path) -> DelusionResult:
         """Detect MCP-related delusions"""
@@ -452,4 +466,5 @@ class MCPExpert(BaseExpert):
             delusions=delusions,
             confidence=confidence,
             recommendations=recommendations,
+            agent_name=self.name,
         )

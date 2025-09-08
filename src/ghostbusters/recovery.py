@@ -4,46 +4,19 @@ Ghostbusters Recovery - Recovery engines for fixing issues
 """
 
 import logging
-from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, List
 
-from pydantic import BaseModel, Field, field_validator
-
-
-class RecoveryResult(BaseModel):
-    """Result from recovery action"""
-
-    success: bool
-    message: str = Field(default="Recovery completed")
-    confidence: float = Field(default=0.8, ge=0.0, le=1.0)
-    changes_made: List[str] = Field(default_factory=list)
-    engine_name: str = Field(default="unknown")
-    files_fixed: List[str] = Field(default_factory=list)
-    errors: List[str] = Field(default_factory=list)
-    warnings: List[str] = Field(default_factory=list)
-    metadata: Dict[str, Any] = Field(default_factory=dict)
-
-    @field_validator('confidence')
-    @classmethod
-    def validate_confidence(cls, v):
-        """Ensure confidence is between 0.0 and 1.0."""
-        return max(0.0, min(1.0, v))
-
-
-class BaseRecoveryEngine(ABC):
-    """Base class for all recovery engines"""
-
-    def __init__(self) -> None:
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-    @abstractmethod
-    async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
-        """Execute recovery action"""
+# Import the pydantic-based classes
+from .recovery_engines.base_recovery_engine import BaseRecoveryEngine, RecoveryResult
 
 
 class SyntaxRecoveryEngine(BaseRecoveryEngine):
     """Syntax recovery engine for fixing syntax errors"""
+
+    def __init__(self):
+        super().__init__("SyntaxRecoveryEngine")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute syntax recovery"""
@@ -76,16 +49,16 @@ class SyntaxRecoveryEngine(BaseRecoveryEngine):
             message="Syntax recovery completed",
             confidence=0.9 if len(errors) == 0 else 0.5,
             changes_made=changes_made,
-            engine_name="SyntaxRecoveryEngine",
-            files_fixed=files_fixed,
-            errors=errors,
-            warnings=warnings,
-            metadata={"engine": "syntax_recovery"},
+            engine_name=self.name,
         )
 
 
 class IndentationFixer(BaseRecoveryEngine):
     """Indentation fixer for fixing indentation errors"""
+
+    def __init__(self):
+        super().__init__("IndentationFixer")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute indentation fixing"""
@@ -132,16 +105,16 @@ class IndentationFixer(BaseRecoveryEngine):
             message="Indentation fixing completed",
             confidence=0.9 if len(errors) == 0 else 0.5,
             changes_made=changes_made,
-            engine_name="IndentationFixer",
-            files_fixed=files_fixed,
-            errors=errors,
-            warnings=warnings,
-            metadata={"engine": "indentation_fixer"},
+            engine_name=self.name,
         )
 
 
 class ImportResolver(BaseRecoveryEngine):
     """Import resolver for fixing import errors"""
+
+    def __init__(self):
+        super().__init__("ImportResolver")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute import resolution"""
@@ -173,16 +146,16 @@ class ImportResolver(BaseRecoveryEngine):
             message="Import resolution completed",
             confidence=0.8 if len(errors) == 0 else 0.4,
             changes_made=changes_made,
-            engine_name="ImportResolver",
-            files_fixed=files_fixed,
-            errors=errors,
-            warnings=warnings,
-            metadata={"engine": "import_resolver"},
+            engine_name=self.name,
         )
 
 
 class TypeAnnotationFixer(BaseRecoveryEngine):
     """Type annotation fixer for adding missing type hints"""
+
+    def __init__(self):
+        super().__init__("TypeAnnotationFixer")
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def execute_recovery(self, action: Dict[str, Any]) -> RecoveryResult:
         """Execute type annotation fixing"""
@@ -214,9 +187,5 @@ class TypeAnnotationFixer(BaseRecoveryEngine):
             message="Type annotation fixing completed",
             confidence=0.7 if len(errors) == 0 else 0.3,
             changes_made=changes_made,
-            engine_name="TypeAnnotationFixer",
-            files_fixed=files_fixed,
-            errors=errors,
-            warnings=warnings,
-            metadata={"engine": "type_annotation_fixer"},
+            engine_name=self.name,
         )

@@ -56,14 +56,14 @@
   - Test each agent individually with new models
   - _Requirements: 1.1, 3.1_
 
-- [ ] 8. Fix legacy agents.py file with dataclass imports
+- [x] 8. Fix legacy agents.py file with dataclass imports
   - Remove dataclass DelusionResult from src/ghostbusters/agents.py
   - Update all agent classes to use the new BaseExpert from agents/base_expert.py
   - Remove dataclass imports and update to use pydantic models
   - Ensure all agents inherit from the correct BaseExpert class
   - _Requirements: 4.1, 4.2, 4.3_
 
-- [ ] 9. Update all concrete validator implementations
+- [x] 9. Update all concrete validator implementations
   - Update SecurityValidator, CodeQualityValidator, TestValidator, BuildValidator, ArchitectureValidator, ModelValidator
   - Ensure all validators return proper pydantic ValidationResult objects
   - Update validator-specific logic to work with pydantic models
@@ -71,7 +71,7 @@
   - Test each validator individually with new models
   - _Requirements: 1.1, 3.2_
 
-- [ ] 10. Update all concrete recovery engine implementations
+- [x] 10. Update all concrete recovery engine implementations
   - Update SyntaxRecoveryEngine, IndentationFixer, ImportResolver, TypeAnnotationFixer
   - Ensure all recovery engines return proper pydantic RecoveryResult objects
   - Update recovery engine logic to work with pydantic models
@@ -79,7 +79,7 @@
   - Test each recovery engine individually with new models
   - _Requirements: 1.1, 3.3_
 
-- [ ] 11. Update existing test file for pydantic compatibility
+- [x] 11. Update existing test file for pydantic compatibility
   - Modify tests/test_ghostbusters.py to work with pydantic models
   - Update test assertions to check pydantic model attributes
   - Add tests for model validation and serialization
@@ -87,7 +87,7 @@
   - Test error handling for invalid model data
   - _Requirements: 1.1, 5.3_
 
-- [ ] 12. Add comprehensive pydantic validation tests
+- [x] 12. Add comprehensive pydantic validation tests
   - Create tests for field validation (confidence score ranges, required fields)
   - Test model serialization and deserialization (to_dict, from_dict)
   - Test error handling for ValidationError exceptions
@@ -95,7 +95,7 @@
   - Test JSON serialization for LangGraph state management
   - _Requirements: 3.1, 3.2, 3.3_
 
-- [ ] 13. Test LangGraph workflow with pydantic state
+- [x] 13. Test LangGraph workflow with pydantic state
   - Test GhostbustersOrchestrator initialization with pydantic state
   - Test state transitions between workflow nodes
   - Test state serialization during workflow execution
@@ -103,7 +103,7 @@
   - Test complete workflow execution end-to-end
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 14. Run full test suite and fix remaining issues
+- [x] 14. Run full test suite and fix remaining issues
   - Execute pytest tests/test_ghostbusters.py
   - Fix any remaining pydantic compatibility issues
   - Ensure test success rate >90% for Ghostbusters tests
