@@ -451,5 +451,294 @@ class TestConnectionStatus:
         assert ConnectionStatus.FAILED == "failed"
 
 
+class TestErrorScenarios:
+    """Test various error scenarios and edge cases."""
+    
+    @pytest.fixture
+    def manager(self):
+        """Create manager with short timeouts for testing."""
+        config = ConnectionConfig(
+            redis_url="redis://test:6379",
+            max_retries=2,
+            retry_delay=0.01,
+            connection_timeout=0.1,
+            socket_timeout=0.1
+        )
+        return RedisConnectionManager(config)
+    
+    @pytest.mark.asyncio
+    async def test_connection_timeout(self, manager):
+        """Test connection timeout handling."""
+        with patch('src.beast_mode_network.redis_foundation.redis.from_url', side_effect=asyncio.TimeoutError("Connection timeout")):
+            result = await manager.connect()
+        
+        assert result is False
+        assert manager.status == ConnectionStatus.FAILED
+    
+    @pytest.mark.asyncio
+    async def test_redis_url_parsing_error(self, manager):
+        """Test invalid Redis URL handling."""
+        manager.config.redis_url = "invalid://url"
+        
+        with patch('src.beast_mode_network.redis_foundation.redis.from_url', side_effect=ValueError("Invalid URL")):
+            result = await manager.connect()
+        
+        assert result is False
+        assert manager.status == ConnectionStatus.FAILED
+    
+    @pytest.mark.asyncio
+    async def test_publish_with_connection_recovery(self, manager):
+        """Test publish with automatic connection recovery."""
+        mock_redis = AsyncMock()
+        
+        # First call fails, second succeeds after reconnection
+        mock_redis.publish = AsyncMock(side_effect=[Exception("Connection lost"), 1])
+        
+        manager._redis_client = mock_redis
+        manager._status = ConnectionStatus.CONNECTED
+        
+        # Mock successful reconnection
+        with patch.object(manager, '_handle_connection_loss') as mock_handle_loss:
+            with patch.object(manager, 'connect', return_value=True):
+                result = await manager.publish("test_channel", "test_message")
+        
+        assert result is False  # First attempt fails
+        mock_handle_loss.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_health_monitoring_with_failures(self, manager):
+        """Test health monitoring handles failures gracefully."""
+        mock_redis = AsyncMock()
+        
+        # Health check fails, then succeeds
+        mock_redis.ping = AsyncMock(side_effect=[Exception("Ping failed"), True])
+        
+        manager._redis_client = mock_redis
+        manager._status = ConnectionStatus.CONNECTED
+        
+        # Mock the health monitoring task
+        with patch.object(manager, '_handle_connection_loss') as mock_handle_loss:
+            # Simulate one health check cycle
+            await manager._health_check_cycle()
+        
+        mock_handle_loss.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_multiple_concurrent_connections(self, manager):
+        """Test handling multiple concurrent connection attempts."""
+        mock_redis = AsyncMock()
+        mock_redis.ping = AsyncMock(return_value=True)
+        
+        with patch('src.beast_mode_network.redis_foundation.redis.from_url', return_value=mock_redis):
+            with patch.object(manager, '_start_health_monitoring', new_callable=AsyncMock):
+                # Start multiple connection attempts concurrently
+                tasks = [manager.connect() for _ in range(5)]
+                results = await asyncio.gather(*tasks)
+        
+        # All should succeed (first one connects, others return True for already connected)
+        assert all(results)
+        assert manager.status == ConnectionStatus.CONNECTED
+    
+    @pytest.mark.asyncio
+    async def test_disconnect_during_connection(self, manager):
+        """Test disconnect called during connection attempt."""
+        connection_event = asyncio.Event()
+        
+        async def slow_connect(*args, **kwargs):
+            await connection_event.wait()
+            mock_redis = AsyncMock()
+            mock_redis.ping = AsyncMock(return_value=True)
+            return mock_redis
+        
+        with patch('src.beast_mode_network.redis_foundation.redis.from_url', side_effect=slow_connect):
+            # Start connection
+            connect_task = asyncio.create_task(manager.connect())
+            
+            # Wait a bit then disconnect
+            await asyncio.sleep(0.01)
+            await manager.disconnect()
+            
+            # Signal connection to complete
+            connection_event.set()
+            
+            # Connection should still complete but manager should be disconnected
+            result = await connect_task
+            assert manager.status == ConnectionStatus.DISCONNECTED
+    
+    @pytest.mark.asyncio
+    async def test_pubsub_subscription_failure(self, manager):
+        """Test pub/sub subscription failure handling."""
+        mock_pubsub = AsyncMock()
+        mock_pubsub.subscribe = AsyncMock(side_effect=Exception("Subscribe failed"))
+        
+        with patch.object(manager, 'get_pubsub', return_value=mock_pubsub):
+            result = await manager.subscribe_to_channel("test_channel", AsyncMock())
+        
+        assert result is False
+    
+    @pytest.mark.asyncio
+    async def test_message_handler_exception(self, manager):
+        """Test message handler exception doesn't crash listener."""
+        mock_pubsub = AsyncMock()
+        
+        # Handler that raises exception
+        async def failing_handler(channel, message):
+            raise Exception("Handler failed")
+        
+        # Mock message stream
+        messages = [
+            {'type': 'message', 'channel': 'test_channel', 'data': 'test_message'}
+        ]
+        
+        async def mock_listen():
+            for msg in messages:
+                yield msg
+                # Stop after first message to avoid infinite loop
+                manager._is_shutting_down = True
+        
+        mock_pubsub.listen = mock_listen
+        
+        # Should not raise exception despite handler failure
+        await manager._listen_for_messages(mock_pubsub, failing_handler)
+    
+    @pytest.mark.asyncio
+    async def test_max_retry_delay_cap(self, manager):
+        """Test that retry delay is capped at max_retry_delay."""
+        manager.config.max_retry_delay = 0.1
+        manager.config.backoff_multiplier = 10.0  # Large multiplier
+        
+        mock_redis = AsyncMock()
+        mock_redis.ping = AsyncMock(side_effect=Exception("Connection failed"))
+        
+        with patch('src.beast_mode_network.redis_foundation.redis.from_url', return_value=mock_redis):
+            with patch('asyncio.sleep', new_callable=AsyncMock) as mock_sleep:
+                await manager.connect()
+        
+        # All delays should be capped at max_retry_delay
+        for call in mock_sleep.call_args_list:
+            delay = call.args[0]
+            assert delay <= manager.config.max_retry_delay
+
+
+class TestConfigurationValidation:
+    """Test configuration validation and edge cases."""
+    
+    def test_invalid_retry_values(self):
+        """Test handling of invalid retry configuration values."""
+        # Negative max_retries should be handled gracefully
+        config = ConnectionConfig(max_retries=-1)
+        manager = RedisConnectionManager(config)
+        assert manager.config.max_retries == -1  # Should preserve value but handle in logic
+    
+    def test_zero_retry_delay(self):
+        """Test zero retry delay configuration."""
+        config = ConnectionConfig(retry_delay=0.0)
+        manager = RedisConnectionManager(config)
+        assert manager.config.retry_delay == 0.0
+    
+    def test_very_large_timeout_values(self):
+        """Test very large timeout values."""
+        config = ConnectionConfig(
+            connection_timeout=3600.0,  # 1 hour
+            socket_timeout=1800.0       # 30 minutes
+        )
+        manager = RedisConnectionManager(config)
+        assert manager.config.connection_timeout == 3600.0
+        assert manager.config.socket_timeout == 1800.0
+
+
+class TestMemoryAndResourceManagement:
+    """Test memory usage and resource management."""
+    
+    @pytest.mark.asyncio
+    async def test_cleanup_on_failed_connection(self):
+        """Test proper cleanup when connection fails."""
+        config = ConnectionConfig(max_retries=1, retry_delay=0.01)
+        manager = RedisConnectionManager(config)
+        
+        with patch('src.beast_mode_network.redis_foundation.redis.from_url', side_effect=Exception("Connection failed")):
+            result = await manager.connect()
+        
+        assert result is False
+        assert manager._redis_client is None
+        assert manager._pubsub is None
+        assert manager._health_check_task is None
+    
+    @pytest.mark.asyncio
+    async def test_multiple_disconnect_calls(self):
+        """Test multiple disconnect calls don't cause issues."""
+        manager = RedisConnectionManager()
+        
+        # Multiple disconnects should be safe
+        await manager.disconnect()
+        await manager.disconnect()
+        await manager.disconnect()
+        
+        assert manager.status == ConnectionStatus.DISCONNECTED
+    
+    @pytest.mark.asyncio
+    async def test_resource_cleanup_on_exception(self):
+        """Test resources are cleaned up when exceptions occur."""
+        manager = RedisConnectionManager()
+        
+        mock_redis = AsyncMock()
+        mock_redis.close = AsyncMock(side_effect=Exception("Close failed"))
+        
+        manager._redis_client = mock_redis
+        manager._status = ConnectionStatus.CONNECTED
+        
+        # Should not raise exception despite close failure
+        await manager.disconnect()
+        
+        assert manager.status == ConnectionStatus.DISCONNECTED
+        assert manager._redis_client is None
+
+
+class TestConcurrencyAndThreadSafety:
+    """Test concurrency and thread safety aspects."""
+    
+    @pytest.mark.asyncio
+    async def test_concurrent_publish_operations(self):
+        """Test concurrent publish operations."""
+        manager = RedisConnectionManager()
+        
+        mock_redis = AsyncMock()
+        mock_redis.publish = AsyncMock(return_value=1)
+        
+        manager._redis_client = mock_redis
+        manager._status = ConnectionStatus.CONNECTED
+        
+        # Perform multiple concurrent publishes
+        tasks = [
+            manager.publish(f"channel_{i}", f"message_{i}")
+            for i in range(10)
+        ]
+        
+        results = await asyncio.gather(*tasks)
+        
+        # All should succeed
+        assert all(results)
+        assert mock_redis.publish.call_count == 10
+    
+    @pytest.mark.asyncio
+    async def test_concurrent_health_checks(self):
+        """Test concurrent health check operations."""
+        manager = RedisConnectionManager()
+        
+        mock_redis = AsyncMock()
+        mock_redis.ping = AsyncMock(return_value=True)
+        
+        manager._redis_client = mock_redis
+        manager._status = ConnectionStatus.CONNECTED
+        
+        # Perform multiple concurrent health checks
+        tasks = [manager.is_healthy() for _ in range(5)]
+        results = await asyncio.gather(*tasks)
+        
+        # All should succeed
+        assert all(results)
+        assert mock_redis.ping.call_count == 5
+
+
 if __name__ == "__main__":
     pytest.main([__file__])

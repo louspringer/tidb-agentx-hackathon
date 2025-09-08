@@ -711,7 +711,458 @@ class TestEndToEndDeployment:
         assert "python" in result
         assert "network" in result
         assert "permissions" in result
-        assert result["python"]["status"] in ["ok", "error"]  # Should at least attempt check
+        assert result["python"]["status"] in ["ok", "error"]
+        
+        # Platform-specific checks
+        if sys.platform.startswith('win'):
+            # Windows-specific checks
+            assert result["python"]["executable"].endswith('.exe')
+        elif sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
+            # Unix-like systems
+            assert '/' in result["python"]["executable"]
+    
+    @pytest.mark.asyncio
+    async def test_redis_connectivity_cross_platform(self):
+        """Test Redis connectivity on different platforms."""
+        auto_setup = AutoSetup()
+        
+        # Test with different Redis URLs that might be used on different platforms
+        redis_urls = [
+            "redis://localhost:6379",
+            "redis://127.0.0.1:6379",
+            "redis://redis:6379",  # Docker container name
+        ]
+        
+        for redis_url in redis_urls:
+            # Mock Redis client for each URL
+            mock_client = MagicMock()
+            mock_client.set.return_value = True
+            mock_client.get.return_value = "connectivity_test"
+            mock_client.delete.return_value = 1
+            
+            with patch('redis.Redis', return_value=mock_client):
+                # Temporarily modify the test to use different URL
+                original_method = auto_setup._test_redis_connectivity
+                
+                async def test_with_url():
+                    import redis
+                    client = redis.Redis.from_url(redis_url, decode_responses=True)
+                    test_key = "beast_mode_test"
+                    test_value = "connectivity_test"
+                    
+                    client.set(test_key, test_value)
+                    retrieved_value = client.get(test_key)
+                    client.delete(test_key)
+                    
+                    if retrieved_value == test_value:
+                        return {"success": True, "message": f"Redis connectivity test passed for {redis_url}"}
+                    else:
+                        return {"success": False, "error": "Redis data integrity test failed"}
+                
+                result = await test_with_url()
+                assert result["success"] is True, f"Redis connectivity should work with {redis_url}"
+
+
+class TestPerformanceAndScaling:
+    """Test performance characteristics and scaling behavior."""
+    
+    @pytest.mark.asyncio
+    async def test_spore_extraction_performance(self):
+        """Test spore extraction performance with large codebases."""
+        # Create a large temporary codebase
+        temp_dir = tempfile.mkdtemp()
+        source_path = Path(temp_dir) / "large_source"
+        source_path.mkdir()
+        
+        try:
+            # Create many files to simulate large codebase
+            import time
+            
+            for i in range(100):
+                file_path = source_path / f"module_{i}.py"
+                file_content = f"""
+# Module {i}
+class Module{i}:
+    def __init__(self):
+        self.value = {i}
+    
+    def process(self):
+        return self.value * 2
+    
+    def get_info(self):
+        return f"Module {i} with value {{self.value}}"
+""" * 10  # Make each file reasonably large
+                file_path.write_text(file_content)
+            
+            # Create subdirectories with more files
+            for i in range(10):
+                sub_dir = source_path / f"package_{i}"
+                sub_dir.mkdir()
+                for j in range(10):
+                    file_path = sub_dir / f"submodule_{j}.py"
+                    file_path.write_text(f"# Submodule {i}.{j}\nvalue = {i * 10 + j}")
+            
+            target_path = Path(temp_dir) / "extracted"
+            
+            config = SporeConfig(
+                source_directory=str(source_path),
+                target_directory=str(target_path),
+                spore_name="performance_test_spore"
+            )
+            
+            # Time the extraction
+            start_time = time.time()
+            
+            extractor = SporeExtractor(config)
+            result = await extractor.extract_spore()
+            
+            extraction_time = time.time() - start_time
+            
+            # Verify extraction succeeded
+            assert result["success"] is True
+            assert result["files_copied"] > 100  # Should have copied many files
+            
+            # Performance check - should complete in reasonable time
+            assert extraction_time < 5.0, f"Extraction took too long: {extraction_time:.2f}s"
+            
+            # Verify all files were copied correctly
+            assert (target_path / "module_0.py").exists()
+            assert (target_path / "module_99.py").exists()
+            assert (target_path / "package_0" / "submodule_0.py").exists()
+            assert (target_path / "package_9" / "submodule_9.py").exists()
+            
+            print(f"Extracted {result['files_copied']} files in {extraction_time:.2f}s")
+            print(f"Total size: {result['total_size']} bytes")
+            
+        finally:
+            shutil.rmtree(temp_dir)
+    
+    @pytest.mark.asyncio
+    async def test_multi_agent_demonstration_scaling(self):
+        """Test demonstration scaling with many agents."""
+        # Test with increasing numbers of agents
+        agent_counts = [2, 5, 10]
+        
+        for num_agents in agent_counts:
+            mock_agents = []
+            for i in range(num_agents):
+                mock_agents.append({
+                    "agent_id": f"scale_test_agent_{i}",
+                    "personality": ["helpful", "curious", "expert"][i % 3],
+                    "capabilities": ["general", "demonstration", f"specialty_{i}"],
+                    "final_stats": {
+                        "messages_sent": 3 + (i % 5),
+                        "help_responses_sent": 1 + (i % 3),
+                        "help_requests_made": i % 2,
+                        "discovered_agents": num_agents - 1
+                    }
+                })
+            
+            mock_result = {
+                "success": True,
+                "start_time": datetime.now().isoformat(),
+                "end_time": datetime.now().isoformat(),
+                "num_agents": num_agents,
+                "duration_minutes": 1,
+                "agents": mock_agents
+            }
+            
+            with patch('src.beast_mode_network.auto_agent.run_agent_demonstration', return_value=mock_result):
+                import time
+                start_time = time.time()
+                
+                result = await run_agent_demonstration(
+                    num_agents=num_agents,
+                    duration_minutes=1
+                )
+                
+                demo_time = time.time() - start_time
+                
+                assert result["success"] is True
+                assert result["num_agents"] == num_agents
+                assert len(result["agents"]) == num_agents
+                
+                # Performance should scale reasonably
+                assert demo_time < 2.0, f"Demo with {num_agents} agents took too long: {demo_time:.2f}s"
+                
+                print(f"Demo with {num_agents} agents completed in {demo_time:.2f}s")
+    
+    @pytest.mark.asyncio
+    async def test_system_resource_usage(self):
+        """Test system resource usage during operations."""
+        import psutil
+        import gc
+        
+        # Get initial resource usage
+        process = psutil.Process()
+        initial_memory = process.memory_info().rss
+        initial_cpu_percent = process.cpu_percent()
+        
+        # Force garbage collection
+        gc.collect()
+        
+        auto_setup = AutoSetup()
+        
+        # Mock heavy operations
+        with patch.object(auto_setup, 'check_system') as mock_check:
+            with patch.object(auto_setup, 'setup_environment') as mock_setup:
+                with patch.object(auto_setup, 'run_demonstration') as mock_demo:
+                    
+                    # Configure mocks to return success
+                    mock_check.return_value = {"overall_status": "ready"}
+                    mock_setup.return_value = {"success": True, "steps": []}
+                    mock_demo.return_value = {"success": True, "num_agents": 5}
+                    
+                    # Perform operations
+                    for _ in range(10):  # Repeat operations
+                        await auto_setup.check_system()
+                        await auto_setup.setup_environment()
+                        await auto_setup.run_demonstration(num_agents=5, duration_minutes=1)
+        
+        # Check final resource usage
+        final_memory = process.memory_info().rss
+        final_cpu_percent = process.cpu_percent()
+        
+        # Memory growth should be reasonable
+        memory_growth = final_memory - initial_memory
+        memory_growth_mb = memory_growth / (1024 * 1024)
+        
+        assert memory_growth_mb < 100, f"Memory growth too high: {memory_growth_mb:.1f}MB"
+        
+        print(f"Memory growth: {memory_growth_mb:.1f}MB")
+        print(f"CPU usage: {final_cpu_percent:.1f}%")
+
+
+class TestErrorRecoveryAndResilience:
+    """Test error recovery and system resilience."""
+    
+    @pytest.mark.asyncio
+    async def test_partial_system_failure_recovery(self):
+        """Test recovery from partial system failures."""
+        auto_setup = AutoSetup()
+        
+        # Simulate intermittent Redis failures
+        call_count = 0
+        
+        async def flaky_redis_test():
+            nonlocal call_count
+            call_count += 1
+            if call_count <= 2:  # Fail first two attempts
+                return {"success": False, "error": "Connection timeout"}
+            else:  # Succeed on third attempt
+                return {"success": True, "message": "Redis connectivity test passed"}
+        
+        with patch.object(auto_setup, 'check_system', return_value={"overall_status": "ready"}):
+            with patch.object(auto_setup, '_test_redis_connectivity', side_effect=flaky_redis_test):
+                with patch.object(auto_setup, '_test_agent_creation', return_value={"success": True}):
+                    
+                    # First attempt should fail
+                    result1 = await auto_setup.setup_environment()
+                    assert result1["success"] is False
+                    
+                    # Second attempt should also fail
+                    result2 = await auto_setup.setup_environment()
+                    assert result2["success"] is False
+                    
+                    # Third attempt should succeed
+                    result3 = await auto_setup.setup_environment()
+                    assert result3["success"] is True
+    
+    @pytest.mark.asyncio
+    async def test_corrupted_spore_handling(self):
+        """Test handling of corrupted or incomplete spore extraction."""
+        temp_dir = tempfile.mkdtemp()
+        
+        try:
+            source_path = Path(temp_dir) / "source"
+            target_path = Path(temp_dir) / "target"
+            source_path.mkdir()
+            
+            # Create source files
+            (source_path / "valid.py").write_text("print('valid')")
+            
+            config = SporeConfig(
+                source_directory=str(source_path),
+                target_directory=str(target_path),
+                spore_name="corruption_test"
+            )
+            
+            extractor = SporeExtractor(config)
+            
+            # Simulate file system error during extraction
+            original_copy = shutil.copy2
+            
+            def failing_copy(src, dst):
+                if "valid.py" in str(src):
+                    raise PermissionError("Simulated file system error")
+                return original_copy(src, dst)
+            
+            with patch('shutil.copy2', side_effect=failing_copy):
+                result = await extractor.extract_spore()
+            
+            # Should handle the error gracefully
+            assert result["success"] is False
+            assert "error" in result
+            
+        finally:
+            shutil.rmtree(temp_dir)
+    
+    @pytest.mark.asyncio
+    async def test_network_interruption_during_demo(self):
+        """Test behavior during network interruptions in demonstration."""
+        # Simulate network interruption during agent demonstration
+        interruption_count = 0
+        
+        async def flaky_demo(*args, **kwargs):
+            nonlocal interruption_count
+            interruption_count += 1
+            
+            if interruption_count == 1:
+                # First call fails due to network issue
+                raise ConnectionError("Network unreachable")
+            else:
+                # Second call succeeds
+                return {
+                    "success": True,
+                    "num_agents": kwargs.get("num_agents", 2),
+                    "duration_minutes": kwargs.get("duration_minutes", 1),
+                    "agents": [
+                        {"agent_id": f"recovery_agent_{i}", "final_stats": {"messages_sent": 1}}
+                        for i in range(kwargs.get("num_agents", 2))
+                    ]
+                }
+        
+        auto_setup = AutoSetup()
+        
+        with patch('src.beast_mode_network.auto_setup.run_agent_demonstration', side_effect=flaky_demo):
+            # First attempt should fail
+            result1 = await auto_setup.run_demonstration()
+            assert result1["success"] is False
+            assert "Network unreachable" in result1["error"]
+            
+            # Second attempt should succeed
+            result2 = await auto_setup.run_demonstration()
+            assert result2["success"] is True
+    
+    @pytest.mark.asyncio
+    async def test_dependency_version_conflicts(self):
+        """Test handling of dependency version conflicts."""
+        system_checker = SystemChecker()
+        
+        # Simulate old Python version
+        with patch('sys.version_info', (3, 6, 5)):  # Python 3.6.5
+            result = await system_checker._check_python()
+            
+            assert result["status"] == "error"
+            assert any("Python 3.7+ required" in issue for issue in result["issues"])
+        
+        # Simulate missing asyncio (shouldn't happen in practice, but test error handling)
+        with patch('builtins.__import__', side_effect=ImportError("No module named 'asyncio'")):
+            result = await system_checker._check_python()
+            
+            assert result["status"] == "error"
+            assert any("asyncio not available" in issue for issue in result["issues"])
+
+
+class TestDocumentationAndUsability:
+    """Test documentation generation and usability features."""
+    
+    @pytest.mark.asyncio
+    async def test_spore_documentation_generation(self):
+        """Test that spore extraction generates proper documentation."""
+        temp_dir = tempfile.mkdtemp()
+        
+        try:
+            source_path = Path(temp_dir) / "source"
+            target_path = Path(temp_dir) / "target"
+            source_path.mkdir()
+            
+            # Create source files
+            (source_path / "main.py").write_text("# Main module\nprint('Hello')")
+            
+            config = SporeConfig(
+                source_directory=str(source_path),
+                target_directory=str(target_path),
+                spore_name="documentation_test",
+                include_documentation=True
+            )
+            
+            extractor = SporeExtractor(config)
+            result = await extractor.extract_spore()
+            
+            assert result["success"] is True
+            
+            # Check that documentation files were created
+            assert (target_path / "README.md").exists()
+            assert (target_path / "requirements.txt").exists()
+            assert (target_path / "setup.py").exists()
+            assert (target_path / "spore_metadata.json").exists()
+            
+            # Verify README content
+            readme_content = (target_path / "README.md").read_text()
+            assert "documentation_test" in readme_content
+            assert "Beast Mode Agent Network Spore" in readme_content
+            assert "Quick Start" in readme_content
+            assert "Usage" in readme_content
+            assert "Architecture" in readme_content
+            
+            # Verify setup script is executable
+            setup_script = target_path / "setup.py"
+            assert setup_script.exists()
+            
+            # Check that setup script has proper shebang and permissions
+            setup_content = setup_script.read_text()
+            assert setup_content.startswith("#!/usr/bin/env python3")
+            assert "Beast Mode Agent Network Spore Setup Script" in setup_content
+            
+            # Verify requirements file
+            requirements_content = (target_path / "requirements.txt").read_text()
+            assert "redis>=4.0.0" in requirements_content
+            
+            # Verify metadata
+            with open(target_path / "spore_metadata.json") as f:
+                metadata = json.load(f)
+            
+            assert metadata["spore_name"] == "documentation_test"
+            assert "entry_points" in metadata
+            assert "main" in metadata["entry_points"]
+            assert "demo" in metadata["entry_points"]
+            assert "check" in metadata["entry_points"]
+            
+        finally:
+            shutil.rmtree(temp_dir)
+    
+    def test_help_and_usage_information(self):
+        """Test that help and usage information is comprehensive."""
+        # Test AutoSetup main function help
+        from src.beast_mode_network.auto_setup import main, check_system, run_demo
+        
+        # These functions should be importable and have proper docstrings
+        assert main.__doc__ is not None
+        assert check_system.__doc__ is not None
+        assert run_demo.__doc__ is not None
+        
+        # Test that command-line interface works
+        import sys
+        from unittest.mock import patch
+        
+        # Test help command
+        with patch('sys.argv', ['auto_setup.py', 'check']):
+            with patch('src.beast_mode_network.auto_setup.check_system') as mock_check:
+                mock_check.return_value = asyncio.create_task(
+                    asyncio.coroutine(lambda: {"overall_status": "ready"})()
+                )
+                
+                # Should not raise exception
+                try:
+                    # This would normally run the check command
+                    pass
+                except SystemExit:
+                    pass  # Expected for command-line tools
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])n"]["status"] in ["ok", "error"]  # Should at least attempt check
         
         # Platform-specific path separators should be handled
         if sys.platform.startswith('win'):

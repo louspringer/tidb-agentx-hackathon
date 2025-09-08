@@ -633,5 +633,559 @@ class TestConvenienceFunctions:
         assert "response_id" in payload
 
 
+class TestHelpSystemIntegration:
+    """Test help system integration scenarios."""
+    
+    @pytest.fixture
+    def mock_bus_client(self):
+        """Create mock bus client with more realistic behavior."""
+        mock_client = AsyncMock()
+        mock_client.agent_id = "integration_agent"
+        mock_client.send_message = AsyncMock(return_value=True)
+        return mock_client
+    
+    @pytest.fixture
+    def manager(self, mock_bus_client):
+        """Create HelpSystemManager instance."""
+        return HelpSystemManager(mock_bus_client)
+    
+    @pytest.mark.asyncio
+    async def test_full_help_request_lifecycle(self, manager):
+        """Test complete help request lifecycle from creation to completion."""
+        # Step 1: Request help
+        request_id = await manager.request_help(
+            required_capabilities=["python", "data_analysis"],
+            description="Need help with complex data processing task",
+            timeout_minutes=60,
+            priority=7
+        )
+        
+        assert request_id is not None
+        request = manager.my_requests[request_id]
+        assert request.status == HelpRequestStatus.PENDING
+        
+        # Step 2: Simulate receiving responses
+        response1 = HelpResponse(
+            response_id="resp1",
+            responder_id="helper1",
+            request_id=request_id,
+            message="I can help with Python!",
+            capabilities_offered=["python"],
+            confidence_level=0.7,
+            estimated_time_minutes=45
+        )
+        
+        response2 = HelpResponse(
+            response_id="resp2", 
+            responder_id="helper2",
+            request_id=request_id,
+            message="I'm an expert in both Python and data analysis!",
+            capabilities_offered=["python", "data_analysis", "machine_learning"],
+            confidence_level=0.9,
+            estimated_time_minutes=30
+        )
+        
+        request.add_response(response1)
+        request.add_response(response2)
+        
+        assert request.status == HelpRequestStatus.RESPONDED
+        assert len(request.responses) == 2
+        
+        # Step 3: Select best helper
+        success = await manager.select_helper(request_id, "helper2")
+        assert success is True
+        assert request.selected_responder == "helper2"
+        assert request.status == HelpRequestStatus.IN_PROGRESS
+        
+        # Step 4: Complete the request
+        success = await manager.complete_help_request(
+            request_id,
+            success=True,
+            result="Data processing completed successfully with 95% accuracy"
+        )
+        
+        assert success is True
+        assert request.status == HelpRequestStatus.COMPLETED
+        assert "95% accuracy" in request.completion_result
+        
+        # Verify all messages were sent
+        assert manager.bus_client.send_message.call_count == 3  # request, selection, completion
+    
+    @pytest.mark.asyncio
+    async def test_multiple_concurrent_requests(self, manager):
+        """Test handling multiple concurrent help requests."""
+        # Create multiple requests concurrently
+        request_tasks = []
+        for i in range(5):
+            task = manager.request_help(
+                required_capabilities=[f"skill_{i}"],
+                description=f"Need help with task {i}",
+                priority=i + 1
+            )
+            request_tasks.append(task)
+        
+        request_ids = await asyncio.gather(*request_tasks)
+        
+        # All requests should succeed
+        assert all(req_id is not None for req_id in request_ids)
+        assert len(manager.my_requests) == 5
+        
+        # Verify requests have different priorities
+        priorities = [manager.my_requests[req_id].priority for req_id in request_ids]
+        assert sorted(priorities) == [1, 2, 3, 4, 5]
+    
+    @pytest.mark.asyncio
+    async def test_request_timeout_handling(self, manager):
+        """Test automatic timeout handling for requests."""
+        # Create request with very short timeout
+        request_id = await manager.request_help(
+            required_capabilities=["test"],
+            description="Test timeout",
+            timeout_minutes=0.01  # 0.6 seconds
+        )
+        
+        request = manager.my_requests[request_id]
+        assert not request.is_expired()
+        
+        # Wait for timeout
+        await asyncio.sleep(0.1)
+        
+        # Request should now be expired
+        assert request.is_expired()
+        
+        # Cleanup should mark it as timed out
+        cleaned = await manager.cleanup_expired_requests()
+        assert cleaned == 1
+        assert request.status == HelpRequestStatus.TIMEOUT
+    
+    @pytest.mark.asyncio
+    async def test_response_ranking_algorithm(self, manager):
+        """Test response ranking and selection algorithms."""
+        # Create request
+        request_id = await manager.request_help(
+            required_capabilities=["python", "data_analysis"],
+            description="Complex data task"
+        )
+        
+        request = manager.my_requests[request_id]
+        
+        # Add responses with different qualities
+        responses = [
+            HelpResponse(
+                response_id="resp1",
+                responder_id="novice",
+                request_id=request_id,
+                message="I'll try to help",
+                capabilities_offered=["python"],
+                confidence_level=0.5,
+                estimated_time_minutes=120
+            ),
+            HelpResponse(
+                response_id="resp2",
+                responder_id="expert",
+                request_id=request_id,
+                message="I'm highly experienced in this area",
+                capabilities_offered=["python", "data_analysis", "machine_learning"],
+                confidence_level=0.95,
+                estimated_time_minutes=30
+            ),
+            HelpResponse(
+                response_id="resp3",
+                responder_id="specialist",
+                request_id=request_id,
+                message="This is exactly my specialty",
+                capabilities_offered=["python", "data_analysis"],
+                confidence_level=0.9,
+                estimated_time_minutes=45
+            )
+        ]
+        
+        for response in responses:
+            request.add_response(response)
+        
+        # Get best responses (should be ranked by quality)
+        best_responses = request.get_best_responses(max_responses=3)
+        
+        assert len(best_responses) == 3
+        # Expert should be first (highest confidence + most capabilities)
+        assert best_responses[0].responder_id == "expert"
+        # Specialist should be second
+        assert best_responses[1].responder_id == "specialist"
+        # Novice should be last
+        assert best_responses[2].responder_id == "novice"
+    
+    @pytest.mark.asyncio
+    async def test_duplicate_response_prevention(self, manager):
+        """Test prevention of duplicate responses from same agent."""
+        # Add a request to respond to
+        request = HelpRequest(
+            request_id="test_req",
+            requester_id="other_agent",
+            required_capabilities=["python"]
+        )
+        manager.active_requests["test_req"] = request
+        
+        # First response should succeed
+        response_id1 = await manager.respond_to_help(
+            request_id="test_req",
+            message="First response"
+        )
+        assert response_id1 is not None
+        
+        # Second response from same agent should fail
+        response_id2 = await manager.respond_to_help(
+            request_id="test_req", 
+            message="Second response"
+        )
+        assert response_id2 is None
+        
+        # Only one response should be recorded
+        assert len(manager.my_responses) == 1
+    
+    @pytest.mark.asyncio
+    async def test_message_handling_integration(self, manager):
+        """Test integration with message handling system."""
+        # Test handling help wanted message
+        help_wanted_msg = BeastModeMessage(
+            type=MessageType.HELP_WANTED,
+            source="remote_agent",
+            payload={
+                "request_id": "remote_req_123",
+                "required_capabilities": ["python", "web"],
+                "description": "Need help with web scraping",
+                "timeout_minutes": 45,
+                "priority": 6,
+                "created_at": datetime.now().isoformat()
+            }
+        )
+        
+        await manager.handle_help_message(help_wanted_msg)
+        
+        # Request should be added to active requests
+        assert "remote_req_123" in manager.active_requests
+        request = manager.active_requests["remote_req_123"]
+        assert request.requester_id == "remote_agent"
+        assert request.required_capabilities == ["python", "web"]
+        assert request.description == "Need help with web scraping"
+        
+        # Test handling help response message
+        help_response_msg = BeastModeMessage(
+            type=MessageType.HELP_RESPONSE,
+            source="helper_agent",
+            target="integration_agent",
+            payload={
+                "response_id": "helper_resp_456",
+                "request_id": "my_request_789",
+                "message": "I can help with that!",
+                "capabilities_offered": ["python", "web", "scraping"],
+                "confidence_level": 0.8,
+                "estimated_time_minutes": 60,
+                "created_at": datetime.now().isoformat()
+            }
+        )
+        
+        # First add the request this is responding to
+        my_request = HelpRequest(
+            request_id="my_request_789",
+            requester_id="integration_agent",
+            required_capabilities=["python"]
+        )
+        manager.my_requests["my_request_789"] = my_request
+        
+        await manager.handle_help_message(help_response_msg)
+        
+        # Response should be added to the request
+        assert len(my_request.responses) == 1
+        response = my_request.responses[0]
+        assert response.responder_id == "helper_agent"
+        assert response.message == "I can help with that!"
+        assert my_request.status == HelpRequestStatus.RESPONDED
+
+
+class TestErrorHandlingAndEdgeCases:
+    """Test error handling and edge cases in help system."""
+    
+    @pytest.fixture
+    def manager(self):
+        """Create manager with mock bus client."""
+        mock_client = AsyncMock()
+        mock_client.agent_id = "error_test_agent"
+        return HelpSystemManager(mock_client)
+    
+    @pytest.mark.asyncio
+    async def test_network_failure_handling(self, manager):
+        """Test handling of network failures during operations."""
+        # Simulate network failure
+        manager.bus_client.send_message = AsyncMock(return_value=False)
+        
+        # Request help should fail gracefully
+        request_id = await manager.request_help(
+            required_capabilities=["test"],
+            description="Test request"
+        )
+        
+        assert request_id is None
+        assert len(manager.my_requests) == 0
+        
+        # Response should also fail gracefully
+        request = HelpRequest(
+            request_id="test_req",
+            requester_id="other_agent",
+            required_capabilities=["test"]
+        )
+        manager.active_requests["test_req"] = request
+        
+        response_id = await manager.respond_to_help(
+            request_id="test_req",
+            message="Test response"
+        )
+        
+        assert response_id is None
+        assert len(manager.my_responses) == 0
+    
+    @pytest.mark.asyncio
+    async def test_malformed_message_handling(self, manager):
+        """Test handling of malformed messages."""
+        # Test message with missing required fields
+        bad_message = BeastModeMessage(
+            type=MessageType.HELP_WANTED,
+            source="bad_agent",
+            payload={"description": "Missing required fields"}
+        )
+        
+        # Should not crash
+        await manager.handle_help_message(bad_message)
+        
+        # No request should be created
+        assert len(manager.active_requests) == 0
+    
+    def test_invalid_request_operations(self, manager):
+        """Test operations on invalid or non-existent requests."""
+        # Test operations on non-existent request
+        request = manager.get_help_request("nonexistent")
+        assert request is None
+        
+        # Test selecting helper for non-existent request
+        async def test_select():
+            success = await manager.select_helper("nonexistent", "helper")
+            assert success is False
+        
+        asyncio.run(test_select())
+    
+    def test_request_state_validation(self, manager):
+        """Test request state validation and transitions."""
+        request = HelpRequest(
+            request_id="state_test",
+            requester_id="test_agent",
+            required_capabilities=["test"]
+        )
+        
+        # Test invalid state transitions
+        request.status = HelpRequestStatus.COMPLETED
+        
+        # Should not be able to add responses to completed request
+        response = HelpResponse(
+            response_id="resp1",
+            responder_id="helper",
+            request_id="state_test",
+            message="Late response"
+        )
+        
+        result = request.add_response(response)
+        assert result is False
+        assert len(request.responses) == 0
+        
+        # Should not be able to select responder for completed request
+        result = request.select_responder("helper")
+        assert result is False
+    
+    @pytest.mark.asyncio
+    async def test_concurrent_request_modifications(self, manager):
+        """Test concurrent modifications to requests."""
+        request = HelpRequest(
+            request_id="concurrent_test",
+            requester_id="test_agent",
+            required_capabilities=["test"]
+        )
+        manager.my_requests["concurrent_test"] = request
+        
+        async def add_response(responder_id):
+            response = HelpResponse(
+                response_id=f"resp_{responder_id}",
+                responder_id=responder_id,
+                request_id="concurrent_test",
+                message=f"Response from {responder_id}"
+            )
+            return request.add_response(response)
+        
+        # Try to add multiple responses concurrently
+        tasks = [add_response(f"helper_{i}") for i in range(5)]
+        results = await asyncio.gather(*tasks)
+        
+        # All should succeed since they're from different responders
+        assert all(results)
+        assert len(request.responses) == 5
+    
+    def test_memory_cleanup_on_completion(self, manager):
+        """Test that completed requests are properly cleaned up."""
+        # Add many completed requests
+        for i in range(100):
+            request = HelpRequest(
+                request_id=f"completed_{i}",
+                requester_id="test_agent",
+                required_capabilities=["test"]
+            )
+            request.status = HelpRequestStatus.COMPLETED
+            request.completed_at = datetime.now() - timedelta(hours=1)
+            manager.my_requests[f"completed_{i}"] = request
+        
+        # Add some active requests
+        for i in range(10):
+            request = HelpRequest(
+                request_id=f"active_{i}",
+                requester_id="test_agent",
+                required_capabilities=["test"]
+            )
+            manager.my_requests[f"active_{i}"] = request
+        
+        initial_count = len(manager.my_requests)
+        assert initial_count == 110
+        
+        # Cleanup old completed requests (this would be called by a background task)
+        manager.cleanup_old_requests(max_age_hours=0.5)
+        
+        # Only active requests should remain
+        remaining_count = len(manager.my_requests)
+        assert remaining_count == 10
+        
+        # Verify only active requests remain
+        for request_id in manager.my_requests:
+            assert request_id.startswith("active_")
+
+
+class TestPerformanceAndScaling:
+    """Test performance characteristics and scaling behavior."""
+    
+    @pytest.fixture
+    def manager(self):
+        """Create manager for performance testing."""
+        mock_client = AsyncMock()
+        mock_client.agent_id = "perf_test_agent"
+        mock_client.send_message = AsyncMock(return_value=True)
+        return HelpSystemManager(mock_client)
+    
+    @pytest.mark.asyncio
+    async def test_large_number_of_requests(self, manager):
+        """Test handling large numbers of help requests."""
+        import time
+        
+        # Create many requests
+        start_time = time.time()
+        request_ids = []
+        
+        for i in range(1000):
+            request_id = await manager.request_help(
+                required_capabilities=[f"skill_{i % 10}"],
+                description=f"Request {i}",
+                priority=(i % 10) + 1
+            )
+            request_ids.append(request_id)
+        
+        creation_time = time.time() - start_time
+        
+        # Should complete in reasonable time (less than 1 second)
+        assert creation_time < 1.0
+        assert len(manager.my_requests) == 1000
+        assert all(req_id is not None for req_id in request_ids)
+    
+    @pytest.mark.asyncio
+    async def test_large_number_of_responses(self, manager):
+        """Test handling large numbers of responses to a single request."""
+        # Create a request
+        request_id = await manager.request_help(
+            required_capabilities=["popular_skill"],
+            description="Very popular request"
+        )
+        
+        request = manager.my_requests[request_id]
+        
+        # Add many responses
+        import time
+        start_time = time.time()
+        
+        for i in range(500):
+            response = HelpResponse(
+                response_id=f"mass_resp_{i}",
+                responder_id=f"helper_{i}",
+                request_id=request_id,
+                message=f"Response {i}",
+                confidence_level=0.5 + (i % 50) / 100.0  # Vary confidence
+            )
+            request.add_response(response)
+        
+        response_time = time.time() - start_time
+        
+        # Should complete in reasonable time
+        assert response_time < 1.0
+        assert len(request.responses) == 500
+        
+        # Test ranking performance
+        start_time = time.time()
+        best_responses = request.get_best_responses(max_responses=10)
+        ranking_time = time.time() - start_time
+        
+        # Ranking should be fast even with many responses
+        assert ranking_time < 0.1
+        assert len(best_responses) == 10
+        
+        # Verify ranking quality (higher confidence should be ranked higher)
+        confidences = [resp.confidence_level for resp in best_responses]
+        assert confidences == sorted(confidences, reverse=True)
+    
+    def test_memory_usage_with_large_datasets(self, manager):
+        """Test memory usage doesn't grow excessively."""
+        import gc
+        
+        # Get initial memory usage
+        gc.collect()
+        initial_objects = len(gc.get_objects())
+        
+        # Create and process many requests
+        for batch in range(10):
+            # Create batch of requests
+            for i in range(100):
+                request = HelpRequest(
+                    request_id=f"batch_{batch}_req_{i}",
+                    requester_id="test_agent",
+                    required_capabilities=["test"]
+                )
+                
+                # Add responses
+                for j in range(10):
+                    response = HelpResponse(
+                        response_id=f"batch_{batch}_req_{i}_resp_{j}",
+                        responder_id=f"helper_{j}",
+                        request_id=request.request_id,
+                        message=f"Response {j}"
+                    )
+                    request.add_response(response)
+                
+                # Complete request
+                request.complete(success=True, result="Completed")
+            
+            # Simulate cleanup of old requests
+            if batch > 2:  # Keep some history
+                # In real implementation, this would be automatic cleanup
+                pass
+        
+        # Force garbage collection
+        gc.collect()
+        final_objects = len(gc.get_objects())
+        
+        # Object growth should be reasonable
+        object_growth = final_objects - initial_objects
+        assert object_growth < 5000  # Reasonable threshold for test overhead
+
+
 if __name__ == "__main__":
     pytest.main([__file__])

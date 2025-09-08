@@ -764,6 +764,527 @@ class TestAgentRegistry:
         assert stats["online_agents"] == 0
         assert stats["offline_agents"] == 0
         assert stats["average_trust_score"] == 0.0
+        assert stats["total_capabilities"] == 0
+        assert stats["capability_distribution"] == {}
+    
+    @pytest.mark.asyncio
+    async def test_capability_indexing(self, registry):
+        """Test that capability indexing works correctly."""
+        # Register agents with overlapping capabilities
+        agent1_caps = AgentCapabilities(
+            agent_id="agent1",
+            capabilities=["python", "data_analysis"]
+        )
+        agent2_caps = AgentCapabilities(
+            agent_id="agent2", 
+            capabilities=["python", "web_development"]
+        )
+        agent3_caps = AgentCapabilities(
+            agent_id="agent3",
+            capabilities=["javascript", "web_development"]
+        )
+        
+        await registry.register_agent(agent1_caps)
+        await registry.register_agent(agent2_caps)
+        await registry.register_agent(agent3_caps)
+        
+        # Test python capability index
+        python_agents = await registry.find_agents_by_capabilities(["python"])
+        assert len(python_agents) == 2
+        
+        # Test web_development capability index
+        web_agents = await registry.find_agents_by_capabilities(["web_development"])
+        assert len(web_agents) == 2
+        
+        # Test unique capability
+        data_agents = await registry.find_agents_by_capabilities(["data_analysis"])
+        assert len(data_agents) == 1
+        assert data_agents[0].agent_id == "agent1"
+    
+    @pytest.mark.asyncio
+    async def test_cleanup_loop_offline_detection(self, registry):
+        """Test that cleanup loop marks agents as offline."""
+        # Use very short timeout for testing
+        registry.availability_timeout_minutes = 0.01  # 0.6 seconds
+        
+        agent_caps = AgentCapabilities(agent_id="test_agent", capabilities=["python"])
+        await registry.register_agent(agent_caps)
+        
+        # Agent should be online initially
+        agent = await registry.get_agent("test_agent")
+        assert agent.availability == AgentStatus.ONLINE
+        
+        # Wait for timeout + cleanup cycle
+        await asyncio.sleep(0.1)
+        
+        # Manually trigger cleanup cycle
+        await registry._cleanup_loop()
+        
+        # Agent should now be offline
+        agent = await registry.get_agent("test_agent")
+        assert agent.availability == AgentStatus.OFFLINE
+    
+    @pytest.mark.asyncio
+    async def test_cleanup_loop_old_agent_removal(self, registry):
+        """Test that cleanup loop removes very old offline agents."""
+        agent_caps = AgentCapabilities(agent_id="old_agent", capabilities=["python"])
+        await registry.register_agent(agent_caps)
+        
+        # Manually set agent as old and offline
+        agent = await registry.get_agent("old_agent")
+        agent.availability = AgentStatus.OFFLINE
+        agent.last_seen = datetime.now() - timedelta(hours=25)  # Older than 24 hours
+        
+        # Trigger cleanup
+        await registry._cleanup_loop()
+        
+        # Agent should be removed
+        agent = await registry.get_agent("old_agent")
+        assert agent is None
+    
+    @pytest.mark.asyncio
+    async def test_time_decay_application(self, registry):
+        """Test that time decay is applied to trust scores."""
+        agent_caps = AgentCapabilities(agent_id="decay_agent", capabilities=["python"])
+        await registry.register_agent(agent_caps)
+        
+        # Set high trust score and old interaction
+        agent = await registry.get_agent("decay_agent")
+        agent.trust_score = 0.9
+        agent.last_interaction = datetime.now() - timedelta(days=2)
+        
+        original_score = agent.trust_score
+        
+        # Trigger cleanup (which applies time decay)
+        await registry._cleanup_loop()
+        
+        # Trust score should have decayed
+        agent = await registry.get_agent("decay_agent")
+        assert agent.trust_score < original_score
+    
+    @pytest.mark.asyncio
+    async def test_concurrent_agent_operations(self, registry):
+        """Test concurrent agent registration and operations."""
+        async def register_agent(agent_num):
+            caps = AgentCapabilities(
+                agent_id=f"concurrent_agent_{agent_num}",
+                capabilities=[f"skill_{agent_num}", "common_skill"]
+            )
+            return await registry.register_agent(caps)
+        
+        # Register multiple agents concurrently
+        tasks = [register_agent(i) for i in range(10)]
+        results = await asyncio.gather(*tasks)
+        
+        # All registrations should succeed
+        assert all(results)
+        
+        # All agents should be findable
+        agents = await registry.find_agents_by_capabilities(["common_skill"])
+        assert len(agents) == 10
+    
+    @pytest.mark.asyncio
+    async def test_registry_context_manager(self, registry):
+        """Test registry as async context manager."""
+        # Registry fixture already handles this, but test explicit usage
+        async with AgentRegistry() as test_registry:
+            agent_caps = AgentCapabilities(agent_id="context_agent", capabilities=["test"])
+            result = await test_registry.register_agent(agent_caps)
+            assert result is True
+        
+        # Registry should be properly shut down after context exit
+        assert test_registry._is_shutting_down is True
+
+
+class TestAgentDiscoveryManager:
+    """Test cases for AgentDiscoveryManager class."""
+    
+    @pytest.fixture
+    def mock_redis_manager(self):
+        """Create mock Redis manager."""
+        mock_manager = AsyncMock()
+        mock_manager.subscribe_to_channel = AsyncMock(return_value=True)
+        mock_manager.publish = AsyncMock(return_value=True)
+        return mock_manager
+    
+    @pytest.fixture
+    def sample_capabilities(self):
+        """Create sample agent capabilities."""
+        return AgentCapabilities(
+            agent_id="discovery_agent",
+            capabilities=["python", "discovery"],
+            specializations=["testing"],
+            description="Test discovery agent"
+        )
+    
+    @pytest.fixture
+    def discovery_manager(self, mock_redis_manager, sample_capabilities):
+        """Create AgentDiscoveryManager instance."""
+        return AgentDiscoveryManager(
+            redis_manager=mock_redis_manager,
+            agent_id="discovery_agent",
+            capabilities=sample_capabilities,
+            channel_name="test_channel"
+        )
+    
+    def test_discovery_manager_initialization(self, discovery_manager, sample_capabilities):
+        """Test discovery manager initialization."""
+        assert discovery_manager.agent_id == "discovery_agent"
+        assert discovery_manager.capabilities == sample_capabilities
+        assert discovery_manager.channel_name == "test_channel"
+        assert discovery_manager._is_running is False
+        assert discovery_manager.announcement_interval == 30.0
+        assert discovery_manager.discovery_scan_interval == 60.0
+    
+    @pytest.mark.asyncio
+    async def test_start_discovery_manager(self, discovery_manager, mock_redis_manager):
+        """Test starting the discovery manager."""
+        with patch.object(discovery_manager.registry, 'start_monitoring') as mock_start_monitoring:
+            with patch.object(discovery_manager.registry, 'register_agent', return_value=True) as mock_register:
+                with patch.object(discovery_manager, 'announce_presence', return_value=True) as mock_announce:
+                    result = await discovery_manager.start()
+        
+        assert result is True
+        assert discovery_manager._is_running is True
+        mock_start_monitoring.assert_called_once()
+        mock_register.assert_called_once_with(discovery_manager.capabilities)
+        mock_redis_manager.subscribe_to_channel.assert_called_once()
+        mock_announce.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_start_discovery_manager_already_running(self, discovery_manager):
+        """Test starting discovery manager when already running."""
+        discovery_manager._is_running = True
+        
+        result = await discovery_manager.start()
+        assert result is True
+    
+    @pytest.mark.asyncio
+    async def test_start_discovery_manager_redis_failure(self, discovery_manager, mock_redis_manager):
+        """Test starting discovery manager with Redis subscription failure."""
+        mock_redis_manager.subscribe_to_channel.return_value = False
+        
+        with patch.object(discovery_manager.registry, 'start_monitoring'):
+            with patch.object(discovery_manager.registry, 'register_agent', return_value=True):
+                result = await discovery_manager.start()
+        
+        assert result is False
+        assert discovery_manager._is_running is False
+    
+    @pytest.mark.asyncio
+    async def test_stop_discovery_manager(self, discovery_manager):
+        """Test stopping the discovery manager."""
+        # Set up running state
+        discovery_manager._is_running = True
+        discovery_manager._announcement_task = AsyncMock()
+        discovery_manager._discovery_task = AsyncMock()
+        
+        with patch.object(discovery_manager.registry, 'stop_monitoring') as mock_stop:
+            await discovery_manager.stop()
+        
+        assert discovery_manager._is_running is False
+        mock_stop.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_announce_presence(self, discovery_manager, mock_redis_manager):
+        """Test announcing agent presence."""
+        with patch('src.beast_mode_network.agent_discovery.create_agent_discovery_message') as mock_create:
+            with patch('src.beast_mode_network.agent_discovery.MessageSerializer') as mock_serializer:
+                mock_message = MagicMock()
+                mock_create.return_value = mock_message
+                mock_serializer.serialize.return_value = '{"test": "message"}'
+                
+                result = await discovery_manager.announce_presence()
+        
+        assert result is True
+        mock_create.assert_called_once_with(discovery_manager.capabilities)
+        mock_serializer.serialize.assert_called_once_with(mock_message)
+        mock_redis_manager.publish.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_discover_agents(self, discovery_manager):
+        """Test discovering agents in the network."""
+        # Mock registry with some agents
+        mock_agents = [
+            DiscoveredAgent(agent_id="agent1", capabilities=["python"]),
+            DiscoveredAgent(agent_id="agent2", capabilities=["javascript"]),
+            DiscoveredAgent(agent_id="discovery_agent", capabilities=["python"])  # Self
+        ]
+        
+        with patch.object(discovery_manager.registry, 'find_agents_by_capabilities', return_value=mock_agents):
+            agents = await discovery_manager.discover_agents(["python"])
+        
+        # Should exclude self from results
+        assert len(agents) == 1
+        assert agents[0].agent_id == "agent1"
+    
+    @pytest.mark.asyncio
+    async def test_discover_agents_no_capabilities(self, discovery_manager):
+        """Test discovering agents without capability filter."""
+        mock_agents = [
+            DiscoveredAgent(agent_id="agent1", capabilities=["python"]),
+            DiscoveredAgent(agent_id="discovery_agent", capabilities=["python"])  # Self
+        ]
+        
+        with patch.object(discovery_manager.registry, 'get_available_agents', return_value=mock_agents):
+            agents = await discovery_manager.discover_agents()
+        
+        # Should exclude self from results
+        assert len(agents) == 1
+        assert agents[0].agent_id == "agent1"
+    
+    @pytest.mark.asyncio
+    async def test_find_best_agents(self, discovery_manager):
+        """Test finding best agents with scoring."""
+        mock_agents = [
+            DiscoveredAgent(agent_id="agent1", capabilities=["python"], trust_score=0.8),
+            DiscoveredAgent(agent_id="agent2", capabilities=["python", "data_analysis"], trust_score=0.6)
+        ]
+        
+        with patch.object(discovery_manager, 'discover_agents', return_value=mock_agents):
+            best_agents = await discovery_manager.find_best_agents(["python"], max_agents=2)
+        
+        assert len(best_agents) == 2
+        # Results should be tuples of (agent, score)
+        assert all(isinstance(result, tuple) and len(result) == 2 for result in best_agents)
+        # Should be sorted by score (descending)
+        assert best_agents[0][1] >= best_agents[1][1]
+    
+    @pytest.mark.asyncio
+    async def test_track_agent_interaction(self, discovery_manager):
+        """Test tracking agent interactions."""
+        with patch.object(discovery_manager.registry, 'update_agent_trust', return_value=True) as mock_update:
+            result = await discovery_manager.track_agent_interaction("agent1", success=True, response_time=2.5)
+        
+        assert result is True
+        mock_update.assert_called_once_with("agent1", True, 2.5)
+    
+    @pytest.mark.asyncio
+    async def test_get_network_stats(self, discovery_manager):
+        """Test getting network statistics."""
+        mock_registry_stats = {
+            "total_agents": 5,
+            "online_agents": 3,
+            "average_trust_score": 0.7
+        }
+        
+        with patch.object(discovery_manager.registry, 'get_registry_stats', return_value=mock_registry_stats):
+            stats = await discovery_manager.get_network_stats()
+        
+        assert "total_agents" in stats
+        assert "discovery_manager" in stats
+        assert stats["discovery_manager"]["agent_id"] == "discovery_agent"
+        assert stats["discovery_manager"]["is_running"] is False
+    
+    @pytest.mark.asyncio
+    async def test_handle_agent_discovery_message(self, discovery_manager):
+        """Test handling agent discovery messages."""
+        from src.beast_mode_network.message_models import BeastModeMessage, MessageType
+        
+        message = BeastModeMessage(
+            type=MessageType.AGENT_DISCOVERY,
+            source="remote_agent",
+            payload={
+                "capabilities": ["python", "web"],
+                "specializations": ["backend"],
+                "description": "Remote test agent",
+                "version": "1.0.0",
+                "max_concurrent_tasks": 3,
+                "supported_message_types": ["simple_message"]
+            }
+        )
+        
+        with patch.object(discovery_manager.registry, 'register_agent', return_value=True) as mock_register:
+            await discovery_manager._handle_agent_discovery(message)
+        
+        mock_register.assert_called_once()
+        # Verify the AgentCapabilities object was created correctly
+        call_args = mock_register.call_args[0][0]
+        assert call_args.agent_id == "remote_agent"
+        assert call_args.capabilities == ["python", "web"]
+        assert call_args.specializations == ["backend"]
+    
+    @pytest.mark.asyncio
+    async def test_handle_agent_response_message(self, discovery_manager):
+        """Test handling agent response messages."""
+        from src.beast_mode_network.message_models import BeastModeMessage, MessageType
+        
+        message = BeastModeMessage(
+            type=MessageType.AGENT_RESPONSE,
+            source="responding_agent",
+            payload={"status": "online"}
+        )
+        
+        with patch.object(discovery_manager.registry, 'update_agent_availability', return_value=True) as mock_update:
+            await discovery_manager._handle_agent_response(message)
+        
+        mock_update.assert_called_once_with("responding_agent", AgentStatus.ONLINE)
+    
+    @pytest.mark.asyncio
+    async def test_request_agent_responses(self, discovery_manager, mock_redis_manager):
+        """Test requesting responses from all agents."""
+        with patch('src.beast_mode_network.agent_discovery.BeastModeMessage') as mock_message_class:
+            with patch('src.beast_mode_network.agent_discovery.MessageSerializer') as mock_serializer:
+                mock_message = MagicMock()
+                mock_message_class.return_value = mock_message
+                mock_serializer.serialize.return_value = '{"test": "health_check"}'
+                
+                await discovery_manager._request_agent_responses()
+        
+        mock_redis_manager.publish.assert_called_once()
+    
+    @pytest.mark.asyncio
+    async def test_discovery_manager_context_manager(self, discovery_manager):
+        """Test discovery manager as async context manager."""
+        with patch.object(discovery_manager, 'start', return_value=True) as mock_start:
+            with patch.object(discovery_manager, 'stop') as mock_stop:
+                async with discovery_manager as ctx_manager:
+                    assert ctx_manager == discovery_manager
+        
+        mock_start.assert_called_once()
+        mock_stop.assert_called_once()
+
+
+class TestConvenienceFunctions:
+    """Test convenience functions for agent discovery."""
+    
+    @pytest.mark.asyncio
+    async def test_create_agent_registry(self):
+        """Test create_agent_registry convenience function."""
+        from src.beast_mode_network.agent_discovery import create_agent_registry
+        
+        registry = await create_agent_registry(availability_timeout_minutes=10)
+        
+        assert isinstance(registry, AgentRegistry)
+        assert registry.availability_timeout_minutes == 10
+        assert registry._cleanup_task is not None
+        
+        # Clean up
+        await registry.stop_monitoring()
+    
+    @pytest.mark.asyncio
+    async def test_create_agent_discovery_manager(self):
+        """Test create_agent_discovery_manager convenience function."""
+        from src.beast_mode_network.agent_discovery import create_agent_discovery_manager
+        
+        mock_redis_manager = AsyncMock()
+        mock_redis_manager.subscribe_to_channel = AsyncMock(return_value=True)
+        
+        capabilities = AgentCapabilities(
+            agent_id="test_agent",
+            capabilities=["python"]
+        )
+        
+        with patch.object(AgentDiscoveryManager, 'start', return_value=True):
+            manager = await create_agent_discovery_manager(
+                mock_redis_manager,
+                "test_agent",
+                capabilities,
+                "test_channel"
+            )
+        
+        assert isinstance(manager, AgentDiscoveryManager)
+        assert manager.agent_id == "test_agent"
+        assert manager.channel_name == "test_channel"
+
+
+class TestErrorHandlingAndEdgeCases:
+    """Test error handling and edge cases in agent discovery."""
+    
+    @pytest.mark.asyncio
+    async def test_registry_error_handling(self):
+        """Test registry error handling with invalid data."""
+        registry = AgentRegistry()
+        
+        # Test with invalid capabilities (should handle gracefully)
+        try:
+            invalid_caps = AgentCapabilities(agent_id="")  # Empty ID should raise ValueError
+            await registry.register_agent(invalid_caps)
+        except ValueError:
+            pass  # Expected
+        
+        # Registry should still be functional
+        valid_caps = AgentCapabilities(agent_id="valid_agent", capabilities=["test"])
+        result = await registry.register_agent(valid_caps)
+        assert result is True
+    
+    @pytest.mark.asyncio
+    async def test_discovery_manager_message_handling_errors(self, discovery_manager):
+        """Test discovery manager handles message processing errors gracefully."""
+        from src.beast_mode_network.message_models import BeastModeMessage, MessageType
+        
+        # Test with malformed message payload
+        bad_message = BeastModeMessage(
+            type=MessageType.AGENT_DISCOVERY,
+            source="bad_agent",
+            payload={"invalid": "structure"}  # Missing required fields
+        )
+        
+        # Should not raise exception
+        await discovery_manager._handle_agent_discovery(bad_message)
+    
+    @pytest.mark.asyncio
+    async def test_concurrent_registry_operations(self):
+        """Test concurrent registry operations don't cause race conditions."""
+        registry = AgentRegistry()
+        await registry.start_monitoring()
+        
+        async def register_and_update_agent(agent_num):
+            caps = AgentCapabilities(
+                agent_id=f"race_agent_{agent_num}",
+                capabilities=["test"]
+            )
+            await registry.register_agent(caps)
+            await registry.update_agent_trust(f"race_agent_{agent_num}", success=True)
+            return await registry.get_agent(f"race_agent_{agent_num}")
+        
+        # Run many concurrent operations
+        tasks = [register_and_update_agent(i) for i in range(20)]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # All operations should complete successfully
+        successful_results = [r for r in results if not isinstance(r, Exception)]
+        assert len(successful_results) == 20
+        
+        await registry.stop_monitoring()
+    
+    @pytest.mark.asyncio
+    async def test_memory_cleanup_on_agent_removal(self):
+        """Test that memory is properly cleaned up when agents are removed."""
+        registry = AgentRegistry()
+        
+        # Register many agents
+        for i in range(100):
+            caps = AgentCapabilities(
+                agent_id=f"temp_agent_{i}",
+                capabilities=[f"skill_{i % 10}"]  # Some overlap in capabilities
+            )
+            await registry.register_agent(caps)
+        
+        # Verify all agents are registered
+        stats = await registry.get_registry_stats()
+        assert stats["total_agents"] == 100
+        
+        # Remove all agents
+        for i in range(100):
+            await registry.unregister_agent(f"temp_agent_{i}")
+        
+        # Verify cleanup
+        stats = await registry.get_registry_stats()
+        assert stats["total_agents"] == 0
+        assert stats["total_capabilities"] == 0
+        assert len(registry._capability_index) == 0
+        assert len(registry._specialization_index) == 0
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
+        stats = await registry.get_registry_stats()
+        
+        assert stats["total_agents"] == 0
+        assert stats["online_agents"] == 0
+        assert stats["offline_agents"] == 0
+        assert stats["average_trust_score"] == 0.0
     
     @pytest.mark.asyncio
     async def test_context_manager(self):

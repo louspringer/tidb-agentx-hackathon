@@ -691,7 +691,717 @@ class TestNetworkResilience:
         class FailingRedisManager:
             def __init__(self):
                 self.is_connected = True
-                self.fail_next_operation = False
+                self.fail_next_operations = 0
+                self.published_messages = []
+                self.subscribers = {}
+                
+            async def connect(self):
+                if self.fail_next_operations > 0:
+                    self.fail_next_operations -= 1
+                    return False
+                self.is_connected = True
+                return True
+                
+            async def disconnect(self):
+                self.is_connected = False
+                
+            async def publish(self, channel: str, message: str):
+                if self.fail_next_operations > 0:
+                    self.fail_next_operations -= 1
+                    return False
+                if not self.is_connected:
+                    return False
+                self.published_messages.append((channel, message))
+                return True
+                
+            async def subscribe_to_channel(self, channel: str, handler):
+                if self.fail_next_operations > 0:
+                    self.fail_next_operations -= 1
+                    return False
+                if channel not in self.subscribers:
+                    self.subscribers[channel] = []
+                self.subscribers[channel].append(handler)
+                return True
+                
+            async def is_healthy(self):
+                return self.is_connected and self.fail_next_operations == 0
+                
+            def simulate_failure(self, num_operations=1):
+                """Simulate failure for next N operations."""
+                self.fail_next_operations = num_operations
+        
+        failing_redis = FailingRedisManager()
+        
+        with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+            MockRedis.return_value = failing_redis
+            
+            client = BeastModeBusClient(
+                agent_id="resilient_agent",
+                capabilities=["resilience_testing"],
+                redis_url=TEST_REDIS_URL,
+                channel_name=TEST_CHANNEL
+            )
+            
+            client.redis_manager = failing_redis
+            
+            # Mock managers
+            mock_discovery = AsyncMock()
+            mock_discovery.start = AsyncMock(return_value=True)
+            mock_discovery.stop = AsyncMock()
+            client.agent_discovery_manager = mock_discovery
+            
+            mock_help = AsyncMock()
+            mock_help.start = AsyncMock(return_value=True)
+            mock_help.stop = AsyncMock()
+            client.help_system_manager = mock_help
+            
+            try:
+                # Initial connection should succeed
+                success = await client.connect()
+                assert success, "Initial connection should succeed"
+                
+                # Simulate Redis failure
+                failing_redis.simulate_failure(2)  # Next 2 operations will fail
+                
+                # Try to send message during failure
+                success = await client.send_simple_message("Test message during failure")
+                assert not success, "Message should fail during Redis failure"
+                
+                # Try to announce presence during failure
+                success = await client.announce_presence()
+                assert not success, "Presence announcement should fail during Redis failure"
+                
+                # Recovery: operations should succeed again
+                success = await client.send_simple_message("Test message after recovery")
+                assert success, "Message should succeed after Redis recovery"
+                
+                # Verify message was published after recovery
+                assert len(failing_redis.published_messages) > 0
+                
+            finally:
+                await client.disconnect()
+    
+    @pytest.mark.asyncio
+    async def test_message_delivery_failure_handling(self):
+        """Test handling of message delivery failures."""
+        class UnreliableRedisManager:
+            def __init__(self, success_rate=0.7):
+                self.is_connected = True
+                self.success_rate = success_rate
+                self.published_messages = []
+                self.subscribers = {}
+                self.attempt_count = 0
+                
+            async def connect(self):
+                self.is_connected = True
+                return True
+                
+            async def disconnect(self):
+                self.is_connected = False
+                
+            async def publish(self, channel: str, message: str):
+                self.attempt_count += 1
+                # Simulate intermittent failures
+                if (self.attempt_count % 3) == 0:  # Every 3rd attempt fails
+                    return False
+                
+                self.published_messages.append((channel, message))
+                return True
+                
+            async def subscribe_to_channel(self, channel: str, handler):
+                return True
+                
+            async def is_healthy(self):
+                return self.is_connected
+        
+        unreliable_redis = UnreliableRedisManager()
+        
+        with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+            MockRedis.return_value = unreliable_redis
+            
+            client = BeastModeBusClient(
+                agent_id="unreliable_test_agent",
+                capabilities=["testing"],
+                redis_url=TEST_REDIS_URL,
+                channel_name=TEST_CHANNEL
+            )
+            
+            client.redis_manager = unreliable_redis
+            
+            # Mock managers
+            mock_discovery = AsyncMock()
+            mock_discovery.start = AsyncMock(return_value=True)
+            mock_discovery.stop = AsyncMock()
+            client.agent_discovery_manager = mock_discovery
+            
+            mock_help = AsyncMock()
+            mock_help.start = AsyncMock(return_value=True)
+            mock_help.stop = AsyncMock()
+            client.help_system_manager = mock_help
+            
+            await client.connect()
+            
+            try:
+                # Send multiple messages, some will fail
+                results = []
+                for i in range(10):
+                    success = await client.send_simple_message(f"Message {i}")
+                    results.append(success)
+                
+                # Some should succeed, some should fail
+                successful_sends = sum(results)
+                failed_sends = len(results) - successful_sends
+                
+                assert successful_sends > 0, "Some messages should succeed"
+                assert failed_sends > 0, "Some messages should fail (simulated)"
+                
+                # Verify successful messages were actually published
+                assert len(unreliable_redis.published_messages) == successful_sends
+                
+            finally:
+                await client.disconnect()
+    
+    @pytest.mark.asyncio
+    async def test_network_partition_simulation(self):
+        """Test behavior during network partition simulation."""
+        # Create two separate Redis managers to simulate partition
+        redis_partition_a = MockRedisManager()
+        redis_partition_b = MockRedisManager()
+        
+        agents_a = []  # Agents in partition A
+        agents_b = []  # Agents in partition B
+        
+        # Create agents in partition A
+        for i in range(2):
+            with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+                MockRedis.return_value = redis_partition_a
+                
+                client = BeastModeBusClient(
+                    agent_id=f"agent_a_{i}",
+                    capabilities=[f"skill_a_{i}"],
+                    redis_url=TEST_REDIS_URL,
+                    channel_name=TEST_CHANNEL
+                )
+                
+                client.redis_manager = redis_partition_a
+                
+                # Mock managers
+                mock_discovery = AsyncMock()
+                mock_discovery.start = AsyncMock(return_value=True)
+                mock_discovery.stop = AsyncMock()
+                client.agent_discovery_manager = mock_discovery
+                
+                mock_help = AsyncMock()
+                mock_help.start = AsyncMock(return_value=True)
+                mock_help.stop = AsyncMock()
+                client.help_system_manager = mock_help
+                
+                await client.connect()
+                agents_a.append(client)
+        
+        # Create agents in partition B
+        for i in range(2):
+            with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+                MockRedis.return_value = redis_partition_b
+                
+                client = BeastModeBusClient(
+                    agent_id=f"agent_b_{i}",
+                    capabilities=[f"skill_b_{i}"],
+                    redis_url=TEST_REDIS_URL,
+                    channel_name=TEST_CHANNEL
+                )
+                
+                client.redis_manager = redis_partition_b
+                
+                # Mock managers
+                mock_discovery = AsyncMock()
+                mock_discovery.start = AsyncMock(return_value=True)
+                mock_discovery.stop = AsyncMock()
+                client.agent_discovery_manager = mock_discovery
+                
+                mock_help = AsyncMock()
+                mock_help.start = AsyncMock(return_value=True)
+                mock_help.stop = AsyncMock()
+                client.help_system_manager = mock_help
+                
+                await client.connect()
+                agents_b.append(client)
+        
+        try:
+            # Test communication within partition A
+            success = await agents_a[0].send_simple_message("Hello from A0", "agent_a_1")
+            assert success, "Communication within partition A should work"
+            
+            # Verify message was published in partition A
+            assert len(redis_partition_a.published_messages) > 0
+            
+            # Test communication within partition B
+            success = await agents_b[0].send_simple_message("Hello from B0", "agent_b_1")
+            assert success, "Communication within partition B should work"
+            
+            # Verify message was published in partition B
+            assert len(redis_partition_b.published_messages) > 0
+            
+            # Verify partitions are isolated (messages don't cross)
+            a_messages = len(redis_partition_a.published_messages)
+            b_messages = len(redis_partition_b.published_messages)
+            
+            # Send message in partition A
+            await agents_a[1].send_simple_message("Another A message")
+            assert len(redis_partition_a.published_messages) == a_messages + 1
+            assert len(redis_partition_b.published_messages) == b_messages  # Unchanged
+            
+            # Send message in partition B
+            await agents_b[1].send_simple_message("Another B message")
+            assert len(redis_partition_b.published_messages) == b_messages + 1
+            assert len(redis_partition_a.published_messages) == a_messages + 1  # Unchanged
+            
+        finally:
+            # Cleanup all agents
+            for agent in agents_a + agents_b:
+                await agent.disconnect()
+
+
+class TestTrustScoreUpdates:
+    """Test agent trust score updates through collaboration."""
+    
+    @pytest.mark.asyncio
+    async def test_trust_score_updates_through_help_requests(self):
+        """Test trust score updates through successful and failed help requests."""
+        mock_redis = MockRedisManager()
+        
+        # Create mock discovered agents with initial trust scores
+        mock_agents = {
+            "reliable_helper": DiscoveredAgent(
+                agent_id="reliable_helper",
+                capabilities=["python", "data_analysis"],
+                trust_score=0.7,
+                total_interactions=10,
+                successful_interactions=7
+            ),
+            "unreliable_helper": DiscoveredAgent(
+                agent_id="unreliable_helper", 
+                capabilities=["python", "web_development"],
+                trust_score=0.4,
+                total_interactions=10,
+                successful_interactions=4
+            )
+        }
+        
+        with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+            MockRedis.return_value = mock_redis
+            
+            requester = BeastModeBusClient(
+                agent_id="trust_test_requester",
+                capabilities=["project_management"],
+                redis_url=TEST_REDIS_URL,
+                channel_name=TEST_CHANNEL
+            )
+            
+            requester.redis_manager = mock_redis
+            
+            # Create mock discovery manager that tracks trust updates
+            trust_updates = []
+            
+            async def mock_track_interaction(agent_id, success, response_time=None):
+                trust_updates.append((agent_id, success, response_time))
+                # Update mock agent trust score
+                if agent_id in mock_agents:
+                    mock_agents[agent_id].update_trust_score(success, response_time)
+            
+            mock_discovery = AsyncMock()
+            mock_discovery.start = AsyncMock(return_value=True)
+            mock_discovery.stop = AsyncMock()
+            mock_discovery.track_agent_interaction = AsyncMock(side_effect=mock_track_interaction)
+            mock_discovery.find_best_agents = AsyncMock(return_value=[
+                (mock_agents["reliable_helper"], 0.8),
+                (mock_agents["unreliable_helper"], 0.6)
+            ])
+            requester.agent_discovery_manager = mock_discovery
+            
+            help_manager = HelpSystemManager(
+                mock_redis, "trust_test_requester", mock_discovery, TEST_CHANNEL
+            )
+            requester.help_system_manager = help_manager
+            
+            await requester.connect()
+            await help_manager.start()
+            
+            try:
+                # Test successful collaboration with reliable helper
+                request_id_1 = await requester.request_help(
+                    required_capabilities=["python"],
+                    description="Test successful collaboration"
+                )
+                
+                help_request_1 = help_manager._my_requests[request_id_1]
+                
+                # Add response from reliable helper
+                response_1 = HelpResponse(
+                    responder_id="reliable_helper",
+                    request_id=request_id_1,
+                    message="I can help with this",
+                    capabilities_offered=["python"],
+                    confidence_level=0.9
+                )
+                help_request_1.add_response(response_1)
+                
+                # Select and complete successfully
+                await requester.select_helper(request_id_1, "reliable_helper")
+                await requester.complete_help_request(request_id_1, success=True)
+                
+                # Test failed collaboration with unreliable helper
+                request_id_2 = await requester.request_help(
+                    required_capabilities=["web_development"],
+                    description="Test failed collaboration"
+                )
+                
+                help_request_2 = help_manager._my_requests[request_id_2]
+                
+                # Add response from unreliable helper
+                response_2 = HelpResponse(
+                    responder_id="unreliable_helper",
+                    request_id=request_id_2,
+                    message="I'll try to help",
+                    capabilities_offered=["web_development"],
+                    confidence_level=0.5
+                )
+                help_request_2.add_response(response_2)
+                
+                # Select and complete with failure
+                await requester.select_helper(request_id_2, "unreliable_helper")
+                await requester.complete_help_request(request_id_2, success=False)
+                
+                # Verify trust score updates were tracked
+                assert len(trust_updates) == 2
+                
+                # Check successful interaction
+                reliable_update = next((u for u in trust_updates if u[0] == "reliable_helper"), None)
+                assert reliable_update is not None
+                assert reliable_update[1] is True  # Success
+                
+                # Check failed interaction
+                unreliable_update = next((u for u in trust_updates if u[0] == "unreliable_helper"), None)
+                assert unreliable_update is not None
+                assert unreliable_update[1] is False  # Failure
+                
+                # Verify trust scores were updated in mock agents
+                reliable_agent = mock_agents["reliable_helper"]
+                unreliable_agent = mock_agents["unreliable_helper"]
+                
+                # Reliable agent should have higher trust score after success
+                assert reliable_agent.successful_interactions == 8  # Was 7, now 8
+                assert reliable_agent.total_interactions == 11  # Was 10, now 11
+                
+                # Unreliable agent should have same successful count but more total interactions
+                assert unreliable_agent.successful_interactions == 4  # Still 4
+                assert unreliable_agent.total_interactions == 11  # Was 10, now 11
+                assert unreliable_agent.failed_interactions == 7  # Was 6, now 7
+                
+            finally:
+                await help_manager.stop()
+                await requester.disconnect()
+    
+    @pytest.mark.asyncio
+    async def test_response_time_impact_on_trust(self):
+        """Test how response time affects trust score calculations."""
+        mock_redis = MockRedisManager()
+        
+        # Create agents with different response time patterns
+        fast_agent = DiscoveredAgent(
+            agent_id="fast_responder",
+            capabilities=["quick_help"],
+            trust_score=0.6,
+            average_response_time=2.0  # 2 seconds average
+        )
+        
+        slow_agent = DiscoveredAgent(
+            agent_id="slow_responder",
+            capabilities=["thorough_help"],
+            trust_score=0.6,
+            average_response_time=30.0  # 30 seconds average
+        )
+        
+        with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+            MockRedis.return_value = mock_redis
+            
+            requester = BeastModeBusClient(
+                agent_id="response_time_tester",
+                capabilities=["testing"],
+                redis_url=TEST_REDIS_URL,
+                channel_name=TEST_CHANNEL
+            )
+            
+            requester.redis_manager = mock_redis
+            
+            # Track trust updates with response times
+            trust_updates = []
+            
+            async def mock_track_interaction(agent_id, success, response_time=None):
+                trust_updates.append((agent_id, success, response_time))
+                if agent_id == "fast_responder":
+                    fast_agent.update_trust_score(success, response_time)
+                elif agent_id == "slow_responder":
+                    slow_agent.update_trust_score(success, response_time)
+            
+            mock_discovery = AsyncMock()
+            mock_discovery.start = AsyncMock(return_value=True)
+            mock_discovery.stop = AsyncMock()
+            mock_discovery.track_agent_interaction = AsyncMock(side_effect=mock_track_interaction)
+            requester.agent_discovery_manager = mock_discovery
+            
+            help_manager = HelpSystemManager(
+                mock_redis, "response_time_tester", mock_discovery, TEST_CHANNEL
+            )
+            requester.help_system_manager = help_manager
+            
+            await requester.connect()
+            await help_manager.start()
+            
+            try:
+                # Test fast response scenario
+                request_id_1 = await requester.request_help(
+                    required_capabilities=["quick_help"],
+                    description="Need quick help"
+                )
+                
+                help_request_1 = help_manager._my_requests[request_id_1]
+                help_request_1.started_at = datetime.now() - timedelta(seconds=3)  # Started 3 seconds ago
+                
+                await requester.select_helper(request_id_1, "fast_responder")
+                await requester.complete_help_request(request_id_1, success=True)
+                
+                # Test slow response scenario
+                request_id_2 = await requester.request_help(
+                    required_capabilities=["thorough_help"],
+                    description="Need thorough help"
+                )
+                
+                help_request_2 = help_manager._my_requests[request_id_2]
+                help_request_2.started_at = datetime.now() - timedelta(seconds=45)  # Started 45 seconds ago
+                
+                await requester.select_helper(request_id_2, "slow_responder")
+                await requester.complete_help_request(request_id_2, success=True)
+                
+                # Verify response times were tracked
+                assert len(trust_updates) == 2
+                
+                fast_update = next((u for u in trust_updates if u[0] == "fast_responder"), None)
+                slow_update = next((u for u in trust_updates if u[0] == "slow_responder"), None)
+                
+                assert fast_update is not None
+                assert slow_update is not None
+                
+                # Fast responder should have better response time
+                assert fast_update[2] < slow_update[2], "Fast responder should have shorter response time"
+                
+                # Both agents had successful interactions, but fast agent should benefit more
+                # from the response time factor in trust calculation
+                fast_trust_after = fast_agent.trust_score
+                slow_trust_after = slow_agent.trust_score
+                
+                # Both should improve (successful interaction), but we can't easily test
+                # the relative improvement without more complex setup
+                assert fast_trust_after > 0.6, "Fast agent trust should improve"
+                assert slow_trust_after > 0.6, "Slow agent trust should improve"
+                
+            finally:
+                await help_manager.stop()
+                await requester.disconnect()
+
+
+class TestComplexScenarios:
+    """Test complex multi-agent scenarios and edge cases."""
+    
+    @pytest.mark.asyncio
+    async def test_cascading_help_requests(self):
+        """Test scenario where agents request help from each other in a chain."""
+        mock_redis = MockRedisManager()
+        
+        # Create a chain of agents: A needs help from B, B needs help from C
+        agents = {}
+        help_managers = {}
+        
+        agent_configs = [
+            ("agent_a", ["project_management"], "Project manager"),
+            ("agent_b", ["python", "project_management"], "Python developer and PM"),
+            ("agent_c", ["python", "advanced_algorithms"], "Senior Python expert")
+        ]
+        
+        try:
+            # Create all agents
+            for agent_id, capabilities, description in agent_configs:
+                with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+                    MockRedis.return_value = mock_redis
+                    
+                    client = BeastModeBusClient(
+                        agent_id=agent_id,
+                        capabilities=capabilities,
+                        description=description,
+                        redis_url=TEST_REDIS_URL,
+                        channel_name=TEST_CHANNEL
+                    )
+                    
+                    client.redis_manager = mock_redis
+                    
+                    # Mock discovery manager
+                    mock_discovery = AsyncMock()
+                    mock_discovery.start = AsyncMock(return_value=True)
+                    mock_discovery.stop = AsyncMock()
+                    mock_discovery.track_agent_interaction = AsyncMock()
+                    client.agent_discovery_manager = mock_discovery
+                    
+                    # Create help manager
+                    help_manager = HelpSystemManager(
+                        mock_redis, agent_id, mock_discovery, TEST_CHANNEL
+                    )
+                    client.help_system_manager = help_manager
+                    
+                    await client.connect()
+                    await help_manager.start()
+                    
+                    agents[agent_id] = client
+                    help_managers[agent_id] = help_manager
+            
+            # Scenario: A requests help from B for Python task
+            request_a_to_b = await agents["agent_a"].request_help(
+                required_capabilities=["python"],
+                description="Need Python implementation for project management tool"
+            )
+            
+            # B responds to A
+            help_request_a = help_managers["agent_a"]._my_requests[request_a_to_b]
+            response_b_to_a = HelpResponse(
+                responder_id="agent_b",
+                request_id=request_a_to_b,
+                message="I can help, but I might need assistance with advanced algorithms",
+                capabilities_offered=["python", "project_management"]
+            )
+            help_request_a.add_response(response_b_to_a)
+            
+            # A selects B
+            await agents["agent_a"].select_helper(request_a_to_b, "agent_b")
+            
+            # Now B realizes they need help from C for the advanced part
+            request_b_to_c = await agents["agent_b"].request_help(
+                required_capabilities=["advanced_algorithms"],
+                description="Need help with complex algorithm optimization for PM tool"
+            )
+            
+            # C responds to B
+            help_request_b = help_managers["agent_b"]._my_requests[request_b_to_c]
+            response_c_to_b = HelpResponse(
+                responder_id="agent_c",
+                request_id=request_b_to_c,
+                message="I can optimize those algorithms for you",
+                capabilities_offered=["advanced_algorithms", "python"]
+            )
+            help_request_b.add_response(response_c_to_b)
+            
+            # B selects C
+            await agents["agent_b"].select_helper(request_b_to_c, "agent_c")
+            
+            # C completes their part
+            await agents["agent_b"].complete_help_request(request_b_to_c, success=True)
+            
+            # B completes their part for A
+            await agents["agent_a"].complete_help_request(request_a_to_b, success=True)
+            
+            # Verify the chain completed successfully
+            assert help_request_a.status == HelpRequestStatus.COMPLETED
+            assert help_request_b.status == HelpRequestStatus.COMPLETED
+            
+            # Verify trust interactions were tracked
+            for agent_id, help_manager in help_managers.items():
+                client = agents[agent_id]
+                if hasattr(client.agent_discovery_manager, 'track_agent_interaction'):
+                    # Should have been called for completed help requests
+                    assert client.agent_discovery_manager.track_agent_interaction.called
+            
+        finally:
+            # Cleanup all agents
+            for help_manager in help_managers.values():
+                await help_manager.stop()
+            for agent in agents.values():
+                await agent.disconnect()
+    
+    @pytest.mark.asyncio
+    async def test_high_load_message_processing(self):
+        """Test system behavior under high message load."""
+        mock_redis = MockRedisManager()
+        
+        # Create multiple agents
+        agents = []
+        num_agents = 5
+        
+        try:
+            for i in range(num_agents):
+                with patch('src.beast_mode_network.bus_client.RedisConnectionManager') as MockRedis:
+                    MockRedis.return_value = mock_redis
+                    
+                    client = BeastModeBusClient(
+                        agent_id=f"load_test_agent_{i}",
+                        capabilities=[f"skill_{i}", "load_testing"],
+                        redis_url=TEST_REDIS_URL,
+                        channel_name=TEST_CHANNEL
+                    )
+                    
+                    client.redis_manager = mock_redis
+                    
+                    # Mock managers
+                    mock_discovery = AsyncMock()
+                    mock_discovery.start = AsyncMock(return_value=True)
+                    mock_discovery.stop = AsyncMock()
+                    client.agent_discovery_manager = mock_discovery
+                    
+                    mock_help = AsyncMock()
+                    mock_help.start = AsyncMock(return_value=True)
+                    mock_help.stop = AsyncMock()
+                    client.help_system_manager = mock_help
+                    
+                    await client.connect()
+                    agents.append(client)
+            
+            # Generate high load of messages
+            import time
+            start_time = time.time()
+            
+            # Each agent sends multiple messages
+            tasks = []
+            messages_per_agent = 20
+            
+            for agent in agents:
+                for i in range(messages_per_agent):
+                    task = agent.send_simple_message(f"Load test message {i} from {agent.agent_id}")
+                    tasks.append(task)
+            
+            # Execute all message sends concurrently
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            end_time = time.time()
+            duration = end_time - start_time
+            
+            # Verify performance
+            total_messages = num_agents * messages_per_agent
+            successful_sends = sum(1 for result in results if result is True)
+            
+            assert successful_sends > 0, "Some messages should have been sent successfully"
+            assert duration < 5.0, f"High load test should complete in reasonable time, took {duration:.2f}s"
+            
+            # Verify messages were published
+            assert len(mock_redis.published_messages) == successful_sends
+            
+            print(f"Processed {successful_sends}/{total_messages} messages in {duration:.2f}s")
+            print(f"Throughput: {successful_sends/duration:.1f} messages/second")
+            
+        finally:
+            # Cleanup
+            for agent in agents:
+                await agent.disconnect()
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])_operation = False
                 self.published_messages = []
                 
             async def connect(self):

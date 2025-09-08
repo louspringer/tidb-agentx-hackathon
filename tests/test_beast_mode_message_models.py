@@ -402,3 +402,254 @@ class TestErrorHandling:
         assert len(capabilities.supported_message_types) == 2
         assert MessageType.SIMPLE_MESSAGE in capabilities.supported_message_types
         assert MessageType.HELP_WANTED in capabilities.supported_message_types
+
+
+class TestEdgeCases:
+    """Test edge cases and boundary conditions."""
+    
+    def test_empty_payload_serialization(self):
+        """Test serialization with empty payload."""
+        message = BeastModeMessage(
+            type=MessageType.SIMPLE_MESSAGE,
+            source="agent1",
+            payload={}
+        )
+        
+        json_str = MessageSerializer.serialize(message)
+        deserialized = MessageSerializer.deserialize(json_str)
+        
+        assert deserialized.payload == {}
+    
+    def test_large_payload_serialization(self):
+        """Test serialization with large payload."""
+        large_payload = {
+            "data": "x" * 10000,  # 10KB string
+            "numbers": list(range(1000)),
+            "nested": {"deep": {"structure": {"with": {"many": "levels"}}}}
+        }
+        
+        message = BeastModeMessage(
+            type=MessageType.TECHNICAL_EXCHANGE,
+            source="agent1",
+            payload=large_payload
+        )
+        
+        json_str = MessageSerializer.serialize(message)
+        deserialized = MessageSerializer.deserialize(json_str)
+        
+        assert deserialized.payload == large_payload
+    
+    def test_unicode_content_serialization(self):
+        """Test serialization with unicode content."""
+        unicode_payload = {
+            "message": "Hello 世界! 🌍 Здравствуй мир! مرحبا بالعالم!",
+            "emoji": "🚀🤖💻🔥⚡",
+            "special_chars": "àáâãäåæçèéêë"
+        }
+        
+        message = BeastModeMessage(
+            type=MessageType.SIMPLE_MESSAGE,
+            source="agent_unicode_测试",
+            payload=unicode_payload
+        )
+        
+        json_str = MessageSerializer.serialize(message)
+        deserialized = MessageSerializer.deserialize(json_str)
+        
+        assert deserialized.payload == unicode_payload
+        assert deserialized.source == "agent_unicode_测试"
+    
+    def test_null_values_in_payload(self):
+        """Test handling of null values in payload."""
+        payload_with_nulls = {
+            "null_value": None,
+            "empty_string": "",
+            "zero": 0,
+            "false": False,
+            "empty_list": [],
+            "empty_dict": {}
+        }
+        
+        message = BeastModeMessage(
+            type=MessageType.SIMPLE_MESSAGE,
+            source="agent1",
+            payload=payload_with_nulls
+        )
+        
+        json_str = MessageSerializer.serialize(message)
+        deserialized = MessageSerializer.deserialize(json_str)
+        
+        assert deserialized.payload == payload_with_nulls
+    
+    def test_agent_id_edge_cases(self):
+        """Test agent ID validation edge cases."""
+        # Test minimum length
+        capabilities = AgentCapabilities(agent_id="ab")  # 2 chars, should work
+        assert capabilities.agent_id == "ab"
+        
+        # Test with special characters
+        capabilities = AgentCapabilities(agent_id="agent-1_test.v2")
+        assert capabilities.agent_id == "agent-1_test.v2"
+        
+        # Test with numbers
+        capabilities = AgentCapabilities(agent_id="agent123")
+        assert capabilities.agent_id == "agent123"
+    
+    def test_capabilities_with_duplicates(self):
+        """Test capabilities normalization removes duplicates."""
+        capabilities = AgentCapabilities(
+            agent_id="test_agent",
+            capabilities=["python", "PYTHON", "  python  ", "data_analysis", "python"],
+            specializations=["ml", "ML", "machine_learning", "ml"]
+        )
+        
+        # Should remove duplicates and normalize case
+        assert capabilities.capabilities == ["python", "data_analysis"]
+        assert capabilities.specializations == ["ml", "machine_learning"]
+    
+    def test_message_priority_boundary_values(self):
+        """Test message priority boundary values."""
+        # Test minimum priority
+        message = BeastModeMessage(
+            type=MessageType.SIMPLE_MESSAGE,
+            source="agent1",
+            priority=1
+        )
+        assert message.priority == 1
+        
+        # Test maximum priority
+        message = BeastModeMessage(
+            type=MessageType.SIMPLE_MESSAGE,
+            source="agent1",
+            priority=10
+        )
+        assert message.priority == 10
+    
+    def test_message_id_uniqueness(self):
+        """Test that message IDs are unique."""
+        messages = []
+        for i in range(100):
+            message = BeastModeMessage(
+                type=MessageType.SIMPLE_MESSAGE,
+                source=f"agent{i}"
+            )
+            messages.append(message.id)
+        
+        # All IDs should be unique
+        assert len(set(messages)) == len(messages)
+    
+    def test_concurrent_message_creation(self):
+        """Test concurrent message creation doesn't cause issues."""
+        import threading
+        import time
+        
+        messages = []
+        
+        def create_messages():
+            for i in range(10):
+                message = BeastModeMessage(
+                    type=MessageType.SIMPLE_MESSAGE,
+                    source=f"agent_{threading.current_thread().ident}_{i}"
+                )
+                messages.append(message)
+                time.sleep(0.001)  # Small delay
+        
+        threads = []
+        for i in range(5):
+            thread = threading.Thread(target=create_messages)
+            threads.append(thread)
+            thread.start()
+        
+        for thread in threads:
+            thread.join()
+        
+        # All messages should have unique IDs
+        message_ids = [msg.id for msg in messages]
+        assert len(set(message_ids)) == len(message_ids)
+        
+        # All messages should have valid timestamps
+        for message in messages:
+            assert isinstance(message.timestamp, datetime)
+
+
+class TestPerformance:
+    """Test performance characteristics."""
+    
+    def test_serialization_performance(self):
+        """Test serialization performance with many messages."""
+        import time
+        
+        messages = []
+        for i in range(1000):
+            message = BeastModeMessage(
+                type=MessageType.SIMPLE_MESSAGE,
+                source=f"agent{i}",
+                payload={"index": i, "data": f"message_{i}"}
+            )
+            messages.append(message)
+        
+        # Time serialization
+        start_time = time.time()
+        for message in messages:
+            MessageSerializer.serialize(message)
+        serialization_time = time.time() - start_time
+        
+        # Should complete in reasonable time (less than 1 second for 1000 messages)
+        assert serialization_time < 1.0
+    
+    def test_deserialization_performance(self):
+        """Test deserialization performance with many messages."""
+        import time
+        
+        # Create serialized messages
+        json_messages = []
+        for i in range(1000):
+            message = BeastModeMessage(
+                type=MessageType.SIMPLE_MESSAGE,
+                source=f"agent{i}",
+                payload={"index": i, "data": f"message_{i}"}
+            )
+            json_messages.append(MessageSerializer.serialize(message))
+        
+        # Time deserialization
+        start_time = time.time()
+        for json_msg in json_messages:
+            MessageSerializer.deserialize(json_msg)
+        deserialization_time = time.time() - start_time
+        
+        # Should complete in reasonable time (less than 1 second for 1000 messages)
+        assert deserialization_time < 1.0
+    
+    def test_memory_usage_with_large_messages(self):
+        """Test memory usage doesn't grow excessively with large messages."""
+        import gc
+        import sys
+        
+        # Get initial memory usage
+        gc.collect()
+        initial_objects = len(gc.get_objects())
+        
+        # Create and serialize many large messages
+        for i in range(100):
+            large_payload = {
+                "data": "x" * 1000,  # 1KB per message
+                "index": i,
+                "metadata": {"created": datetime.now().isoformat()}
+            }
+            
+            message = BeastModeMessage(
+                type=MessageType.TECHNICAL_EXCHANGE,
+                source=f"agent{i}",
+                payload=large_payload
+            )
+            
+            json_str = MessageSerializer.serialize(message)
+            MessageSerializer.deserialize(json_str)
+        
+        # Force garbage collection
+        gc.collect()
+        final_objects = len(gc.get_objects())
+        
+        # Object count shouldn't grow excessively (allow some growth for test overhead)
+        object_growth = final_objects - initial_objects
+        assert object_growth < 1000  # Reasonable threshold
